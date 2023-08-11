@@ -1,0 +1,240 @@
+* lit review 
+:PROPERTIES:
+:ID:       f6770c62-73be-446d-98d2-6ffd9b32b282
+:END:
+
+** existing stuff 
+
+on private museums: 
+- [[cite:&Adam_2021_rise]]
+- [[cite:&Brown_2019_private]]
+- [[cite:&Walker_2019_collector]]
+- [[cite:&Velthuis_Gera_forthcoming_fragility]]
+  elegant approach: talk about costs generally, then as a reason for closure
+  cites
+  - [[cite:&Walker_2019_collector, p.146]]: finance
+  - [[cite:&DeNigris_2018_museums]]: no long-term strategy
+  - [[cite:&Adam_2021_rise]]: founder disengagement, wrongdoing
+  own finding: complex, often finance 
+  -> very PM focused, also wishy-washy with "complexity"
+  
+
+density-dependence
+- [[cite:Carroll_1989_density]]
+- [[cite:&Carroll_1989_density_repl]]
+- [[cite:&Carroll_2000_brewery]]
+- [[cite:&Hannan_1992_dynamics]]: chapter 6
+- [[cite:&Hannan_etal_1995_cars]]
+- [[cite:&Hedstroem_1992_impasse]]: check if this gets referenced
+
+
+
+
+
+overall argument: low density -> low legitimacy -> high closing
+increasing density -> increasing legitimacy -> less closing
+what is actually at high closing? [[cite:&Delacroix_Rao_1994_unbundling]]: -> competition -> high closing 
+
+
+extentions of density
+- [[cite:&Rao_1994_reputation]]: actual measurement of legitimation through competitions/certification/rating
+- [[cite:&Zucker_1989_legitimacy]]
+- [[cite:&Kennedy_2008_counted]]: sensemaking
+  -> somewhat addressed in [[id:f6f23e3e-0cad-42c3-ace6-1518d4208b86][variable-driven]]
+- [[cite:&Ruef_2000_emergence]]: discourse 
+- [[cite:&Ruef_2004_demise]]:
+  check who cites this
+- [[cite:&Abrahamson_1999_fashion]]: superstitious: PMs get dropped when not providing differentiation
+  # but failure to provide differentiation will be impossible to measure
+- [[cite:&Dobbin_Dowd_1997_competition]]: about policy -> foundings
+- [[cite:&Greve_2006_vox]]: combination of SM, ecology, production of culture
+  also dealing with theory is relevant/inspiration: not actually about microradios, but theoretical contribution
+- [[cite:&Greve_2002_banking]]: spatial dimension
+- [[cite:&Hedstroem_1994_diffusion]]: mobilization, spatial
+- [[cite:&Hsu_2005_forms]]: organizational identity/form should be measured directly (or what?), taken-for-grantedness
+- [[cite:&Lizardo_2009_comparative]]: all kind of stuff of field, identity, category, logic
+- [[cite:&Lomi_1995_population]]: spatial stuff, heterogeneity: not really new stuff, but expanded existing -> nice normal science
+- [[cite:&Porac_1990_taxonomic]]: competitor definition
+- [[cite:&Powell_1991_introduction]]: taken-for-grantedness
+- [[cite:&Singh_1991_change]]: government recognition, funding -> periods change density dynamics
+
+
+*should map key concepts from all articles -> sees what gaps there are*
+
+  
+  
+  
+
+
+*** variable-driven
+:PROPERTIES:
+:ID:       f6f23e3e-0cad-42c3-ace6-1518d4208b86
+:END:
+
+demand/legitimacy
+- *inclusion in MOW/IDA*: don't have good longitudinal data tho..
+- *trip advisor/social media/google reviews/media*: could link to insufficient interest from public [[cite:&Velthuis_Gera_forthcoming_fragility]]
+
+- *organizational characteristics*
+  - activities (PMDB), size, collaborations
+
+- *founder characteristics*:
+  - financial situation: performance of companies that they are board members of? -> BvD
+    could also be complicated..
+  - industry? I don't see how this is a good measurement.. also throwing 15 dummies in there doesn't sound great for identification
+  - could do billionaire or not KEK
+
+ - Covid restrictions
+
+
+-> all things that could matter for PM, but *what's the point*? -> need more theory overall
+we actually don't care about private museums...
+
+resource-dependence
+
+we care about wider stories/mechanisms of which private museums are an example
+-> should be liberating: can choose the story, and fit PMs in there
+
+
+
+*** use clickhouse/org-brain tags to find similar terms/papers
+
+search terms:
+- density
+- ecology
+- mortality
+
+
+#+begin_src R
+library(DBI)
+library(collapse)
+
+con <- DBI::dbConnect(RClickhouse::clickhouse(), host="localhost", db = "obvz")
+
+cmd_bc <- "select * from bc"
+cmd_bp <- "select * from bp"
+
+## get both parent and child relations (unclear why there are separate tables, but whatever)
+dt_bc <- qDT(dbGetQuery(con, cmd_bc))
+dt_bp <- qDT(dbGetQuery(con, cmd_bp))
+
+## generate brain links
+dt_bl <- rbind(dt_bp[, .(child, parent)], dt_bc[, .(child, parent)]) %>% unique 
+  
+rel_terms1 <- .c(ecology, mortality, density)
+
+## find papers that are good on relevant terms
+
+## long-collapse version
+sbt(dt_bl, parent %in% rel_terms1) %>% gby(child) %>% smr(cnt = len(child)) %>% sbt(cnt >= 2)
+
+## more compact collapse
+dt_rel_papers <- sbt(dt_bl, parent %in% rel_terms1) %>% fcount(child) %>% sbt(N >= 2)
+
+## even more compact collapse possible? doubt it: different steps
+## sbt(dt_bl, parent %in% rel_terms1 & fcount(parent, child) > 2)
+
+## dt still most compact 
+dt_bl[parent %in% rel_terms1, .N, child][N >= 2]
+
+## tags they they use
+dt_bl[dt_rel_papers[, .(child)], .(parent), on = "child"] %>% fcount(parent) %>% roworder(-N) %>%
+  sbt(parent %!in% rel_terms1) %>% sbt(1:20)
+
+
+## find papers that have similar tags to papers high on relevant terms
+dt_other_papers <- dt_bl[dt_rel_papers[, .(child)], .(parent), on = "child"] %>% funique %>% 
+  dt_bl[., on = "parent"] %>% .[!dt_rel_papers, on = "child"]
+
+## tags that other papers use
+dt_other_papers %>% fcount(parent) %>% roworder(-N) %>% sbt(1:20)
+
+## print the papers with the largest absolute overlap
+dt_other_papers %>% fcount(child) %>% roworder(-N) %>% sbt(1:30)
+  
+  
+#+end_src
+
+#+RESULTS:
+| Porac_Ventresca_Mishina_2017_cognition | 29 |
+| Hsu_2005_forms                         | 27 |
+| Peltoniemi_2014_cultural               | 23 |
+| Fligstein_2015_fields                  | 23 |
+| Rossman_2012_climbing                  | 22 |
+| King_Pearce_2010_contentiousness       | 20 |
+| Porac_1990_taxonomic                   | 20 |
+| Kirschbaum_2017_jazz                   | 20 |
+| Bourdieu_1993_production               | 19 |
+| Abrahamson_1999_fashion                | 18 |
+| Friedland_1991_symbols                 | 18 |
+| Rao_1994_reputation                    | 17 |
+| Maclean_etal_2021_philanthropy         | 17 |
+| Fligstein_2002_markets                 | 17 |
+| Cousin_Chauvin_2021_bourgeoisie        | 17 |
+| Powell_1991_introduction               | 16 |
+| Berwick_Christia_2018_capacity         | 16 |
+| Hsu_2006_jacks                         | 16 |
+| Hsu_2015_granted                       | 16 |
+| Kackovic_etal_2020_quality             | 16 |
+| Piazzai_concepts                       | 15 |
+| Lena_2019_entitled                     | 15 |
+| Lizardo_2009_comparative               | 15 |
+| Fligstein_1991_transformation          | 15 |
+| Gnyp_2015_collectors                   | 15 |
+| Boone_2012_uneveness                   | 15 |
+| Brown_2019_private                     | 15 |
+| KohlArenas_2015_selfhelp               | 15 |
+| Lena_2008_classification               | 14 |
+| KalbCosmo_2020_museum                  | 14 |
+
+-> this really seems to be all kind of things.. 
+
+
+** stuff I haven't read
+
+[[cite:&Greenwood_etal_2017_handbook]]: there are some interesting chapteres: Meyer, Scott, Diversity programs,
+[[cite:&Scott_2008_theory]]
+
+[[cite:&Dupin_Wezel_2023_bakeries]]: read for inspiration of theorizing
+
+[[cite:&Bogaert_etal_2014_ecological]]: about founding, not closing
+
+[[cite:&Wakefield_2017_superrich]]
+
+[[cite:&Petersen_Koput_1991_heterogeneity]]: decreasing mortality when density increases could be unobserved heterogeneity -> should measure legitimation directly
+see how it relates to [[cite:&Lomi_1995_population]]
+[[cite:&Tasselli_Zappa_Lomi_2020_holes]]
+
+[[cite:&Delacroix_Rao_1994_unbundling]]: decompose density into separate processes
+- Dominik Meier (ERNOP): survival: [[file:~/Dropbox/phd/conferences/ERNOP/Meier_Litofcenko_2023ernop_blurry.docx]]
+  paper doesn't include survival aspect.. 
+
+  could also look at mission statements -> atypical have higher mortality rate?
+
+- Petra van Aken: [[file:~/Dropbox/phd/conferences/ERNOP/van_Aken_2023_identity.docx]]
+
+
+
+
+** relevance
+relevance of density lit: if it quacks like a duck -> if it behaves like an organizational form, it is an organizational form?
+point would be that survival doesn't depend on organizational characteristics but environmental
+wider relevance: are PMs really a new thing?
+
+e.g. if there was
+- no decline in mortality with higher density (which would be more legitimacy)
+- less closing with better government spending, or more transformation into public
+-> then PMs are not really a thing?
+
+*(institutional) logic*: do PMs constitute a shift in logic of art provision? # like Yu's husband
+
+
+is consideration of environmental characteristics contribution? to PMs maybe (although [[cite:&Velthuis_Gera_forthcoming_fragility]] have it somewhat), but not overall..
+could do some cross-level interactions? -> for now seems forced, maybe makes sense later tho
+
+
+
+
+
+** check web of science
+maybe there is some annual review? 
