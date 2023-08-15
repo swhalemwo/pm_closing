@@ -192,12 +192,35 @@ dt_other_papers %>% fcount(child) %>% roworder(-N) %>% sbt(1:30)
 
 ** stuff I haven't read
 
+
+
+
+[[cite:&Haugh_etal_2021_nascent]]
+
+[[cite:&Carroll_Khessina_2019_demography]]: done 
+
+
+[[cite:&Lounsbury_Ventresca_Hirsch_2003_recycling]]: inspiration: irrelevant actual case, nice theorizing
+
+
+[[cite:&Kennedy_2009_TQM]]: both economic and social considerations in adoption decisions
+
+[[cite:&Pizza_Abrahamson_2020_fads]]: management fashion.. maybe too much about management
+
+
+[[cite:&Goldfarb_Zavyalova_Pillai_2018_Rao]]: check also for methodology
+certification: is there something like best museums?
+https://www.forbes.com/sites/rsmdiscovery/2017/10/30/ranking-the-worlds-most-admired-art-museums-and-what-big-business-can-learn-from-them/
+could google for "top 100 museums in the world"
+https://www.theinternationalman.com/art-museums.php LUL 
+
 [[cite:&Greenwood_etal_2017_handbook]]: there are some interesting chapteres: Meyer, Scott, Diversity programs,
 [[cite:&Scott_2008_theory]]
 
 [[cite:&Dupin_Wezel_2023_bakeries]]: read for inspiration of theorizing
 
 [[cite:&Bogaert_etal_2014_ecological]]: about founding, not closing
+check the arguments about NPOs
 
 [[cite:&Wakefield_2017_superrich]]
 
@@ -213,6 +236,29 @@ see how it relates to [[cite:&Lomi_1995_population]]
 
 - Petra van Aken: [[file:~/Dropbox/phd/conferences/ERNOP/van_Aken_2023_identity.docx]]
 
+[[cite:&Barnett_Fen_Luo_2012_identity]]: cited by [[cite:&Carroll_Khessina_2019_demography]]: naming as constraint to change
+
+[[cite:&Glynn_Abzug_2002_names]]: cited by [[cite:&Carroll_Khessina_2019_demography]]: names matter
+
+cite:&Dobrev_etal_2006_interdependence
+
+check Dieuwke's lit
+
+** donesies
+[[file:~/Dropbox/nootes/Teece_2023_euram.org]]: dynamic capabilities -> corporate shill
+
+
+
+
+*** less directly relevant
+[[cite:&Walker_2010_reputation]]: reputation overall
+[[cite:&Pfarrer_Pollock_Rindova_2010_assets]]: reputation on earnings surprise behavior/perception of that
+[[cite:&Lange_Lee_Dai_2010_reputation]]: also lit review of reputation
+
+[[cite:&Cavusgil_Seggie_Talay_2007_dynamic]]: dynamic capabilities
+[[cite:&Strang_Soule_1998_diffusion]]: diffusion
+
+[[cite:&Clark_2004_surge]]
 
 
 
