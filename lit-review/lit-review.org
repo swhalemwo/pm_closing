@@ -28,9 +28,6 @@ density-dependence
 - [[cite:&Hedstroem_1992_impasse]]: check if this gets referenced
 
 
-
-
-
 overall argument: low density -> low legitimacy -> high closing
 increasing density -> increasing legitimacy -> less closing
 what is actually at high closing? [[cite:&Delacroix_Rao_1994_unbundling]]: -> competition -> high closing 
