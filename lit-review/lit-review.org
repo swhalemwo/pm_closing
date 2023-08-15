@@ -102,9 +102,13 @@ we care about wider stories/mechanisms of which private museums are an example
 *** use clickhouse/org-brain tags to find similar terms/papers
 
 search terms:
-- density
-- ecology
-- mortality
+- [X] density
+- [X] ecology
+- [X] mortality
+- [ ] survival: at Hanna_2010_partiality
+- [ ] exit
+- [ ] defection
+- [ ] event-history
 
 
 #+begin_src R
