@@ -57,12 +57,17 @@ extentions of density
 - [[cite:&Porac_1990_taxonomic]]: competitor definition
 - [[cite:&Powell_1991_introduction]]: taken-for-grantedness
 - [[cite:&Singh_1991_change]]: government recognition, funding -> periods change density dynamics
-
+- [[cite:&Negro_2011_winemaking]]: schemas, also has defection tho
+- [[cite:&Fligstein_2002_markets]]: much about markets, PMs aren't.. but the institutional part
+- [[cite:&Fligstein_2015_fields]]
 
 *should map key concepts from all articles -> sees what gaps there are*
 
-  
-  
+
+luxury:
+- [[cite:&Cousin_Chauvin_2021_bourgeoisie]]: has some references to luxury consumption
+
+
   
 
 
@@ -272,11 +277,20 @@ e.g. if there was
 - less closing with better government spending, or more transformation into public
 -> then PMs are not really a thing?
 
-*(institutional) logic*: do PMs constitute a shift in logic of art provision? # like Yu's husband
-
+*(institutional) logic*: do PMs constitute a shift in logic of art provision?
+# like Yu's husband
 
 is consideration of environmental characteristics contribution? to PMs maybe (although [[cite:&Velthuis_Gera_forthcoming_fragility]] have it somewhat), but not overall..
 could do some cross-level interactions? -> for now seems forced, maybe makes sense later tho
+
+
+fashion: what would show that it's superstitious vs substantial (actually provides something for someone) ?
+could be framing: fad/fashion or sustainable?
+-> would need bunch of indicators that can differentiate 
+
+
+dynamic capabilities? 
+
 
 
 
@@ -284,3 +298,254 @@ could do some cross-level interactions? -> for now seems forced, maybe makes sen
 
 ** check web of science
 maybe there is some annual review? 
+
+** AI/citation network tools
+:PROPERTIES:
+:ID:       97506cf5-5c36-4567-990b-4f5f0351a57e
+:END:
+
+*** https://scite.ai/
+ 15 euros a month
+
+*** done https://citationgecko.azurewebsites.net/
+CLOSED: [2023-08-11 vr 10:58]
+free, but super incomplete:
+[[cite:&Rao_1994_reputation]] has 2k citations irl,
+but maybe ~80 there, and none after 2015 (real 943) 
+
+also has no references among the recommended papers
+
+*** https://www.connectedpapers.com/
+hmm just one paper as input
+
+still not bad
+
+- Walker 2010: A Systematic Review of the Corporate Reputation Literature: Definition, Measurement, and Theory
+  [[cite:&Walker_2010_reputation]]: seems less relevant: not much about survival
+- Michael D. Pfarrer, Timothy G. Pollock, V. Rindova 2010: A Tale of Two Assets: The Effects of Firm Reputation and Celebrity on Earnings Surprises and Investors' Reactions
+  [[cite:&Pfarrer_Pollock_Rindova_2010_assets]]: reputation on behavior -> reaction to that by other parties
+- Donald Lange, Peggy M. Lee, Ye Dai 2011: Organizational Reputation: A Review
+  [[cite:&Lange_Lee_Dai_2010_reputation]]
+
+
+
+Erin Çavuşgil, Steven H. Seggie, M. Talay, 2007: Dynamic Capabilities View: Foundations and Research Agenda
+[[cite:&Cavusgil_Seggie_Talay_2007_dynamic]]
+
+G. R. Ferris+ 4 authorsF. R. Blass: The role of reputation in the organizational sciences: A multilevel review, construct assessment, and research directions: dont' even bother to download atm 
+
+using [[cite:&Abrahamson_1999_fashion]]: 
+
+- A. Portes, C. S. Smith, K. Schwartzman 2007: DIFFUSION IN ORGANIZATIONS AND SOCIAL MOVEMENTS: From Hybrid Corn to Poison Pills: [[cite:&Strang_Soule_1998_diffusion]]
+- [[cite:&Kennedy_2009_TQM]]
+- Alessandro Piazza, Eric Abrahamson: 2020: Fads and Fashions in Management Practices: Taking Stock and Looking Forward: [[cite:&Pizza_Abrahamson_2020_fads]]
+  
+- Timothy B. Clark 2004: The Fashion of Management Fashion: a Surge Too Far?
+  [[cite:&Clark_2004_surge]]
+  also refer to [[cite:&Gill_Whittle_1993_panacea]] as having come up with the idea
+
+  
+
+hmm could treat closing as abandoment of PMs on part of founder -> BvD
+*PMs is actually not really management fashion, just actual fashion*
+maybe see which works gets cited as fashion overall by by [[cite:&Pizza_Abrahamson_2020_fads;&Abrahamson_1996_fashion;&Abrahamson_1999_fashion;&Gill_Whittle_1993_panacea]]
+
+
+
+*** https://www.researchrabbit.ai/mission
+
+kinda works, but can't filter by date
+also always 50 papers -> can't filter
+
+Lounsbury 2003: social movements, field frames and industry emergence: a cultural political persepective on US recycling
+[[cite:&Lounsbury_Ventresca_Hirsch_2003_recycling]]
+
+Carroll: 20 : organization, productd and corporate demography
+[[cite:&Poston_2019_population]], [[cite:&Carroll_Khessina_2019_demography]]
+
+Helen Haugh & Paul Robson & John Hagedoorn & Kate Sugar: 2021: The nascent ecology of social enterprise
+[[cite:&Haugh_etal_2021_nascent]]
+
+*** https://www.cocites.com
+seems to have gone nowhere                          
+*** https://www.semanticscholar.org/
+
+*** elicit https://elicit.org
+
+https://www.sciencedirect.com/science/article/pii/S0148296314001684
+
+
+
+** angles
+organizational lit
+fashion/luxury consumption
+philanthropy
+
+does environment matter? or is it all about organizational characteristics? resourcss, whether founder loses interest
+
+-> maybe better: how does environment matter, which parts of it?
+--> need to specify dimensions, but there's probably not so much material dependence
+
+
+
+
+** hypotheses
+
+*** inertia
+
+**** concept
+inertia
+
+**** text
+[[textcite:&Carroll_Khessina_2019_demography]] argue due to inertia that organizational transformation are difficult, especially of core features such as authority, technology and marketing strategy.
+#
+Inertia can also be cognitive; characterized by adherence to taken-for-granted categories and blueprints as well as organizational identity. 
+#
+One component of organizational identity is the name of an organization.
+# 
+(*Barnett, Pontikes*) argue that the name can constrain organizational transformation, such as in the case of banks who were less likely to transform if they included the region in which they were initially active in their name. 
+#
+Similarly, inclusion of the name of the founder may be an indicator of organizational inertia, and thus decrease probability of transforming the private museum into a different organizational form. 
+
+
+**** data 
+PMDB on whether founder's name is in museum name
+
+
+*** organizational resources I
+
+**** concept
+resources
+
+**** text
+Firms depend on resources.
+#
+While non-profits do not have to run profitably (and are indeed often dependent on cash infusions or endowments), parts of the revenue are still gained from other income sources such as ticket sales and museum shop and restaurent income. 
+#
+Do these and other organizational characteristics reflect organizational resources, which in turn affect survival chances? 
+
+
+**** data
+
+actual measures:
+- PMDB: endowment
+
+proxies of organizational resources:
+- PMDB: room size
+- PMDB: collection size
+- PMBD: employees
+- PMDB: activities
+- Artfacts: number of shows in organization
+
+
+*** organizational resources II 
+
+**** concept
+resources
+
+**** text
+Firms depend on resources.
+#
+Given that PMs are often non-profits, they are often dependent on cash inflows from their founders.
+#
+[[cite:&Velthuis_Gera_forthcoming_fragility;&Velthuis_2007_talking]]: debt as one of the few contexts (next to death and divorce) which legitimate selling of artworks.
+#
+Thus, declining financial status of founders might lead to higher probability of closure. 
+
+
+
+**** data
+BvD: how firms of founders are doing
+PMBD: whether wealth is available
+
+
+
+
+*** environment resources
+**** concept
+resources
+
+**** text
+resources in environment matter
+
+Museums need to exhibit artists to audiences, without either the legitimacy/purpose of the museums declines?
+
+But could be that art can just be imported globally -> local supply doesn't matter much?
+althrough IIRC the
+
+more local shows/PMDB -> lower mortality?
+# but this could also be competition -> resources basically turns pretty quickly into density dependence
+
+
+**** data
+PMDB density: could be proxy for how much art there is?
+
+Artfacts: number of shows on NUTS/1/2/3/city level:
+might measure both artists (supply) and audiences (demand)
+
+
+
+*** firm diversity
+**** concept
+firm diversity
+# seems to develop into capabilities pretty quickly
+
+
+**** text
+if organizations have more diversity (rather capabilities), they can better adopt to changing circumstances
+
+**** data
+PMDB: diversity of collection in terms of genre/medium/regional focus
+
+
+
+*** environmental diversity
+**** concept
+diversity
+
+**** text
+[[cite:&Carroll_Khessina_2019_demography]] argue that the diversity of the organization population influences mortality 
+# do they? 
+
+**** data
+Artfacts: diversity of stuff in terms of genre/medium exhibited
+# do we have medium? not atm, but artfacts has..
+# could also have gender/country/age diversity
+
+
+
+*** match between collection genre content and local art supply
+
+**** concept
+
+match between collection genre content and local art supply
+
+**** text
+organizations might thrive better in contexts where they have easy access to the resources that they rely on.
+[[cite:&Carroll_Khessina_2019_demography]]
+
+**** data
+Artfacts: overlap between collection focus and supply
+# don't have artfacts medium/genre tho.. 
+
+
+
+*** density -> control
+
+
+*** cooperation
+**** concept
+ties, capabilities
+
+**** text
+[[cite:&Carroll_Khessina_2019_demography]]: has something on mutualism
+p. 529: "ties with important actors"
+
+not clear what those ties provide tho: is not really money, or business opportunity
+could rather be indicator of organizational resources
+
+
+**** data
+pmdb: cooperation with other organizations
+
+
