@@ -288,7 +288,7 @@ check Dieuwke's lit
 
 
 
-*** less directly relevant
+** less directly relevant
 [[cite:&Walker_2010_reputation]]: reputation overall
 [[cite:&Pfarrer_Pollock_Rindova_2010_assets]]: reputation on earnings surprise behavior/perception of that
 [[cite:&Lange_Lee_Dai_2010_reputation]]: also lit review of reputation
@@ -298,6 +298,35 @@ check Dieuwke's lit
 
 [[cite:&Clark_2004_surge]]
 
+** ideas dumping ground
+:PROPERTIES:
+:CREATED:  <2023-08-17 do 11:19>
+:END:
+
+- search the openalex citations of density papers for luxury consumption
+- search the openalex citations/references of non-profit closure for
+  - luxury consumption
+  - tax incentives
+  - (government) regulationk
+
+
+variation: what variable have proper (correponding to theory) amounts of variation:
+- not funding source variation...
+- countries
+
+  
+Andy thinks there's still some variation, e.g. having a board -> more people are putting in money -> less concentration of resource sources
+same with friends-of association
+
+what if interaction? e.g. lack of diverse funding sources could be a problem only if there's a decline in founder's wealth -> i'm done
+
+also thinks laws of countries matter [[cite:&Dupuy_Ron_Prakash_2014_crackdown]], tax incentives
+search on semantic scholar:  https://www.semanticscholar.org/search?q=tax%20incentives%20nonprofit%20survival&sort=relevance
+
+
+EFA of PM attributes: hybridity, typicality [[cite:&Smith_2014_hybridity]]
+
+is there some arguemnt to be made about mediation of cultural stuff (recognition, awards, prestige, reputation) via material reources/money into survival?
 
 
 ** relevance
@@ -329,8 +358,7 @@ dynamic capabilities?
 
 
 
-** check web of science
-maybe there is some annual review? 
+
 
 ** AI/citation network tools
 :PROPERTIES:
@@ -407,6 +435,10 @@ seems to have gone nowhere
 
 https://www.sciencedirect.com/science/article/pii/S0148296314001684
 
+
+
+*** semantic scholar
+*** web of science
 
 
 ** angles
