@@ -456,7 +456,7 @@ does environment matter? or is it all about organizational characteristics? reso
 
 ** hypotheses
 
-*** inertia
+*** inertia I (name I)
 
 **** concept
 inertia
@@ -477,7 +477,76 @@ Similarly, inclusion of the name of the founder may be an indicator of organizat
 PMDB on whether founder's name is in museum name
 
 
-*** organizational resources I
+*** inertia II (death)
+
+**** concept
+inertia
+resources? 
+
+**** text
+
+change in authority (core feature)
+also commitment of children less clear -> resources
+
+
+**** data
+death in PMDB: just 1 for PMs after founder died?
+
+
+there's also some funny interaction specification with years after death [[cite:&Carroll_Khessina_2019_demography]]: p.527
+
+original approach: whether mortality increases after organizational change
+
+could also be non-linear: if organization survives transition, it's stable (red queen, trial by fire)
+
+
+
+*** categorical imperative (name II)
+**** concept
+category adherence? [[cite:&Hsu_2005_forms;&Zuckerman_1999_illegitimacy]]
+
+
+
+**** text
+name indicates form (if forms are stable, there's something in the name)
+
+[[cite:&Barnett_Fen_Luo_2012_identity]]: something about name, but not really
+[[cite:&Glynn_Abzug_2002_names]]: seems more relevant.. 
+
+**** data
+PMDB: whether museum has "museum" in name, compare chance of dissolution with other names (institute, gallery)
+
+
+
+*** categorical imperative II (recognition)
+**** concept
+recognition
+
+**** text
+recognition by third parties might
+- give better access to art -> founder finds it more rewarding
+- attract more audience -> more income
+- attract more VIPs/HNWI -> better for networking
+
+  
+
+**** data
+listed in MOW/IDA
+
+*** government crackdown/
+**** concept
+regulation
+
+**** text
+[[cite:&Dupuy_Ron_Prakash_2014_crackdown]]
+
+**** data
+can use that of cite:&Dupuy_Ron_Prakash_2014_crackdown
+
+
+
+
+*** organizational resources I: organizational characteristics
 
 **** concept
 resources
@@ -487,6 +556,12 @@ Firms depend on resources.
 #
 While non-profits do not have to run profitably (and are indeed often dependent on cash infusions or endowments), parts of the revenue are still gained from other income sources such as ticket sales and museum shop and restaurent income. 
 #
+liability of size: 
+- [[cite:&Hager_2001_demise]],
+- [[cite:&Carroll_Khessina_2019_demography]],
+- 
+
+
 Do these and other organizational characteristics reflect organizational resources, which in turn affect survival chances? 
 
 
@@ -503,13 +578,13 @@ proxies of organizational resources:
 - Artfacts: number of shows in organization
 
 
-*** organizational resources II 
+*** organizational resources II: founder inflows
 
 **** concept
 resources
 
 **** text
-Firms depend on resources.
+Organizations depend on resources.
 #
 Given that PMs are often non-profits, they are often dependent on cash inflows from their founders.
 #
@@ -524,6 +599,27 @@ BvD: how firms of founders are doing
 PMBD: whether wealth is available
 
 
+*** organizational resources III: tax incentives 
+**** concept
+resources
+
+**** text
+Organizations depend on resources.
+#
+NPOs, and PMs in particular, depend on donors.
+#
+Higher TMITR increase the tax incentives as they increase the amount the amount of money returned.
+#
+Hypothesis: higher TMITR -> lower mortality
+
+maybe this can be a contribution?
+search the non-profit closing literature and its references and citations
+
+use semantic scholar
+
+**** data
+Top marginal income tax rates: 
+can use correlated random effects
 
 
 *** environment resources
@@ -612,5 +708,9 @@ could rather be indicator of organizational resources
 
 **** data
 pmdb: cooperation with other organizations
+
+
+
+
 
 
