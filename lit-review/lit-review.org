@@ -225,7 +225,7 @@ dt_other_papers %>% fcount(child) %>% roworder(-N) %>% sbt(1:30)
 [[cite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]]: maybe.. 
 [[cite:&Lu_Shon_Zhang_2019_dissolution]]
 
-[[cite:&Hager_2001_vulnerability]]
+
 
 [[cite:&Hager_1999_demise]]
 
@@ -283,6 +283,10 @@ cite:&Dobrev_etal_2006_interdependence
 check Dieuwke's lit
 
 ** donesies
+
+[[cite:&Hager_2001_vulnerability]]: museums close quite much as well: 6.2% in 4 years; 10% in 8 years
+shows against the nichyness of PMs
+
 
 [[cite:&Duckles_Hager_Galaskiewicz_2005_close]]: finance doesn't matter sooo much (neither necessary nor sufficient), internal cohesion/external demand important
 
@@ -357,7 +361,14 @@ e.g. if there was
 -> then PMs are not really a thing?
 
 *(institutional) logic*: do PMs constitute a shift in logic of art provision?
-# like Yu's husband
+# like Yu's husband: kindergardens are clash of confucian (obey authorities), socialist (care for others/society?), capitalist (develop yourself) ideology
+hmm doesn't it crash with nichiness? logics [[cite:&Thornton_2015_ilp;&thornton_2012_logics]] are iirc quite large things (state, market, family, religion)
+I mean there is no a-priori reason why logic can't operate on smaller scale tho: the logic of public art provision...
+# yeah but if I'd look at changes I'd compare e.g. government spending with value added (economic activity in sector)
+
+
+
+
 
 is consideration of environmental characteristics contribution? to PMs maybe (although [[cite:&Velthuis_Gera_forthcoming_fragility]] have it somewhat), but not overall..
 could do some cross-level interactions? -> for now seems forced, maybe makes sense later tho
