@@ -204,8 +204,10 @@ dt_other_papers %>% fcount(child) %>% roworder(-N) %>% sbt(1:30)
 :ORDERED:  t
 :END:
 
+
+
 [[cite:&Chambre_Fatt_2002_liability]]
-[[cite:&Bielefeld_1994_survival]]: sounds pretty straightforward
+
 
 [[cite:&Hager_etal_1996_grave]]
 
@@ -228,14 +230,12 @@ dt_other_papers %>% fcount(child) %>% roworder(-N) %>% sbt(1:30)
 [[cite:&Hager_1999_demise]]
 
 [[cite:&Arbogust_2020_closure]]
-[[cite:&Searing_2020_zombies]]
+
 [[cite:&Herlin_2013_sorry]]
 [[cite:&Hager_Galaskiewicz_Larson_2007_liability]]
 
 
 [[cite:&Haugh_etal_2021_nascent]]
-
-[[cite:&Carroll_Khessina_2019_demography]]: done 
 
 
 [[cite:&Lounsbury_Ventresca_Hirsch_2003_recycling]]: inspiration: irrelevant actual case, nice theorizing
@@ -257,8 +257,6 @@ https://www.theinternationalman.com/art-museums.php LUL
 
 [[cite:&Dupin_Wezel_2023_bakeries]]: read for inspiration of theorizing
 
-[[cite:&Bogaert_etal_2014_ecological]]: about founding, not closing
-check the arguments about NPOs
 
 [[cite:&Wakefield_2017_superrich]]
 
@@ -280,10 +278,27 @@ see how it relates to [[cite:&Lomi_1995_population]]
 
 cite:&Dobrev_etal_2006_interdependence
 
+[[cite:&Rousseliere_2019_mortality]]: methods: correlated random effects, also some yuge Bayesian approach.. 
+
 check Dieuwke's lit
 
 ** donesies
+
+[[cite:&Duckles_Hager_Galaskiewicz_2005_close]]: finance doesn't matter sooo much (neither necessary nor sufficient), internal cohesion/external demand important
+
+cite:&Bogaert_etal_2014_ecological: about founding/closing ~ legitimation
+check the arguments about NPOs
+fuzziness is interesting -> should look into GoM
+
+
 [[file:~/Dropbox/nootes/Teece_2023_euram.org]]: dynamic capabilities -> corporate shill
+
+
+[[cite:&Bielefeld_1994_survival]]: high mortality in fast-growing sectors; age/size/strategies/funding
+[[cite:&Carroll_Khessina_2019_demography]]: resources, competition, specialization, cognition/identities, inertia
+
+
+[[cite:&Searing_2020_zombies]]: p. 369: "the role of financial resource dependence appears to be limited. If anything, financial difficulties appear to be symptomatic of other, deeper conditions that are more contributory"
 
 
 
@@ -296,7 +311,9 @@ check Dieuwke's lit
 [[cite:&Cavusgil_Seggie_Talay_2007_dynamic]]: dynamic capabilities
 [[cite:&Strang_Soule_1998_diffusion]]: diffusion
 
-[[cite:&Clark_2004_surge]]
+management fashion: 
+- [[cite:&Clark_2004_surge]]
+- [[cite:&Gill_Whittle_1993_panacea]]
 
 ** ideas dumping ground
 :PROPERTIES:
@@ -377,6 +394,9 @@ but maybe ~80 there, and none after 2015 (real 943)
 also has no references among the recommended papers
 
 *** https://www.connectedpapers.com/
+:PROPERTIES:
+:ID:       707111d6-cbab-402a-acc3-41d9b6477c43
+:END:
 hmm just one paper as input
 
 still not bad
