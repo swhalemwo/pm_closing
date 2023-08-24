@@ -215,8 +215,6 @@ dt_other_papers %>% fcount(child) %>% roworder(-N) %>% sbt(1:30)
 
 [[cite:&Vance_2010_funding]]
 
-[[cite:&Mayer_2022_slimmer]]: also recycling the IRS data
-
 [[cite:&Shon_Lu_2023_demographic]]: heh really milking your IRS data aren't you
 [[cite:&Park_Shon_Lu_2021_mortality]]: meh IRS
 
@@ -224,7 +222,6 @@ dt_other_papers %>% fcount(child) %>% roworder(-N) %>% sbt(1:30)
 
 [[cite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]]: maybe.. 
 [[cite:&Lu_Shon_Zhang_2019_dissolution]]
-
 
 
 [[cite:&Hager_1999_demise]]
@@ -274,15 +271,24 @@ see how it relates to [[cite:&Lomi_1995_population]]
 
 [[cite:&Barnett_Fen_Luo_2012_identity]]: cited by [[cite:&Carroll_Khessina_2019_demography]]: naming as constraint to change
 
-[[cite:&Glynn_Abzug_2002_names]]: cited by [[cite:&Carroll_Khessina_2019_demography]]: names matter
 
-cite:&Dobrev_etal_2006_interdependence
+
+cite:&Dobrev_etal_2006_interdependence: also interesting in regards to theory-data link: super complex and general theory with one specific population
 
 [[cite:&Rousseliere_2019_mortality]]: methods: correlated random effects, also some yuge Bayesian approach.. 
 
+[[cite:&Dollhopf_Scheitle_2016_founders]]: founder characteristics
+
 check Dieuwke's lit
 
-** donesies
+** donesies 
+
+[[cite:&Glynn_Abzug_2002_names]]: having proper name gives legitimacy -> survival
+
+[[cite:&Mayer_2022_slimmer]]: volatility -> mortality
+nice theory + large sample, some modeling weirdnesses tho (asset calculation, volatility  distribution, mediation, density)
+volatility probably not possible with PMDB, but maybe diversification
+
 
 [[cite:&Hager_2001_vulnerability]]: museums close quite much as well: 6.2% in 4 years; 10% in 8 years
 shows against the nichyness of PMs
