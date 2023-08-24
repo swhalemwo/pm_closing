@@ -220,7 +220,7 @@ dt_other_papers %>% fcount(child) %>% roworder(-N) %>% sbt(1:30)
 
 [[cite:&HernandezOrtiz_2022_discontinuity]]
 
-[[cite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]]: maybe.. 
+
 [[cite:&Lu_Shon_Zhang_2019_dissolution]]
 
 
@@ -281,7 +281,18 @@ cite:&Dobrev_etal_2006_interdependence: also interesting in regards to theory-da
 
 check Dieuwke's lit
 
+[[cite:&Fernandez_2007_dissolution]]: gets cited a lot me thinks
+
+
 ** donesies 
+
+[[cite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]]:
+success/failure: not really closing; closing rather can be a type of either -> paper is more abstracted
+strategy/control/leadership -> NPO failure
+marketing is part of strategy? -> social media
+also volunteers par of HR management
+collaboration
+"financials easy to measure" -> we are niche
 
 [[cite:&Glynn_Abzug_2002_names]]: having proper name gives legitimacy -> survival
 
@@ -354,6 +365,12 @@ search on semantic scholar:  https://www.semanticscholar.org/search?q=tax%20ince
 EFA of PM attributes: hybridity, typicality [[cite:&Smith_2014_hybridity]]
 
 is there some arguemnt to be made about mediation of cultural stuff (recognition, awards, prestige, reputation) via material reources/money into survival?
+
+
+it could be that there are subpopulations in the PMs that react differently: full-service museums vs private homes -> might react differently to same pressures/face different constraints?
+[[id:98819b7e-7a2d-4ebf-b14d-958d9777cd90][identity (original 8MP idea)]]
+maybe I can bring identity in a sense that is permissible, as long as I'm not delegitimizing PMs as a whole
+
 
 
 ** relevance
