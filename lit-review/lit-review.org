@@ -271,8 +271,6 @@ see how it relates to [[cite:&Lomi_1995_population]]
 
 [[cite:&Barnett_Fen_Luo_2012_identity]]: cited by [[cite:&Carroll_Khessina_2019_demography]]: naming as constraint to change
 
-
-
 cite:&Dobrev_etal_2006_interdependence: also interesting in regards to theory-data link: super complex and general theory with one specific population
 
 [[cite:&Rousseliere_2019_mortality]]: methods: correlated random effects, also some yuge Bayesian approach.. 
@@ -282,6 +280,9 @@ cite:&Dobrev_etal_2006_interdependence: also interesting in regards to theory-da
 check Dieuwke's lit
 
 [[cite:&Fernandez_2007_dissolution]]: gets cited a lot me thinks
+
+[[cite:&Hannan_1998_mortality]]: probably good for age dependence, but also not NPO-specific
+
 
 
 ** donesies 
@@ -324,6 +325,7 @@ fuzziness is interesting -> should look into GoM
 
 
 
+
 ** less directly relevant
 [[cite:&Walker_2010_reputation]]: reputation overall
 [[cite:&Pfarrer_Pollock_Rindova_2010_assets]]: reputation on earnings surprise behavior/perception of that
@@ -335,6 +337,11 @@ fuzziness is interesting -> should look into GoM
 management fashion: 
 - [[cite:&Clark_2004_surge]]
 - [[cite:&Gill_Whittle_1993_panacea]]
+
+cite:Stinchcombe_1965_structure: classic
+
+
+
 
 ** ideas dumping ground
 :PROPERTIES:
