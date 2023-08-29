@@ -205,9 +205,7 @@ dt_other_papers %>% fcount(child) %>% roworder(-N) %>% sbt(1:30)
 :END:
 
 
-
 [[cite:&Chambre_Fatt_2002_liability]]
-
 
 [[cite:&Hager_etal_1996_grave]]
 
@@ -278,6 +276,8 @@ cite:&Dobrev_etal_2006_interdependence: also interesting in regards to theory-da
 [[cite:&Dollhopf_Scheitle_2016_founders]]: founder characteristics
 
 check Dieuwke's lit
+
+[[cite:&Thornton_Lecy_2022_funding]]: government funding -> financial health
 
 [[cite:&Fernandez_2007_dissolution]]: gets cited a lot me thinks
 
@@ -537,7 +537,7 @@ Inertia can also be cognitive; characterized by adherence to taken-for-granted c
 #
 One component of organizational identity is the name of an organization.
 # 
-(*Barnett, Pontikes*) argue that the name can constrain organizational transformation, such as in the case of banks who were less likely to transform if they included the region in which they were initially active in their name. 
+[[textcite:&Barnett_Fen_Luo_2012_identity]] argue that the name can constrain organizational transformation, such as in the case of banks who were less likely to transform if they included the region in which they were initially active in their name. 
 #
 Similarly, inclusion of the name of the founder may be an indicator of organizational inertia, and thus decrease probability of transforming the private museum into a different organizational form. 
 
