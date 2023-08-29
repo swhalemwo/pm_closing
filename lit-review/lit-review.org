@@ -379,6 +379,14 @@ it could be that there are subpopulations in the PMs that react differently: ful
 maybe I can bring identity in a sense that is permissible, as long as I'm not delegitimizing PMs as a whole
 
 
+graph: is capabilities something different than the capability to get resources? -> does it make sense to have  separate concepts?
+
+
+a number of topics are interwoven:
+- resources and legitimacy, age, size
+- multiple forms of PMs and legitimacy, resources, environment??, susceptibility to other forces generally
+
+
 
 ** relevance
 relevance of density lit: if it quacks like a duck -> if it behaves like an organizational form, it is an organizational form?
