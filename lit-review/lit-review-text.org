@@ -1,55 +1,65 @@
+#+latex_class: article_poetics
+# erases make title
+# #+BIND: org-export-latex-title-command ""
+
+# fucks all the maketitlestuff just to be sure
+#+OPTIONS: num:nil
+#+OPTIONS: toc:nil
+#+OPTIONS: h:5
+
+
+
 * lit review text
+:PROPERTIES:
+:NUMBERS: no
+:END:
 
-** DV
 
-
-
-
-*** closing vs transformation
+** general
+Investigating the closure of museums requires thinking about their much more than I had originally thought, as it is the absence of processes that keep them alive that is ultimately responsible for their closure.
 #
-more research into our database necessary to see if it makes sense to focus on closing or on transformation more generally (competing risks)
+The task thus becomes to capture the inner workings and external dependencies of private museums during their lifetime to be able to characterize which mechanism/dependency does (and which doesn't) lead to closure.
+
+
+** dependent variable specification
+
+
+*closing vs transformation*: more research into our database necessary to see if it makes sense to focus on closing or on transformation more generally (competing risks)
 
 ** Size
 
-Larger NPOs are generally found to have lower mortality rates [[parencite:&Hager_1999_demise;&Duckles_Hager_Galaskiewicz_2005_close]], with size being measured through indicators such as number of employees, expenditure or revenues [[parencite:&Bielefeld_1994_survival;&Fernandez_2007_dissolution;&Searing_2020_zombies]].
+Larger NPOs are generally found to have lower mortality rates [[parencite:&Hager_1999_demise;&Duckles_Hager_Galaskiewicz_2005_close]], with size being measured through indicators such as assets [[parencite:&Lu_Shon_Zhang_2019_dissolution]], number of employees parencite:&Bielefeld_1994_survival and volunteers [[parencite:&Fernandez_2007_dissolution]], or revenues parencite:&Searing_2020_zombies.
+#
+Smaller organiations are argued to face greater difficulty in collecting resources and recruiting staff as well as relatively higher costs for administration and regulation [[parencite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]], while being less able to diversify or benefit from economies of scale [[parencite:&Hager_1999_demise]]. 
+#
+Larger organizations are also argued to be able to waste some resources during normal times which can be utilized effectively during situations of crisis without having to scale back services (which generate revenue) [[parencite:&Hager_2001_vulnerability]] and hence avoid downsizing, which can lead to dissolution [[parencite:&Duckles_Hager_Galaskiewicz_2005_close;&Bielefeld_1994_survival]]. 
 
-
+#+latex: \bigbreak
+#+latex: \noindent
+*H_size*: Larger private museums are less likely to close than smaller ones.
 
 
 ** Resource diversification
 
 A substantial amount of literature focuses on resources as resource depletion is a leading cause of (nonprofit) organizational demise. 
 #
-Diversification and (i.e. a multitude of funding sources) is found to reduce mortality [[parencite:&Fernandez_2007_dissolution;&Bielefeld_1994_survival;&Hager_2001_vulnerability]]; similarly volatility (rapid changes in revenues) is found to increase mortality [[parencite:&Mayer_2022_slimmer]]. 
+Diversification and (i.e. a multitude of funding sources) is found to reduce mortality [[parencite:&Fernandez_2007_dissolution;&Bielefeld_1994_survival;&Hager_2001_vulnerability;&Lu_Shon_Zhang_2019_dissolution]]; similarly volatility (rapid changes in revenues) is found to increase mortality [[parencite:&Mayer_2022_slimmer]]. 
 #
 While private museums are likely already generally leaning toward higher concentration than NPOs generally due to high reliance on the financial contributions of the founder-collector, there might still be variation in the degree of revenue concentration as museums might vary in the proportion of revenues received from ticket prices, restaurants, cafes, museum shops or other activities. 
 
+#+latex: \bigbreak
+#+latex: \noindent
+*H_diversification*: Private museums with more diversified revenue channels are less likely to close than more diversified ones. 
 
 
-However, some studies also argue that financial aspects are less relevant [[parencite:&Searing_2020_zombies]] (who argues that "financial difficulties appear to be symptomatic of other, deeper conditions that are more contributory" (p. 369), such as internal conflict.
-#
-Similarly, [[textcite:&Duckles_Hager_Galaskiewicz_2005_close]] find next to conflict, loss of internal commitment and abandonment by insiders as one of the main reasons for non-profit closure. 
+# However, some studies also argue that financial aspects are less relevant [[parencite:&Searing_2020_zombies]] (who argues that "financial difficulties appear to be symptomatic of other, deeper conditions that are more contributory" (p. 369), such as internal conflict.
+# #
+# Similarly, [[textcite:&Duckles_Hager_Galaskiewicz_2005_close]] find next to conflict, loss of internal commitment and abandonment by insiders as one of the main reasons for non-profit closure. 
 
 # what are resources really?
 # revenue?
 # assets?
-
-
-
-
-
-
-
-** Theoretical approaches
-Neoinstitutionalism [[cite:&Meyer_1977_myth;&diMaggio_1983_iron]], resource dependence theory [[parencite:&Pfeffer_Salancik_1978_control]] and organizational ecology [[parencite:&Carroll_1989_density;&Hannan_1992_dynamics]] are sometimes listed as different paradigms [[parencite:&Helmig_Ingerfurth_Pinz_2013_nonprofit;&Fernandez_2007_dissolution]]. 
-#
-However, as organizational ecology incorporates elements from neoinstitutionalism (legitimacy) and resource dependency theory (competition over resources) these do in my view not constitute clearly separated frameworks.
-#
-Perhaps it is the tendency of modeling legitmacy and competition explictly (rather than through the density proxy common in organizational ecology) which is responsible for the continuation of these 
-
-
-
-
+# [[cite:&Duckles_Hager_Galaskiewicz_2005_close]]: capacity: ability? to do the work of the organization (also skills and resources)
 
 ** Age
 
@@ -69,94 +79,235 @@ Similar, according to "liability of senescence" capabilities/routines/coalitions
 Given such conflicting predictions, [[textcite:&Carroll_Khessina_2019_demography]] propose to model age dependence with piece-wise constant hazard models (rather than functional models) to estimate age-specific effects which can, but don't have to, indicate a relationship between age and mortality.
 
 
+#+latex: \bigbreak
+#+latex: \noindent
+*H_age*: maybe best to move to controls
 
-
-*** relevance for PMs
-
-
-*** age as proxy for capabilities, social ties,
 
 
 ** Organizational transformation
 #
 [[textcite:&Carroll_Khessina_2019_demography]] argue that transformation of core features of organizations such as changes in technology or authority can have divergent consequences. 
 #
-On the one hand, it can disrupt customer relations by decreasing (perceived) reliability and accountability as the change upsets established perceptions, which can lead to higher mortality. 
+On the one hand, it can disrupt internal routines as well as external customer relations by decreasing (perceived) reliability and accountability as the change upsets established perceptions, which can lead to higher mortality. 
 #
-However,
+On the other hand, organizational transformation can be necessary to adapt to a changing environment, and hence be beneficial for survival.
 
 
-In the case of private museums, founder death has been speculated to pose a challenge to their sustainability as "seldom do heirs share a similar passion or wish to take on the financial burden of maintaining private museum indefinitely" [[cite:&Walker_2019_collector p.234]].
+
+The death of the founder can potentially constitute a substantial transformation as authority has to be reconfigured.
+# 
+Abandonment by insiders (such as divorce of directors) has been argued to contribute to NPO closure [[parencite:&Duckles_Hager_Galaskiewicz_2005_close]][fn::conflict is similarly argued to contribute to closure but is likely not testable with the current data.]
+#
+Even if plans have been made for a handover, the new leaders might not share quite the same commitment to art as the original founder, potentially decreasing museum sustainability. 
+# question is if death is so important, or rather restructuring of authority
+
+
+In the case of private museums, founder death has been speculated to pose a challenge to their sustainability as "seldom do heirs share a similar passion or wish to take on the financial burden of maintaining private museum indefinitely" [[parencite:&Walker_2019_collector p.234]].
+#
 # 
 However, existing research has not found a straightforward effect of founder death on museum closure [[parencite:&Velthuis_Gera_forthcoming_fragility;&Velthuis_etal_2023_boom]].
 #
 Nevertheless as previous research has relied primarily on descriptive statistics, investigating founder death in a multivariate survival model allows to investigate the effect of founder death with more precision.
 #
-It 
 
+
+#+latex: \bigbreak
+#+latex: \noindent
+*H_death*: A private museum is more likely to close after the death of the founder.
 
 # what are the consequences of founder death not mattering? could it be that PMs are actually more independent from founders than we think? 
 
 
 
-** environment 
+# ** environment 
+
+# Government funding to cultural sector could be competitive
+
+# Government funding to NPOs is found to increase survival chances [[parencite:&Vance_2010_funding]], presumably by increasing overall financial health such as operating margins and financial reserves [[parencite:&Thornton_Lecy_2022_funding]]. 
 
 
 
 
 
-** Name 
+** legitimacy/understandability 
 # provide legitimacy
 
-Legitimacy is necessary for being understood by the organizations in the environemnt; to the extent that this influences resource acquisition it could influence survival prospects.
-
-
-
-A factor that has been considered as contributing to legitimacy is the name or an organization:
+Legitimacy is necessary for being understood/tolerated/supported by other the organizations in the environemnt; to the extent that this influences resource acquisition it could influence survival prospects.
 #
-[[textcite:&Glynn_Abzug_2002_names]] argue that symbolic isomorphism with prevailing field norms (adhering to naming conventions) enhancec legitimacy, which according to the organizational ecology enhaces survival aspects [[parencite:&Hannan_1992_dynamics]].
+While [[textcite:&Bielefeld_1994_survival]] finds that NPOs who pursue less legitimation strategies (obtaining endorsements, lobbying or contributing to local causes) are more likely to close, other studies find limited impact of legitimacy on survival, both when measured via density parencite:&Bogaert_etal_2014_ecological or from archival sources and interviews [[parencite:&Fernandez_2007_dissolution]].
 #
-There are at least two aspects of the name that can be considered applicable in the context of private museum:
+In the context of private museums, decline of legitimacy/status could lead to lower visitor numbers, less discounts from art dealers, less government grants (?) or lower chances on collaborations with other museums or corporations, resulting in lower revenues and higher acquisition costs.
+
+
+Legitimacy might be obtained by isomorphism, i.e. adopting features associated with blueprints [[parencite:&diMaggio_1983_iron]].
 #
-First whether the name contains the founders name, and second whether the name uses the term "museum", or a less far-reaching/more modest like "foundation" or "institute".
-# although e.g. Centre Pompidou, Hamburg Kunsthalle, Alte Gallerie also don't call themselves "museum"
-# should compare form distribution of MOW art museums and PMDB
+Understandability/sense-making [[parencite:&Glynn_Abzug_2002_names]] might thus be limited if an organization is atypical [[parencite:&Rosch_1975_family]], i.e. displays an unusual combination of features.
+#
+In the case of private museums, such cases might be combinations of features from house museums (e.g. accessibility only by appointment) with full-service museums (e.g. extensive activities). 
+#
+Next to "hard" organizational features, adherence to naming conventions has been found to enhance legitimacy [[parencite:&Glynn_Abzug_2002_names]]; organizations that adhere to field norms about name length, name ambiguity (usage of artificial names) and name domain specificity (mentioning industry) were judged more legitimate. 
+# 
+However, the category of museums could be relatively flexible (it is e.g. not subject to state regulation), which might result in a relatively high tolerance of diversity as "anything goes" and hence limited "devaluation" of non-conforming/atypical members. 
+
+#+latex: \bigbreak
+#+latex: \noindent
+*H_typicality*: Atypical private museums have higher mortality rates.
+
+Legitimacy might also be measured by inclusion in industry registers, such as the Museum of the World (MOW) database [[parencite:&deGruyter_2021_MOW]].
+
+#+latex: \bigbreak
+#+latex: \noindent
+*H_mow*: Private museums included in the MOW database have higher survival chances.
 
 
 
-mismatch between claimed identity and actual identity? e.g. what if something claims to be museum but is feature-wise only house-museum?
+# Another factor next to actual features that has been considered as contributing to legitimacy is the name or an organization:
+# #
+# [[textcite:&Glynn_Abzug_2002_names]] argue that symbolic isomorphism with prevailing field norms (adhering to naming conventions) enhancec legitimacy, which according to the organizational ecology enhaces survival aspects [[parencite:&Hannan_1992_dynamics]].
+# #
+# Whether the museum name uses the term "museum", or a less far-reaching/more modest like "foundation" or "institute" might influence of third parties and thereby affect survival chances. 
+# # although e.g. Centre Pompidou, Hamburg Kunsthalle, Alte Gallerie also don't call themselves "museum"
+# # should compare form distribution of MOW art museums and PMDB
+# # 
+# It might be that blueprints exist for different kinds of institution, 
 
 
-In the context of private museums, decline of legitimacy/status could lead to lower visitor numbers or less discounts from art dealers, resulting in lower revenues and higher *operating costs*
-# nope, acquisition of new artworks is not operating costs
+
+# mismatch between claimed identity and actual identity? e.g. what if something claims to be museum but is feature-wise only house-museum?
+
+# grade of membership, fuzzy density, isomorphism
+#
+# In practice, typicality measures would be derived empirically from any number of variables.
 
 
-However, some studies find limited impact of legitimacy on survival, both when measured via density parencite:&Bogaert_etal_2014_ecological or from archival sources and interviews [[parencite:&Fernandez_2007_dissolution]]. 
-
-find little legitimacy impact on survival
-- [[cite:&Fernandez_2007_dissolution]]
-- [[]] (also have fuzzy density)
- 
-
-isomorphism?
-
-could be proxy for size/resources tho..?
+# could be proxy for size/resources tho..?
 # maybe in practice, but not by definition
 
-** fad
-the more private museums are founded, the less they become a status of distinction
-ultimately, art collectors might stop founding them, or even close them to direct their resources to the "next big thing"
 
 
-** different kinds of PM
-e.g. house museums could be less under pressure than real museums -> clustering
+** reputation
+
+Reputation has been argued to enhance organizational survival [[cite:&Rao_1994_reputation]].
+#
+However, reputation effects could also be a spurious effect of organizational capabilities as more competent organizations are more able to both aquire reputation through certification contests and survive in long run parencite:&Goldfarb_Zavyalova_Pillai_2018_Rao.
+#
+Recognition might be measured by inclusion in the Artnews top 200 collector ranking.
+
+#+latex: \bigbreak
+#+latex: \noindent
+*H_artnews*: Private museums of collectors included in the Artnews top 200 collector ranking are less likely to close. 
+
+# recognition by
+# - MOW: effect is quite questionable: don't think it's used much by professionals
+#   -> effect here would likely be size rather than reputation
+# - artnews
+# - Museu.ms HUH
 
 
-[[cite:&Hager_2001_vulnerability]]: different kinds of cultural NPOs differ in survival chances/influence variables
 
-According to resource partioning, a concentration of the market by generalists opens up spaces at the margins for small specialists [[parencite:&Carroll_Khessina_2019_demography]]. 
+** more speculative approaches
+*** different kinds of PM
 
-EFA/PCA/LCA
+# e.g. house museums could be less under pressure than real museums -> clustering
+
+
+
+
+# According to resource partioning, a concentration of the market by generalists opens up spaces at the margins for small specialists [[parencite:&Carroll_Khessina_2019_demography]]. 
+
+# EFA/PCA/LCA
+
+# is hard to sell: basically assumes the "deductive" (rather speculative) PMDB form specification might not be correct
+# keep as side project?
+# it could matter..
+# many things can matter that I can't test
+# maybe should propose it..
+
+It could also be relevant to explore the diversity of private museums, possibly summarizing it.
+#
+It might be the case that various dimensions of e.g. sizes (collection size, floor size), activities, opening times and name properties ("museum" vs other form, inclusion of founder's name) can be reduced to fewer dimensions, or alternative that private museums can be grouped in more-or-less distinct subgroups (such as full-service museums and house museums).
+#
+The finding that mortality differs for different kinds of cultural organizations (e.g. theathers, museums, dance organizations; [[cite:&Hager_2001_vulnerability]]) could also be reflected for different kinds of private museums. 
+#
+# In the organizational literature, a distinction is made between generalists and specialists [[parencite:&Carroll_Khessina_2019_demography]] as a function of the diversification of the resource base.
+#
+# doesn't really fit for PMs: house museums don't have different part of resource base (in that they draw resources from a different source than full-service museums), but draw it from "same" as full-service (founder), but less from audience/corporations/government
+# 
+Whereas e.g. full-service museums might also rely on e.g. revenues from tickets, cafes and restaurants, government grants or collaborations with corporations, house museums might be relying predominantly on their founders. 
+#
+These sub-forms of private museums might thus differ in their susceptibility to environmental factors: House museums might be less constrained by legitimacy and competition, but on the other hand could be more susceptible to e.g. tranformation (death of the foudner) due to less extensive institutionalization. 
+
+# picking wrong name (museums vs foundation): lack of knowledge about appropriateness -> lower skills/capabilities?
+# but name is easy to pick: lack of effect could be that founders know how to pick right name
+
+
+
+*** founder name could reflect inertia and/or founder authority
+
+Including the founder's name in the museum name might indicate that
+- an organization is very inert, as the founder's vision is highly valued.
+- the authority (core feature) of organization is relatively strongly centered around founder. This doesn't necessarily imply inertia as the founder can be flexible, but it would correspond to a larger transformation in case of the death of the founder, which could lower survival chances
+  # annoying: I don't think this theory is super forcing.. but could be, will never find out if I don't test it
+
+*** fad
+Founding a private museum could constitute a fashion/trend that could be characterized as (luxury) consumption.
+#
+Closing might then be an instance of private museums having become not useful for displaying status as they are replaced by the next trend of luxury spending.
+#
+This would require identifying some other trends of luxury consumption. 
+
+
+# ** COMMENT fad
+# the more private museums are founded, the less they become a status of distinction
+# ultimately, art collectors might stop founding them, or even close them to direct their resources to the "next big thing"
+
+*** demand
+Low demand by the public has been found to be related failures of NPOs generally [[parencite:&Duckles_Hager_Galaskiewicz_2005_close]] and private museums specifically [[parencite:&Velthuis_Gera_forthcoming_fragility]]. I however can't think of a good way of measuring this.
+
+# how to measure this:
+# existing organizations? supply is proxy for demand LUL i love equilibrium
+# amount with tertiary education? could still be that they don't show the art that's in demand
+
+#+Latex: \begin{sloppypar}
+#+Latex: \printbibliography
+#+Latex: \end{sloppypar}
+
+
+
+
+* scrap :noexport:
+** done reframing closing to success/failure
+CLOSED: [2023-08-28 ma 17:04]
+NPO closure: not necessarily failure 
+
+[[cite:&Searing_2020_zombies]]
+
+[[cite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]]: argue to focus wider on NPO success/failure, with success corresponding to mission accomplishment
+however noticed that mission statements can also be quite vague, and calls for more research into them means there isn't really a overall good way to measure 
+PM mission statements are probably not so specific that you can say whether they are met 
+
+NPOs are perpetually failing: 
+- [[cite:&Meyer_Zucker_1989_failing]]: also differentiate performance from survival
+- [[cite:&Seibel_1996_failure]]: NPOs (rather than state/market orgs) can fail and be interested in ignorance about failure
+  # edgy today, aren't we
+
+-> I don't think this is needed:
+- mission is likely something general like "promoting art"/"providing education" -> doesn't have clear expiring date/achievement criteria -> closure is failure
+  
+
+
+
+
+** done Theoretical approaches
+CLOSED: [2023-08-29 di 18:13]
+Neoinstitutionalism [[cite:&Meyer_1977_myth;&diMaggio_1983_iron]], resource dependence theory [[parencite:&Pfeffer_Salancik_1978_control]] and organizational ecology [[parencite:&Carroll_1989_density;&Hannan_1992_dynamics]] are sometimes listed as different paradigms [[parencite:&Helmig_Ingerfurth_Pinz_2013_nonprofit;&Fernandez_2007_dissolution]]. 
+#
+However, as organizational ecology incorporates elements from neoinstitutionalism (legitimacy) and resource dependency theory (competition over resources) these do in my view not constitute clearly separated frameworks.
+#
+Perhaps it is the tendency of modeling legitmacy and competition explictly (rather than through the density proxy common in organizational ecology) which is responsible for the continuation of these 
+
+
 
 
 
@@ -198,26 +349,4 @@ OTOH, having yuge number of NPOs from different sectors (e.g. [[cite:&Mayer_2022
 *framing*: Find it hard to think of anything else than survival of private museums.
 #
 # also project is about PMs
-
-
-* scrap
-** done reframing closing to success/failure
-CLOSED: [2023-08-28 ma 17:04]
-NPO closure: not necessarily failure 
-
-[[cite:&Searing_2020_zombies]]
-
-[[cite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]]: argue to focus wider on NPO success/failure, with success corresponding to mission accomplishment
-however noticed that mission statements can also be quite vague, and calls for more research into them means there isn't really a overall good way to measure 
-PM mission statements are probably not so specific that you can say whether they are met 
-
-NPOs are perpetually failing: 
-- [[cite:&Meyer_Zucker_1989_failing]]: also differentiate performance from survival
-- [[cite:&Seibel_1996_failure]]: NPOs (rather than state/market orgs) can fail and be interested in ignorance about failure
-  # edgy today, aren't we
-
--> I don't think this is needed:
-- mission is likely something general like "promoting art"/"providing education" -> doesn't have clear expiring date/achievement criteria -> closure is failure
-  
-
 
