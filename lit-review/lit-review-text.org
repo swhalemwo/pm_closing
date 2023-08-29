@@ -1,11 +1,223 @@
 * lit review text
 
-** Resources
+** DV
 
-A substantial amount of 
+
+
+
+*** closing vs transformation
+#
+more research into our database necessary to see if it makes sense to focus on closing or on transformation more generally (competing risks)
+
+** Size
+
+Larger NPOs are generally found to have lower mortality rates [[parencite:&Hager_1999_demise;&Duckles_Hager_Galaskiewicz_2005_close]], with size being measured through indicators such as number of employees, expenditure or revenues [[parencite:&Bielefeld_1994_survival;&Fernandez_2007_dissolution;&Searing_2020_zombies]].
+
+
+
+
+** Resource diversification
+
+A substantial amount of literature focuses on resources as resource depletion is a leading cause of (nonprofit) organizational demise. 
+#
+Diversification and (i.e. a multitude of funding sources) is found to reduce mortality [[parencite:&Fernandez_2007_dissolution;&Bielefeld_1994_survival;&Hager_2001_vulnerability]]; similarly volatility (rapid changes in revenues) is found to increase mortality [[parencite:&Mayer_2022_slimmer]]. 
+#
+While private museums are likely already generally leaning toward higher concentration than NPOs generally due to high reliance on the financial contributions of the founder-collector, there might still be variation in the degree of revenue concentration as museums might vary in the proportion of revenues received from ticket prices, restaurants, cafes, museum shops or other activities. 
+
+
+
+However, some studies also argue that financial aspects are less relevant [[parencite:&Searing_2020_zombies]] (who argues that "financial difficulties appear to be symptomatic of other, deeper conditions that are more contributory" (p. 369), such as internal conflict.
+#
+Similarly, [[textcite:&Duckles_Hager_Galaskiewicz_2005_close]] find next to conflict, loss of internal commitment and abandonment by insiders as one of the main reasons for non-profit closure. 
+
+# what are resources really?
+# revenue?
+# assets?
+
+
+
+
+
+
+
+** Theoretical approaches
+Neoinstitutionalism [[cite:&Meyer_1977_myth;&diMaggio_1983_iron]], resource dependence theory [[parencite:&Pfeffer_Salancik_1978_control]] and organizational ecology [[parencite:&Carroll_1989_density;&Hannan_1992_dynamics]] are sometimes listed as different paradigms [[parencite:&Helmig_Ingerfurth_Pinz_2013_nonprofit;&Fernandez_2007_dissolution]]. 
+#
+However, as organizational ecology incorporates elements from neoinstitutionalism (legitimacy) and resource dependency theory (competition over resources) these do in my view not constitute clearly separated frameworks.
+#
+Perhaps it is the tendency of modeling legitmacy and competition explictly (rather than through the density proxy common in organizational ecology) which is responsible for the continuation of these 
+
+
+
 
 
 ** Age
 
+
+The age of an organization is considered in different ways to be related to closing.
+#
+What started with liability of newness [[cite:&Stinchcombe_1965_structure]], which posited that organizational mortality decreases over time due to acquisition of capabilities and connections, has lead to a number of extensions [[parencite:&Carroll_Khessina_2019_demography;&Hannan_1998_mortality]]:
+#
+Liability of adolescence argues that shortly after foundings organizations can still draw on endowments, the expiration of which leads to a peak of mortality some time after opening.
+#
+While according this view mortality still decreases after the peak as the organization becomes more established, other perspectives argue also for a positive relationship between age and mortality:
+# 
+According to "liability of obsolescence" the environment changes faster than organizations which are seen as relatively constrained by inertia, which therefore leads to declining fitness and survival chances.
+#
+Similar, according to "liability of senescence" capabilities/routines/coalitions can constrain the actions of organizations.
+#
+Given such conflicting predictions, [[textcite:&Carroll_Khessina_2019_demography]] propose to model age dependence with piece-wise constant hazard models (rather than functional models) to estimate age-specific effects which can, but don't have to, indicate a relationship between age and mortality.
+
+
+
+
+*** relevance for PMs
+
+
+*** age as proxy for capabilities, social ties,
+
+
+** Organizational transformation
+#
+[[textcite:&Carroll_Khessina_2019_demography]] argue that transformation of core features of organizations such as changes in technology or authority can have divergent consequences. 
+#
+On the one hand, it can disrupt customer relations by decreasing (perceived) reliability and accountability as the change upsets established perceptions, which can lead to higher mortality. 
+#
+However,
+
+
+In the case of private museums, founder death has been speculated to pose a challenge to their sustainability as "seldom do heirs share a similar passion or wish to take on the financial burden of maintaining private museum indefinitely" [[cite:&Walker_2019_collector p.234]].
+# 
+However, existing research has not found a straightforward effect of founder death on museum closure [[parencite:&Velthuis_Gera_forthcoming_fragility;&Velthuis_etal_2023_boom]].
+#
+Nevertheless as previous research has relied primarily on descriptive statistics, investigating founder death in a multivariate survival model allows to investigate the effect of founder death with more precision.
+#
+It 
+
+
+# what are the consequences of founder death not mattering? could it be that PMs are actually more independent from founders than we think? 
+
+
+
+** environment 
+
+
+
+
+
+** Name 
+# provide legitimacy
+
+Legitimacy is necessary for being understood by the organizations in the environemnt; to the extent that this influences resource acquisition it could influence survival prospects.
+
+
+
+A factor that has been considered as contributing to legitimacy is the name or an organization:
+#
+[[textcite:&Glynn_Abzug_2002_names]] argue that symbolic isomorphism with prevailing field norms (adhering to naming conventions) enhancec legitimacy, which according to the organizational ecology enhaces survival aspects [[parencite:&Hannan_1992_dynamics]].
+#
+There are at least two aspects of the name that can be considered applicable in the context of private museum:
+#
+First whether the name contains the founders name, and second whether the name uses the term "museum", or a less far-reaching/more modest like "foundation" or "institute".
+# although e.g. Centre Pompidou, Hamburg Kunsthalle, Alte Gallerie also don't call themselves "museum"
+# should compare form distribution of MOW art museums and PMDB
+
+
+
+mismatch between claimed identity and actual identity? e.g. what if something claims to be museum but is feature-wise only house-museum?
+
+
+In the context of private museums, decline of legitimacy/status could lead to lower visitor numbers or less discounts from art dealers, resulting in lower revenues and higher *operating costs*
+# nope, acquisition of new artworks is not operating costs
+
+
+However, some studies find limited impact of legitimacy on survival, both when measured via density parencite:&Bogaert_etal_2014_ecological or from archival sources and interviews [[parencite:&Fernandez_2007_dissolution]]. 
+
+find little legitimacy impact on survival
+- [[cite:&Fernandez_2007_dissolution]]
+- [[]] (also have fuzzy density)
+ 
+
+isomorphism?
+
+could be proxy for size/resources tho..?
+# maybe in practice, but not by definition
+
+** fad
+the more private museums are founded, the less they become a status of distinction
+ultimately, art collectors might stop founding them, or even close them to direct their resources to the "next big thing"
+
+
+** different kinds of PM
+e.g. house museums could be less under pressure than real museums -> clustering
+
+
+[[cite:&Hager_2001_vulnerability]]: different kinds of cultural NPOs differ in survival chances/influence variables
+
+According to resource partioning, a concentration of the market by generalists opens up spaces at the margins for small specialists [[parencite:&Carroll_Khessina_2019_demography]]. 
+
+EFA/PCA/LCA
+
+
+
+** rather reflections
+
+*** private museums as organizations?
+
+The non-profit organizational literature focuses (unsurprisingly) on organizations.
+#
+operations: profit, revenue, assets
+funder diversity
+client satisfaction
+internal cohesion
+closure is discussed naturally and quite high [[cite:&Hager_2001_vulnerability]]: 10% of museums close over 8 year period 
+
+In particular
+
+# 
+I noticed how this differs from our conceptualization/emphasis of PMs which focus heavily on the collector
+
+*** PMs are niche -> consequence for theorizing -> framing? 
+:PROPERTIES:
+:ID:       ed602948-7ad0-4031-a920-a1bca5a6cd48
+:END:
+even if PMs are considered organizations, they are in a very small niche
+- high dependence on single income stream (low diversification; but maybe variation still exists)
+- one sub-sub-sector (not just NPOs, not just cultural NPOs, but museums)
+  [[cite:&Hager_2001_vulnerability]]: much variation even between cultural sector  NPOs
+- governance: centralized around collector (NPOs more seen as collective, or at with variation, not really as private endeavors of their founders)
+- weak client relationships: 
+  - weak dependence on third party suppliers for inputs: just to 
+    although, consumers (audience) can help with money (just money, but operations work without visitors), and 
+  - little development of technology (unlike e.g. hospitals/childcare/environmental)
+  - 
+
+OTOH, having yuge number of NPOs from different sectors (e.g. [[cite:&Mayer_2022_slimmer]]) goes at the expense of influences specific to each organizational-form [[parencite:&Hager_2001_vulnerability]]
+
+
+*framing*: Find it hard to think of anything else than survival of private museums.
+#
+# also project is about PMs
+
+
+* scrap
+** done reframing closing to success/failure
+CLOSED: [2023-08-28 ma 17:04]
+NPO closure: not necessarily failure 
+
+[[cite:&Searing_2020_zombies]]
+
+[[cite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]]: argue to focus wider on NPO success/failure, with success corresponding to mission accomplishment
+however noticed that mission statements can also be quite vague, and calls for more research into them means there isn't really a overall good way to measure 
+PM mission statements are probably not so specific that you can say whether they are met 
+
+NPOs are perpetually failing: 
+- [[cite:&Meyer_Zucker_1989_failing]]: also differentiate performance from survival
+- [[cite:&Seibel_1996_failure]]: NPOs (rather than state/market orgs) can fail and be interested in ignorance about failure
+  # edgy today, aren't we
+
+-> I don't think this is needed:
+- mission is likely something general like "promoting art"/"providing education" -> doesn't have clear expiring date/achievement criteria -> closure is failure
+  
 
 
