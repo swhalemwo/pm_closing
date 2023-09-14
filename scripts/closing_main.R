@@ -27,7 +27,9 @@ gc_locs <- function(dir_proj) {
     list(
         proj = dir_proj,
         figs = paste0(dir_proj, "figures/"),
-        tbls = paste0(dir_proj, "tables/"))
+        tbls = paste0(dir_proj, "tables/"),
+        data = paste0(dir_proj, "data/")
+    )
 }
 
         
@@ -233,17 +235,17 @@ dt_pca_prepped <- slt(dt_pmdb, vrbls_dimred1) %>%
 
 l_pcares_prcomp <- prcomp(dt_pca_prepped, scale=T)
 
-ncomp <- 10 ## len(vrbls_dimred1)
+ncomp <- 5 ## len(vrbls_dimred1)
 rawLoadings <- l_pcares_prcomp$rotation[,1:ncomp] %*% diag(l_pcares_prcomp$sdev, ncomp, ncomp)
 rotatedLoadings <- varimax(rawLoadings)$loadings
 
 ## scores <- scale(l_pcares$x) %*% varimax(rawLoadings)$rotmat %>% adt
 
 library(psych)
-l_pcares_psych <- psych::principal(dt_pca_prepped, rotate = "varimax", nfactors = len(vrbls_dimred1)) 
+l_pcares_psych <- psych::principal(dt_pca_prepped, rotate = "varimax", nfactors = ncomp) 
 
 
-gd_dimred_loads(l_pcares_psych$loadings) %>% .[dim %in% paste0("dim", 1:5)] %>% gp_dimred_loads # psych
+gd_dimred_loads(l_pcares_psych$loadings) %>% .[dim %in% paste0("dim", 1:ncomp)] %>% gp_dimred_loads # psych
 gd_dimred_loads(l_pcares_prcomp$rotation) %>% .[dim %in% paste0("dim", 1:5)] %>% gp_dimred_loads # unrotated prcomp
 gd_dimred_loads(rotatedLoadings) %>% .[dim %in% paste0("dim", 1:5)] %>% gp_dimred_loads # rotated prcomp
 
@@ -252,6 +254,8 @@ gd_dimred_loads(rotatedLoadings) %>% .[dim %in% paste0("dim", 1:5)] %>% gp_dimre
 library(factoextra)
 fviz_screeplot(l_pcares_prcomp, choice = "variance")
 
+l_pcares_psych$values %>% gp_scree
+l_pcares_psych$Vaccounted[1,] %>% gp_scree # scree plot of rotated factors -> not so useful
 
 
 
