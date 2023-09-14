@@ -1,26 +1,91 @@
-## * closing main file
+## * closing central file
+
+## * stuff to load
+
+## ** libraries
 
 args <- commandArgs(trailingOnly = T)
-options(width = 110)
+options(width = 115)
 
-detach("package:pmdata", unload = T)
+## detach("package:pmdata", unload = T)
 
+library(jtls)
 library(pmdata)
 library(memoise)
 library(collapse)
 library(purrr)
+library(docstring)
 
-LOCS <- list(PROJDIR = "/home/johannes/Dropbox/phd/papers/closing/",
-             MOICACHE = "/home/johannes/memoi_cache_closing/")
+## LOCS <- list(PROJDIR = "/home/johannes/Dropbox/phd/papers/closing/")
+## LOCS$FIGDIR <- paste0(FIG
 
+## ** functions
 
-DATA_LOCS <- gc_data_locs()
-dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%
-    .[museum_status %in% c("private museum", "no longer a private museum", "closed")] # yeet bad PMs
-dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
+## *** config functions
+
+gc_locs <- function(dir_proj) {
+    list(
+        proj = dir_proj,
+        figs = paste0(dir_proj, "figures/"),
+        tbls = paste0(dir_proj, "tables/"))
+}
+
+        
+gc_plts <- function() {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+
+    l_pltcfgs <- list(
+        p_vrblcvrg = list(
+            dt_vrblcvrg = quote(dt_vrblcvrg),
+            yeet_acts = F,
+            caption = "PMDB variable coverage by museum status",
+            width = 9,
+            height = 12),
+        p_asdf = list(
+            dtx = quote(mtcars),
+            width = 10,
+            height = 20,
+            caption = "kappa")
+    )
+
+    ## check that there are no duplicate 
+    if (any_duplicated(names(l_pltcfgs))) stop("duplicated names")
+
+    ## check that all entries have width, heigh, caption
+    if (!all(unlist(map(l_pltcfgs, ~all(c("width", "height", "caption") %in% names(.x)))))) {
+        stop("not all configs have width, height and caption")}
+
     
+    return(l_pltcfgs)
+        
+}
 
-dt_pmdb %>% str
+## *** data generation
+
+
+gd_dimred_loads <- function(loadmat) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    #' generate long data.frame of dimensionality reduction loadings
+    #'
+    #' @param loadmat: loadings matrix
+    #' @value data.table with columns vrbl, dim, value
+
+    dt_dimred_loads <- matrix(data = as.numeric(loadmat),
+                              nrow = nrow(loadmat),
+                              dimnames = list(rownames(loadmat), paste0("dim", 1:ncol(loadmat)))) %>% 
+                              ## dimnames = attributes(loadmat)$dimnames) %>% 
+                              ## dimnames = as.list(paste0("dim", 1:ncol(loadmat)))) %>%
+        adt(keep.rownames = "vrbl") %>%
+        melt(id.vars = "vrbl", variable.name = "dim") %>%
+        .[, dim := factor(dim, levels = sort(unique(dim)))]
+
+        ## .[dim %in% paste0("dim", 1:10) ] %>%
+        ## .[, dim := factor(dim, levels = paste0("RC", 1:10))]
+
+    return(dt_dimred_loads)
+}
+
 
 gd_pmdb_excl_splong <- function(dt_pmdb_excl, vrbls_tocheck) {
     ## generate coverage of dt_pmdb_excl (before cleaning) to assess
@@ -53,7 +118,50 @@ gd_pmdb_excl_splong <- function(dt_pmdb_excl, vrbls_tocheck) {
     return(dt_pmdb_excl_splong)
 }
 
-## find non-standardized columns
+## *** plotting
+
+gp_vrblcvrg <- function(dt_vrblcvrg, yeet_acts) {
+
+    dt_vrblcvrg %>% 
+        .[if(yeet_acts) !grepl("^act_", vrbl) else T] %>% # filtering out activities if requested
+        ggplot(aes(x=value, y=vrbl, color = variable)) +
+        geom_jitter(width= 0, height = 0.3) +
+        theme(legend.position = "bottom")
+    
+}
+
+gp_dimred_loads <- function(dt_dimred_loads) {
+    #' plot factor loadings with ggplot in col + facetted
+    #'
+    #' @param dt_dimred_loads: long data.frame with columns vrbl, dim (PCA/EFA outcome), value (loading)
+    
+    ## ADDME: automatic ordering of rows
+
+    ggplot(dt_dimred_loads, aes(x=abs(value),y=vrbl, fill = value)) +
+        geom_col() +
+        facet_grid(. ~ dim) +
+        scale_fill_gradient2(high = "red", low = "blue")
+}
+
+
+## * main
+if (interactive()) {stop("it's interactive time")}
+
+
+## set up constants used for object management
+c_dirs <- gc_locs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## project dirs
+PMDATA_LOCS <- gc_pmdata_locs() # pmdata source
+l_plts <- list() # list of plots
+c_pltargs <- list() # arguments to pass to gc_plts
+
+
+
+dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%
+    .[museum_status %in% c("private museum", "no longer a private museum", "closed")] # yeet bad PMs
+dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
+    
+
+## ** variable selection
 
 ## get relevant char columns: convert "" to NA
 vrbls_relchars <- .c(
@@ -61,7 +169,7 @@ vrbls_relchars <- .c(
     staff_size, buildgtype, slfidfcn, city, clctn_med_fcs, clctn_cry_fcs, clctn_reg_fcs, clctn_modctmp,
     insta_handle)
     
-
+## set variables to check: all numeric vrbls, selected char vrbls, yeet llid
 vrbls_tocheck <- c(
     setdiff(num_vars(dt_pmdb, return = "names"), .c(llid)), vrbls_relchars)
 
@@ -71,7 +179,11 @@ dt_pmdb_splong <- tfmv(dt_pmdb, vars = vrbls_relchars, FUN = \(x) replace(x, x==
     melt(id.vars = c("ID", "museum_status"), variable.name = "vrbl")
 
 
+
+
 ## plot variable coverage by museum type
+
+
 dt_vrblcvrg <- merge(
     dt_pmdb_splong[, .(all_PMs = sum(!is.na(value))/.N), vrbl],
     dt_pmdb_splong[, .(vlus_present = sum(!is.na(value))/.N), .(vrbl, museum_status)] %>%  # prop_cpltns by status
@@ -80,14 +192,118 @@ dt_vrblcvrg <- merge(
     melt(id.vars = "vrbl") %>% .[, src := "pmdb"]
 
 
+gdplt("p_vrblcvrg")
+wdplt("p_vrblcvrg")
 
-p_vrblcvrg <- dt_vrblcvrg %>% 
+
+
+penl_vrbls <- .c(gvtsupport, donorprogram, endowment, sponsorship, rentalpossblt, staff_size, clctn_size,
+                 cafe_restrnt, webshop, museumshop)
+
+
+dt_vrblcvrg %>% 
     ## .[!grepl("^act_", vrbl)] %>%  # exclude activities
+    .[, rel_var := fifelse(vrbl %in% penl_vrbls, "penl", "not_penl")] %>% 
     ggplot(aes(x=value, y=vrbl, color = variable)) +
     geom_jitter(width= 0, height = 0.3) +
-    theme(legend.position = "bottom")
-p_vrblcvrg
+    theme(legend.position = "bottom") +
+    facet_grid(rel_var ~ . , space = "free", scales = "free")
 
+
+
+## ** dimension reduction fun
+## will have different variable sets, e.g. whether founder should be there or not
+## doesn't matter so much now which variables to use, just set up framework for plotting
+vrbls_dimred1 <- setdiff(num_vars(dt_pmdb, return = "names"), .c(llid, ID, year_closed))
+
+dt_pca_prepped <- slt(dt_pmdb, vrbls_dimred1) %>%
+    tfmv(vars = names(.), FUN = replace_NA)
+
+l_pcares_prcomp <- prcomp(dt_pca_prepped, scale=T)
+
+ncomp <- 10 ## len(vrbls_dimred1)
+rawLoadings <- l_pcares_prcomp$rotation[,1:ncomp] %*% diag(l_pcares_prcomp$sdev, ncomp, ncomp)
+rotatedLoadings <- varimax(rawLoadings)$loadings
+rotatedLoadings2 <- promax(rawLoadings)$loadings
+## scores <- scale(l_pcares$x) %*% varimax(rawLoadings)$rotmat %>% adt
+
+library(psych)
+l_pcares_psych <- psych::principal(dt_pca_prepped, rotate = "varimax", nfactors = 20) # len(vrbls_dimred1)) #
+
+
+
+gd_dimred_loads(l_pcares_psych$loadings) %>% .[dim %in% paste0("dim", 1:5)] %>% gp_dimred_loads
+gd_dimred_loads(l_pcares_prcomp$rotation) %>% .[dim %in% paste0("dim", 1:5)] %>% gp_dimred_loads
+gd_dimred_loads(rotatedLoadings) %>% .[dim %in% paste0("dim", 1:5)] %>% gp_dimred_loads
+gd_dimred_loads(rotatedLoadings2) %>% gp_dimred_loads
+X11()
+
+
+gp_scree <- function(scree_vlus) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+
+    data.table(value = scree_vlus) %>% .[, dim_nbr := factor(1:.N)] %>%
+        ggplot(aes(x=dim_nbr, y=value)) + geom_col() 
+}
+
+
+(l_pcares_prcomp$sdev^2/sum(l_pcares_prcomp$sdev^2)) %>% gp_scree
+
+prop.table(l_pcares_psych$values) %>% gp_scree
+
+l_pcares_psych$Vaccounted
+
+
+
+
+library(factoextra)
+fviz_screeplot(l_pcares_prcomp, choice = "variance")
+
+l_pcares_prcomp$sdev %>% gp_scree
+l_pcares_psych$Vaccounted %>% .[4,1:10] %>% gp_scree
+
+corx <- cor(dt_pca_prepped)
+scree(corx)
+
+## https://stackoverflow.com/questions/53825816/convert-a-loadings-object-to-a-dataframe-r
+dt_pca_loads_splong <- matrix(as.numeric(l_pcares_psych$loadings),
+                              attributes(l_pcares_psych$loadings)$dim,
+                              dimnames = attributes(l_pcares_psych$loadings)$dimnames) %>%
+    adt(keep.rownames = "vrbl") %>%
+    melt(id.vars = "vrbl", variable.name = "dim") %>% 
+    .[dim %in% paste0("RC", 1:10) ] %>%
+    .[, dim := factor(dim, levels = paste0("RC", 1:10))]
+
+library("RColorBrewer")
+display.brewer.all(type = 'div')
+
+
+
+gp_dimred_loads(dt_pca_loads_splong)
+
+
+
+
+
+
+
+
+as.numeric(l_pcares_psych$loadings)
+
+summary(l_pcares_prcomp)
+
+## library(factoextra)
+fviz_pca_var(l_pcares)
+
+fviz_contrib(l_pcares, choice = "var", axes = 2)
+
+l_pcares
+                                          
+
+pcares <- prcomp(, scale = T)
+
+slt(dt_pmdb, vrbls_dimred1) %>% fsum %>% 
 
 
 
@@ -98,7 +314,8 @@ dt_vrblcvrg_excl <- merge(
     dt_pmdb_excl_splong[, .(all_PMs = sum(!is.na(value))/.N), vrbl],
     dt_pmdb_excl_splong[, .(vlus_present = sum(!is.na(value))/.N), .(vrbl, museum_status)] %>%
     dcast(vrbl ~ museum_status, value.var = "vlus_present"), on = "vrbl") %>%
-    melt(id.vars = "vrbl") %>% .[, src := "pmdb_excl"]
+    melt(id.vars = "vrbl") %>% .[, src := "pmdb_excl"] %>%
+    .[, rel_var := fifelse(vrbl %in% penl_vrbls, "penl", "not_penl")] 
 
 ## combine both coverage dts
 dt_vrblcvrg_cbnd <- rbind(dt_vrblcvrg, dt_vrblcvrg_excl) %>% 
