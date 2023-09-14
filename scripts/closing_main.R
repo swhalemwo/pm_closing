@@ -133,7 +133,7 @@ gp_vrblcvrg <- function(dt_vrblcvrg, yeet_acts) {
 gp_dimred_loads <- function(dt_dimred_loads) {
     #' plot factor loadings with ggplot in col + facetted
     #'
-    #' @param dt_dimred_loads: long data.frame with columns vrbl, dim (PCA/EFA outcome), value (loading)
+    #' @param dt_dimred_loads long data.frame with columns vrbl, dim (PCA/EFA outcome), value (loading)
     
     ## ADDME: automatic ordering of rows
 
@@ -142,6 +142,18 @@ gp_dimred_loads <- function(dt_dimred_loads) {
         facet_grid(. ~ dim) +
         scale_fill_gradient2(high = "red", low = "blue")
 }
+
+gp_scree <- function(scree_vlus) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    #' plot the scree plot (just column plot of vector
+    #'
+    #' param scree_vlus vector of scree values
+
+    data.table(value = scree_vlus) %>% .[, dim_nbr := factor(1:.N)] %>%
+        ggplot(aes(x=dim_nbr, y=value)) + geom_col() 
+}
+
 
 
 ## * main
@@ -224,86 +236,25 @@ l_pcares_prcomp <- prcomp(dt_pca_prepped, scale=T)
 ncomp <- 10 ## len(vrbls_dimred1)
 rawLoadings <- l_pcares_prcomp$rotation[,1:ncomp] %*% diag(l_pcares_prcomp$sdev, ncomp, ncomp)
 rotatedLoadings <- varimax(rawLoadings)$loadings
-rotatedLoadings2 <- promax(rawLoadings)$loadings
+
 ## scores <- scale(l_pcares$x) %*% varimax(rawLoadings)$rotmat %>% adt
 
 library(psych)
-l_pcares_psych <- psych::principal(dt_pca_prepped, rotate = "varimax", nfactors = 20) # len(vrbls_dimred1)) #
+l_pcares_psych <- psych::principal(dt_pca_prepped, rotate = "varimax", nfactors = len(vrbls_dimred1)) 
 
 
+gd_dimred_loads(l_pcares_psych$loadings) %>% .[dim %in% paste0("dim", 1:5)] %>% gp_dimred_loads # psych
+gd_dimred_loads(l_pcares_prcomp$rotation) %>% .[dim %in% paste0("dim", 1:5)] %>% gp_dimred_loads # unrotated prcomp
+gd_dimred_loads(rotatedLoadings) %>% .[dim %in% paste0("dim", 1:5)] %>% gp_dimred_loads # rotated prcomp
 
-gd_dimred_loads(l_pcares_psych$loadings) %>% .[dim %in% paste0("dim", 1:5)] %>% gp_dimred_loads
-gd_dimred_loads(l_pcares_prcomp$rotation) %>% .[dim %in% paste0("dim", 1:5)] %>% gp_dimred_loads
-gd_dimred_loads(rotatedLoadings) %>% .[dim %in% paste0("dim", 1:5)] %>% gp_dimred_loads
-gd_dimred_loads(rotatedLoadings2) %>% gp_dimred_loads
-X11()
-
-
-gp_scree <- function(scree_vlus) {
-    if (as.character(match.call()[[1]]) %in% fstd){browser()}
-    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
-
-    data.table(value = scree_vlus) %>% .[, dim_nbr := factor(1:.N)] %>%
-        ggplot(aes(x=dim_nbr, y=value)) + geom_col() 
-}
-
-
-(l_pcares_prcomp$sdev^2/sum(l_pcares_prcomp$sdev^2)) %>% gp_scree
-
-prop.table(l_pcares_psych$values) %>% gp_scree
-
-l_pcares_psych$Vaccounted
-
-
-
+## X11()
 
 library(factoextra)
 fviz_screeplot(l_pcares_prcomp, choice = "variance")
 
-l_pcares_prcomp$sdev %>% gp_scree
-l_pcares_psych$Vaccounted %>% .[4,1:10] %>% gp_scree
-
-corx <- cor(dt_pca_prepped)
-scree(corx)
-
-## https://stackoverflow.com/questions/53825816/convert-a-loadings-object-to-a-dataframe-r
-dt_pca_loads_splong <- matrix(as.numeric(l_pcares_psych$loadings),
-                              attributes(l_pcares_psych$loadings)$dim,
-                              dimnames = attributes(l_pcares_psych$loadings)$dimnames) %>%
-    adt(keep.rownames = "vrbl") %>%
-    melt(id.vars = "vrbl", variable.name = "dim") %>% 
-    .[dim %in% paste0("RC", 1:10) ] %>%
-    .[, dim := factor(dim, levels = paste0("RC", 1:10))]
-
-library("RColorBrewer")
-display.brewer.all(type = 'div')
 
 
 
-gp_dimred_loads(dt_pca_loads_splong)
-
-
-
-
-
-
-
-
-as.numeric(l_pcares_psych$loadings)
-
-summary(l_pcares_prcomp)
-
-## library(factoextra)
-fviz_pca_var(l_pcares)
-
-fviz_contrib(l_pcares, choice = "var", axes = 2)
-
-l_pcares
-                                          
-
-pcares <- prcomp(, scale = T)
-
-slt(dt_pmdb, vrbls_dimred1) %>% fsum %>% 
 
 
 
