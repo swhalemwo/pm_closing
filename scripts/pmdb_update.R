@@ -85,7 +85,7 @@ dt_colclsfcn <- imap(l_colclsfcn, ~data.table(vrbl = .x, exclude_reason = .y)) %
 l_cols_already_processed <- c(
     .c(ID, name, museum_status, iso3c, year_opened, year_closed), # basic columns set up in gd_pmdb_excl
     pmdata::gc_rename_list() %>% unname %>% unlist, # input columns: get standardized later
-    dt_colsclsfcn$vrbl
+    dt_colclsfcn$vrbl
 ) 
 
 setdiff(names(dt_pmdb_excl), l_cols_already_processed)
@@ -111,6 +111,28 @@ dt_vrblsets <- dt_rename_list[dt_exclnames, on = .(vrbl_orig == name_excl)] %>%
 ## check which are not dealth with properly: indoor/outdoor facilities
 dt_vrblsets[is.na(exclude_reason) & is.na(vrbl_new)]
 
-fwrite(dt_vrblsets[order(exclude_reason, na.last = F)], paste0(c_dirs$data, "pmdb_update/variable_sets.csv"))
+## write to file 
+## fwrite(dt_vrblsets[order(exclude_reason, na.last = F)], paste0(c_dirs$data, "pmdb_update/variable_sets.csv"))
 
 
+
+## data fillup
+vrbls_tofillup <- .c(year_opened, year_closed, Museum_city, country, Founder_gender, pmdb_actvts,
+                     "Outdoor facilities", "Indoor facilities", "Museum_institutional self-identification")
+
+
+
+## generate data to fill up 
+dt_pmdb_fillup <- dt_pmdb_excl[museum_status %in% c("private museum", "no longer a private museum", "closed"),
+             c("ID", "name",  "museum_status", vrbls_tofillup), with = F]
+
+## look at affected variables: just year_opened/year_closed?
+dt_pmdb_fillup[museum_status != "no longer a private museum"] %>%
+    melt(id.vars = "ID") %>% .[, .N, .(is.na(value), variable)] %>% .[is.na==T]
+
+## year_opened
+dt_pmdb_fillup[is.na(year_opened) & museum_status != "no longer a private museum",
+               .(ID, name, museum_status, year_opened)] %>% print(n=200)
+
+## year_closed
+dt_pmdb_fillup[museum_status == "closed" & is.na(year_closed)]
