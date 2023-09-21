@@ -15,6 +15,7 @@ library(memoise)
 library(collapse)
 library(purrr)
 library(docstring)
+library(ggbeeswarm)
 
 ## LOCS <- list(PROJDIR = "/home/johannes/Dropbox/phd/papers/closing/")
 ## LOCS$FIGDIR <- paste0(FIG
@@ -41,6 +42,12 @@ gc_plts <- function() {
             dt_vrblcvrg = quote(dt_vrblcvrg),
             yeet_acts = F,
             caption = "PMDB variable coverage by museum status",
+            width = 9,
+            height = 12),
+        p_vrblcvrg_grpd = list(
+            dt_vrblcvrg = quote(dt_vrblcvrg_grpd),
+            yeet_acts = F,
+            caption = "PMDB variable coverage by museum status and variable group",
             width = 9,
             height = 12),
         p_asdf = list(
@@ -122,15 +129,45 @@ gd_pmdb_excl_splong <- function(dt_pmdb_excl, vrbls_tocheck) {
 
 ## *** plotting
 
-gp_vrblcvrg <- function(dt_vrblcvrg, yeet_acts) {
 
-    dt_vrblcvrg %>% 
+
+gp_vrblcvrg <- function(dt_vrblcvrg, yeet_acts) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+
+    ## mtcars %>% adt %>% 
+    ##     ggplot(aes(x=cyl, y=gear)) +
+    ##     ## geom_point()
+    ##     geom_beeswarm()
+
+    ## vignette("usageExamples")
+        
+    
+    dt_vrblcvrg %>% # .[value > 0.95] %>% 
         .[if(yeet_acts) !grepl("^act_", vrbl) else T] %>% # filtering out activities if requested
-        ggplot(aes(x=value, y=vrbl, color = variable)) +
-        geom_jitter(width= 0, height = 0.3) +
-        theme(legend.position = "bottom")
+        ggplot(aes(x=value, y=vrbl, color = museum_status)) +
+        geom_beeswarm(side = 0) + 
+        ## geom_jitter(width= 0, height = 0.3) +
+        theme(legend.position = "bottom") +
+        labs(x="proportion data available")
     
 }
+
+gp_vrblcvrg_grpd <- function(dt_vrblcvrg_grpd, yeet_acts) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    #' variable coverage, facetted by group
+    
+    dt_vrblcvrg_grpd %>% # .[value > 0.95] %>%
+        .[if(yeet_acts) !grepl("^act_", vrbl) else T] %>% # filtering out activities if requested
+        ggplot(aes(x=value, y=vrbl, color = museum_status)) +
+        geom_beeswarm(side = 0) + 
+        theme(legend.position = "bottom") +
+        facet_grid(grp ~ ., scales = "free", space = "free", switch = "y") + 
+        theme(strip.text.y.left = element_text(angle = 0)) +
+        labs(x="proportion data available")
+}
+
 
 gp_dimred_loads <- function(dt_dimred_loads) {
     #' plot factor loadings with ggplot in col + facetted
@@ -181,11 +218,13 @@ dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
 vrbls_relchars <- .c(
     museum_status, iso3c, nationality, gender, ticket_price, opng_time, nbr_visitrs, website, mission, 
     staff_size, buildgtype, slfidfcn, city, clctn_med_fcs, clctn_cry_fcs, clctn_reg_fcs, clctn_modctmp,
-    insta_handle)
+    insta_handle, architect)
     
 ## set variables to check: all numeric vrbls, selected char vrbls, yeet llid
 vrbls_tocheck <- c(
     setdiff(num_vars(dt_pmdb, return = "names"), .c(llid)), vrbls_relchars)
+
+## setdiff(names(dt_pmdb), vrbls_tocheck)
 
 ## replace empty string with NA, use variables to check
 dt_pmdb_splong <- tfmv(dt_pmdb, vars = vrbls_relchars, FUN = \(x) replace(x, x=="", NA)) %>%
@@ -199,18 +238,53 @@ dt_pmdb_splong <- tfmv(dt_pmdb, vars = vrbls_relchars, FUN = \(x) replace(x, x==
 
 
 dt_vrblcvrg <- merge(
-    dt_pmdb_splong[, .(all_PMs = sum(!is.na(value))/.N), vrbl],
+    dt_pmdb_splong[, .(all_PMs = sum(!is.na(value))/.N), vrbl], # overall cpltns
     dt_pmdb_splong[, .(vlus_present = sum(!is.na(value))/.N), .(vrbl, museum_status)] %>%  # prop_cpltns by status
     dcast(vrbl ~ museum_status, value.var = "vlus_present"), on = "vrbl") %>%
     .[order(`private museum`)] %>% .[, vrbl := factor(vrbl, levels = vrbl)] %>% 
-    melt(id.vars = "vrbl") %>% .[, src := "pmdb"]
+    melt(id.vars = "vrbl", variable.name = "museum_status") %>% .[, src := "pmdb"]
 
 
 gdplt("p_vrblcvrg")
 wdplt("p_vrblcvrg")
+dpltF("p_vrblcvrg")
+
+l_vrblgrps <- list(
+    sm = .c(insta_handle, insta_flwrs, insta_posts, fb_flwrs, fb_likes, google_rating, google_nbrrvws,
+                  trpadvsr_rating, trpadvsr_nbrrvws, twitter_flwrs, insta_bluetick, youtube_flwrs),
+    founder = .c(gender, birthyear, deathyear, founder_gvrnc, an_nyears, an_lyear, an_fyear, founder_wealth,
+                 nationality, industry, founder_name, founder_weal_ustd),
+    clctn = .c(clctn_gnr_fcs, realism, clctn_modctmp, clctn_reg_fcs, avbl_clctnhldngs, clctn_med_fcs, clctn_size,
+               clctn_med_fcs_nms, clctn_cry_fcs),
+    identity = .c(mission, avbl_legalstruct, slfidfcn, muem_fndr_name, foundation, avbl_gvrncstruct, website,
+                  staff_diversity),
+    relations = .c(gvtsupport, donorprogram, endowment, sponsorship, cooperation),
+    operations = c(keep(names(dt_pmdb), ~grepl("^act_", .x)), ## all the activities
+                   .c(cafe_restrnt, avbl_floorsize, avbl_exhibsize, museumshop, buildgtype,
+                      reducedtickets, staff_size, rentalpossblt, webshop, nbr_visitrs, ticket_price,
+                      opng_time, temp_exhibs, avbl_exhibhist, architect)),
+    existence = .c(city, iso3c, multiplelocs, year_opened, year_closed), #
+    technical = .c(ID, name, museum_status, llid, origin)
+)
+    
+dt_vrblgrps <- imap(l_vrblgrps, ~data.table(grp = .y, vrbl = .x)) %>% rbindlist
+if (len(setdiff(dt_vrblgrps$vrbl, names(dt_pmdb))) >0) {stop("vrbls has typos")}
+setdiff(names(dt_pmdb), dt_vrblgrps$vrbl)
+
+dt_vrblcvrg_grpd <- dt_vrblgrps[dt_vrblcvrg, on = "vrbl"] %>%
+    .[, vrbl := factor(vrbl, levels = levels(dt_vrblcvrg$vrbl))]
+    
+
+    .[order(grp, `private museum`)]
+
+gdplt("p_vrblcvrg_grpd")
+gwdplt("p_vrblcvrg_grpd")
+## %$% setdiff(dt_vrblcvrg$vrbl, vrbl)
+
+setdiff(dt_vrblgrps$vrbl, dt_vrblcvrg$vrbl)
 
 
-
+## ** some manual selection on what counts as promising, don't think it really is good to capture what's going on
 penl_vrbls <- .c(gvtsupport, donorprogram, endowment, sponsorship, rentalpossblt, staff_size, clctn_size,
                  cafe_restrnt, webshop, museumshop)
 
@@ -238,7 +312,7 @@ dt_pca_prepped <- slt(dt_pmdb, vrbls_dimred1) %>%
 
 l_pcares_prcomp <- prcomp(dt_pca_prepped, scale=T)
 
-ncomp <- 5 ## len(vrbls_dimred1)
+ncomp <- 2 ## len(vrbls_dimred1)
 rawLoadings <- l_pcares_prcomp$rotation[,1:ncomp] %*% diag(l_pcares_prcomp$sdev, ncomp, ncomp) # diag = eigenvalues?
 rotatedLoadings <- varimax(rawLoadings)$loadings
 
@@ -252,8 +326,6 @@ scale(dt_pca_prepped) %*% rawLoadings %>% adt %>% cbind(dt_pmdb[, .(ID, name, is
 ## https://stats.stackexchange.com/questions/59213/how-to-compute-varimax-rotated-principal-components-in-r
 
     
-
-
 ## scores <- scale(l_pcares$x) %*% varimax(rawLoadings)$rotmat %>% adt
 
 library(psych)
