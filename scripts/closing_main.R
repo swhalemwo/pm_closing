@@ -42,19 +42,25 @@ gc_plts <- function() {
             dt_vrblcvrg = quote(dt_vrblcvrg_all),
             yeet_acts = F,
             caption = "PMDB variable coverage by museum status",
-            width = 9,
-            height = 12),
+            width = 19,
+            height = 24),
         p_vrblcvrg = list(
             dt_vrblcvrg = quote(dt_vrblcvrg_all),
             yeet_acts = F,
             caption = "PMDB variable coverage by museum status and variable group",
-            width = 16,
-            height = 20),
-        p_asdf = list(
-            dtx = quote(mtcars),
-            width = 10,
-            height = 20,
-            caption = "kappa")
+            width = 19,
+            height = 24),
+        p_vrblcvrg_ratio = list(
+            dt_vrblcvrg = quote(dt_vrblcvrg_ratio),
+            caption = "PMDB variable coverage (abs/rel prop) by museum status and variable group",
+            width = 19,
+            height = 24)
+            
+        ## p_asdf = list(
+        ##     dtx = quote(mtcars),
+        ##     width = 10,
+        ##     height = 20,
+        ##     caption = "kappa")
     )
 
     ## check that there are no duplicate 
@@ -237,7 +243,7 @@ gp_vrblcvrg <- function(dt_vrblcvrg_grpd, yeet_acts) {
         theme(legend.position = "bottom") +
         facet_grid(grp ~ ., scales = "free", space = "free", switch = "y") + 
         theme(strip.text.y.left = element_text(angle = 0)) +
-        labs(x="proportion data available")
+        labs(x="proportion data available", y = element_blank())
 }
 
 
@@ -436,6 +442,13 @@ dcast(dt_vrblcvrg_cbnd, vrbl + variable ~ src) %>%
     sbt(diff > 0.02)
 
 
+
+# generate plots and write them to file
+walk(names(gc_plts()), ~lapply(c(gplt, wplt), \(f) f(.x)))
+
+gdplt("p_vrblcvrg")
+dpltF("p_vrblcvrg")
+gwdplt("p_vrblcvrg")
 
 
 dt_nbrs <- gd_nbrs()
