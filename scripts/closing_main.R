@@ -218,13 +218,13 @@ dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
 vrbls_relchars <- .c(
     museum_status, iso3c, nationality, gender, ticket_price, opng_time, nbr_visitrs, website, mission, 
     staff_size, buildgtype, slfidfcn, city, clctn_med_fcs, clctn_cry_fcs, clctn_reg_fcs, clctn_modctmp,
-    insta_handle, architect)
+    insta_handle, architect, industry)
     
 ## set variables to check: all numeric vrbls, selected char vrbls, yeet llid
 vrbls_tocheck <- c(
     setdiff(num_vars(dt_pmdb, return = "names"), .c(llid)), vrbls_relchars)
 
-## setdiff(names(dt_pmdb), vrbls_tocheck)
+setdiff(names(dt_pmdb), vrbls_tocheck)
 
 ## replace empty string with NA, use variables to check
 dt_pmdb_splong <- tfmv(dt_pmdb, vars = vrbls_relchars, FUN = \(x) replace(x, x=="", NA)) %>%
@@ -256,11 +256,11 @@ l_vrblgrps <- list(
                  nationality, industry, founder_name, founder_weal_ustd),
     clctn = .c(clctn_gnr_fcs, realism, clctn_modctmp, clctn_reg_fcs, avbl_clctnhldngs, clctn_med_fcs, clctn_size,
                clctn_med_fcs_nms, clctn_cry_fcs),
-    identity = .c(mission, avbl_legalstruct, slfidfcn, muem_fndr_name, foundation, avbl_gvrncstruct, website,
+    identity = .c(mission, avbl_legalstruct, slfidfcn, muem_fndr_name, foundation, avbl_gvrncstruct, 
                   staff_diversity),
     relations = .c(gvtsupport, donorprogram, endowment, sponsorship, cooperation),
     operations = c(keep(names(dt_pmdb), ~grepl("^act_", .x)), ## all the activities
-                   .c(cafe_restrnt, avbl_floorsize, avbl_exhibsize, museumshop, buildgtype,
+                   .c(cafe_restrnt, avbl_floorsize, avbl_exhibsize, museumshop, buildgtype, website,
                       reducedtickets, staff_size, rentalpossblt, webshop, nbr_visitrs, ticket_price,
                       opng_time, temp_exhibs, avbl_exhibhist, architect)),
     existence = .c(city, iso3c, multiplelocs, year_opened, year_closed), #
@@ -274,11 +274,8 @@ setdiff(names(dt_pmdb), dt_vrblgrps$vrbl)
 dt_vrblcvrg_grpd <- dt_vrblgrps[dt_vrblcvrg, on = "vrbl"] %>%
     .[, vrbl := factor(vrbl, levels = levels(dt_vrblcvrg$vrbl))]
     
-
-    .[order(grp, `private museum`)]
-
 gdplt("p_vrblcvrg_grpd")
-gwdplt("p_vrblcvrg_grpd")
+gwdplt("p_vrblcvrg")
 ## %$% setdiff(dt_vrblcvrg$vrbl, vrbl)
 
 setdiff(dt_vrblgrps$vrbl, dt_vrblcvrg$vrbl)
