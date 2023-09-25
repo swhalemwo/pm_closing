@@ -51,7 +51,7 @@ gc_plts <- function() {
             width = 19,
             height = 24),
         p_vrblcvrg_ratio = list(
-            dt_vrblcvrg = quote(dt_vrblcvrg_ratio),
+            dt_vrblcvrg = quote(dt_vrblcvrg_fcs),
             caption = "PMDB variable coverage (abs/rel prop) by museum status and variable group",
             width = 19,
             height = 24)
@@ -246,6 +246,24 @@ gp_vrblcvrg <- function(dt_vrblcvrg_grpd, yeet_acts) {
         labs(x="proportion data available", y = element_blank())
 }
 
+gp_vrblcvrg_ratio <- function(dt_vrblcvrg) {
+    #' variable coverage with log points
+
+    dcast(dt_vrblcvrg, grp + vrbl ~ museum_status) %>%
+        .[, ratio := log(`private museum`/closed)] %>% # calculate open/closed ratio
+        replace_Inf() %>% # set cases where no closed have value to NA
+        melt(id.vars = .c(grp, vrbl), variable.name = "museum_status") %>%
+        ## set order of actors 
+        .[, xfacet := factor(fifelse(museum_status == "ratio", "log(prop_open/prop_closed)", "prop"),
+                             levels = c("prop", "log(prop_open/prop_closed)"))] %>% 
+        ggplot(aes(x=value, y=vrbl, color = museum_status)) +
+        geom_beeswarm(side = 0) + 
+        theme(legend.position = "bottom") +
+        facet_grid(grp ~ xfacet, scales = "free", space = "free_y", switch = "y") + 
+        theme(strip.text.y.left = element_text(angle = 0)) +
+        labs(x="proportion data available")
+}
+
 
 gp_dimred_loads <- function(dt_dimred_loads) {
     #' plot factor loadings with ggplot in col + facetted
@@ -332,6 +350,7 @@ dt_vrblcvrg_fcs <- gd_vrblcvrg(dt_pmdb_splong, all_statuses = F)
 
     
 gdplt("p_vrblcvrg")
+gdplt("p_vrblcvrg_ratio")
 ## %$% setdiff(dt_vrblcvrg$vrbl, vrbl)
 
 ## check which variables are not considered in dt_vrblgrps
@@ -339,36 +358,24 @@ gdplt("p_vrblcvrg")
 setdiff(dt_vrblgrps$vrbl, dt_vrblcvrg$vrbl)
 
 ## ratio calculations
-dcast(dt_vrblcvrg_grpd, grp + vrbl ~ museum_status) %>%
-    .[, ratio := log(`private museum`/closed)] %>%
-    replace_Inf() %>% # set cases where no closed have value to NA
-    melt(id.vars = .c(grp, vrbl), variable.name = "museum_status") %>%
-    .[, xfacet := factor(fifelse(museum_status == "ratio", "log(prop_open/prop_closed)", "prop"),
-                         levels = c("prop", "log(prop_open/prop_closed)"))] %>% 
-    ggplot(aes(x=value, y=vrbl, color = museum_status)) +
-    geom_beeswarm(side = 0) + 
-    theme(legend.position = "bottom") +
-    facet_grid(grp ~ xfacet, scales = "free", space = "free_y", switch = "y") + 
-    theme(strip.text.y.left = element_text(angle = 0)) +
-    labs(x="proportion data available")
+
+# generate plots and write them to file
+walk(names(gc_plts()), ~lapply(c(gplt, wplt), \(f) f(.x)))
+
+gdplt("p_vrblcvrg")
+dpltF("p_vrblcvrg")
+gwdplt("p_vrblcvrg")
+
+
+dt_nbrs <- gd_nbrs()
+fwrite(dt_nbrs, paste0(c_dirs$tbls, "tbl_nbrs.csv"), quote = F)
+
+
+
+
 
     
-
-
-
-## ** some manual selection on what counts as promising, don't think it really is good to capture what's going on
-penl_vrbls <- .c(gvtsupport, donorprogram, endowment, sponsorship, rentalpossblt, staff_size, clctn_size,
-                 cafe_restrnt, webshop, museumshop)
-
-
-dt_vrblcvrg %>% 
-    ## .[!grepl("^act_", vrbl)] %>%  # exclude activities
-    .[, rel_var := fifelse(vrbl %in% penl_vrbls, "penl", "not_penl")] %>% 
-    ggplot(aes(x=value, y=vrbl, color = variable)) +
-    geom_jitter(width= 0, height = 0.3) +
-    theme(legend.position = "bottom") +
-    facet_grid(rel_var ~ . , space = "free", scales = "free")
-
+stop("dimred not ready")
 
 
 ## ** dimension reduction fun
@@ -421,38 +428,7 @@ l_pcares_psych$Vaccounted[1,] %>% gp_scree # scree plot of rotated factors -> no
 
 
 
-## ** combine with dt_pmdb_excl: check how much of the lack of availability is due to incomplete standardization
-dt_pmdb_excl_splong <- gd_pmdb_excl_splong(dt_pmdb_excl, vrbls_tocheck)
 
-dt_vrblcvrg_excl <- merge(
-    dt_pmdb_excl_splong[, .(all_PMs = sum(!is.na(value))/.N), vrbl],
-    dt_pmdb_excl_splong[, .(vlus_present = sum(!is.na(value))/.N), .(vrbl, museum_status)] %>%
-    dcast(vrbl ~ museum_status, value.var = "vlus_present"), on = "vrbl") %>%
-    melt(id.vars = "vrbl") %>% .[, src := "pmdb_excl"] %>%
-    .[, rel_var := fifelse(vrbl %in% penl_vrbls, "penl", "not_penl")] 
-
-## combine both coverage dts
-dt_vrblcvrg_cbnd <- rbind(dt_vrblcvrg, dt_vrblcvrg_excl) %>% 
-    .[order(src, variable, value)] %>% # order by private museum completeness (most entities there)
-    .[, vrbl := factor(vrbl, levels = unique(vrbl))]
-
-## just focus on where the coverage discrepancy between 
-dcast(dt_vrblcvrg_cbnd, vrbl + variable ~ src) %>%
-    fmutate(diff = abs(pmdb - pmdb_excl)) %>%
-    sbt(diff > 0.02)
-
-
-
-# generate plots and write them to file
-walk(names(gc_plts()), ~lapply(c(gplt, wplt), \(f) f(.x)))
-
-gdplt("p_vrblcvrg")
-dpltF("p_vrblcvrg")
-gwdplt("p_vrblcvrg")
-
-
-dt_nbrs <- gd_nbrs()
-fwrite(dt_nbrs, paste0(c_dirs$tbls, "tbl_nbrs.csv"), quote = F)
 
 
 
