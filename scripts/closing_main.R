@@ -267,6 +267,17 @@ gp_scree <- function(scree_vlus) {
 
 
 
+## *** nbrs generation
+gd_nbrs <- function() {
+    
+    dt_ynkplt <- gc_ynkplt()
+    dt_refplt <- gc_refplt()
+
+    dt_nbrs_cbnd <- rbind(dt_ynkplt, dt_refplt)
+
+
+    return(dt_nbrs_cbnd)
+}
 ## * main
 if (interactive()) {stop("it's interactive time")}
 
@@ -425,16 +436,7 @@ dcast(dt_vrblcvrg_cbnd, vrbl + variable ~ src) %>%
     sbt(diff > 0.02)
 
 
-gd_nbrs <- function() {
-    
-    dt_ynkplt <- gc_ynkplt()
-    dt_refplt <- gc_refplt()
 
-    dt_nbrs_cbnd <- rbind(dt_ynkplt, dt_refplt)
-
-
-    return(dt_nbrs_cbnd)
-}
 
 dt_nbrs <- gd_nbrs()
 fwrite(dt_nbrs, paste0(c_dirs$tbls, "tbl_nbrs.csv"), quote = F)
