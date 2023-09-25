@@ -48,8 +48,8 @@ gc_plts <- function() {
             dt_vrblcvrg = quote(dt_vrblcvrg_grpd),
             yeet_acts = F,
             caption = "PMDB variable coverage by museum status and variable group",
-            width = 9,
-            height = 12),
+            width = 16,
+            height = 20),
         p_asdf = list(
             dtx = quote(mtcars),
             width = 10,
@@ -367,6 +367,19 @@ dcast(dt_vrblcvrg_cbnd, vrbl + variable ~ src) %>%
     sbt(diff > 0.02)
 
 
-
-
+gd_nbrs <- function() {
     
+    dt_ynkplt <- gc_ynkplt()
+    dt_refplt <- gc_refplt()
+
+    dt_nbrs_cbnd <- rbind(dt_ynkplt, dt_refplt)
+
+
+    return(dt_nbrs_cbnd)
+}
+
+dt_nbrs <- gd_nbrs()
+fwrite(dt_nbrs, paste0(c_dirs$tbls, "tbl_nbrs.csv"), quote = F)
+
+
+
