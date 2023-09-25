@@ -38,14 +38,14 @@ gc_plts <- function() {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
 
     l_pltcfgs <- list(
-        p_vrblcvrg = list(
-            dt_vrblcvrg = quote(dt_vrblcvrg),
+        p_vrblcvrg_ugrpd = list(
+            dt_vrblcvrg = quote(dt_vrblcvrg_all),
             yeet_acts = F,
             caption = "PMDB variable coverage by museum status",
             width = 9,
             height = 12),
-        p_vrblcvrg_grpd = list(
-            dt_vrblcvrg = quote(dt_vrblcvrg_grpd),
+        p_vrblcvrg = list(
+            dt_vrblcvrg = quote(dt_vrblcvrg_all),
             yeet_acts = F,
             caption = "PMDB variable coverage by museum status and variable group",
             width = 16,
@@ -69,7 +69,79 @@ gc_plts <- function() {
         
 }
 
+gc_vrblgrps <- function(dt_pmdb) {
+    #' generate list of thematic variable groups
+    
+    l_vrblgrps <- list(
+        sm = .c(insta_handle, insta_flwrs, insta_posts, fb_flwrs, fb_likes, google_rating, google_nbrrvws,
+                trpadvsr_rating, trpadvsr_nbrrvws, twitter_flwrs, insta_bluetick, youtube_flwrs),
+        founder = .c(gender, birthyear, deathyear, founder_gvrnc, an_nyears, an_lyear, an_fyear, founder_wealth,
+                     nationality, industry, founder_name, founder_weal_ustd),
+        clctn = .c(clctn_gnr_fcs, realism, clctn_modctmp, clctn_reg_fcs, avbl_clctnhldngs,
+                   clctn_med_fcs, clctn_size,
+                   clctn_med_fcs_nms, clctn_cry_fcs),
+        identity = .c(mission, avbl_legalstruct, slfidfcn, muem_fndr_name, foundation, avbl_gvrncstruct, 
+                      staff_diversity),
+        relations = .c(gvtsupport, donorprogram, endowment, sponsorship, cooperation),
+        operations = c(keep(names(dt_pmdb), ~grepl("^act_", .x)), ## all the activities
+                       .c(cafe_restrnt, avbl_floorsize, avbl_exhibsize, museumshop, buildgtype, website,
+                          reducedtickets, staff_size, rentalpossblt, webshop, nbr_visitrs, ticket_price,
+                          opng_time, temp_exhibs, avbl_exhibhist, architect)),
+        existence = .c(city, iso3c, multiplelocs, year_opened, year_closed), #
+        technical = .c(ID, name, museum_status, llid, origin)
+    )
+
+    dt_vrblgrps <- imap(l_vrblgrps, ~data.table(grp = .y, vrbl = .x)) %>% rbindlist
+    if (len(setdiff(dt_vrblgrps$vrbl, names(dt_pmdb))) >0) {
+        stop("vrbls has typos, or not all variables are grouped")
+    }
+    ## setdiff(names(dt_pmdb), dt_vrblgrps$vrbl)
+
+    return(dt_vrblgrps)
+}
+
 ## *** data generation
+
+gd_vrblcvrg <- function(dt_vrbl_splong, all_statuses) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    #' generate dataframe with coverage of variables,
+    #' depending all_statuses for all pmdb_status values (open, closed, no longer PM) as well as overall average
+    #' if !all_statuses: only for open and closed
+
+    if (all_statuses) {
+
+        ## variable coverage for open, closed, no_longer, and overall
+        dt_vrblcvrg <- merge(
+            dt_pmdb_splong[, .(all_PMs = sum(!is.na(value))/.N), vrbl], # overall cpltns
+            ## prop_cpltns by status
+            dt_pmdb_splong[, .(vlus_present = sum(!is.na(value))/.N), .(vrbl, museum_status)] %>%
+            dcast(vrbl ~ museum_status, value.var = "vlus_present"), on = "vrbl") %>%
+            .[order(`private museum`)] %>% .[, vrbl := factor(vrbl, levels = vrbl)] %>% 
+            melt(id.vars = "vrbl", variable.name = "museum_status") %>% .[, src := "pmdb"]
+
+    } else if (!all_statuses) {
+        
+        ## only proportions of open and closed
+        dt_vrblcvrg <- dt_pmdb_splong[museum_status %in% c("private museum", "closed"),
+                                      .(vlus_present = sum(!is.na(value))/.N), .(vrbl, museum_status)] %>%
+            dcast(vrbl ~ museum_status, value.var = "vlus_present") %>%
+            .[order(`private museum`)] %>% .[, vrbl := factor(vrbl, levels = vrbl)] %>% 
+            melt(id.vars = "vrbl", variable.name = "museum_status") %>% .[, src := "pmdb"]
+    }
+
+    ## no good reason to maintain vrbl coverage which isn't grouped
+    ## if I don't wanna use it in plot, can just not use it, but always should have option
+    ## move the variable grouping step here as well
+    dt_vrblgrps <- gc_vrblgrps(dt_pmdb)
+
+    dt_vrblcvrg_grpd <- dt_vrblgrps[dt_vrblcvrg, on = "vrbl"] %>%
+        .[, vrbl := factor(vrbl, levels = levels(dt_vrblcvrg$vrbl))]
+
+    return(dt_vrblcvrg_grpd)
+
+}
+
 
 
 gd_dimred_loads <- function(loadmat) {
@@ -131,7 +203,7 @@ gd_pmdb_excl_splong <- function(dt_pmdb_excl, vrbls_tocheck) {
 
 
 
-gp_vrblcvrg <- function(dt_vrblcvrg, yeet_acts) {
+gp_vrblcvrg_ugrpd <- function(dt_vrblcvrg, yeet_acts) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
 
@@ -153,7 +225,7 @@ gp_vrblcvrg <- function(dt_vrblcvrg, yeet_acts) {
     
 }
 
-gp_vrblcvrg_grpd <- function(dt_vrblcvrg_grpd, yeet_acts) {
+gp_vrblcvrg <- function(dt_vrblcvrg_grpd, yeet_acts) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     #' variable coverage, facetted by group
@@ -232,53 +304,39 @@ dt_pmdb_splong <- tfmv(dt_pmdb, vars = vrbls_relchars, FUN = \(x) replace(x, x==
     melt(id.vars = c("ID", "museum_status"), variable.name = "vrbl")
 
 
-
+dt_vrblcvrg_all <- gd_vrblcvrg(dt_pmdb_splong, all_statuses = T)
+dt_vrblcvrg_fcs <- gd_vrblcvrg(dt_pmdb_splong, all_statuses = F)
 
 ## plot variable coverage by museum type
 
+## gdplt("p_vrblcvrg")
+## wdplt("p_vrblcvrg")
+## dpltF("p_vrblcvrg")
 
-dt_vrblcvrg <- merge(
-    dt_pmdb_splong[, .(all_PMs = sum(!is.na(value))/.N), vrbl], # overall cpltns
-    dt_pmdb_splong[, .(vlus_present = sum(!is.na(value))/.N), .(vrbl, museum_status)] %>%  # prop_cpltns by status
-    dcast(vrbl ~ museum_status, value.var = "vlus_present"), on = "vrbl") %>%
-    .[order(`private museum`)] %>% .[, vrbl := factor(vrbl, levels = vrbl)] %>% 
-    melt(id.vars = "vrbl", variable.name = "museum_status") %>% .[, src := "pmdb"]
-
-
+    
 gdplt("p_vrblcvrg")
-wdplt("p_vrblcvrg")
-dpltF("p_vrblcvrg")
-
-l_vrblgrps <- list(
-    sm = .c(insta_handle, insta_flwrs, insta_posts, fb_flwrs, fb_likes, google_rating, google_nbrrvws,
-                  trpadvsr_rating, trpadvsr_nbrrvws, twitter_flwrs, insta_bluetick, youtube_flwrs),
-    founder = .c(gender, birthyear, deathyear, founder_gvrnc, an_nyears, an_lyear, an_fyear, founder_wealth,
-                 nationality, industry, founder_name, founder_weal_ustd),
-    clctn = .c(clctn_gnr_fcs, realism, clctn_modctmp, clctn_reg_fcs, avbl_clctnhldngs, clctn_med_fcs, clctn_size,
-               clctn_med_fcs_nms, clctn_cry_fcs),
-    identity = .c(mission, avbl_legalstruct, slfidfcn, muem_fndr_name, foundation, avbl_gvrncstruct, 
-                  staff_diversity),
-    relations = .c(gvtsupport, donorprogram, endowment, sponsorship, cooperation),
-    operations = c(keep(names(dt_pmdb), ~grepl("^act_", .x)), ## all the activities
-                   .c(cafe_restrnt, avbl_floorsize, avbl_exhibsize, museumshop, buildgtype, website,
-                      reducedtickets, staff_size, rentalpossblt, webshop, nbr_visitrs, ticket_price,
-                      opng_time, temp_exhibs, avbl_exhibhist, architect)),
-    existence = .c(city, iso3c, multiplelocs, year_opened, year_closed), #
-    technical = .c(ID, name, museum_status, llid, origin)
-)
-    
-dt_vrblgrps <- imap(l_vrblgrps, ~data.table(grp = .y, vrbl = .x)) %>% rbindlist
-if (len(setdiff(dt_vrblgrps$vrbl, names(dt_pmdb))) >0) {stop("vrbls has typos")}
-setdiff(names(dt_pmdb), dt_vrblgrps$vrbl)
-
-dt_vrblcvrg_grpd <- dt_vrblgrps[dt_vrblcvrg, on = "vrbl"] %>%
-    .[, vrbl := factor(vrbl, levels = levels(dt_vrblcvrg$vrbl))]
-    
-gdplt("p_vrblcvrg_grpd")
-gwdplt("p_vrblcvrg")
 ## %$% setdiff(dt_vrblcvrg$vrbl, vrbl)
 
+## check which variables are not considered in dt_vrblgrps
+## are variables that are grouped (all pmbd variables are), but not used (e.g. technical)
 setdiff(dt_vrblgrps$vrbl, dt_vrblcvrg$vrbl)
+
+## ratio calculations
+dcast(dt_vrblcvrg_grpd, grp + vrbl ~ museum_status) %>%
+    .[, ratio := log(`private museum`/closed)] %>%
+    replace_Inf() %>% # set cases where no closed have value to NA
+    melt(id.vars = .c(grp, vrbl), variable.name = "museum_status") %>%
+    .[, xfacet := factor(fifelse(museum_status == "ratio", "log(prop_open/prop_closed)", "prop"),
+                         levels = c("prop", "log(prop_open/prop_closed)"))] %>% 
+    ggplot(aes(x=value, y=vrbl, color = museum_status)) +
+    geom_beeswarm(side = 0) + 
+    theme(legend.position = "bottom") +
+    facet_grid(grp ~ xfacet, scales = "free", space = "free_y", switch = "y") + 
+    theme(strip.text.y.left = element_text(angle = 0)) +
+    labs(x="proportion data available")
+
+    
+
 
 
 ## ** some manual selection on what counts as promising, don't think it really is good to capture what's going on
