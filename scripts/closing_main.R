@@ -53,7 +53,7 @@ gc_plts <- function() {
         p_vrblcvrg_ratio = list(
             dt_vrblcvrg = quote(dt_vrblcvrg_fcs),
             caption = "PMDB variable coverage (abs/rel prop) by museum status and variable group",
-            width = 19,
+            width = 18,
             height = 24)
             
         ## p_asdf = list(
@@ -261,7 +261,8 @@ gp_vrblcvrg_ratio <- function(dt_vrblcvrg) {
         theme(legend.position = "bottom") +
         facet_grid(grp ~ xfacet, scales = "free", space = "free_y", switch = "y") + 
         theme(strip.text.y.left = element_text(angle = 0)) +
-        labs(x="proportion data available")
+        labs(x="data availability", y = element_blank()) +
+        theme_pmdb()
 }
 
 
