@@ -104,6 +104,7 @@ gc_vrblgrps <- function(dt_pmdb) {
     }
     ## setdiff(names(dt_pmdb), dt_vrblgrps$vrbl)
 
+    attr(dt_vrblgrps, "gnrtdby") <- as.character(match.call()[[1]])
     return(dt_vrblgrps)
 }
 
@@ -147,6 +148,7 @@ gd_vrblcvrg <- function(dt_vrbl_splong, all_statuses) {
     dt_vrblcvrg_grpd <- dt_vrblgrps[dt_vrblcvrg, on = "vrbl"] %>%
         .[, vrbl := factor(vrbl, levels = levels(dt_vrblcvrg$vrbl))]
 
+    attr(dt_vrblcvrg_grpd, "gnrtdby") <- as.character(match.call()[[1]])
     return(dt_vrblcvrg_grpd)
 
 }
@@ -174,6 +176,7 @@ gd_dimred_loads <- function(loadmat) {
         ## .[dim %in% paste0("dim", 1:10) ] %>%
         ## .[, dim := factor(dim, levels = paste0("RC", 1:10))]
 
+    attr(dt_dimred_loads, "gnrtdby") <- as.character(match.call()[[1]])
     return(dt_dimred_loads)
 }
 
@@ -207,6 +210,7 @@ gd_pmdb_excl_splong <- function(dt_pmdb_excl, vrbls_tocheck) {
         tfmv(vars = names(.), FUN = \(x) replace(x, x=="", NA)) %>%
         melt(id.vars = c("ID", "museum_status"), variable.name = "vrbl")
 
+    attr(dt_pmdb_excl_splong, "gnrtdby") <- as.character(match.call()[[1]])
     return(dt_pmdb_excl_splong)
 }
 
@@ -256,6 +260,7 @@ gp_vrblcvrg <- function(dt_vrblcvrg_grpd, yeet_acts) {
 gp_vrblcvrg_ratio <- function(dt_vrblcvrg) {
     gw_fargs(match.call())
     #' variable coverage with log points
+
 
     dcast(dt_vrblcvrg, grp + vrbl ~ museum_status) %>%
         .[, ratio := log(`private museum`/closed)] %>% # calculate open/closed ratio
@@ -417,10 +422,31 @@ fwrite(dt_nbrs, paste0(c_dirs$tbls, "tbl_nbrs.csv"), quote = F)
 
 
 
+gc_clgrphattrs <- function() {
+    #' generate configs of Rgraphviz rendering, required for gwd_clgrph
+    attrs <- list()
+    attrs$node <- list()
+    attrs$node$shape <- "box"
+    attrs$node$fixedsize <- F
+    attrs$graph <- list()
+    attrs$graph$splines <- F
+    ## attrs$graph$com
+    ## attrs$node$fontsize = 11
+
+    return(attrs)
+}
+
+
+## callgraph testing
+jtls::gwd_clgrph()
+dpltF("callgraph")
+## dpltF("p_vrblcvrg")
+## gdplt("p_vrblcvrg_ratio")
+
+
 
     
 stop("dimred not ready")
-
 
 ## ** dimension reduction fun
 ## will have different variable sets, e.g. whether founder should be there or not
