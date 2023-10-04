@@ -77,6 +77,7 @@ gc_plts <- function() {
 
 gc_vrblgrps <- function(dt_pmdb) {
     #' generate list of thematic variable groups
+    gw_fargs(match.call())
     
     l_vrblgrps <- list(
         sm = .c(insta_handle, insta_flwrs, insta_posts, fb_flwrs, fb_likes, google_rating, google_nbrrvws,
@@ -109,6 +110,8 @@ gc_vrblgrps <- function(dt_pmdb) {
 ## *** data generation
 
 gd_vrblcvrg <- function(dt_vrbl_splong, all_statuses) {
+    gw_fargs(match.call())
+    
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     #' generate dataframe with coverage of variables,
@@ -151,6 +154,7 @@ gd_vrblcvrg <- function(dt_vrbl_splong, all_statuses) {
 
 
 gd_dimred_loads <- function(loadmat) {
+    gw_fargs(match.call())
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     #' generate long data.frame of dimensionality reduction loadings
@@ -175,6 +179,7 @@ gd_dimred_loads <- function(loadmat) {
 
 
 gd_pmdb_excl_splong <- function(dt_pmdb_excl, vrbls_tocheck) {
+    gw_fargs(match.call())
     ## generate coverage of dt_pmdb_excl (before cleaning) to assess
     ## contribution of cleaning to (lack of) data coverage
 
@@ -210,6 +215,7 @@ gd_pmdb_excl_splong <- function(dt_pmdb_excl, vrbls_tocheck) {
 
 
 gp_vrblcvrg_ugrpd <- function(dt_vrblcvrg, yeet_acts) {
+    gw_fargs(match.call())
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
 
@@ -232,6 +238,7 @@ gp_vrblcvrg_ugrpd <- function(dt_vrblcvrg, yeet_acts) {
 }
 
 gp_vrblcvrg <- function(dt_vrblcvrg_grpd, yeet_acts) {
+    gw_fargs(match.call())
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     #' variable coverage, facetted by group
@@ -247,6 +254,7 @@ gp_vrblcvrg <- function(dt_vrblcvrg_grpd, yeet_acts) {
 }
 
 gp_vrblcvrg_ratio <- function(dt_vrblcvrg) {
+    gw_fargs(match.call())
     #' variable coverage with log points
 
     dcast(dt_vrblcvrg, grp + vrbl ~ museum_status) %>%
@@ -267,6 +275,7 @@ gp_vrblcvrg_ratio <- function(dt_vrblcvrg) {
 
 
 gp_dimred_loads <- function(dt_dimred_loads) {
+    gw_fargs(match.call())
     #' plot factor loadings with ggplot in col + facetted
     #'
     #' @param dt_dimred_loads long data.frame with columns vrbl, dim (PCA/EFA outcome), value (loading)
@@ -280,6 +289,7 @@ gp_dimred_loads <- function(dt_dimred_loads) {
 }
 
 gp_scree <- function(scree_vlus) {
+    gw_fargs(match.call())
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     #' plot the scree plot (just column plot of vector
@@ -326,6 +336,27 @@ gd_nbrs <- function() {
 
     return(dt_nbrs_cbnd)
 }
+
+
+gw_fargs <- function(matched_call) {
+    callstr <- matched_call %>% deparse
+
+    fname <- as.character(matched_call[[1]])
+
+    ## nchar(call_str)
+    fargs_str <- substring(callstr, nchar(fname) + 2, nchar(callstr)-1) # remove function name and brackets
+
+    ## parse function arguments
+    dt_fargs <- strsplit(fargs_str, ",")[[1]] %>% 
+        map(~strsplit(.x, "=")[[1]] %>% trimws %>%
+                setNames(c("param_name", "param_value")) %>% as.list) %>% rbindlist
+
+    ## reorder columns
+    dt_fargs <- dt_fargs[, .(fname = fname, param_name, param_value)]
+
+    fwrite(dt_fargs, paste0(c_dirs$tbls, "farg_calls.csv"), append = T)
+}
+
 ## * main
 if (interactive()) {stop("it's interactive time")}
 

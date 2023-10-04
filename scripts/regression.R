@@ -30,9 +30,15 @@ gd_pmyear <- function(dt_pmdb) {
 }
 
 
-## ** main
+## * main
 if (interactive()) {stop("it's interactive time")}
 
 END_YEAR <- 2021
 
 gd_pmyear(dt_pmdb)
+
+## * foodweb testing
+
+
+
+
