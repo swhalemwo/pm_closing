@@ -262,7 +262,7 @@ gp_vrblcvrg_ratio <- function(dt_vrblcvrg) {
         facet_grid(grp ~ xfacet, scales = "free", space = "free_y", switch = "y") + 
         theme(strip.text.y.left = element_text(angle = 0)) +
         labs(x="data availability", y = element_blank()) +
-        theme_pmdb()
+        theme_closing()
 }
 
 
@@ -289,6 +289,29 @@ gp_scree <- function(scree_vlus) {
     data.table(value = scree_vlus) %>% .[, dim_nbr := factor(1:.N)] %>%
         ggplot(aes(x=dim_nbr, y=value)) + geom_col() 
 }
+
+theme_closing <- function(extra_space_top=0) {
+    ## pmdb theme for minimal layout
+    
+    ## theme_minimal() %+replace%
+
+    base_size = 11
+    half_line <- base_size/2
+
+
+    theme(
+        ## panel.grid.major = element_blank(),
+        ## panel.background = element_rect(fill = "white"),
+        ## axis.ticks = element_blank(),
+        ## axis.ticks.length = unit(0, "pt"),
+        ## axis.title = element_blank(),
+        ## axis.text = element_blank(),
+        ## plot.margin = unit(c(extra_space_top,0,0,0), "points"),
+        axis.title = element_text(size = base_size)
+        )
+
+}
+
 
 
 
@@ -345,29 +368,18 @@ dt_vrblcvrg_fcs <- gd_vrblcvrg(dt_pmdb_splong, all_statuses = F)
 
 ## plot variable coverage by museum type
 
-## gdplt("p_vrblcvrg")
-## wdplt("p_vrblcvrg")
-## dpltF("p_vrblcvrg")
-
     
-gdplt("p_vrblcvrg")
-gdplt("p_vrblcvrg_ratio")
-## %$% setdiff(dt_vrblcvrg$vrbl, vrbl)
-
 ## check which variables are not considered in dt_vrblgrps
 ## are variables that are grouped (all pmbd variables are), but not used (e.g. technical)
-setdiff(dt_vrblgrps$vrbl, dt_vrblcvrg$vrbl)
+setdiff(gc_vrblgrps(dt_pmdb)$vrbl, dt_vrblcvrg_all$vrbl)
+
 
 ## ratio calculations
 
 # generate plots and write them to file
 walk(names(gc_plts()), ~lapply(c(gplt, wplt), \(f) f(.x)))
 
-gdplt("p_vrblcvrg")
-dpltF("p_vrblcvrg")
-gwdplt("p_vrblcvrg")
-
-
+## write numbers
 dt_nbrs <- gd_nbrs()
 fwrite(dt_nbrs, paste0(c_dirs$tbls, "tbl_nbrs.csv"), quote = F)
 
