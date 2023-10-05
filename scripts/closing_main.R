@@ -343,24 +343,6 @@ gd_nbrs <- function() {
 }
 
 
-gw_fargs <- function(matched_call) {
-    callstr <- matched_call %>% deparse
-
-    fname <- as.character(matched_call[[1]])
-
-    ## nchar(call_str)
-    fargs_str <- substring(callstr, nchar(fname) + 2, nchar(callstr)-1) # remove function name and brackets
-
-    ## parse function arguments
-    dt_fargs <- strsplit(fargs_str, ",")[[1]] %>% 
-        map(~strsplit(.x, "=")[[1]] %>% trimws %>%
-                setNames(c("param_name", "param_value")) %>% as.list) %>% rbindlist
-
-    ## reorder columns
-    dt_fargs <- dt_fargs[, .(fname = fname, param_name, param_value)]
-
-    fwrite(dt_fargs, paste0(c_dirs$tbls, "farg_calls.csv"), append = T)
-}
 
 gc_clgrphattrs <- function() {
     #' generate configs of Rgraphviz rendering, required for gwd_clgrph
