@@ -1,6 +1,17 @@
 #+PROPERTY: header-args:R :session *R:closing* 
-#+PROPERTY: header-args:R+ :output-dir /home/johannes/Dropbox/phd/papers/closing/notes/ 
-#+PROPERTY: header-args:R+ :results output graphics file
+#+PROPERTY: header-args:R+ :output-dir /home/johannes/Dropbox/phd/papers/closing/notes/
+
+# can't set the :results header-arg globally: sometimes I want figures, sometimes just text
+# #+PROPERTY: header-args:R+ :results output graphics file
+
+#+latex_class: article_usual2
+# erases make title
+# #+BIND: org-export-latex-title-command ""
+
+# fucks all the maketitlestuff just to be sure
+#+OPTIONS: num:nil
+#+OPTIONS: toc:nil
+#+OPTIONS: h:5
 
 
 
@@ -47,57 +58,145 @@ figure:
 code: requires having R-session called "*R:closing* with all objects as of commit [[orgit-rev:~/Dropbox/phd/papers/closing/::6d5973d1fbc9bebc145d5281c9a6c8675b4c4f25][~/Dropbox/phd/papers/closing/ (magit-rev 6d5973d)]]: dt_pmyear, dt_pmdb
 
 
-#+begin_src R :file test.pdf :width 7 :height 4 
+#+begin_src R :file age-dist-last-year.pdf :width 7 :height 4 :results output graphics file
 dt_pmyear[, .SD[which.max(age)], ID][, .N, .(age, closing)] %>%
   ggplot(aes(x=age, y=N, fill = factor(closing))) +
-
   geom_col() + 
-  facet_grid(closing ~.)
+  facet_grid(closing ~.) +
+  theme(legend.position = "none")
 #+end_src
 
 #+RESULTS:
-[[file:/home/johannes/Dropbox/phd/papers/closing/notes/test.pdf]]
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/age-dist-last-year.pdf]]
+
+analyze survival data: need to know
+- time Y_i,
+- event indictator \delta_i
+for subject i:
+- observed time Y_i = min(T_i, C_i) where T_i = event time and C_i = censoring time -> what happens first
+- event indicator: \delta_i = 1 if event occured, else 0
+
+probability that subject survives beyond time:
+\begin{equation*}
+S(t) = Pr(T > t) = 1-F(t)
+\end{equation*}
+with
+- S(t): survival function
+- F(t) = Pr(T \leq t): cumulative distribution function
+  # unclear greater/less than relatiosnhips
+
+  # e.g if at t=10 F(t) = 0.8, then 80% dead -> survival chance = 20%?
+
+*survival probability* at certain time, S(t): conditional probability of surviving beyond that, given that individual has survived so far
+calculation: (number of people alive at that time)/(number of people alive prior)
+
+*Kaplan-Meier*: estimate of survival probability at given time: product of conditional probabilities up until given time
+# ah interesting: kinda chain-like process
+
+t=0: S(t_0) = 1
+
+** packages
+
+#+begin_src R :results "none"
+library(lubridate)
+library(ggsurvfit)
+## gtsummary: needs v8, which doesn't want to be installed
+## tidycmprsk: not available for current R version
+
+library(condsurv)
+library(survival)
+#+end_src
 
 
 
+** data
+
+use "lung" dataset: probably lung cancer
+228 observations, 165 ded, 63 not
+
+recode status properly: 1 event, 0 not event
+time: time observed
+sex: 1 male, 2 female
+
+#+begin_src R :results "none"
+
+lung <- 
+  survival::lung %>% 
+  mutate(
+    status = recode(status, `1` = 0, `2` = 1)
+  ) %>% adt
+
+#+end_src
+
+# some stuff with dates on some custom created objects?
 
 
+** creating survival objects and curves
 
+Kaplan-Meier: most common way: non-parametric approach, creates step function  (step for every time event occurs)
 
+*Surv*: creates survival objects
+one entry per subject: survival time, "+" in case subject was censored
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-#+begin_src R :session *R:closing* :export results
-adt(mtcars)[, .N, cyl]
-## lm(mpg ~ cyl, mtcars) %>% summary
+#+begin_src R :results output
+Surv(lung$time, lung$status)[1:10]
 #+end_src
 
 #+RESULTS:
-| 6 |  7 |
-| 4 | 11 |
-| 8 | 14 |
+:  [1]  306   455  1010+  210   883  1022+  310   361   218   166
+
+ID 1: event after 306 days, ID3: censored after 1010 days
 
 
+*survfit*: creates survival curves using Kaplan-Meier method
 
-  
-#+begin_src R :results output graphics :file test.png
-library("ggplot2")
-ggplot(iris, aes(x = Sepal.Width, y = Sepal.Length, color = Species)) +
-  geom_point()
-#+END_SRC
+#+begin_src R :results output
+s1 <- survfit(Surv(time, status) ~ 1, lung)
+str(s1)
+
+#+end_src
 
 #+RESULTS:
+#+begin_example
+List of 16
+ $ n        : int 228
+ $ time     : num [1:186] 5 11 12 13 15 26 30 31 53 54 ...
+ $ n.risk   : num [1:186] 228 227 224 223 221 220 219 218 217 215 ...
+ $ n.event  : num [1:186] 1 3 1 2 1 1 1 1 2 1 ...
+ $ n.censor : num [1:186] 0 0 0 0 0 0 0 0 0 0 ...
+ $ surv     : num [1:186] 0.996 0.982 0.978 0.969 0.965 ...
+ $ std.err  : num [1:186] 0.0044 0.00885 0.00992 0.01179 0.01263 ...
+ $ cumhaz   : num [1:186] 0.00439 0.0176 0.02207 0.03103 0.03556 ...
+ $ std.chaz : num [1:186] 0.00439 0.0088 0.00987 0.01173 0.01257 ...
+ $ type     : chr "right"
+ $ logse    : logi TRUE
+ $ conf.int : num 0.95
+ $ conf.type: chr "log"
+ $ lower    : num [1:186] 0.987 0.966 0.959 0.947 0.941 ...
+ $ upper    : num [1:186] 1 1 0.997 0.992 0.989 ...
+ $ call     : language survfit(formula = Surv(time, status) ~ 1, data = lung)
+ - attr(*, "class")= chr "survfit"
+#+end_example
+
+probably 186 distinct times
+objects: 
+- time: timepoints at which curve has a step (at least one event occurred)
+- surv: estimate of survival
+
+use survfit2 (ggsurvfit package),
+# seems to use disgusting function names (add confidence_interval JFC)
+
+#+begin_src R :results output graphics file :file kaplan_meier.pdf :width 6 :height 4
+survfit2(Surv(time, status) ~ 1, data = lung) %>%
+  ggsurvfit() +
+  add_confidence_interval() + # CI
+  add_risktable() # breaks formatting (makes two pages), you love to see it
+#+end_src
+
+#+RESULTS:
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/kaplan_meier.pdf]]
+
+
   
 
 
