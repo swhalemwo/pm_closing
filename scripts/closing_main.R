@@ -24,7 +24,7 @@ library(ggbeeswarm)
 
 ## *** config functions
 
-gc_locs <- function(dir_proj) {
+gc_dirs <- function(dir_proj) {
     list(
         proj = dir_proj,
         figs = paste0(dir_proj, "figures/"),
@@ -365,7 +365,7 @@ if (interactive()) {stop("it's interactive time")}
 
 
 ## set up constants used for object management
-c_dirs <- gc_locs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## project dirs
+c_dirs <- gc_dirs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## project dirs
 PMDATA_LOCS <- gc_pmdata_locs() # pmdata source
 l_plts <- list() # list of plots
 c_pltargs <- list() # arguments to pass to gc_plts
