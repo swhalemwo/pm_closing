@@ -362,6 +362,22 @@ gw_fargs <- function(matched_call) {
     fwrite(dt_fargs, paste0(c_dirs$tbls, "farg_calls.csv"), append = T)
 }
 
+gc_clgrphattrs <- function() {
+    #' generate configs of Rgraphviz rendering, required for gwd_clgrph
+    attrs <- list()
+    attrs$node <- list()
+    attrs$node$shape <- "box"
+    attrs$node$fixedsize <- F
+    attrs$graph <- list()
+    attrs$graph$splines <- F
+    ## attrs$graph$com
+    ## attrs$node$fontsize = 11
+
+    return(attrs)
+}
+
+
+
 ## * main
 if (interactive()) {stop("it's interactive time")}
 
@@ -418,23 +434,6 @@ walk(names(gc_plts()), ~lapply(c(gplt, wplt), \(f) f(.x)))
 ## write numbers
 dt_nbrs <- gd_nbrs()
 fwrite(dt_nbrs, paste0(c_dirs$tbls, "tbl_nbrs.csv"), quote = F)
-
-
-
-
-gc_clgrphattrs <- function() {
-    #' generate configs of Rgraphviz rendering, required for gwd_clgrph
-    attrs <- list()
-    attrs$node <- list()
-    attrs$node$shape <- "box"
-    attrs$node$fixedsize <- F
-    attrs$graph <- list()
-    attrs$graph$splines <- F
-    ## attrs$graph$com
-    ## attrs$node$fontsize = 11
-
-    return(attrs)
-}
 
 
 ## callgraph testing
