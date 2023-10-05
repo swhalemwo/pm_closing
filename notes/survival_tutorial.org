@@ -1,0 +1,118 @@
+#+PROPERTY: header-args:R :session *R:closing* 
+#+PROPERTY: header-args:R+ :output-dir /home/johannes/Dropbox/phd/papers/closing/notes/ 
+#+PROPERTY: header-args:R+ :results output graphics file
+
+
+
+* survival tutorial (Zabor)
+:PROPERTIES:
+:ID:       66ff2a7e-50d7-4e34-a390-4d7ab3173c4b
+:END:
+https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html
+
+** basics
+survival data is *time-to-event* data with distinct start time and end-time
+
+cancer: time from
+- surgery to death
+- start of treatment to progression
+- response to recurrence
+ 
+other fields: time
+- from HIV infection to AIDS development
+- to heart attack
+- machine malfunction
+
+*censoring*: subject has not experienced event of interest by end of data collection
+
+may be due to
+- loss of follow up
+- withdrawal
+- *no event by end of study*
+  # seems to be the case for me
+  
+*right censoring*: no event by end of study
+also *left-censoring*, but not dealth with here
+
+figure:
+- right-censoring due to no event happening
+- right censoring due to dropout: know even didn't happen during observation time
+- event during observation period
+-> Survival Analysis: account for censoring
+
+*follow-up* times: might differ between according to event status (event, censored)
+# unclear what they mean with "follow-up" time
+# probably the time after treatment -> i.e. if people drop out follow-up time can differ
+
+code: requires having R-session called "*R:closing* with all objects as of commit [[orgit-rev:~/Dropbox/phd/papers/closing/::6d5973d1fbc9bebc145d5281c9a6c8675b4c4f25][~/Dropbox/phd/papers/closing/ (magit-rev 6d5973d)]]: dt_pmyear, dt_pmdb
+
+
+#+begin_src R :file test.pdf :width 7 :height 4 
+dt_pmyear[, .SD[which.max(age)], ID][, .N, .(age, closing)] %>%
+  ggplot(aes(x=age, y=N, fill = factor(closing))) +
+
+  geom_col() + 
+  facet_grid(closing ~.)
+#+end_src
+
+#+RESULTS:
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/test.pdf]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#+begin_src R :session *R:closing* :export results
+adt(mtcars)[, .N, cyl]
+## lm(mpg ~ cyl, mtcars) %>% summary
+#+end_src
+
+#+RESULTS:
+| 6 |  7 |
+| 4 | 11 |
+| 8 | 14 |
+
+
+
+  
+#+begin_src R :results output graphics :file test.png
+library("ggplot2")
+ggplot(iris, aes(x = Sepal.Width, y = Sepal.Length, color = Species)) +
+  geom_point()
+#+END_SRC
+
+#+RESULTS:
+  
+
+
+
+* relevant
+*left-censoring*: might be present due to missing data on time-varying covariates
+
+
+
+
+
+
+
+
+
+
+
+
