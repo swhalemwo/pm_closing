@@ -88,7 +88,8 @@ with
   # e.g if at t=10 F(t) = 0.8, then 80% dead -> survival chance = 20%?
 
 *survival probability* at certain time, S(t): conditional probability of surviving beyond that, given that individual has survived so far
-calculation: (number of people alive at that time)/(number of people alive prior)
+calculation: (number of people alive without loss at that time)/(number of people alive prior)
+# kinda contradictory: first sentence is forward looking ("surviving beyond"), other backward looking ("alive prior")
 
 *Kaplan-Meier*: estimate of survival probability at given time: product of conditional probabilities up until given time
 # ah interesting: kinda chain-like process
@@ -105,6 +106,8 @@ library(ggsurvfit)
 
 library(condsurv)
 library(survival)
+
+library(texreg)
 #+end_src
 
 
@@ -124,7 +127,7 @@ lung <-
   survival::lung %>% 
   mutate(
     status = recode(status, `1` = 0, `2` = 1)
-  ) %>% adt
+  ) %>% adt(keep.rownames = "ID")
 
 #+end_src
 
@@ -186,20 +189,574 @@ objects:
 use survfit2 (ggsurvfit package),
 # seems to use disgusting function names (add confidence_interval JFC)
 
-#+begin_src R :results output graphics file :file kaplan_meier.pdf :width 6 :height 4
+#+begin_src R :results output graphics file :file kaplan_meier.pdf :width 6 :height 3
 survfit2(Surv(time, status) ~ 1, data = lung) %>%
   ggsurvfit() +
-  add_confidence_interval() + # CI
-  add_risktable() # breaks formatting (makes two pages), you love to see it
+  add_confidence_interval()  # CI
+  ## add_risktable() # breaks formatting (makes two pages), you love to see it
 #+end_src
 
 #+RESULTS:
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/kaplan_meier.pdf]]
 
+*** recreate the Kaplan meier estimator myself
 
+
+actually use wikipedia definition:
+\begin{equation*}
+\hat{S}(t) = \prod_{i: t_i \leq t} \left( 1- \frac{d_i}{n_i} \right)
+\end{equation*}
+with:
+- d_i: deaths in time i
+- n_i: people survived up to t_i (not dead yet, does not include people dying in t_i)
+
+it just drops out the censored ones by focusing on deaths in each time period
+
+#+begin_src R :results none
+## needs people alive at each time
+## people can drop out without dying -> not dealing with that properly atm: all exits are equal
+dt_kapmei <- lung[, .N, .(time, status)][order(time,status)] %>% # aggregate to event
+  .[, status := fifelse(status == 1, "ded", "cens")] %>% # rename status for comfy recastign
+  dcast(time  ~ status, value.var = "N") %>% replace_NA() %>% # separate censored and ded
+  rbind(data.table(time = 1, cens = 0, ded = 0), .) %>% .[order(time)] %>%  # make up t=1 (all alive)
+  .[, `:=`(cens_cum = cumsum(cens), death_cum = cumsum(ded), ttl = sum(cens) + sum(ded))] %>% 
+  .[, Nalive :=  ttl - cens_cum - death_cum] %>% # set up number alive
+  .[, Nalive_lag1 := flag(Nalive)] %>% .[1, Nalive_lag1 := Nalive] %>% # lag for comparison 
+  .[, surv_prob := 1 - ded/Nalive_lag1] %>% # calculate conditional probability for each time
+  .[, kapmei := cumprod(surv_prob)] %>% # calculate Kaplan-Meier: sum of conditional probabilities up to t_x
+  .[, survfit_prob := c(1, s1$surv)] # add s1 Kaplan Meier for comparison
+dt_kapmei
+
+## check difference
+## dt_kapmei[, .(time, diff = kapmei-survfit_prob)] %>% print(n=200)
+
+## need to separate each event time into two steps:
+## beginning: everybody is alive
+## end: people who die are dead
+## -> people who die are calculated as people who were alive in beginning -> lag of previous time
+
+## ## compare with Surv result
+## survfit2(Surv(time, status) ~ 1, data = lung) %>%
+##   ggsurvfit() +
+##   add_confidence_interval() + # CI
+##   geom_step(dt_kapmei, mapping = aes(x=time, y=kapmei, color = "red"), show.legend = F)
+
+## comparison looks good now
+
+#+end_src
+
+#+RESULTS:
+
+
+
+
+
+*** estimating x-year survival
+
+often interested in *probability of surviving beyond certain number of years*
+can use "summary" with "times" argument
+
+#+begin_src R :results output
+summary(survfit(Surv(time, status) ~ 1, data = lung), times = 365.25)
+
+#+end_src
+
+#+RESULTS:
+: Call: survfit(formula = Surv(time, status) ~ 1, data = lung)
+: 
+:  time n.risk n.event survival std.err lower 95% CI upper 95% CI
+:   365     65     121    0.409  0.0358        0.345        0.486
+
+
+
+around 41% survive 1 year
+
+if *naive* estimate (ignores censoring): 121 patients dead before 1 year
+121/228 = 53% dead -> would think that 47% survive 
+
+
+
+
+*ignoring censoring: wrongly treats censored patients as part of risk set for entire follow up period*
+-> overestimate survival chance
+
+# simulating that by setting time to max time + 1 for censored cases -> observations originally censored at some point now part of risk set for entire time period
+
+#+begin_src R
+lung2 <- copy(lung)
+max_time <- max(lung2$time)
+
+lung2[status == 0, time := max_time + 1]
+
+survfit2(Surv(time, status) ~ 1, data = lung2) %>%
+  ggsurvfit() +
+  add_confidence_interval()  # CI
+
+#+end_src
+
+#+RESULTS:
+
+# figure looks good, like in tutorial: survival stays higher, levels out at more than 25% (27.6% get censored)
+# get treated as alive when censoring not considered
+
+
+
+*** estimating median survival time
+
+average survival time: use median since not normally distributed
+
+#+begin_src R :results output
+survfit(Surv(time, status) ~ 1, data = lung)
+
+#+end_src
+
+#+RESULTS:
+: Call: survfit(formula = Surv(time, status) ~ 1, data = lung)
+: 
+:        n events median 0.95LCL 0.95UCL
+: [1,] 228    165    310     285     363
+
+median = 310 days
+
+ignoring censoring (by yeeting censored people completely): underestimate mean survival time: people who get censored contribute time to survival time
+
+# why are 
+
+*** comparing survival times between groups
+*log-rank test*: weights observations over entire follow up time -> compare survival time
+some versions weight start/end more heavily -> choose depending on design
+
+# weird btw that "Surv" arguments are time, time2, status, but always called as time, status
+
+#+begin_src R :results output
+
+
+survival::survdiff(Surv(time, status) ~ sex, lung)
+#+end_src
+
+#+RESULTS:
+: Call:
+: survival::survdiff(formula = Surv(time, status) ~ sex, data = lung)
+: 
+:         N Observed Expected (O-E)^2/E (O-E)^2/V
+: sex=1 138      112     91.6      4.55      10.3
+: sex=2  90       53     73.4      5.68      10.3
+: 
+:  Chisq= 10.3  on 1 degrees of freedom, p= 0.001
+
+pretty unclear
+- what the p-value is testing
+- what the observed and expected are referring to: neither add up to 228, but 165
   
+observed: number of events
+expected: expected number of events (probably given frequency distributions)
+
+plotting difference: 
+
+#+begin_src R :results output graphics file :file gender.pdf :width 7 :height 4
+
+survfit2(Surv(time, status) ~ sex, data = lung) %>%
+  ggsurvfit() +
+  add_confidence_interval()  # CI
+
+#+end_src
+
+#+RESULTS:
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/gender.pdf]]
+
+sex == 2 seems to do better: less observed (53) than expected (73), while sex==1 has more observed (112) than expected (91)
+
+*** the Cox regression model
+include one/several variables
+
+Cox regression: semi-parametric for univariate/multivariate regressions wiht survival outcomes
+
+\begin{equation*}
+h(t|X_i) = h_0(t) \exp(\beta_1 X_{i1} + ... + \beta_p X_ip)
+\end{equation*}
+with: 
+- h(t): *hazard: instantaneous rate at which events occur*
+- h_0(t) *underlying baseline hazard*
+
+assumptions:
+- non-informative censoring
+- proportional hazards
+
+can use "coxph"
+
+#+begin_src R :results output
+
+coxph(Surv(time, status) ~ sex, data = lung) %>% summary
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Call:
+coxph(formula = Surv(time, status) ~ sex, data = lung)
+
+  n= 228, number of events= 165 
+
+       coef exp(coef) se(coef)      z Pr(>|z|)   
+sex -0.5310    0.5880   0.1672 -3.176  0.00149 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+    exp(coef) exp(-coef) lower .95 upper .95
+sex     0.588      1.701    0.4237     0.816
+
+Concordance= 0.579  (se = 0.021 )
+Likelihood ratio test= 10.63  on 1 df,   p=0.001
+Wald test            = 10.09  on 1 df,   p=0.001
+Score (logrank) test = 10.33  on 1 df,   p=0.001
+
+Warning message:
+In x$coef : partial match of 'coef' to 'coefficients'
+#+end_example
+
+*hazard ratio (HR)* = 0.59 = exp(\beta): *ratio of hazards between two groups at any particular point in time*
+HR: instantaneous rate of occurence (?) of the event of interest in those who are still at risk for the event
+not a risk
+
+*HR = 0.59: 0.59 as many women are dying as males; women have a lower hazard than men*
+
+** part 2: Landmark Analysis and time dependent covariates
+*** landmark approach
+part 1: covariates measured at baseline (before follow up)
+now: covariates measured after follow up time begins
+
+e.g. interest in association between complete response and survival
+
+landmark??
+# maybe time of measurement? 
+
+H0 in landmark approach: survival from landmark does not depend on response status at landmark
+
+cancer: other time-varying covariates: other events, transplant failure, compliance
+
+BMT dataset: bone marrow transplants
+variables of interest:
+- T1: time to death/last follow up
+- delta1: death indicator; 1=dead, 0=alive
+- TA: time in days to acute graphv versus host disease (AGVHD) (??)
+- deltaA: AGVHD indicator: 1 developed AGVHD, 0: never developed AGVHD
+  
+if deltaA==0, TA = T1
+
+#+begin_src R :results none
+library(SemiCompRisks)
+
+data(BMT, package = "SemiCompRisks")
+dt_bmt <- adt(BMT, keep.rownames = "my_id")
+
+#+end_src
+
+landmark approach:
+- select fixed time after baseline as landmark time: based on clinical information
+- subset population for those followed until landmark time, report number of excluded/censored
+- calculate follow-up from landmark time with log-rank/cox regression
+
+here: relationship between AGVHD and survival
+
+landmark:
+1. aGVHD typically occurs within 90 days after transplant -> use 90 days landmark
+  # yeah latest of those who developed it had it after 88 days
+2. subset population
+
+#+begin_src R :results none
+dt_bmt_lndmrk <- dt_bmt[T1 >= 90]
+#+end_src
+
+yeets 15 patients, all dead before 90 days
+
+3. calculate follow-up time using traditional methods
+so we compare survival chances/times of those who got the disease with those who didn't
+
+# that's not really time-varying (is just shifting the baseline), but whatever
+
+#+begin_src R
+## log-rank test
+survival::survdiff(Surv(T1, delta1) ~ deltaA, dt_bmt_lndmrk2)
+
+## cox regression 
+dt_bmt_lndmrk2 <- copy(dt_bmt_lndmrk)[, T1 := T1-90]
+coxph(Surv(T1, delta1) ~ deltaA, dt_bmt_lndmrk2) %>% summary
+
+## plotting 
+survfit2(Surv(T1, delta1) ~ deltaA, data = dt_bmt_lndmrk2) %>%
+  ggsurvfit() +
+  add_confidence_interval() 
+#+end_src   
+   
+-> people who developed AGVHD have higher mortality, but not significantly 
+
+*** time-dependent covariate approach
+
+more appropriate than landmark when:
+- value of covariate is changing over time
+- no obvious landmark time
+- landmark would lead to many exclusions
+
+requires different data structure
+https://cran.r-project.org/web/packages/survival/vignettes/timedep.pdf
+one row for each time segment -> effectively can use year later on
 
 
+#+begin_src R :results output
+dt_bmt_segmt <- 
+  tmerge(
+    data1 = dt_bmt[, .(my_id, T1, delta1)], 
+    data2 = dt_bmt[, .(my_id, T1, delta1, TA, deltaA)], 
+    id = my_id, 
+    death = event(T1, delta1),
+    agvhd = tdc(TA)
+    ) %>% adt
+
+mr_tut <- coxph(
+  Surv(time = tstart, time2 = tstop, event = death) ~ agvhd,
+  data = dt_bmt_segmt)
+
+summary(mr_tut)
+
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Warning message:
+In rle(icount$irow)$length : partial match of 'length' to 'lengths'
++ Call:
+coxph(formula = Surv(time = tstart, time2 = tstop, event = death) ~ 
+    agvhd, data = dt_bmt_segmt)
+
+  n= 163, number of events= 80 
+
+        coef exp(coef) se(coef)    z Pr(>|z|)
+agvhd 0.3351    1.3980   0.2815 1.19    0.234
+
+      exp(coef) exp(-coef) lower .95 upper .95
+agvhd     1.398     0.7153    0.8052     2.427
+
+Concordance= 0.535  (se = 0.024 )
+Likelihood ratio test= 1.33  on 1 df,   p=0.2
+Wald test            = 1.42  on 1 df,   p=0.2
+Score (logrank) test = 1.43  on 1 df,   p=0.2
+
+Warning message:
+In x$coef : partial match of 'coef' to 'coefficients'
+#+end_example
+
+not significant either
+# but much closer? p=0.2 vs p=0.8 with landmark
+
+# try with person-time approach
+
+#+begin_src R :results output
+dt_bmt2 <- dt_bmt[, .(time = 1:T1), .(my_id, deltaA, TA, delta1)] %>%
+  .[, `:=`(agvhd = fifelse(time >= TA & deltaA == 1, 1, 0))] %>% # fill up agvhd for those who got it
+  .[, event := fifelse(time ==max(time) & delta1 == 1, 1, 0), my_id] %>% # assign death events
+  .[, time2 := time +1]
+
+mr_long <- coxph(Surv(time = time, time2 = time2, event = event) ~ agvhd, data = dt_bmt2)
+
+suppressWarnings(screenreg(list(mr_tut, mr_long)))
+
+
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+================================
+             Model 1  Model 2   
+--------------------------------
+agvhd          0.34        0.33 
+              (0.28)      (0.28)
+--------------------------------
+AIC          720.42      720.43 
+R^2            0.01        0.00 
+Max. R^2       0.99        0.01 
+Num. events   80          80    
+Num. obs.    163      114965    
+Missings       0           0    
+PH test        0.06        0.06 
+================================
+,*** p < 0.001; ** p < 0.01; * p < 0.05
+#+end_example
+
+*** try replicating survival models in poisson
+
+
+#+begin_src R
+library(glmmTMB)
+mr_poi <- glm(event ~ agvhd, dt_bmt2, family = poisson)
+
+mr_poi2 <- glmmTMB(event ~ agvhd + factor(time), dt_bmt2[my_id %in% 1:3], family = poisson)
+
+mr_poi3 <- glmmTMB(closing ~ age + I(age^2) , dt_pmyear)
+mr_poi4 <- fepois(closing ~ age + I(age^2) | year, dt_pmyear)
+
+library(fixest)
+mr_poi3 <- fepois(event ~ agvhd | time, dt_bmt2)
+# fepois 
+
+#+end_src
+
+constantly crashing
+
+** advanced topics
+*** Assessing proportional hazards
+
+Cox proportional hazards assumption: hazards are proportional
+cox.zph function: checks proportional hazards assumption
+- hypothesis testing whether
+  - effect of each covariate differs according to time,
+  - global test of all covariates at once
+  done through interaction between covariate and log(time)
+  significant value: PH assumption violated
+- plots of Schoenfeld residuals:
+  deviation from a zero-slope line is evidence that PH assumption is violated
+
+#+begin_src R :results output
+mv_fit <- coxph(Surv(time, status) ~ sex + age, lung)
+cz <- cox.zph(mv_fit)
+print(cz)
+
+#+end_src
+
+#+RESULTS:
+:        chisq df    p
+: sex    2.608  1 0.11
+: age    0.209  1 0.65
+: GLOBAL 2.771  2 0.25
+
+#+begin_src R :results output graphics file :file resids.pdf :width 6 :height 4
+plot(cz)
+#+end_src
+
+#+RESULTS:
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/resids.pdf]]
+
+# plotting messed up: only plots the last one in X11, but  generates plot for each variable
+
+all p < 0.05 -> proportional hazards fine
+
+# ehhh
+# guess the line is some additional smooth fit
+
+*** smooth fit
+hmm isn't what they have basically a scatterplot?
+
+line: smoothed estimate of median survival according to age
+
+# super slow for some reason 
+
+# idk.. smooth is nice and all, but nightmare to interpret
+# shouldn't add it just because it looks nice -> should be properly specified with splines or something
+
+#+begin_src R :results output graphics file :file smooth_survival.pdf :width 7 :height 5
+lung %>% ggplot(aes(x=age, y=time)) +
+  geom_point(mapping = aes(shape = factor(status)), size = 5) +
+  scale_shape_manual(values = c(1,4)) +
+  geom_smooth()
+
+## library(sm)
+
+sm.options(
+  list(
+    xlab = "Age (years)",
+    ylab = "Median time to death (years)")
+  )
+
+sm.survival(
+  x = lung$age,
+  y = lung$time,
+  status = lung$status,
+  h = 0.15 * sd(lung$age) / nrow(lung)^(-1/4)
+  )
+
+#+end_src
+
+#+RESULTS:
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/smooth_survival.pdf]]
+
+*** conditional survival
+
+getting probability of survival after having already survived some time
+
+\begin{equation*}
+S(y|x) =  \frac{S(x + y)}{S(x)}
+\end{equation*}
+
+y: number of additional years of interest
+x: number of years patient already survived
+
+# isn't this basically subsetting? just run analysis with those that have already survived
+
+#+begin_src R :results output
+fit1 <- survfit(Surv(time, status) ~ 1, data = lung)
+
+prob_times <- seq(365.25, 182.625 * 4, 182.625)
+
+map(prob_times, ~conditional_surv_est(basekm = fit1, t1 = 182.625, t2 = .x)) %>%
+  rbindlist %>%
+  .[, .(months = round(prob_times / 30.4), cs_est, cs_lci, cs_uci)] 
+
+#+end_src
+
+#+RESULTS:
+: # A data frame: 3 × 4
+:   months cs_est cs_lci cs_uci
+:    <dbl>  <dbl>  <dbl>  <dbl>
+: 1     12   0.58   0.49   0.66
+: 2     18   0.36   0.27   0.45
+: 3     24   0.16   0.1    0.25
+
+t1: time on which to condition: now half a year
+having survived half a year, the probability to survive up to 1 year is 0.58
+
+see if I can reproduce that with subsetting
+
+
+#+begin_src R :results output
+
+fit_condmnl <- survfit(Surv(time, status) ~ 1, data = lung[time > 182])
+
+map(prob_times, ~summary(fit_condmnl, times = .x) %>% as.list %>% .[c("time", "surv")]) %>% rbindlist
+
+#+end_src
+
+#+RESULTS:
+: # A data frame: 3 × 2
+:    time  surv
+:   <dbl> <dbl>
+: 1  365. 0.578
+: 2  548. 0.361
+: 3  730. 0.163
+
+looks the same, but can't say for sure because *conditional_surv_est rounds everything to two digits!!!!*
+fucking garbage
+
+
+can plot survival conditional on having survived different lengths
+
+this is something different now me thinks: previously was p(t_survived|survived 180 days), now p(tx|ty), with
+- tx all t >= tx,
+- ty the different survival times used in the t_survived before (prob_times)
+
+#+begin_src R :results output graphics file :file cond_survival.pdf :width 7 :height 4
+gg_conditional_surv(
+  basekm = fit1, 
+  at = prob_times,
+  main = "Conditional survival in lung data",
+  xlab = "Days"
+  ) +
+  labs(color = "Conditional time")
+
+#+end_src
+
+#+RESULTS:
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/cond_survival.pdf]]
 
 * relevant
 *left-censoring*: might be present due to missing data on time-varying covariates
