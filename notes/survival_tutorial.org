@@ -517,14 +517,13 @@ mr_tut <- coxph(
 
 summary(mr_tut)
 
-
 #+end_src
 
 #+RESULTS:
 #+begin_example
 Warning message:
 In rle(icount$irow)$length : partial match of 'length' to 'lengths'
-+ Call:
+Call:
 coxph(formula = Surv(time = tstart, time2 = tstop, event = death) ~ 
     agvhd, data = dt_bmt_segmt)
 
@@ -548,7 +547,7 @@ In x$coef : partial match of 'coef' to 'coefficients'
 not significant either
 # but much closer? p=0.2 vs p=0.8 with landmark
 
-# try with person-time approach
+**** try with person-time approach
 
 #+begin_src R :results output
 dt_bmt2 <- dt_bmt[, .(time = 1:T1), .(my_id, deltaA, TA, delta1)] %>%
@@ -559,8 +558,6 @@ dt_bmt2 <- dt_bmt[, .(time = 1:T1), .(my_id, deltaA, TA, delta1)] %>%
 mr_long <- coxph(Surv(time = time, time2 = time2, event = event) ~ agvhd, data = dt_bmt2)
 
 suppressWarnings(screenreg(list(mr_tut, mr_long)))
-
-
 
 #+end_src
 
@@ -584,25 +581,6 @@ PH test        0.06        0.06
 ,*** p < 0.001; ** p < 0.01; * p < 0.05
 #+end_example
 
-*** try replicating survival models in poisson
-
-
-#+begin_src R
-library(glmmTMB)
-mr_poi <- glm(event ~ agvhd, dt_bmt2, family = poisson)
-
-mr_poi2 <- glmmTMB(event ~ agvhd + factor(time), dt_bmt2[my_id %in% 1:3], family = poisson)
-
-mr_poi3 <- glmmTMB(closing ~ age + I(age^2) , dt_pmyear)
-mr_poi4 <- fepois(closing ~ age + I(age^2) | year, dt_pmyear)
-
-library(fixest)
-mr_poi3 <- fepois(event ~ agvhd | time, dt_bmt2)
-# fepois 
-
-#+end_src
-
-constantly crashing
 
 ** advanced topics
 *** Assessing proportional hazards
@@ -757,6 +735,72 @@ gg_conditional_surv(
 
 #+RESULTS:
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/cond_survival.pdf]]
+
+** own data 
+
+#+begin_src R
+library(countrycode)
+
+dt_svl <- copy(dt_pmyear) %>%
+  .[, `:=`(year_end = year + 1, age_end = age+1, # set up both age and time as periods
+           ## set up dummy if PM is in EU to have some testing
+           d_EU = fifelse(countrycode(iso3c, "iso3c", "un.region.name") == "Europe", 1, 0))] %>% na.omit
+  
+
+mr_year <- coxph(Surv(time = year, time2 = year_end, event = closing) ~ d_EU, dt_svl)
+mr_time <- coxph(Surv(time = age, time2 = age_end, event = closing) ~ d_EU, dt_svl)
+
+## how 
+mr_time_age <- coxph(Surv(time = age, time2 = age_end, event = closing) ~ d_EU + age + I(age^2), dt_svl)
+
+screenreg(list(mr_year, mr_time))
+
+  
+
+## compact mode
+dt_svl2 <- dt_pmyear[, .SD[which.max(year)], ID] %>%
+  .[, d_EU := fifelse(countrycode(iso3c, "iso3c", "un.region.name") == "Europe", 1, 0)] %>% na.omit
+
+dt_svl2[!complete.cases(dt_svl2)]
+dt_svl2[year <= year_opened]
+
+## yeets those founded in 2021
+mr_year_cpct <- coxph(Surv(time = year_opened, time2 = year, event = closing) ~ d_EU, dt_svl2)
+mr_time_cpct <- coxph(Surv(time = age, event = closing) ~ d_EU, dt_svl2)
+  
+
+screenreg(list(mr_year, mr_time, mr_year_cpct, mr_time_cpct), digits = 5)
+
+survfit2(Surv(age, closing) ~ 1, dt_svl2) %>%
+  ggsurvfit() + add_confidence_interval()
+
+## looks super weird 
+survfit2(Surv(time = year_opened, time2 =year, event = closing) ~ 1, dt_svl2) %>%
+  ggsurvfit() + add_confidence_interval() +
+  xlim(x=c(dt_svl2[, min(year_opened)], 2021))
+# not technically wrong tho.. 
+#+end_src
+
+** try replicating survival models in poisson -> postponed
+
+
+#+begin_src R
+library(glmmTMB)
+mr_poi <- glm(event ~ agvhd, dt_bmt2, family = poisson)
+
+mr_poi2 <- glmmTMB(event ~ agvhd + factor(time), dt_bmt2[my_id %in% 1:3], family = poisson)
+
+mr_poi3 <- glmmTMB(closing ~ age + I(age^2) , dt_pmyear)
+mr_poi4 <- fepois(closing ~ age + I(age^2) | year, dt_pmyear)
+
+library(fixest)
+mr_poi3 <- fepois(event ~ agvhd | time, dt_bmt2)
+# fepois 
+
+#+end_src
+
+constantly crashing
+
 
 * relevant
 *left-censoring*: might be present due to missing data on time-varying covariates
