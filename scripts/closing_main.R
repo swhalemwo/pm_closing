@@ -7,15 +7,18 @@
 args <- commandArgs(trailingOnly = T)
 options(width = 115)
 
-## detach("package:pmdata", unload = T)
-
 library(jtls)
 library(pmdata)
 library(memoise)
 library(collapse)
 library(purrr)
 library(docstring)
-library(ggbeeswarm)
+library(ggbeeswarm) # move points up/down on vrblcvrg plots.. hopefully avoid
+library(survival) 
+library(ggsurvfit) # easy visualizations of survival objects, hopefully avoid
+library(countrycode) 
+library(muhaz) # for smooth hazard curves
+library(patchwork) # for stichting plots together, hopefully avoid
 
 ## LOCS <- list(PROJDIR = "/home/johannes/Dropbox/phd/papers/closing/")
 ## LOCS$FIGDIR <- paste0(FIG
@@ -54,13 +57,24 @@ gc_plts <- function() {
             dt_vrblcvrg = quote(dt_vrblcvrg_fcs),
             caption = "PMDB variable coverage (abs/rel prop) by museum status and variable group",
             width = 18,
-            height = 24)
-            
-        ## p_asdf = list(
-        ##     dtx = quote(mtcars),
-        ##     width = 10,
-        ##     height = 20,
-        ##     caption = "kappa")
+            height = 24),
+        p_surv = list(
+            dt_pmcpct = quote(dt_pmcpct),
+            caption = "Private Museum Survival probability",
+            width = 14,
+            height = 8),
+        p_hazard = list(
+            dt_pmcpct = quote(dt_pmcpct),
+            caption = "Private Museum hazard function",
+            cutwidth = 2,
+            bw.smooth = 5,
+            width = 14,
+            height = 8),
+        p_agedens = list(
+            dt_pmcpct = quote(dt_pmcpct),
+            caption = "Age distribution of private museums",
+            width = 17,
+            height = 16)        
     )
 
     ## check that there are no duplicate 
@@ -102,7 +116,7 @@ gc_vrblgrps <- function(dt_pmdb) {
     if (len(setdiff(dt_vrblgrps$vrbl, names(dt_pmdb))) >0) {
         stop("vrbls has typos, or not all variables are grouped")
     }
-    ## setdiff(names(dt_pmdb), dt_vrblgrps$vrbl)
+    ## print(setdiff(names(dt_pmdb), dt_vrblgrps$vrbl))
 
     attr(dt_vrblgrps, "gnrtdby") <- as.character(match.call()[[1]])
     return(dt_vrblgrps)
