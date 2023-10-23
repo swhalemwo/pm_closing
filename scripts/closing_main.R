@@ -195,6 +195,32 @@ gd_dimred_loads <- function(loadmat) {
 }
 
 
+gd_pmdb_splong <- function(dt_pmdb) {
+    #' generate super long PM dt, ;
+    ## FIXME: this func now includes a bunch of configuration (vrbls_relchars)
+    ## which is probably better as external argument/config
+
+    ## get relevant char columns: convert "" to NA
+    vrbls_relchars <- .c(
+        museum_status, iso3c, nationality, gender, ticket_price, opng_time, nbr_visitrs, website, mission, 
+        staff_size, buildgtype, slfidfcn, city, clctn_med_fcs, clctn_cry_fcs, clctn_reg_fcs, clctn_modctmp,
+        insta_handle, architect, industry)
+    
+    ## set variables to check: all numeric vrbls, selected char vrbls, yeet llid
+    vrbls_tocheck <- c(
+        setdiff(num_vars(dt_pmdb, return = "names"), .c(llid)), vrbls_relchars)
+
+    ## setdiff(names(dt_pmdb), vrbls_tocheck)
+
+    ## replace empty string with NA, use variables to check
+    dt_pmdb_splong <- tfmv(dt_pmdb, vars = vrbls_relchars, FUN = \(x) replace(x, x=="", NA)) %>%
+        fselect(vrbls_tocheck) %>%
+        melt(id.vars = c("ID", "museum_status"), variable.name = "vrbl")
+
+    attr(dt_pmdb_splong, "gnrtdby") <- as.character(match.call()[[1]])
+    return(dt_pmdb_splong)
+}
+
 gd_pmdb_excl_splong <- function(dt_pmdb_excl, vrbls_tocheck) {
     gw_fargs(match.call())
     ## generate coverage of dt_pmdb_excl (before cleaning) to assess
@@ -391,25 +417,10 @@ dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%
 dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
     
 
+
 ## ** variable selection
 
-## get relevant char columns: convert "" to NA
-vrbls_relchars <- .c(
-    museum_status, iso3c, nationality, gender, ticket_price, opng_time, nbr_visitrs, website, mission, 
-    staff_size, buildgtype, slfidfcn, city, clctn_med_fcs, clctn_cry_fcs, clctn_reg_fcs, clctn_modctmp,
-    insta_handle, architect, industry)
-    
-## set variables to check: all numeric vrbls, selected char vrbls, yeet llid
-vrbls_tocheck <- c(
-    setdiff(num_vars(dt_pmdb, return = "names"), .c(llid)), vrbls_relchars)
-
-setdiff(names(dt_pmdb), vrbls_tocheck)
-
-## replace empty string with NA, use variables to check
-dt_pmdb_splong <- tfmv(dt_pmdb, vars = vrbls_relchars, FUN = \(x) replace(x, x=="", NA)) %>%
-    fselect(vrbls_tocheck) %>%
-    melt(id.vars = c("ID", "museum_status"), variable.name = "vrbl")
-
+dt_pmdb_splong <- gd_pmdb_splong(dt_pmdb)
 
 dt_vrblcvrg_all <- gd_vrblcvrg(dt_pmdb_splong, all_statuses = T)
 dt_vrblcvrg_fcs <- gd_vrblcvrg(dt_pmdb_splong, all_statuses = F)
