@@ -12,7 +12,7 @@ library(pmdata)
 library(memoise)
 library(collapse)
 library(purrr)
-library(docstring)
+library(docstring) # for annotating 
 library(ggbeeswarm) # move points up/down on vrblcvrg plots.. hopefully avoid
 library(survival) 
 library(ggsurvfit) # easy visualizations of survival objects, hopefully avoid
