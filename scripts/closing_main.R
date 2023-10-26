@@ -19,6 +19,8 @@ library(ggsurvfit) # easy visualizations of survival objects, hopefully avoid
 library(countrycode) 
 library(muhaz) # for smooth hazard curves
 library(patchwork) # for stichting plots together, hopefully avoid
+library(texreg, include.only = c("screenreg", "texreg")) ## inspection of results
+library(tinytest) # for looking at pmdata tests
 
 ## LOCS <- list(PROJDIR = "/home/johannes/Dropbox/phd/papers/closing/")
 ## LOCS$FIGDIR <- paste0(FIG
@@ -410,12 +412,15 @@ PMDATA_LOCS <- gc_pmdata_locs() # pmdata source
 l_plts <- list() # list of plots
 c_pltargs <- list() # arguments to pass to gc_plts
 
-
-
 dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%
     .[museum_status %in% c("private museum", "no longer a private museum", "closed")] # yeet bad PMs
 dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
-    
+
+
+
+
+tests_pmdata <- test_package("pmdata", verbose = T)
+summary(tests_pmdata)
 
 
 ## ** variable selection
