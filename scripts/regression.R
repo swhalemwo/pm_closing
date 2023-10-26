@@ -20,16 +20,19 @@ gd_pmx <- function(dt_pmdb) {
         if (nbr_opng_year_missing > 0) {
             warning(sprintf("FIXME: %s PMs have no opening year", nbr_opng_year_missing))}})
     
-    
-
-    ## only basic variables for now to test overall flow, later add more variables
-    dt_pmx <- dt_pmdb[museum_status %in% c("private museum", "closed"), # yeet NLPM
-                      .(ID, name, iso3c, museum_status, year_opened, year_closed,
-                        gender, deathyear)] %>% # select main variables
+    ## filter out cases for all kinds of reasons
+    dt_pmdb_fltrd <- copy(dt_pmdb) %>% 
+        .[museum_status %in% c("private museum", "closed")] %>%  # yeet NLPM
         .[!(museum_status == "closed" & is.na(year_closed))] %>% # yeet closed with missing closing year
         .[!is.na(year_opened)] %>% # yeet all without proper opening year
-        .[, gender := factor(fifelse(gender %in% c("F", "M"), gender, "couple"),
-                             levels = .c(M, F, "couple"))] # recode gender to couple
+        .[year_opened < END_YEAR] # only use those opened before end year (age has to be > 0)
+
+
+    ## only basic variables for now to test overall flow, later add more variables
+    dt_pmx <- copy(dt_pmdb_fltrd) %>% 
+        .[, .(ID, name, iso3c, museum_status, year_opened, year_closed, deathyear, 
+              gender = factor(fifelse(gender %in% c("F", "M"), gender, "couple"),
+                              levels = .c(M, F, "couple")))] # recode other genders to couple
     
     
 
@@ -43,7 +46,7 @@ gd_pmx <- function(dt_pmdb) {
 
     
 
-gd_pmyear <- function(dt_pmx) {
+gd_pmyear <- function(dt_pmx, dt_pmtiv) {
     gw_fargs(match.call())
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
@@ -56,13 +59,20 @@ gd_pmyear <- function(dt_pmx) {
                                                deathyear, gender)] %>%
         ## set closing variable
         .[, closing := fifelse(museum_status == "closed" & year_closed == year, 1, 0)] %>% 
-        .[!(year > END_YEAR)] %>% # yeet pm years beyond END_YEAR
-        .[!(year_opened > year)] %>% # yeet pm-years where expansion went into negative direction
+        ## .[!(year > END_YEAR)] %>% # yeet pm years beyond END_YEAR
+        ## .[!(year_opened > year)] %>% # yeet pm-years where expansion went into negative direction
         .[, age := year - year_opened] %>%
         ## founder death: 1 if deathyear > year, else 0 (before death or not dead at all)
         .[, founder_dead := fifelse(!is.na(deathyear),fifelse(deathyear > year, 1, 0), 0)] %>% 
         .[, `:=`(tstart = age, tstop = age+1)] %>%
         .[, pm_dens := .N, .(iso3c, year)] # calculate PM density 
+
+    ## combine with time-invariant variables
+    dt_pmyear2 <- merge(dt_pmyear,
+                        copy(dt_pmtiv)[, `:=`(iso3c=NULL, name = NULL)], ## yeet non-essential columns
+                        on = "ID") 
+
+    if (any(is.na(dt_pmyear2$mow))) {stop("some MOW is NA")}
 
     ## try to get comfy groupby counts with collapse, but super incomprehensible API
     ## fcount(asdf = .c(iso3c, year), add = T, name = "pm_dens") # works, but name comes last -> not consistent
@@ -83,29 +93,63 @@ gd_pmyear <- function(dt_pmx) {
     ## when setting END_YEAR to e.g. 2015, museums that close later don't have a closing year, as intended
 
     ## yeet unused variables
-    dt_pmyear[, `:=`(museum_status = NULL, year_closed = NULL, deathyear = NULL)]
+    dt_pmyear2[, `:=`(museum_status = NULL, year_closed = NULL, deathyear = NULL)]
 
     
-    attr(dt_pmyear, "gnrtdby") <- as.character(match.call()[[1]])
-    return(dt_pmyear)
+    attr(dt_pmyear2, "gnrtdby") <- as.character(match.call()[[1]])
+    return(dt_pmyear2)
 
 }
 
-gd_pmcpct <- function(dt_pmx) {
+gd_pmcpct <- function(dt_pmyear) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
     gw_fargs(match.call())
-    ## PM compact: survival data on time invariant variables
-    dt_pmcpct <- dt_pmx %>% copy() %>%
-        .[, last_year := fifelse(museum_status == "closed", year_closed, END_YEAR)] %>% 
-        .[, .(ID, name,
-              reg6 = rcd_iso3c_reg6(iso3c),
-              years = last_year - year_opened,
-              status = fifelse(museum_status == "closed", 1, 0))] %>%
-        .[, west := fifelse(reg6 %in% .c(EU, NALUL),1, 0)] %>% 
-        .[years > 0] # FIXME should not be necessary to filter here
+    ## PM compact: survival data on time invariant variables for testing compability between long and compact
+
+    dt_pmcpct <- dt_pmyear[, .SD[which.max(age)], ID]
+
+    ## dt_pmcpct <- dt_pmx %>% copy() %>%
+    ##     .[, last_year := fifelse(museum_status == "closed", year_closed, END_YEAR)] %>% 
+    ##     .[, .(ID, name,
+    ##           ## reg6 = rcd_iso3c_reg6(iso3c),
+    ##           years = last_year - year_opened,
+    ##           status = fifelse(museum_status == "closed", 1, 0))] %>%
+    ##     .[, west := fifelse(reg6 %in% .c(EU, NALUL),1, 0)] %>% 
+    ##     .[years > 0] # FIXME should not be necessary to filter here
+    
 
     attr(dt_pmcpct, "gnrtdby") <- as.character(match.call()[[1]])
     return(dt_pmcpct)
 }
+
+gd_pmtiv <- function(dt_pmx) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    gw_fargs(match.call())
+    #' add all kinds of time-invariant data to pmdb: MOW, tax incentives
+
+    dt_pmx2 <- copy(dt_pmx) %>% 
+        .[, reg6 := rcd_iso3c_reg6(iso3c)] %>%
+        .[, west := fifelse(reg6 %in% .c(EU, NALUL),1, 0)]
+    
+    ## get MOW data 
+    dt_mow_info <- gd_mow_info()[!is.na(PMDB_ID), .(PMDB_ID, mow = 1)]
+
+    ## join mow with PMX subset
+    ## later will probably have more sophisticated infrastructure
+    dt_pmtiv <- merge(dt_pmx2[, .(ID, iso3c, name, reg6, west)],
+                      dt_mow_info, by.x = "ID", by.y = "PMDB_ID", all.x = T) %>%
+        .[, mow := fifelse(is.na(mow), 0, mow)]
+    ## dt_mow_info[dt_pmx, on = .(PMDB_ID =  ID)]
+
+    attr(dt_pmtiv, "gnrtdby") <- as.character(match.call()[[1]])
+    return(dt_pmtiv)
+
+
+}
+
+
+
 
 ## ** plots
 gp_surv <- function(dt_pmcpct) {
@@ -116,7 +160,7 @@ gp_surv <- function(dt_pmcpct) {
     ## maybe make more pretty later,
     ## for now this is just basic diagnostics to automatically update when data is updated
 
-    survfit2(Surv(years, status) ~ 1, dt_pmcpct) %>% 
+    survfit2(Surv(age, closing) ~ 1, dt_pmcpct) %>% 
         ggsurvfit() + add_confidence_interval()
 
 }
@@ -128,11 +172,11 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
     ## i think the muhaz kernel is more appropriate than the default geom_smooth kernel (goes negative)
 
     ## details of pehaz/muhaz functions can be figured out later
-    res_pehaz <- pehaz(dt_pmcpct$years, dt_pmcpct$status, width = cutwidth)
+    res_pehaz <- pehaz(dt_pmcpct$age, dt_pmcpct$closing, width = cutwidth)
     dt_pehaz <- data.table(cuts = res_pehaz$Cuts,
                            haz = c(res_pehaz$Hazard, tail(res_pehaz$Hazard, 1)))
 
-    res_muhaz <- muhaz(dt_pmcpct$years, dt_pmcpct$status, bw.smooth = bw.smooth, b.cor = "none", max.time = 60,
+    res_muhaz <- muhaz(dt_pmcpct$age, dt_pmcpct$closing, bw.smooth = bw.smooth, b.cor = "none", max.time = 60,
                        bw.method = "local")
     dt_muhaz <- data.table(grid = res_muhaz$est.grid,
                            haz = res_muhaz$haz.est)
@@ -152,21 +196,22 @@ gp_agedens <- function(dt_pmcpct) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     ## age distribution
     ## density
-    p_agedens1 <- ggplot(dt_pmcpct, aes(x=years)) + geom_density()
+    p_agedens1 <- ggplot(dt_pmcpct, aes(x=age)) + geom_density()
     ## doesn't really show numbers tho.. 
 
     
     ## maybe points
-    p_agedens2 <- dt_pmcpct %>% copy() %>% .[order(years, -status)] %>% 
-        .[, y_offset := 1:.N, years] %>%
-        .[, status := factor(status, levels = c(1,0))] %>% 
-        ggplot(aes(x=years, y=y_offset,
+    p_agedens2 <- dt_pmcpct %>% copy() %>% .[order(age, -closing)] %>% 
+        .[, y_offset := 1:.N, age] %>%
+        .[, status := factor(closing, levels = c(1,0))] %>% 
+        ggplot(aes(x=age, y=y_offset,
                    color = factor(status),
                    ## fill = factor(status)
                    )) +
         ## geom_tile() + 
         geom_point() +
-        theme(legend.position = c(0.8,0.7))
+        theme(legend.position = c(0.8,0.7)) 
+        
         
 
     p_agedens1 / p_agedens2
@@ -236,11 +281,16 @@ if (interactive()) {stop("it's interactive time")}
 END_YEAR <- 2021
 
 dt_pmx <- gd_pmx(dt_pmdb)
+dt_pmtiv <- gd_pmtiv(dt_pmx)
 
-dt_pmyear <- gd_pmyear(dt_pmx)
-dt_pmcpct <- gd_pmcpct(dt_pmx)
+dt_pmyear <- gd_pmyear(dt_pmx, dt_pmtiv)
+dt_pmcpct <- gd_pmcpct(dt_pmyear)
 
+if (any(is.na(match(dt_pmyear[, funique(ID)], dt_pmx[, ID])))) {
+    stop("some how IDs went missing between dt_pmx and dt_pmyear")}
 
+if (any(is.na(match(dt_pmx[, ID], dt_pmcpct[, ID])))) {
+    stop("some how IDs went missing between dt_pmx and dt_pmcpct")}
 
 ## library(glmmTMB)
 ## glmmTMB(closing ~ age + I(age^2), dt_pmyear, family = poisson) %>% summary
@@ -248,11 +298,18 @@ dt_pmcpct <- gd_pmcpct(dt_pmx)
 r.null <- coxph(Surv(tstart, tstop, closing) ~ 1, dt_pmyear)
 
 ## some regional covariates
-r.reg6 <- coxph(Surv(years, status) ~ reg6, dt_pmcpct) # doesn't like to convert 
-r.west <- coxph(Surv(years, status) ~ west, dt_pmcpct)
+r.reg6 <- coxph(Surv(age, closing) ~ reg6, dt_pmcpct) # doesn't like to convert 
+
+## compare cpct and long (year) data
+r.west_cpct <- coxph(Surv(age, closing) ~ west, dt_pmcpct)
+r.west_year <- coxph(Surv(age, closing) ~ west, dt_pmyear)
+r.west_year2 <- coxph(Surv(age, closing) ~ west, dt_pmyear[, .SD[which.max(age)], ID])
+screenreg2(list(r.west_cpct, r.west_year, r.west_year2), digits = 4)
 
 
-r.more <- coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + founder_dead, dt_pmyear)
+## fullest model
+r.more <- coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + founder_dead + mow, dt_pmyear)
+
 
 screenreg2(list(r.more))
 
@@ -260,7 +317,7 @@ screenreg2(list(r.more))
 
 cox.zph(r.more)
 cox.zph(r.more, transform = "rank")
- %>% plot
+##  %>% plot
 
 
 
