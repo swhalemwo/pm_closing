@@ -30,7 +30,8 @@ gd_pmx <- function(dt_pmdb) {
 
     ## only basic variables for now to test overall flow, later add more variables
     dt_pmx <- copy(dt_pmdb_fltrd) %>% 
-        .[, .(ID, name, iso3c, museum_status, year_opened, year_closed, deathyear, 
+        .[, .(ID, name, iso3c, museum_status, year_opened, year_closed, deathyear,
+              slfidfcn, muem_fndr_name, 
               gender = factor(fifelse(gender %in% c("F", "M"), gender, "couple"),
                               levels = .c(M, F, "couple")))] # recode other genders to couple
     
@@ -130,14 +131,18 @@ gd_pmtiv <- function(dt_pmx) {
 
     dt_pmx2 <- copy(dt_pmx) %>% 
         .[, reg6 := rcd_iso3c_reg6(iso3c)] %>%
-        .[, west := fifelse(reg6 %in% .c(EU, NALUL),1, 0)]
+        .[, west := fifelse(reg6 %in% .c(EU, NALUL),1, 0)] %>%
+        .[, slfidfcn := fifelse(slfidfcn %in% c("Collection", "Foundation", "Museum"),
+                                tolower(slfidfcn), "other")] %>%
+        .[, slfidfcn := factor(slfidfcn, levels = c("museum", "foundation", "collection", "other"))] %>% 
+        .[, muem_fndr_name := fifelse(is.na(muem_fndr_name), 0, muem_fndr_name)] # FIXME in PMDB google sheets
     
     ## get MOW data 
     dt_mow_info <- gd_mow_info()[!is.na(PMDB_ID), .(PMDB_ID, mow = 1)]
 
     ## join mow with PMX subset
     ## later will probably have more sophisticated infrastructure
-    dt_pmtiv <- merge(dt_pmx2[, .(ID, iso3c, name, reg6, west)],
+    dt_pmtiv <- merge(dt_pmx2[, .(ID, iso3c, name, reg6, west, slfidfcn, muem_fndr_name)],
                       dt_mow_info, by.x = "ID", by.y = "PMDB_ID", all.x = T) %>%
         .[, mow := fifelse(is.na(mow), 0, mow)]
     ## dt_mow_info[dt_pmx, on = .(PMDB_ID =  ID)]
@@ -308,7 +313,8 @@ screenreg2(list(r.west_cpct, r.west_year, r.west_year2), digits = 4)
 
 
 ## fullest model
-r.more <- coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + founder_dead + mow, dt_pmyear)
+r.more <- coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + founder_dead + mow +
+              slfidfcn + muem_fndr_name, dt_pmyear)
 
 
 screenreg2(list(r.more))
