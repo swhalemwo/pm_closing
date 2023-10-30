@@ -1,3 +1,59 @@
+## * dimred code
+
+gd_dimred_loads <- function(loadmat) {
+    gw_fargs(match.call())
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    #' generate long data.frame of dimensionality reduction loadings
+    #'
+    #' @param loadmat: loadings matrix
+    #' @value data.table with columns vrbl, dim, value
+
+    dt_dimred_loads <- matrix(data = as.numeric(loadmat),
+                              nrow = nrow(loadmat),
+                              dimnames = list(rownames(loadmat), paste0("dim", 1:ncol(loadmat)))) %>% 
+                              ## dimnames = attributes(loadmat)$dimnames) %>% 
+                              ## dimnames = as.list(paste0("dim", 1:ncol(loadmat)))) %>%
+        adt(keep.rownames = "vrbl") %>%
+        melt(id.vars = "vrbl", variable.name = "dim") %>%
+        .[, dim := factor(dim, levels = sort(unique(dim)))]
+
+        ## .[dim %in% paste0("dim", 1:10) ] %>%
+        ## .[, dim := factor(dim, levels = paste0("RC", 1:10))]
+
+    attr(dt_dimred_loads, "gnrtdby") <- as.character(match.call()[[1]])
+    return(dt_dimred_loads)
+}
+
+
+gp_dimred_loads <- function(dt_dimred_loads) {
+    gw_fargs(match.call())
+    #' plot factor loadings with ggplot in col + facetted
+    #'
+    #' @param dt_dimred_loads long data.frame with columns vrbl, dim (PCA/EFA outcome), value (loading)
+    
+    ## ADDME: automatic ordering of rows
+
+    ggplot(dt_dimred_loads, aes(x=abs(value),y=vrbl, fill = value)) +
+        geom_col() +
+        facet_grid(. ~ dim) +
+        scale_fill_gradient2(high = "red", low = "blue")
+}
+
+gp_scree <- function(scree_vlus) {
+    gw_fargs(match.call())
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    #' plot the scree plot (just column plot of vector
+    #'
+    #' param scree_vlus vector of scree values
+
+    data.table(value = scree_vlus) %>% .[, dim_nbr := factor(1:.N)] %>%
+        ggplot(aes(x=dim_nbr, y=value)) + geom_col() 
+}
+
+
+
 ## ** dimension reduction fun
 ## will have different variable sets, e.g. whether founder should be there or not
 ## doesn't matter so much now which variables to use, just set up framework for plotting
