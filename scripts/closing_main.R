@@ -57,19 +57,19 @@ gc_plts <- function() {
 
     l_pltcfgs <- list(
         p_vrblcvrg_ugrpd = list(
-            dt_vrblcvrg = quote(dt_vrblcvrg_all),
+            dt_vrblcvrg = quote(l_vrblcvrg$dt_vrblcvrg_all),
             yeet_acts = F,
             caption = "PMDB variable coverage by museum status",
             width = 19,
             height = 24),
         p_vrblcvrg = list(
-            dt_vrblcvrg = quote(dt_vrblcvrg_all),
+            dt_vrblcvrg = quote(l_vrblcvrg$dt_vrblcvrg_all),
             yeet_acts = F,
             caption = "PMDB variable coverage by museum status and variable group",
             width = 19,
             height = 24),
         p_vrblcvrg_ratio = list(
-            dt_vrblcvrg = quote(dt_vrblcvrg_fcs),
+            dt_vrblcvrg = quote(l_vrblcvrg$dt_vrblcvrg_fcs),
             caption = "PMDB variable coverage (abs/rel prop) by museum status and variable group",
             width = 18,
             height = 24),
@@ -139,7 +139,7 @@ gc_vrblgrps <- function(dt_pmdb) {
 
 ## *** data generation
 
-gd_vrblcvrg <- function(dt_vrbl_splong, all_statuses) {
+gd_vrblcvrg <- function(dt_pmdb_splong, all_statuses) {
     gw_fargs(match.call())
     
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
@@ -181,6 +181,10 @@ gd_vrblcvrg <- function(dt_vrbl_splong, all_statuses) {
     return(dt_vrblcvrg_grpd)
 
 }
+
+## check which variables are not considered in dt_vrblgrps
+## are variables that are grouped (all pmbd variables are), but not used (e.g. technical)
+## setdiff(gc_vrblgrps(dt_pmdb)$vrbl, dt_vrblcvrg_all$vrbl)
 
 
 
@@ -244,6 +248,30 @@ gd_pmdb_excl_splong <- function(dt_pmdb_excl, vrbls_tocheck) {
     attr(dt_pmdb_excl_splong, "gnrtdby") <- as.character(match.call()[[1]])
     return(dt_pmdb_excl_splong)
 }
+
+gl_vrblcvrg <- function(dt_pmdb) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    gw_fargs(match.call())
+
+    #' bundle all the variable coverage objects in one list for more comfy handling
+    
+    dt_pmdb_splong <- gd_pmdb_splong(dt_pmdb)
+
+    dt_vrblcvrg_all <- gd_vrblcvrg(dt_pmdb_splong, all_statuses = T)
+    dt_vrblcvrg_fcs <- gd_vrblcvrg(dt_pmdb_splong, all_statuses = F)
+
+    l_vrblcvrg <- list(dt_pmdb_splong = dt_pmdb_splong,
+                       dt_vrblcvrg_all =dt_vrblcvrg_all,
+                       dt_vrblcvrg_fcs = dt_vrblcvrg_fcs)
+
+    attr(l_vrblcvrg, "gnrtdby") <- as.character(match.call()[[1]])
+
+    return(l_vrblcvrg)
+    
+}
+
+
 
 ## *** plotting
 
@@ -380,31 +408,28 @@ dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%
     .[museum_status %in% c("private museum", "no longer a private museum", "closed")] # yeet bad PMs
 dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
 
+## variable coverage
+l_vrblcvrg <- gl_vrblcvrg(dt_pmdb)
+
+gd_mow_info <- memoise(gd_mow_info) # memoizing gd_mow_info: saves the fread of 55k file
+
+END_YEAR <- 2021
 
 source(paste0(c_dirs$code, "regression.R"))
 
-stop("halt stop")
+dt_pmx <- gd_pmx(dt_pmdb)
+dt_pmtiv <- gd_pmtiv(dt_pmx)
 
-tests_pmdata <- test_package("pmdata", verbose = T)
-summary(tests_pmdata)
+dt_pmyear <- gd_pmyear(dt_pmx, dt_pmtiv)
+dt_pmcpct <- gd_pmcpct(dt_pmyear)
 
+l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct)
 
-## ** variable selection
+screenreg2(list(l_mdls$r.more))
 
-dt_pmdb_splong <- gd_pmdb_splong(dt_pmdb)
-
-dt_vrblcvrg_all <- gd_vrblcvrg(dt_pmdb_splong, all_statuses = T)
-dt_vrblcvrg_fcs <- gd_vrblcvrg(dt_pmdb_splong, all_statuses = F)
-
-## plot variable coverage by museum type
-
-    
-## check which variables are not considered in dt_vrblgrps
-## are variables that are grouped (all pmbd variables are), but not used (e.g. technical)
-setdiff(gc_vrblgrps(dt_pmdb)$vrbl, dt_vrblcvrg_all$vrbl)
+screenreg2(list(l_mdls$r.west_cpct, l_mdls$r.west_year, l_mdls$r.west_year2), digits = 4)
 
 
-## ratio calculations
 
 # generate plots and write them to file
 walk(names(gc_plts()), ~lapply(c(gplt, wplt), \(f) f(.x)))
@@ -422,6 +447,5 @@ dpltF("callgraph")
 
 
 
-    
-stop("dimred not ready")
-
+library(mvbutils, include.only = "foodweb")
+foodweb(where = "package:jtls")

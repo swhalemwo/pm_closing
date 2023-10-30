@@ -291,55 +291,55 @@ gp_inflcases <- function(dt_inflcases, dt_coefs) {
 
 
 
-## * main
-if (interactive()) {stop("it's interactive time")}
+## ## * main
+## if (interactive()) {stop("it's interactive time")}
 
 ## memoise functions for more snappy iterations
-gd_mow_info <- memoise(gd_mow_info) # memoizing gd_mow_info: saves the fread of 55k file
 
-END_YEAR <- 2021
+gc_pmdb_tests <- function(dt_pmx, dt_pmyear, dt_pmcpct) {
+    #' bunch of checks to run on PMDB derived data
+    #' FIXME: implement later more properly with tinytest
 
-dt_pmx <- gd_pmx(dt_pmdb)
-dt_pmtiv <- gd_pmtiv(dt_pmx)
+    if (any(is.na(match(dt_pmyear[, funique(ID)], dt_pmx[, ID])))) {
+        stop("some how IDs went missing between dt_pmx and dt_pmyear")}
 
-dt_pmyear <- gd_pmyear(dt_pmx, dt_pmtiv)
-dt_pmcpct <- gd_pmcpct(dt_pmyear)
+    if (any(is.na(match(dt_pmx[, ID], dt_pmcpct[, ID])))) {
+        stop("some how IDs went missing between dt_pmx and dt_pmcpct")}
 
-if (any(is.na(match(dt_pmyear[, funique(ID)], dt_pmx[, ID])))) {
-    stop("some how IDs went missing between dt_pmx and dt_pmyear")}
-
-if (any(is.na(match(dt_pmx[, ID], dt_pmcpct[, ID])))) {
-    stop("some how IDs went missing between dt_pmx and dt_pmcpct")}
+}
 
 ## library(glmmTMB)
 ## glmmTMB(closing ~ age + I(age^2), dt_pmyear, family = poisson) %>% summary
 
-r.null <- coxph(Surv(tstart, tstop, closing) ~ 1, dt_pmyear)
+gl_mdls <- function(dt_pmyear, dt_pmcpct) {
+    gw_fargs(match.call())
 
-## some regional covariates
-r.reg6 <- coxph(Surv(age, closing) ~ reg6, dt_pmcpct) # doesn't like to convert 
+    l_mdls <- list(
+        r.null = coxph(Surv(tstart, tstop, closing) ~ 1, dt_pmyear),
 
-## compare cpct and long (year) data
-r.west_cpct <- coxph(Surv(age, closing) ~ west, dt_pmcpct)
-r.west_year <- coxph(Surv(age, closing) ~ west, dt_pmyear)
-r.west_year2 <- coxph(Surv(age, closing) ~ west, dt_pmyear[, .SD[which.max(age)], ID])
-screenreg2(list(r.west_cpct, r.west_year, r.west_year2), digits = 4)
+        ## some regional covariates
+        r.reg6 = coxph(Surv(age, closing) ~ reg6, dt_pmcpct), # doesn't like to convert 
+
+        ## compare cpct and long (year) data
+        r.west_cpct = coxph(Surv(age, closing) ~ west, dt_pmcpct),
+        r.west_year = coxph(Surv(age, closing) ~ west, dt_pmyear),
+        r.west_year2 = coxph(Surv(age, closing) ~ west, dt_pmyear[, .SD[which.max(age)], ID]),
+
+        ## fullest model
+        r.more = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + founder_dead + mow +
+                           slfidfcn + muem_fndr_name, dt_pmyear)
+    )
+
+    attr(l_mdls, "gnrtdby") <- as.character(match.call()[[1]])
+
+    return(l_mdls)
+}
 
 
-## fullest model
-r.more <- coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + founder_dead + mow +
-              slfidfcn + muem_fndr_name, dt_pmyear)
-
-
-screenreg2(list(r.more))
-
-
-
-cox.zph(r.more)
-cox.zph(r.more, transform = "rank")
+## FIXME: generate proper cox.zph result table for any coxph model
+## cox.zph(r.more)
+## cox.zph(r.more, transform = "rank")
 ##  %>% plot
-
-
 
 
 
