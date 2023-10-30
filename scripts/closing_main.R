@@ -34,7 +34,20 @@ gc_dirs <- function(dir_proj) {
         proj = dir_proj,
         figs = paste0(dir_proj, "figures/"),
         tbls = paste0(dir_proj, "tables/"),
-        data = paste0(dir_proj, "data/")
+        data = paste0(dir_proj, "data/"),
+        code = paste0(dir_proj, "scripts/")
+    )
+}
+
+gc_vvs <- function() {
+    #' generate variable vectors
+
+    list(
+        ## time-invariant variables
+        vrbls_base = .c(ID, iso3c, year, tstart, tstop, age),
+        vrbls_tiv = .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6),
+        vrbls_tv= .c(pm_density, founder_dead)
+
     )
 }
 
@@ -417,7 +430,9 @@ dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%
 dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
 
 
+source(paste0(c_dirs$code, "regression.R"))
 
+stop("halt stop")
 
 tests_pmdata <- test_package("pmdata", verbose = T)
 summary(tests_pmdata)

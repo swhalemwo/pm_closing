@@ -3,6 +3,7 @@
 
 
 
+
 ## ** data functions
 
 gd_pmx <- function(dt_pmdb) {
@@ -31,9 +32,9 @@ gd_pmx <- function(dt_pmdb) {
     ## only basic variables for now to test overall flow, later add more variables
     dt_pmx <- copy(dt_pmdb_fltrd) %>% 
         .[, .(ID, name, iso3c, museum_status, year_opened, year_closed, deathyear,
-              slfidfcn, muem_fndr_name, 
-              gender = factor(fifelse(gender %in% c("F", "M"), gender, "couple"),
-                              levels = .c(M, F, "couple")))] # recode other genders to couple
+              slfidfcn, muem_fndr_name, gender)]
+
+    
     
     
 
@@ -57,7 +58,7 @@ gd_pmyear <- function(dt_pmx, dt_pmtiv) {
     dt_pmyear <- dt_pmx[, last_year := fifelse(museum_status == "closed", year_closed, END_YEAR)] %>%
         ## expand to pm_year UoA
         .[, .(year = year_opened:last_year), .(ID, iso3c, museum_status, year_opened, year_closed,
-                                               deathyear, gender)] %>%
+                                               deathyear)] %>%
         ## set closing variable
         .[, closing := fifelse(museum_status == "closed" & year_closed == year, 1, 0)] %>% 
         ## .[!(year > END_YEAR)] %>% # yeet pm years beyond END_YEAR
@@ -135,14 +136,24 @@ gd_pmtiv <- function(dt_pmx) {
         .[, slfidfcn := fifelse(slfidfcn %in% c("Collection", "Foundation", "Museum"),
                                 tolower(slfidfcn), "other")] %>%
         .[, slfidfcn := factor(slfidfcn, levels = c("museum", "foundation", "collection", "other"))] %>% 
-        .[, muem_fndr_name := fifelse(is.na(muem_fndr_name), 0, muem_fndr_name)] # FIXME in PMDB google sheets
+        .[, muem_fndr_name := fifelse(is.na(muem_fndr_name), 0, muem_fndr_name)] %>% # FIXME in PMDB google sheets
+        .[, gender := factor(fifelse(gender %in% c("F", "M"), gender, "couple"),
+                             levels = c("M", "F", "couple"))] # recode other genders to couple
     
-    ## get MOW data 
+
+    
+    ## get MOW data: get MOW entries which have PMDB match
     dt_mow_info <- gd_mow_info()[!is.na(PMDB_ID), .(PMDB_ID, mow = 1)]
 
-    ## join mow with PMX subset
+    
+    ## construct tiv vrbl vector: yeet "mow" from tiv variables: not there yet
+    vrbls_tiv_temp <- setdiff(c("ID", "iso3c", "name", gc_vvs()$vrbls_tiv), "mow")
+
+
+    ## left join PMX subset with MOW
     ## later will probably have more sophisticated infrastructure
-    dt_pmtiv <- merge(dt_pmx2[, .(ID, iso3c, name, reg6, west, slfidfcn, muem_fndr_name)],
+    ## dt_pmtiv <- merge(dt_pmx2[, .(ID, iso3c, name, reg6, west, slfidfcn, muem_fndr_name)],
+    dt_pmtiv <- merge(dt_pmx2[, vrbls_tiv_temp, with = F],
                       dt_mow_info, by.x = "ID", by.y = "PMDB_ID", all.x = T) %>%
         .[, mow := fifelse(is.na(mow), 0, mow)]
     ## dt_mow_info[dt_pmx, on = .(PMDB_ID =  ID)]
@@ -282,6 +293,9 @@ gp_inflcases <- function(dt_inflcases, dt_coefs) {
 
 ## * main
 if (interactive()) {stop("it's interactive time")}
+
+## memoise functions for more snappy iterations
+gd_mow_info <- memoise(gd_mow_info) # memoizing gd_mow_info: saves the fread of 55k file
 
 END_YEAR <- 2021
 
