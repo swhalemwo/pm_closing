@@ -321,12 +321,12 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         r.reg6 = coxph(Surv(age, closing) ~ reg6, dt_pmcpct), # doesn't like to convert 
 
         ## compare cpct and long (year) data
-        r.west_cpct = coxph(Surv(age, closing) ~ west, dt_pmcpct),
-        r.west_year = coxph(Surv(age, closing) ~ west, dt_pmyear),
-        r.west_year2 = coxph(Surv(age, closing) ~ west, dt_pmyear[, .SD[which.max(age)], ID]),
+        r_west_cpct = coxph(Surv(age, closing) ~ west, dt_pmcpct),
+        r_west_year = coxph(Surv(age, closing) ~ west, dt_pmyear),
+        r_west_year2 = coxph(Surv(age, closing) ~ west, dt_pmyear[, .SD[which.max(age)], ID]),
 
         ## fullest model
-        r.more = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + founder_dead + mow +
+        r_more = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + founder_dead + mow +
                            slfidfcn + muem_fndr_name, dt_pmyear)
     )
 

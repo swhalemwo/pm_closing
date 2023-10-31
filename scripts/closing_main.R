@@ -398,9 +398,9 @@ dt_pmcpct <- gd_pmcpct(dt_pmyear)
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct)
 
-screenreg2(list(l_mdls$r.more))
+screenreg2(list(l_mdls$r_more))
 
-screenreg2(list(l_mdls$r.west_cpct, l_mdls$r.west_year, l_mdls$r.west_year2), digits = 4)
+screenreg2(list(l_mdls$r_west_cpct, l_mdls$r_west_year, l_mdls$r_west_year2), digits = 4)
 
 
 
