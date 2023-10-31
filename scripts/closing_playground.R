@@ -87,6 +87,41 @@ penl_vrbls <- .c(gvtsupport, donorprogram, endowment, sponsorship, rentalpossblt
 
 
 ## ** combine with dt_pmdb_excl: check how much of the lack of availability is due to incomplete standardization
+gd_pmdb_excl_splong <- function(dt_pmdb_excl, vrbls_tocheck) {
+    gw_fargs(match.call())
+    ## generate coverage of dt_pmdb_excl (before cleaning) to assess
+    ## contribution of cleaning to (lack of) data coverage
+
+    ## actually pretty unneccessary since my cleaning doesn't really change coverage, but meaning:
+    ## presence of string is converted into availability (e.g. clctnhldngs)
+
+    ## set up dt with names for comparison
+    ## recycle some code from gd_pmdb_excl
+    dt_rename_list <- c(list(ID = "ID",
+                             country = "country",
+                             iso3c = "iso3c",
+                             name = "name",
+                             year_opened =  "year_opened_str",
+                             year_closed = "year_closed_str",
+                             museum_status = "museum_status"),
+                        gc_rename_list()) %>%     
+        map(~vrbl_fndr(dt_pmdb_excl, .x)) %>% 
+        imap(~list(vrbl_orig = .x, vrbl_new = .y)) %>% rbindlist
+    
+    
+    ## select relevant vars, rename, fill up empty strings with NA, melt to superlong
+    dt_pmdb_excl_splong <- slt(dt_pmdb_excl, dt_rename_list$vrbl_orig) %>%
+        frename(setNames(dt_rename_list$vrbl_new, dt_rename_list$vrbl_orig)) %>%
+        slt(vrbls_tocheck) %>% # only select the ones to check
+        tfmv(vars = names(.), FUN = \(x) replace(x, x=="", NA)) %>%
+        melt(id.vars = c("ID", "museum_status"), variable.name = "vrbl")
+
+    attr(dt_pmdb_excl_splong, "gnrtdby") <- as.character(match.call()[[1]])
+    return(dt_pmdb_excl_splong)
+}
+
+
+
 dt_pmdb_excl_splong <- gd_pmdb_excl_splong(dt_pmdb_excl, vrbls_tocheck)
 
 dt_vrblcvrg_excl <- merge(
