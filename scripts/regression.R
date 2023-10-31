@@ -331,8 +331,8 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
     )
 
     attr(l_mdls, "gnrtdby") <- as.character(match.call()[[1]])
-
     return(l_mdls)
+    
 }
 
 

@@ -21,6 +21,7 @@ library(muhaz) # for smooth hazard curves
 library(patchwork) # for stichting plots together, hopefully avoid
 library(texreg, include.only = c("screenreg", "texreg")) ## inspection of results
 library(tinytest) # for looking at pmdata tests
+library(parallel) # parallel processing
 
 ## LOCS <- list(PROJDIR = "/home/johannes/Dropbox/phd/papers/closing/")
 ## LOCS$FIGDIR <- paste0(FIG
@@ -35,7 +36,8 @@ gc_dirs <- function(dir_proj) {
         figs = paste0(dir_proj, "figures/"),
         tbls = paste0(dir_proj, "tables/"),
         data = paste0(dir_proj, "data/"),
-        code = paste0(dir_proj, "scripts/")
+        code = paste0(dir_proj, "scripts/"),
+        misc = paste0(dir_proj, "misc/")
     )
 }
 
@@ -191,6 +193,7 @@ gd_vrblcvrg <- function(dt_pmdb_splong, all_statuses) {
 
 
 gd_pmdb_splong <- function(dt_pmdb) {
+    gw_fargs(match.call())
     #' generate super long PM dt, ;
     ## FIXME: this func now includes a bunch of configuration (vrbls_relchars)
     ## which is probably better as external argument/config
@@ -411,7 +414,9 @@ dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
 ## variable coverage
 l_vrblcvrg <- gl_vrblcvrg(dt_pmdb)
 
-gd_mow_info <- memoise(gd_mow_info) # memoizing gd_mow_info: saves the fread of 55k file
+if ("memoised" %!in% class(gd_mow_info)) {
+    gd_mow_info <- memoise(gd_mow_info) # memoizing gd_mow_info: saves the fread of 55k file
+}
 
 END_YEAR <- 2021
 
@@ -431,7 +436,10 @@ screenreg2(list(l_mdls$r.west_cpct, l_mdls$r.west_year, l_mdls$r.west_year2), di
 
 
 
-# generate plots and write them to file
+## generate plots and write them to file
+## FIXME: parallelize this: can use some overarching mclapply
+## mclapply(names(gc_plts()), \(x) lapply(c(gplt, wplt), \(f) f(x)), mc.cores = 6)
+## mclapply seems to break gwd_clgrph (?????) for whatever reason.. 
 walk(names(gc_plts()), ~lapply(c(gplt, wplt), \(f) f(.x)))
 
 ## write numbers
@@ -446,6 +454,3 @@ dpltF("callgraph")
 ## gdplt("p_vrblcvrg_ratio")
 
 
-
-library(mvbutils, include.only = "foodweb")
-foodweb(where = "package:jtls")
