@@ -374,6 +374,8 @@ c_dirs <- gc_dirs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## pr
 PMDATA_LOCS <- gc_pmdata_locs() # pmdata source
 l_plts <- list() # list of plots
 c_pltargs <- list() # arguments to pass to gc_plts
+system(sprintf("rm %s", paste0(c_dirs$tbls, "farg_calls.csv")))
+
 
 dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%
     .[museum_status %in% c("private museum", "no longer a private museum", "closed")] # yeet bad PMs
@@ -417,7 +419,7 @@ fwrite(dt_nbrs, paste0(c_dirs$tbls, "tbl_nbrs.csv"), quote = F)
 
 ## callgraph testing
 jtls::gwd_clgrph()
-dpltF("callgraph")
+## dpltF("callgraph2")
 ## dpltF("p_vrblcvrg")
 ## gdplt("p_vrblcvrg_ratio")
 

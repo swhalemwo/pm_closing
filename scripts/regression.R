@@ -272,20 +272,24 @@ gd_inflcases <- function(rx) {
 }
 
 gp_inflcases <- function(dt_inflcases, dt_coefs) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     #' generate histogram of coefficient changes due to dropping each observation once (jacknife/dfbeta-residuals)
     
     ## could regenerate dt_coefs quite quickly from dt_inflcases, but might need it more often
     ## need to sketch proper processing steps (which objects needed where),
     ## also with table outputs
-    dt_coefs <- dt_inflcases[, unique(.SD), .SDcols = .c(vrbl, coef, se)]
+    if (missing(dt_coefs)) {
+        dt_coefs <- dt_inflcases[, unique(.SD), .SDcols = .c(vrbl, coef, se)]
+    }
 
     ## histogram is better than density: not so much drawn to heights by narrow spread by discretizing
     ggplot() +
         geom_histogram(dt_inflcases, mapping = aes(x=coef_wo)) +
-        geom_point(, mapping = aes(x=coef, y=0)) +
+        geom_point(dt_coefs, mapping = aes(x=coef, y=0)) +
         geom_vline(xintercept = 0, linetype = 2) + 
-        geom_errorbarh(dt_coefs, mapping = aes(xmin = coef - 1.96*se, xmax = coef + 1.96*se, y=0), height = 50) + 
-        facet_wrap(~vrbl, scales = "free_x")
+        geom_errorbarh(dt_coefs, mapping = aes(xmin = coef - 1.96*se, xmax = coef + 1.96*se, y=50), height = 50) + 
+        facet_wrap(~vrbl, scales = "free")
 
 }
 
@@ -336,8 +340,16 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
 }
 
 
+
+## gd_inflcases(l_mdls$r.more) %>% gp_inflcases
+
+
+    
+
+
+
 ## FIXME: generate proper cox.zph result table for any coxph model
-## cox.zph(r.more)
+## cox.zph(l_mdls$r.more)
 ## cox.zph(r.more, transform = "rank")
 ##  %>% plot
 
