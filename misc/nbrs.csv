@@ -1,0 +1,15 @@
+nbr_name,nbr_fmt,grp
+ynkplt_p_vrblcvrg_ugrpd,(eval (concat "#+label: fig:p_vrblcvrg_ugrpd\n" "#+caption: PMDB variable coverage by museum status\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_vrblcvrg_ugrpd.pdf]]")),pltcfgs
+ynkplt_p_vrblcvrg,(eval (concat "#+label: fig:p_vrblcvrg\n" "#+caption: PMDB variable coverage by museum status and variable group\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_vrblcvrg.pdf]]")),pltcfgs
+ynkplt_p_vrblcvrg_ratio,(eval (concat "#+label: fig:p_vrblcvrg_ratio\n" "#+caption: PMDB variable coverage (abs/rel prop) by museum status and variable group\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_vrblcvrg_ratio.pdf]]")),pltcfgs
+ynkplt_p_surv,(eval (concat "#+label: fig:p_surv\n" "#+caption: Private Museum Survival probability\n" "#+attr_latex: :width 14cm\n" "[[file:../figures/p_surv.pdf]]")),pltcfgs
+ynkplt_p_hazard,(eval (concat "#+label: fig:p_hazard\n" "#+caption: Private Museum hazard function\n" "#+attr_latex: :width 14cm\n" "[[file:../figures/p_hazard.pdf]]")),pltcfgs
+ynkplt_p_agedens,(eval (concat "#+label: fig:p_agedens\n" "#+caption: Age distribution of private museums\n" "#+attr_latex: :width 17cm\n" "[[file:../figures/p_agedens.pdf]]")),pltcfgs
+ynkplt_p_yeardens,(eval (concat "#+label: fig:p_yeardens\n" "#+caption: Private Museum-year Distribution\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_yeardens.pdf]]")),pltcfgs
+refplt_p_vrblcvrg_ugrpd,\ref{fig:p_vrblcvrg_ugrpd},figlbls
+refplt_p_vrblcvrg,\ref{fig:p_vrblcvrg},figlbls
+refplt_p_vrblcvrg_ratio,\ref{fig:p_vrblcvrg_ratio},figlbls
+refplt_p_surv,\ref{fig:p_surv},figlbls
+refplt_p_hazard,\ref{fig:p_hazard},figlbls
+refplt_p_agedens,\ref{fig:p_agedens},figlbls
+refplt_p_yeardens,\ref{fig:p_yeardens},figlbls

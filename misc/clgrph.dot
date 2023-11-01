@@ -1,0 +1,72 @@
+digraph D {
+compound = true;
+ subgraph cluster_l_vrblcvrg {
+ label = "l_vrblcvrg";
+ l_vrblcvrg__dt_vrblcvrg_all [label=dt_vrblcvrg_all]; 
+l_vrblcvrg__dt_vrblcvrg_fcs [label=dt_vrblcvrg_fcs]; 
+l_vrblcvrg [label = "", color=transparent, width=0, height=0] 
+} 
+ gc_dirs; 
+gc_pmdb_tests; 
+gc_vrblgrps; 
+gc_vvs; 
+gd_inflcases; 
+gd_mow_info; 
+gd_pmcpct; 
+gd_pmdb_excl_splong; 
+gd_pmdb_splong; 
+gd_pmtiv; 
+gd_pmx; 
+gd_pmyear; 
+gd_vrblcvrg; 
+gl_mdls; 
+gl_vrblcvrg; 
+gp_agedens; 
+gp_hazard; 
+gp_inflcases; 
+gp_schoenfeld; 
+gp_surv; 
+gp_vrblcvrg; 
+gp_vrblcvrg_ratio; 
+gp_vrblcvrg_ugrpd; 
+theme_closing; 
+dt_pmdb; 
+dt_pmdb_splong; 
+dt_pmx; 
+dt_pmtiv; 
+dt_pmyear; 
+dt_pmcpct; 
+2; 
+5; 
+l_mdls 
+ 2 -> gp_hazard; 
+5 -> gp_hazard; 
+dt_pmcpct -> gl_mdls; 
+dt_pmcpct -> gp_agedens; 
+dt_pmcpct -> gp_hazard; 
+dt_pmcpct -> gp_surv; 
+dt_pmdb -> gc_vrblgrps; 
+dt_pmdb -> gd_pmdb_splong; 
+dt_pmdb -> gd_pmx; 
+dt_pmdb -> gl_vrblcvrg; 
+dt_pmdb_splong -> gd_vrblcvrg; 
+dt_pmtiv -> gd_pmyear; 
+dt_pmx -> gd_pmtiv; 
+dt_pmx -> gd_pmyear; 
+dt_pmyear -> gd_pmcpct; 
+dt_pmyear -> gl_mdls; 
+gc_vrblgrps -> gd_vrblcvrg; 
+gc_vvs -> gd_pmtiv; 
+gd_mow_info -> gd_pmtiv; 
+gd_pmcpct -> dt_pmcpct; 
+gd_pmdb_splong -> gl_vrblcvrg; 
+gd_pmtiv -> dt_pmtiv; 
+gd_pmx -> dt_pmx; 
+gd_pmyear -> dt_pmyear; 
+gd_vrblcvrg -> gl_vrblcvrg; 
+gl_mdls -> l_mdls; 
+gl_vrblcvrg -> l_vrblcvrg[lhead=cluster_l_vrblcvrg,ltail=gl_vrblcvrg]; 
+l_vrblcvrg__dt_vrblcvrg_all -> gp_vrblcvrg; 
+l_vrblcvrg__dt_vrblcvrg_all -> gp_vrblcvrg_ugrpd; 
+l_vrblcvrg__dt_vrblcvrg_fcs -> gp_vrblcvrg_ratio; 
+theme_closing -> gp_vrblcvrg_ratio }
