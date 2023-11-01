@@ -319,10 +319,10 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
     gw_fargs(match.call())
 
     l_mdls <- list(
-        r.null = coxph(Surv(tstart, tstop, closing) ~ 1, dt_pmyear),
+        r_null = coxph(Surv(tstart, tstop, closing) ~ 1, dt_pmyear),
 
         ## some regional covariates
-        r.reg6 = coxph(Surv(age, closing) ~ reg6, dt_pmcpct), # doesn't like to convert 
+        r_reg6 = coxph(Surv(age, closing) ~ reg6, dt_pmcpct), # doesn't like to convert 
 
         ## compare cpct and long (year) data
         r_west_cpct = coxph(Surv(age, closing) ~ west, dt_pmcpct),
@@ -341,7 +341,7 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
 
 
 
-## gd_inflcases(l_mdls$r.more) %>% gp_inflcases
+## gd_inflcases(l_mdls$r_more) %>% gp_inflcases
 
 
     
@@ -349,8 +349,8 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
 
 
 ## FIXME: generate proper cox.zph result table for any coxph model
-## cox.zph(l_mdls$r.more)
-## cox.zph(r.more, transform = "rank")
+## cox.zph(l_mdls$r_more)
+## cox.zph(r_more, transform = "rank")
 ##  %>% plot
 
 
