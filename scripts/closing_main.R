@@ -364,6 +364,28 @@ gc_clgrphattrs <- function() {
     return(attrs)
 }
 
+## gl_dts <- function(dt_pmdb) {
+##     #' absolutely cursed idea to just collect all the dts in one block
+       #' the callgraph tec isn't there yet sadly
+##     gw_fargs(match.call())
+    
+##     dt_pmx <- gd_pmx(dt_pmdb)
+##     dt_pmtiv <- gd_pmtiv(dt_pmx)
+
+##     dt_pmyear <- gd_pmyear(dt_pmx, dt_pmtiv)
+##     dt_pmcpct <- gd_pmcpct(dt_pmyear)
+
+##     l_dts <- list(
+##         dt_pmx =     dt_pmx, 
+##         dt_pmtiv=    dt_pmtiv,                              
+##         dt_pmyear=   dt_pmyear,
+##         dt_pmcpct =  dt_pmcpct)
+
+##     attr(l_dts, "gnrtdby") <- as.character(match.call()[[1]])
+##     return(l_dts)
+## }
+
+## l_dts <- gl_dts(dt_pmdb)
 
 
 ## * main
@@ -392,6 +414,7 @@ if ("memoised" %!in% class(gd_mow_info)) {
 END_YEAR <- 2021
 
 source(paste0(c_dirs$code, "regression.R"))
+
 
 dt_pmx <- gd_pmx(dt_pmdb)
 dt_pmtiv <- gd_pmtiv(dt_pmx)
@@ -423,5 +446,4 @@ jtls::gwd_clgrph()
 ## dpltF("callgraph2")
 ## dpltF("p_vrblcvrg")
 ## gdplt("p_vrblcvrg_ratio")
-
 

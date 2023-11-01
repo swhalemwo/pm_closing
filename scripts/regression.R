@@ -233,7 +233,10 @@ gp_agedens <- function(dt_pmcpct) {
     p_agedens1 / p_agedens2
 }
 
-## gwdplt("p_surv")
+
+## gwdplt("p_agedens")
+
+
 
 gd_inflcases <- function(rx) {
     gw_fargs(match.call())
@@ -442,5 +445,5 @@ gp_coxphdiag <- function(rx) {
 
 }
 
-gp_coxphdiag(l_mdls$r_west_cpct)
+##  gp_coxphdiag(l_mdls$r_west_cpct)
 
