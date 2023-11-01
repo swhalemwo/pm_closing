@@ -233,6 +233,37 @@ gp_agedens <- function(dt_pmcpct) {
     p_agedens1 / p_agedens2
 }
 
+gp_yeardens <- function(dt_pmyear) {
+    gw_fargs(match.call())
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+
+    
+    dt_year_agg <- dt_pmyear[, .N, .(reg6, year)] %>%
+        .[order(reg6, year)] %>% 
+        .[, prop := N/sum(N), reg6] %>%
+        .[, cumprop := cumsum(prop), reg6]
+
+    
+    p_yeardens1 <- ggplot(dt_year_agg[, .(N = sum(N)), year], aes(x=year, y=N)) + geom_line()
+    ## ggplot(dt_pmyear, aes(x=year, color = reg6)) + geom_density()
+        
+    ## N by region 
+    p_yeardens2 <- ggplot(dt_year_agg, aes(x=year, y=N, color = reg6)) + geom_line()
+        
+    ## within-prop by region
+    p_yeardens3 <- ggplot(dt_year_agg, aes(x=year, y=prop, color = reg6)) + geom_line()
+        
+    p_yeardens4 <- ggplot(dt_year_agg, aes(x=year, y=cumprop, color = reg6)) + geom_line()
+
+    p_yeardens <- (p_yeardens1 + p_yeardens2) /  (p_yeardens4 + p_yeardens3) +
+        plot_layout(guides = "collect") & theme(legend.position = "bottom") & guides(color = guide_legend(nrow = 1))
+   
+    return(p_yeardens)
+
+
+}
+    
+## gp_yeardens(dt_pmyear)
 
 ## gwdplt("p_agedens")
 

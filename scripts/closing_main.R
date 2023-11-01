@@ -92,7 +92,13 @@ gc_plts <- function() {
             dt_pmcpct = quote(dt_pmcpct),
             caption = "Age distribution of private museums",
             width = 17,
-            height = 16)        
+            height = 16),
+        p_yeardens = list(
+            dt_pmyear = quote(dt_pmyear),
+            caption = "Private Museum-year Distribution",
+            width = 19,
+            height = 12)
+        
     )
 
     ## check that there are no duplicate 
