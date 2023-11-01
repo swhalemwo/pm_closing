@@ -21,7 +21,8 @@ library(muhaz) # for smooth hazard curves
 library(patchwork) # for stichting plots together, hopefully avoid
 library(texreg, include.only = c("screenreg", "texreg")) ## inspection of results
 library(tinytest) # for looking at pmdata tests
-library(parallel) # parallel processing
+## library(parallel) # parallel processing
+library(furrr) # parallel processing
 library(splines) # for gp_schoenfeld, maybe neeeded later too for regressions
 
 ## LOCS <- list(PROJDIR = "/home/johannes/Dropbox/phd/papers/closing/")
@@ -403,7 +404,7 @@ c_dirs <- gc_dirs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## pr
 PMDATA_LOCS <- gc_pmdata_locs() # pmdata source
 l_plts <- list() # list of plots
 c_pltargs <- list() # arguments to pass to gc_plts
-system(sprintf("rm %s", paste0(c_dirs$tbls, "farg_calls.csv")))
+system(sprintf("rm %s", paste0(c_dirs$misc, "farg_calls.csv")))
 
 
 dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%
@@ -439,12 +440,17 @@ screenreg2(list(l_mdls$r_west_cpct, l_mdls$r_west_year, l_mdls$r_west_year2), di
 ## generate plots and write them to file
 ## FIXME: parallelize this: can use some overarching mclapply
 ## mclapply(names(gc_plts()), \(x) lapply(c(gplt, wplt), \(f) f(x)), mc.cores = 6)
-## mclapply seems to break gwd_clgrph (?????) for whatever reason.. 
-walk(names(gc_plts()), ~lapply(c(gplt, wplt), \(f) f(.x)))
+## mclapply seems to break gwd_clgrph (?????) for whatever reason..
+
 
 ## write numbers
 dt_nbrs <- gd_nbrs()
 fwrite(dt_nbrs, paste0(c_dirs$misc, "nbrs.csv"), quote = F)
+
+
+plan(multicore, workers = 4)
+future_walk(names(gc_plts()), ~lapply(c(gplt, wplt), \(f) f(.x)))
+plan(sequential)
 
 
 ## callgraph testing
