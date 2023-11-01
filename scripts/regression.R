@@ -358,6 +358,68 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
 
 
 gp_schoenfeld <- function(rx) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     ## schoenfeld resid plots for all variables
+    
+    ## residuals(rx, type = "schoenfeld") %>% adt %>%
+
+    dpltR("p_hazard")
+    cox_zph_res <- cox.zph(rx, transform = "identity", terms = F)
+    ## https://stats.stackexchange.com/questions/616468/schoenfeld-residuals-for-factors-with-cox-zph
+    ## terms = F to get one for each dummy variable
+        
+    plot(cox_zph_res, var = "mow")
+
+    
+    
+
+    ## cox.zph based approach
+    dt_schoen_coxzph <- data.table(x = cox_zph_res$x) %>% # x is transformed time axis
+        cbind(adt(cox_zph_res$y)) %>%
+        melt(id.vars = "x", variable.name = "vrbl")
+        
+    ## ## residuals() based approach
+    ## dt_schoen_residuals <- data.table(x=cox_zph_res$x) %>%
+    ##     cbind(adt(residuals(rx, type = "schoenfeld"))) %>%
+    ##     melt(id.vars = "x", variable.name = "vrbl")
+    
+    
+    ## m_schoenfeld_resids <- residuals(rx, type = "schoenfeld")
+    
+    ## m_vcov <- vcov(rx)
+        
+    ## ## manual approach with scaling raw schoenfeld resids by vcov
+    ## dt_schoen_mnl <- data.table(x=cox_zph_res$x) %>%
+    ##     cbind(m_schoenfeld_resids %*% m_vcov) %>%
+    ##     melt(id.vars = "x", variable.name = "vrbl")
+
+    ## ## check if schoen_mnl is scaler of schoen_coxzph
+    ## join(dt_schoen_coxzph[, .(x, vrbl, vlu_coxzph = value)], dt_schoen_mnl[, .(x, vrbl, vlu_mnl = value)],
+    ##      on = .c(x, vrbl)) %>%
+    ##     .[, ratio := vlu_coxzph/vlu_mnl] %>% ggplot(aes(x=ratio)) + geom_density()
+    ## ## yikes
+    
+
+    
+    dt_coef <- adt(coef(rx), keep.rownames = T) %>% setnames(c("vrbl", "coef"))
+        
+    ggplot(dt_schoen_coxzph, aes(x=x, y=value)) +
+        geom_point(size = 1) +
+        geom_smooth(method = lm, formula = y ~ bs(x, df = 3)) +
+        ## geom_smooth(method = lm, formula = y ~ pspline(x, df = 4)) +
+        ## geom_smooth(method = lm, formula = y ~ ns(x, df = 3)) +
+        geom_hline(dt_coef, mapping = aes(yintercept = coef), linetype = 2) + 
+        facet_wrap(~vrbl, scales ="free") +
+        labs(x="time", y="beta(t)")       
+     
+     
+    
+
+
+
 
 }
+
+
+gp_schoenfeld(l_mdls$r_more)

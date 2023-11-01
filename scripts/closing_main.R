@@ -22,6 +22,7 @@ library(patchwork) # for stichting plots together, hopefully avoid
 library(texreg, include.only = c("screenreg", "texreg")) ## inspection of results
 library(tinytest) # for looking at pmdata tests
 library(parallel) # parallel processing
+library(splines) # for gp_schoenfeld, maybe neeeded later too for regressions
 
 ## LOCS <- list(PROJDIR = "/home/johannes/Dropbox/phd/papers/closing/")
 ## LOCS$FIGDIR <- paste0(FIG
