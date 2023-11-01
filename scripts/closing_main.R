@@ -438,7 +438,7 @@ walk(names(gc_plts()), ~lapply(c(gplt, wplt), \(f) f(.x)))
 
 ## write numbers
 dt_nbrs <- gd_nbrs()
-fwrite(dt_nbrs, paste0(c_dirs$tbls, "tbl_nbrs.csv"), quote = F)
+fwrite(dt_nbrs, paste0(c_dirs$misc, "nbrs.csv"), quote = F)
 
 
 ## callgraph testing
