@@ -341,6 +341,35 @@ theme_closing <- function(extra_space_top=0) {
 }
 
 
+## *** tables
+
+
+gc_tbls <- function(c_tblargs) {
+    list(
+        t_testtable = list(
+            input_data = quote(mtcars),
+            caption = "this is a great test table")
+    )
+}
+
+
+
+
+gt_testtable <- function(input_data) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    
+    ##
+
+    list(
+        dt_fmtd = adt(input_data, keep.rownames = "model")[1:12, 1:4],
+        align_cfg = rep("l",5),
+        hline_after = c(0,1,4, 6,9),
+        add_to_row = NULL,
+        landscape = F)
+    
+    
+}
 
 
 ## *** nbrs generation
@@ -404,6 +433,8 @@ c_dirs <- gc_dirs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## pr
 PMDATA_LOCS <- gc_pmdata_locs() # pmdata source
 l_plts <- list() # list of plots
 c_pltargs <- list() # arguments to pass to gc_plts
+l_tbls <- list() # list of tables 
+c_tblargs <- list() # arguments to pass to gc_tbls
 system(sprintf("rm %s", paste0(c_dirs$misc, "farg_calls.csv")))
 
 
@@ -458,4 +489,18 @@ jtls::gwd_clgrph()
 ## dpltF("callgraph2")
 ## dpltF("p_vrblcvrg")
 ## gdplt("p_vrblcvrg_ratio")
+
+## ** table testing 
+
+
+
+gtbl("t_testtable")
+wtbl("t_testtable")
+dtblF("t_testtable")
+
+check_if_file_is_open(paste0(c_dirs$tbls, "t_testtable.pdf"))
+
+
+
+
 

@@ -11,8 +11,7 @@ l_vrblcvrg__dt_vrblcvrg_fcs [label=dt_vrblcvrg_fcs];
 l_vrblcvrg [label = "", color=transparent, width=0, height=0]; 
 l_vrblcvrg__dt_pmdb_splong [label=dt_pmdb_splong] 
 } 
- gc_dirs; 
-gc_pmdb_tests; 
+ gc_pmdb_tests; 
 gc_vrblgrps; 
 gc_vvs; 
 gd_inflcases; 
@@ -35,6 +34,7 @@ gp_vrblcvrg;
 gp_vrblcvrg_ratio; 
 gp_vrblcvrg_ugrpd; 
 gp_yeardens; 
+gt_testtable; 
 theme_closing; 
 dt_pmdb; 
 dt_pmdb_splong; 
