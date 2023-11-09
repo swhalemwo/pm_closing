@@ -59,20 +59,24 @@ gc_vvs <- function() {
         pm_dens = "PM density",
         "I(pm_dens^2)" = "PM density^2",
         west = "Europe and North America",
-        reg6 = "Region")
+        reg6 = "Region",
+        GLOBAL = "Global") # from cox.zph
     
 
     
     l_vrblgrps <- list(
         founder = .c(gender, founder_dead),
         museum = .c(slfidfcn, muem_fndr_name, mow),
-        envir = .c(pm_dens, "I(pm_dens^2)", west, reg6)
+        envir = .c(pm_dens, "I(pm_dens^2)", west, reg6),
+        misc = .c(GLOBAL)
     )
 
     l_vrblgrp_lbls <- list(
         founder = "Founder",
         museum = "Museum",
-        envir = "Environment")
+        envir = "Environment",
+        misc = "Miscellaneous")
+    
     
 
     dt_vrbl_lbls = data.table(vrbl = names(l_vrbl_lbls), vrbl_lbl = unlist(l_vrbl_lbls))
@@ -399,8 +403,13 @@ gc_tbls <- function(c_tblargs) {
     list(
         t_testtable = list(
             input_data = quote(mtcars),
-            caption = "this is a great test table")
+            caption = "this is a great test table"),
+        t_coxzph = list(
+            rx = l_mdls$r_more,
+            caption = "Z-test of proportional hazards")
     )
+
+    
 }
 
 
@@ -421,6 +430,30 @@ gt_testtable <- function(input_data) {
     
     
 }
+
+gt_coxzph <- function(rx) {
+    gw_fargs(match.call())
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    
+    #' generate a table of the cox.zph result (whether hazards are proportional) 
+
+    ## get the cox.zph results
+    dt_coxzph_prep <- cox.zph(l_mdls$r_more, terms = T) %>% chuck("table") %>% adt(keep.rownames = "vrbl") %>%
+        .[, .(vrbl, p)]
+
+    dt_coxzph <- gc_vvs() %>% chuck("dt_vrblinfo") %>% .[dt_coxzph_prep, on = "vrbl"]
+
+    list(
+        dt_fmtd = dt_coxzph[, .(vrbl_lbl, p)],
+        align_cfg = rep("l", 3),
+        hline_after = c(0,1, nrow(dt_coxzph)),
+        add_to_row = NULL)
+
+}
+
+
+
 
 
 ## *** nbrs generation
@@ -548,6 +581,15 @@ jtls::gwd_clgrph()
 gtbl("t_testtable")
 wtbl("t_testtable")
 dtblF("t_testtable")
+
+gtbl("t_coxzph")
+wtbl("t_coxzph")
+dtblF("t_coxzph")
+
+    
+
+
+gp_coxphdiag(l_mdls$r_more)
 
 check_if_file_is_open(paste0(c_dirs$tbls, "t_testtable.pdf"))
 
