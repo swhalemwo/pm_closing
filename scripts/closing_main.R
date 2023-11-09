@@ -81,9 +81,11 @@ gc_vvs <- function() {
 
     dt_vrbl_lbls = data.table(vrbl = names(l_vrbl_lbls), vrbl_lbl = unlist(l_vrbl_lbls))
 
-    dt_vrblgrp_lbls <- data.table(vrblgrp = names(l_vrblgrp_lbls), vrblgrp_lbl = unlist(l_vrblgrp_lbls))
+    dt_vrblgrp_lbls <- data.table(vrblgrp = names(l_vrblgrp_lbls), vrblgrp_lbl = unlist(l_vrblgrp_lbls)) %>%
+        .[, vrblgrp := factor(vrblgrp, levels = names(l_vrblgrps))]
 
-    dt_vrblgrps <- imap(l_vrblgrps, ~data.table(vrbl = .x, vrblgrp = .y)) %>% rbindlist
+    dt_vrblgrps <- imap(l_vrblgrps, ~data.table(vrbl = .x, vrblgrp = .y)) %>% rbindlist %>%
+        .[, vrblgrp := factor(vrblgrp, levels = names(l_vrblgrps))]
 
     ## check that the variables that are grouped/labelled are the same
     if (!setequal(dt_vrbl_lbls$vrbl, dt_vrblgrps$vrbl)) {
