@@ -138,7 +138,7 @@ gc_vrblgrps <- function(dt_pmdb) {
     )
 
     dt_vrblgrps <- imap(l_vrblgrps, ~data.table(grp = .y, vrbl = .x)) %>% rbindlist
-    if (len(setdiff(dt_vrblgrps$vrbl, names(dt_pmdb))) >0) {
+    if (len(setdiff( names(dt_pmdb), dt_vrblgrps$vrbl)) >0) {
         stop("vrbls has typos, or not all variables are grouped")
     }
     ## print(setdiff(names(dt_pmdb), dt_vrblgrps$vrbl))
