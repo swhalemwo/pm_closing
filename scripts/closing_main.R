@@ -44,17 +44,66 @@ gc_dirs <- function(dir_proj) {
 }
 
 gc_vvs <- function() {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    
     #' generate variable vectors
 
+    ## group variables thematically, add also labels
+
+    l_vrbl_lbls <- list(
+        gender = "Founder Gender",
+        founder_dead = "Founder died",
+        slfidfcn = "Selfidentification",
+        muem_fndr_name = "Founder name in Museum name",
+        mow = "MOW inclusion",
+        pm_dens = "PM density",
+        "I(pm_dens^2)" = "PM density^2",
+        west = "Europe and North America",
+        reg6 = "Region")
+    
+
+    
+    l_vrblgrps <- list(
+        founder = .c(gender, founder_dead),
+        museum = .c(slfidfcn, muem_fndr_name, mow),
+        envir = .c(pm_dens, "I(pm_dens^2)", west, reg6)
+    )
+
+    l_vrblgrp_lbls <- list(
+        founder = "Founder",
+        museum = "Museum",
+        envir = "Environment")
+    
+
+    dt_vrbl_lbls = data.table(vrbl = names(l_vrbl_lbls), vrbl_lbl = unlist(l_vrbl_lbls))
+
+    dt_vrblgrp_lbls <- data.table(vrblgrp = names(l_vrblgrp_lbls), vrblgrp_lbl = unlist(l_vrblgrp_lbls))
+
+    dt_vrblgrps <- imap(l_vrblgrps, ~data.table(vrbl = .x, vrblgrp = .y)) %>% rbindlist
+
+    ## check that the variables that are grouped/labelled are the same
+    if (!setequal(dt_vrbl_lbls$vrbl, dt_vrblgrps$vrbl)) {
+        stop("something wrong with vrbl labels and groups")}
+
+    dt_vrblinfo <- join(dt_vrbl_lbls, dt_vrblgrps, on = "vrbl") %>%
+        join(dt_vrblgrp_lbls, on = "vrblgrp")
+
+
+    
+    
+    
     list(
         ## time-invariant variables
         vrbls_base = .c(ID, iso3c, year, tstart, tstop, age),
         vrbls_tiv = .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6),
-        vrbls_tv= .c(pm_density, founder_dead)
+        vrbls_tv= .c(pm_density, founder_dead),
+        dt_vrblinfo = dt_vrblinfo)
+        
 
-    )
+    
 }
 
+## gc_vvs()
         
 gc_plts <- function() {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
