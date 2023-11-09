@@ -3,10 +3,10 @@ gl_vrblcvrg,dt_pmdb,dt_pmdb
 gd_pmdb_splong,dt_pmdb,dt_pmdb
 gd_vrblcvrg,dt_pmdb_splong,dt_pmdb_splong
 gd_vrblcvrg,all_statuses,T
-gc_vrblgrps,dt_pmdb,dt_pmdb
+gc_pmdb_vrblgrps,dt_pmdb,dt_pmdb
 gd_vrblcvrg,dt_pmdb_splong,dt_pmdb_splong
 gd_vrblcvrg,all_statuses,F
-gc_vrblgrps,dt_pmdb,dt_pmdb
+gc_pmdb_vrblgrps,dt_pmdb,dt_pmdb
 gd_pmx,dt_pmdb,dt_pmdb
 gd_pmtiv,dt_pmx,dt_pmx
 gd_pmyear,dt_pmx,dt_pmx

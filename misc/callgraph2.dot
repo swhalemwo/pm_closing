@@ -12,7 +12,7 @@ l_vrblcvrg [label = "", color=transparent, width=0, height=0];
 l_vrblcvrg__dt_pmdb_splong [label=dt_pmdb_splong] 
 } 
  gc_pmdb_tests; 
-gc_vrblgrps; 
+gc_pmdb_vrblgrps; 
 gc_vvs; 
 gd_inflcases; 
 gd_mow_info; 
@@ -51,7 +51,7 @@ dt_pmcpct -> gl_mdls;
 dt_pmcpct -> gp_agedens; 
 dt_pmcpct -> gp_hazard; 
 dt_pmcpct -> gp_surv; 
-dt_pmdb -> gc_vrblgrps; 
+dt_pmdb -> gc_pmdb_vrblgrps; 
 dt_pmdb -> gd_pmdb_splong; 
 dt_pmdb -> gd_pmx; 
 dt_pmdb -> gl_vrblcvrg; 
@@ -62,7 +62,7 @@ dt_pmx -> gd_pmyear;
 dt_pmyear -> gd_pmcpct; 
 dt_pmyear -> gl_mdls; 
 dt_pmyear -> gp_yeardens; 
-gc_vrblgrps -> gd_vrblcvrg; 
+gc_pmdb_vrblgrps -> gd_vrblcvrg; 
 gc_vvs -> gd_pmtiv; 
 gd_inflcases -> gp_coxphdiag; 
 gd_mow_info -> gd_pmtiv; 

@@ -114,8 +114,10 @@ gc_plts <- function() {
         
 }
 
-gc_vrblgrps <- function(dt_pmdb) {
-    #' generate list of thematic variable groups
+gc_pmdb_vrblgrps <- function(dt_pmdb) {
+    #' generate list of thematic variable groups of PMDB vrbls,
+    
+
     gw_fargs(match.call())
     
     l_vrblgrps <- list(
@@ -182,7 +184,7 @@ gd_vrblcvrg <- function(dt_pmdb_splong, all_statuses) {
     ## no good reason to maintain vrbl coverage which isn't grouped
     ## if I don't wanna use it in plot, can just not use it, but always should have option
     ## move the variable grouping step here as well
-    dt_vrblgrps <- gc_vrblgrps(dt_pmdb)
+    dt_vrblgrps <- gc_pmdb_vrblgrps(dt_pmdb)
 
     dt_vrblcvrg_grpd <- dt_vrblgrps[dt_vrblcvrg, on = "vrbl"] %>%
         .[, vrbl := factor(vrbl, levels = levels(dt_vrblcvrg$vrbl))]
@@ -194,7 +196,7 @@ gd_vrblcvrg <- function(dt_pmdb_splong, all_statuses) {
 
 ## check which variables are not considered in dt_vrblgrps
 ## are variables that are grouped (all pmbd variables are), but not used (e.g. technical)
-## setdiff(gc_vrblgrps(dt_pmdb)$vrbl, dt_vrblcvrg_all$vrbl)
+## setdiff(gc_pmdb_vrblgrps(dt_pmdb)$vrbl, dt_vrblcvrg_all$vrbl)
 
 
 
