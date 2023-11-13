@@ -24,6 +24,7 @@ library(tinytest) # for looking at pmdata tests
 ## library(parallel) # parallel processing
 library(furrr) # parallel processing
 library(splines) # for gp_schoenfeld, maybe neeeded later too for regressions
+library(Hmisc, include.only = "latexTranslate") # latexTranslate
 
 ## LOCS <- list(PROJDIR = "/home/johannes/Dropbox/phd/papers/closing/")
 ## LOCS$FIGDIR <- paste0(FIG
@@ -407,7 +408,7 @@ gc_tbls <- function(c_tblargs) {
             input_data = quote(mtcars),
             caption = "this is a great test table"),
         t_coxzph = list(
-            rx = l_mdls$r_more,
+            rx = quote(l_mdls$r_more),
             caption = "Z-test of proportional hazards")
     )
 
@@ -440,17 +441,67 @@ gt_coxzph <- function(rx) {
     
     #' generate a table of the cox.zph result (whether hazards are proportional) 
 
-    ## get the cox.zph results
-    dt_coxzph_prep <- cox.zph(l_mdls$r_more, terms = T) %>% chuck("table") %>% adt(keep.rownames = "vrbl") %>%
-        .[, .(vrbl, p)]
+    coxzph_trfms <- list(km = "Kaplan-Meier", identity = "Identity", rank = "Rank")
 
-    dt_coxzph <- gc_vvs() %>% chuck("dt_vrblinfo") %>% .[dt_coxzph_prep, on = "vrbl"]
+    ## generate the actual data
+    dt_coxzph_prep <- map(names(coxzph_trfms), ~cox.zph(l_mdls$r_more, terms = T, transform = .x) %>%
+                                                   chuck("table") %>% adt(keep.rownames = "vrbl") %>%
+                                                   .[, src := .x]) %>% list_rbind %>%
+                      .[, .(vrbl, src, p)]
+
+    
+    dt_coxzph <- gc_vvs() %>% chuck("dt_vrblinfo") %>% .[dt_coxzph_prep, on = "vrbl"] %>%
+        .[, p_fmtd := fmt_cell(coef = p, pvalue = p,  type = "coef-stars", wcptbl = F), .(vrbl, src)] %>%
+        dcast(vrbl_lbl + vrblgrp + vrblgrp_lbl ~ src, value.var = "p_fmtd") %>%
+        .[order(vrblgrp)]
+
+    ## ## get the cox.zph results
+    ## dt_coxzph_prep <- cox.zph(l_mdls$r_more, terms = T) %>% chuck("table") %>% adt(keep.rownames = "vrbl") %>%
+    ##     .[, .(vrbl, p)]
+    ##     ## .[vrbl == "mow", p := 0.04] %>% # edit values a bit for testing
+    ##     ## .[vrbl == "pm_dens", p:=0.002]
+
+    ## dt_coxzph <- gc_vvs() %>% chuck("dt_vrblinfo") %>% .[dt_coxzph_prep, on = "vrbl"] %>%
+    ##     .[order(vrblgrp)] %>%
+    ##     .[, p_fmtd := fmt_cell(coef = p, pvalue= p, type = "coef-stars", wcptbl = F), vrbl]
+
+            
+    dt_grpstrs <- gc_grpstrs(dt_coxzph, "vrblgrp_lbl", 2) # get the group strings: go to add.to.row
+
+    signote <- gc_signote(se_mention = F, ncol = 3) # get the significance note
+
+
+    dt_coxzph_viz <- dt_coxzph[, c("vrbl_lbl", names(coxzph_trfms)), with = F] %>%
+        cbind(grp_filler = "", .) %>%
+        .[, vrbl_lbl := latexTranslate(vrbl_lbl)]
+
+    ## put the names in the order they are in the table
+    c_colnames_base <- c(coxzph_trfms, list(grp_filler = "", vrbl_lbl = "Variable"))
+
+    c_colnames_fmtd <- map(names(dt_coxzph_viz),
+                              ~sprintf("\\multicolumn{1}{l}{%s}", chuck(c_colnames_base, .x))) %>%
+        paste0(collapse = " & ")
+
+    c_colnames <- paste0("\\hline \n ", c_colnames_fmtd, "\\\\ \n") ## add hline and linebreaks
+    
+    ## generate the title
+    ## multicolumns for everything to have proper fonts, not italics
+    ## c_colnames <- "\\hline \n & \\multicolumn{1}{l}{Variable} & \\multicolumn{1}{l}{p-value} \\\\ \n"
+
+    ## generate the variable add.to.row components      
+
+    ## add to row cfg
+    c_atr <- list(
+        pos = c(list(-1, nrow(dt_coxzph)), dt_grpstrs$pos), # pos needs to be a list
+        command = c(c_colnames, signote, dt_grpstrs$grpstr))
+    
 
     list(
-        dt_fmtd = dt_coxzph[, .(vrbl_lbl, p)],
-        align_cfg = rep("l", 3),
-        hline_after = c(0,1, nrow(dt_coxzph)),
-        add_to_row = NULL)
+        dt_fmtd = dt_coxzph_viz,
+        align_cfg = c("l", "p{0mm}", "l", rep("D{.}{.}{5}",3)),
+        ## hline_after = c(0, nrow(dt_coxzph)),
+        hline_after = -1,
+        add_to_row = c_atr)
 
 }
 
