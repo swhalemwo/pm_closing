@@ -110,7 +110,7 @@ gc_vvs <- function() {
     
 }
 
-## gc_vvs()
+
         
 gc_plts <- function() {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
@@ -455,17 +455,7 @@ gt_coxzph <- function(rx) {
         dcast(vrbl_lbl + vrblgrp + vrblgrp_lbl ~ src, value.var = "p_fmtd") %>%
         .[order(vrblgrp)]
 
-    ## ## get the cox.zph results
-    ## dt_coxzph_prep <- cox.zph(l_mdls$r_more, terms = T) %>% chuck("table") %>% adt(keep.rownames = "vrbl") %>%
-    ##     .[, .(vrbl, p)]
-    ##     ## .[vrbl == "mow", p := 0.04] %>% # edit values a bit for testing
-    ##     ## .[vrbl == "pm_dens", p:=0.002]
-
-    ## dt_coxzph <- gc_vvs() %>% chuck("dt_vrblinfo") %>% .[dt_coxzph_prep, on = "vrbl"] %>%
-    ##     .[order(vrblgrp)] %>%
-    ##     .[, p_fmtd := fmt_cell(coef = p, pvalue= p, type = "coef-stars", wcptbl = F), vrbl]
-
-            
+                
     dt_grpstrs <- gc_grpstrs(dt_coxzph, "vrblgrp_lbl", 2) # get the group strings: go to add.to.row
 
     signote <- gc_signote(se_mention = F, ncol = 3) # get the significance note
