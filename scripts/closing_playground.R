@@ -146,3 +146,51 @@ dcast(dt_vrblcvrg_cbnd, vrbl + variable ~ src) %>%
 ## already broken as of <2023-09-25 ma>,
 ## and even if some improvement can be gained by standardization, it isn't much,
 ## and won't do much about the fact that for yuge number of variables the data is just missing
+
+
+## ** test gt
+## absolute clown package -> u.s.e.l.e.s.s.
+install.packages("gt")
+
+library(gt)
+
+gt_gttest <- function(dtx) {
+
+    tx <- dtx %>% adt(keep.rownames = "model") %>% .[, disp := disp-100] %>% head %>%
+        .[disp <100, disp := disp*0.9832] %>% 
+        .[mpg == 21, drat := drat + 0.0123] %>%
+        ## .[, gear := sprintf("\\textbf{%s}", gear)] %>% 
+        .[, .(model, mpg, disp, drat, wt, gear)] %>%   
+        gt(groupname_col = "gear", caption = "t_gttest") # groupname_col to get groups,
+
+
+    tx2 <- tx %>% cols_label(.list = list(mpg = "MPG", wt = "woto")) %>% # rename columns, can pass arguments as list to .list
+        tab_spanner(label = "meeee", columns = 1:3) %>% # add one spanner: each call can only add one
+        tab_header("i like dogs", subtitle = "LUL") %>% # doesn't seem to have location at the bottom
+        tab_style(style = cell_text(weight = "bold"),
+                  locations = cells_row_groups()) %>% # can make the columns bold, probably others as well
+        tab_style(style = cell_text(
+                      weight = "bold"
+                      ## style = "italic"
+                  ),
+                  location = cells_body(rows = 1:3)) %>%
+        tab_footnote("i like cake") %>%
+        tab_options(data_row.padding = px(20),
+                    row_group.padding = px(20))
+    
+
+    return(tx2)
+
+}
+
+l_tbls2 <- list(
+    t_gttest = gt_gttest(mtcars))
+
+gtsave(l_tbls2$t_gttest, filename = "~/Dropbox/phd/papers/closing/tabbles/t_gttest.tex")
+
+
+
+wtbl2("t_gttest")
+dtblF("t_gttest")
+
+wtbl_pdf("t_gttest", F)
