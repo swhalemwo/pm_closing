@@ -637,13 +637,13 @@ jtls::gwd_clgrph()
 
 
 
-gtbl("t_testtable")
-wtbl("t_testtable")
-dtblF("t_testtable")
+## gtbl("t_testtable")
+## wtbl("t_testtable")
+## dtblF("t_testtable")
 
-gtbl("t_coxzph")
-wtbl("t_coxzph")
-dtblF("t_coxzph")
+## gtbl("t_coxzph")
+## wtbl("t_coxzph")
+## dtblF("t_coxzph")
 
     
 texreg(l_mdls$r_more, single.row = T, file = paste0(c_dirs$tbls, "r_more.tex"))
