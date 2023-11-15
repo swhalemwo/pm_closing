@@ -181,16 +181,31 @@ gp_surv <- function(dt_pmcpct) {
 
 }
 
-
-gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
-    gw_fargs(match.call())
-    ## smooth hazard curves
-    ## i think the muhaz kernel is more appropriate than the default geom_smooth kernel (goes negative)
-
+gd_pehaz <- function(dt_pmcpct, cutwidth) {
+    #' get dt of "baseline" hazard (just don't account for anything, just age and closing)
+    #' pehaz: Piecewise-Exponential Hazard
+    #' cutwidth: allows different aggregations
+    
     ## details of pehaz/muhaz functions can be figured out later
     res_pehaz <- pehaz(dt_pmcpct$age, dt_pmcpct$closing, width = cutwidth)
     dt_pehaz <- data.table(cuts = res_pehaz$Cuts,
                            haz = c(res_pehaz$Hazard, tail(res_pehaz$Hazard, 1)))
+
+    return(dt_pehaz)
+
+}
+
+
+
+gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    gw_fargs(match.call())
+    ## smooth hazard curves
+    ## i think the muhaz kernel is more appropriate than the default geom_smooth kernel (goes negative)
+
+    dt_pehaz <- gd_pehaz(dt_pmcpct, cutwidth)
+
+    ## Muhaz: probably "mu" because Mueller (guy who wrote some of the kernel algorithms)
 
     res_muhaz <- muhaz(dt_pmcpct$age, dt_pmcpct$closing, bw.smooth = bw.smooth, b.cor = "none", max.time = 60,
                        bw.method = "local")
