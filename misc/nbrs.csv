@@ -17,3 +17,5 @@ refplt_p_surv,\ref{fig:p_surv},figlbls
 refplt_p_hazard,\ref{fig:p_hazard},figlbls
 refplt_p_agedens,\ref{fig:p_agedens},figlbls
 refplt_p_yeardens,\ref{fig:p_yeardens},figlbls
+ynktbl_t_testtable,#+INCLUDE: "../tables/t_testtable.tex" export latex,ynktbl
+ynktbl_t_coxzph,#+INCLUDE: "../tables/t_coxzph.tex" export latex,ynktbl
