@@ -623,6 +623,7 @@ fwrite(dt_nbrs, paste0(c_dirs$misc, "nbrs.csv"), quote = F)
 
 plan(multicore, workers = 4)
 future_walk(names(gc_plts()), ~lapply(c(gplt, wplt), \(f) f(.x)))
+future_walk(names(gc_tbls()), ~lapply(c(gtbl, wtbl), \(f) f(.x)))
 plan(sequential)
 
 
@@ -645,7 +646,7 @@ wtbl("t_coxzph")
 dtblF("t_coxzph")
 
     
-
+texreg(l_mdls$r_more, single.row = T, file = paste0(c_dirs$tbls, "r_more.tex"))
 
 gp_coxphdiag(l_mdls$r_more)
 
