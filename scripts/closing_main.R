@@ -543,9 +543,10 @@ gd_nbrs <- function() {
     dt_ynkplt <- gc_ynkplt()
     dt_refplt <- gc_refplt()
 
-    dt_ynktbl <- gc_ynktbl()
+    ## dt_ynktbl <- gc_ynktbl()
+    dt_reftbl <- gc_reftbl()
 
-    dt_nbrs_cbnd <- Reduce(rbind, list(dt_meanhaz, dt_ynkplt, dt_refplt, dt_ynktbl))
+    dt_nbrs_cbnd <- Reduce(rbind, list(dt_meanhaz, dt_ynkplt, dt_refplt, dt_reftbl))
 
     
     return(dt_nbrs_cbnd)
