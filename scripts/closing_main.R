@@ -496,33 +496,6 @@ gt_coxzph <- function(rx) {
 }
 
 
-gc_ynktbl <- function() {
-    if (as.character(match.call()[[1]]) %in% fstd){browser()}
-    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
-    
-    tblnames <- do.call("gc_tbls", list()) %>% names() 
-
-    data.table(tblname = tblnames) %>%
-        .[, macro := sprintf("#+INCLUDE: \"../tables/%s.tex\" export latex", tblname)] %>%
-        .[, .(nbr_name = paste0("ynktbl_", tblname),
-              nbr_fmt = macro,
-              grp = "ynktbl")]
-
-    
-        ## gc_plts() %>%
-        ## imap(~.x[.c(caption)]) %>% rbindlist(idcol = "tblname") %>% # height not needed
-##         .[, macro :=
-##                 sprintf(paste0('(eval (concat "#+label: fig:%s\\n" "#+caption: %s\\n" ',
-##                                '"#+attr_latex: :width %scm\\n" "[[file:../figures/%s]]"))'),
-##                         pltname, 
-##                         caption,
-##                         width,
-##                         ## paste0("plt_", batch_version, "_", filename))] %>%
-##                         paste0(pltname, ".pdf"))] %>%
-##         .[, .(nbr_name = paste0("ynkplt_", pltname), nbr_fmt = macro, grp = "pltcfgs")]
-}
-
-
 
 
 
