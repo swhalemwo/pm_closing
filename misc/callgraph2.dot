@@ -47,7 +47,6 @@ dt_pmcpct;
 2; 
 5; 
 l_mdls__r_more; 
-rx; 
 l_mdls 
  2 -> gp_hazard; 
 5 -> gp_hazard; 
@@ -86,5 +85,4 @@ l_mdls__r_more -> gt_coxzph;
 l_vrblcvrg__dt_vrblcvrg_all -> gp_vrblcvrg; 
 l_vrblcvrg__dt_vrblcvrg_all -> gp_vrblcvrg_ugrpd; 
 l_vrblcvrg__dt_vrblcvrg_fcs -> gp_vrblcvrg_ratio; 
-rx -> gd_inflcases; 
 theme_closing -> gp_vrblcvrg_ratio }

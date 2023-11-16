@@ -26,4 +26,5 @@ gp_vrblcvrg,dt_vrblcvrg_grpd,l_vrblcvrg$dt_vrblcvrg_all
 gp_vrblcvrg,yeet_acts,FALSE
 gp_surv,dt_pmcpct,dt_pmcpct
 gt_coxzph,rx,l_mdls$r_more
+gt_coxzph,rx,l_mdls$r_more
 gd_inflcases,rx,rx
