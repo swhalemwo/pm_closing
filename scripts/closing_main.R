@@ -429,6 +429,7 @@ gt_testtable <- function(input_data) {
         align_cfg = rep("l",5),
         hline_after = c(0,1,4, 6,9),
         add_to_row = NULL,
+        number_cols = c(F, rep(T, 3)),
         landscape = F)
     
     
@@ -489,9 +490,11 @@ gt_coxzph <- function(rx) {
     list(
         dt_fmtd = dt_coxzph_viz,
         align_cfg = c("l", "p{0mm}", "l", rep("D{.}{.}{5}",3)),
+        ## align_cfg = c("l", "p{0mm}", rep("l", 4)),
         ## hline_after = c(0, nrow(dt_coxzph)),
         hline_after = -1,
-        add_to_row = c_atr)
+        add_to_row = c_atr,
+        number_cols = c(rep(F,2), rep(T,3)))
 
 }
 
@@ -641,12 +644,14 @@ jtls::gwd_clgrph()
 ## wtbl("t_testtable")
 ## dtblF("t_testtable")
 
-## gtbl("t_coxzph")
-## wtbl("t_coxzph")
+gtbl("t_coxzph")
+wtbl("t_coxzph")
+wtbl_pdf("t_coxzph_wcpT", landscape = F)
 ## dtblF("t_coxzph")
 
+wtbl_pdf("r_more", landscape = F)
     
-texreg(l_mdls$r_more, single.row = T, file = paste0(c_dirs$tbls, "r_more.tex"))
+texreg(l_mdls$r_more, single.row = T, file = paste0(c_dirs$tbls, "r_more.tex"), label = "tbl:t_r_more")
 
 gp_coxphdiag(l_mdls$r_more)
 
