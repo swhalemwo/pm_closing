@@ -19,3 +19,4 @@ refplt_p_agedens,\ref{fig:p_agedens},figlbls
 refplt_p_yeardens,\ref{fig:p_yeardens},figlbls
 reftbl_t_testtable,\ref{tbl:t_testtable},reftbl
 reftbl_t_coxzph,\ref{tbl:t_coxzph},reftbl
+reftbl_t_reg_coxph,\ref{tbl:t_reg_coxph},reftbl

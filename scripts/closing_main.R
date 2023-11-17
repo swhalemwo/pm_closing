@@ -97,6 +97,22 @@ gc_vvs <- function() {
     dt_ctgterm_lbls <- rbindlist(l_ctgterm_lbls) %>%
         .[, term := factor(term, levels = term)]
 
+    ## FIXME: write test that the variable of every term is defined in dt_vrbl_lbls
+
+    
+    ## information for gofs
+    c_gof <- list(
+        list(gof_name = "nobs",   digits = 0, gof_lbl = "Museum-years"),
+        list(gof_name = "nevent", digits = 0, gof_lbl = "Closures"),
+        list(gof_name = "logLik", digits = 2, gof_lbl = "log. Likelihood"),
+        list(gof_name = "AIC",    digits = 2, gof_lbl = "AIC"),
+        list(gof_name = "BIC",    digits = 2, gof_lbl = "BIC"))
+
+    dt_gof_cfg <- rbindlist(c_gof) %>%
+        .[, gof_name := factor(gof_name, levels = gof_name)]
+
+
+    
 
     ## l_mdl_lbls <- list()
         
@@ -116,7 +132,8 @@ gc_vvs <- function() {
         vrbls_tiv = .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6),
         vrbls_tv= .c(pm_density, founder_dead),
         dt_vrblinfo = dt_vrblinfo,
-        dt_ctgterm_lbls = dt_ctgterm_lbls)
+        dt_ctgterm_lbls = dt_ctgterm_lbls,
+        dt_gof_cfg = dt_gof_cfg)
         
 
     
@@ -422,9 +439,9 @@ gc_tbls <- function(c_tblargs) {
         t_coxzph = list(
             rx = quote(l_mdls$r_more),
             caption = "Z-test of proportional hazards"),
-        t_reg = list(
-            dt_coef = quote(dt_coef),
-            dt_gof = quote(dt_gof),
+        t_reg_coxph = list(
+            l_mdls = quote(l_mdls),
+            l_mdlnames = quote(l_mdlnames_coxph), # FIXME: gw_fargs should be able to handle vectors
             caption = "kappa")
     )
 
@@ -503,6 +520,29 @@ gt_coxzph <- function(rx) {
         number_cols = c(rep(F,2), rep(T,3)))
 
 }
+
+gt_reg_coxph <- function(l_mdls, l_mdlnames) {
+    #' collect some models from l_mdls and format them into nice custom regression table
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    gw_fargs(match.call())
+
+
+    l_mdls_slct <- map(l_mdlnames, ~chuck(l_mdls, .x))
+
+    l_mdlres <- map2(l_mdls_slct, l_mdlnames, ~gd_reg_coxph(.x, .y))
+
+    dt_coef <- map(l_mdlres, ~chuck(.x, "dt_coef")) %>% rbindlist
+    dt_gof <- map(l_mdlres, ~chuck(.x, "dt_gof")) %>% rbindlist
+
+    c_vvs <- gc_vvs()
+
+    gt_reg(dt_coef, dt_gof, dt_vrblinfo = c_vvs$dt_vrblinfo, dt_ctgterm_lbls = c_vvs$dt_ctgterm_lbls,
+           dt_gof_cfg = c_vvs$dt_gof_cfg, mdl_lbls = setNames(l_mdlnames, l_mdlnames))
+    
+    
+}
+
 
 
 
@@ -615,6 +655,7 @@ dt_pmyear <- gd_pmyear(dt_pmx, dt_pmtiv)
 dt_pmcpct <- gd_pmcpct(dt_pmyear)
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct)
+l_mdlnames_coxph <- c("r_more", "r_less1", "r_less2", "r_west_cpct")
 
 screenreg2(list(l_mdls$r_more))
 
@@ -653,14 +694,14 @@ jtls::gwd_clgrph()
 ## wtbl("t_testtable")
 ## dtblF("t_testtable")
 
-gtbl("t_coxzph")
-wtbl("t_coxzph")
-wtbl_pdf("t_coxzph_wcpF", landscape = F)
-dtblF("t_coxzph_wcpF")
+## gtbl("t_coxzph")
+## wtbl("t_coxzph")
+## wtbl_pdf("t_coxzph_wcpF", landscape = F)
+## dtblF("t_coxzph_wcpF")
 
-wtbl_pdf("r_more", landscape = F)
+## wtbl_pdf("r_more", landscape = F)
     
-texreg(l_mdls$r_more, single.row = T, file = paste0(c_dirs$tbls, "r_more.tex"), label = "tbl:t_r_more")
+## texreg(l_mdls$r_more, single.row = T, file = paste0(c_dirs$tbls, "r_more.tex"), label = "tbl:t_r_more")
 
 gp_coxphdiag(l_mdls$r_more)
 
@@ -670,115 +711,15 @@ check_if_file_is_open(paste0(c_dirs$tbls, "t_testtable.pdf"))
 screenreg(l_mdls$r_more)
 
 
-gd_reg_coxph <- function(rx, mdl_name) {
-    #' tidy coxph regression model into dt
-    #' needs: vrbl, mdl_name, coef, se, pvalue
-    if (as.character(match.call()[[1]]) %in% fstd){browser()}
-    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+
+## gt_reg_coxph(l_mdls, )
 
     
-    
-    ## maybe using term is indeed better than variable, better way of dealing with categorical variables
-    dt_coef <- broom::tidy(rx) %>% adt() %>%
-        .[, .(term, coef = estimate, se = std.error, pvalue= p.value, mdl_name = mdl_name)]
-        
-    dt_gof <- broom::glance(rx) %>% adt %>% # melt(measure.vars = names(.), variable.name = "gof_term") %>%
-        .[, .(nobs, nevent, logLik, AIC, BIC, mdl_name = mdl_name)]
-
-    ## apply(dt_gof, 2, typeof)
-    ## sapply(dt_gof, typeof)
-
-    return(list(
-        dt_coef = dt_coef,
-        dt_gof = dt_gof))
-
-
-}
-
-
-
-l_mdlres <- map2(list(l_mdls$r_more, l_mdls$r_less1, l_mdls$r_less2),
-     list("r_more", "r_less1", "r_less2"),
-     ~gd_reg_coxph(.x, .y))
-
-dt_coef <- map(l_mdlres, ~chuck(.x, "dt_coef")) %>% rbindlist
-dt_gof <- map(l_mdlres, ~chuck(.x, "dt_gof")) %>% rbindlist
-
-
-
-
-gt_reg <- function(dt_coef, dt_gof) {
-    if (as.character(match.call()[[1]]) %in% fstd){browser()}
-    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
-    #' dt_coef: dt with vrbl, mdl_name, coef, se, pvalue
-    #' dt_gof: wide dt with GOF stats and mdl_name
-    
-    #' use vvs for all the labels
-    #' maybe later can use vvs also for mdl_lbls, for now just call them 1/2
-
-
-
-    ## grps2 <- grps+1
-    c_vvs <- gc_vvs()
-    
-    ## first combine continuous and categorical variables
-    ## add variable group to categorical variables
-    ## use update join for categorical terms, then rbind with variable info (continuous variables)
-    dt_termlbls <- copy(c_vvs$dt_ctgterm_lbls)[c_vvs$dt_vrblinfo,
-                                               `:=`("vrblgrp" = i.vrblgrp, "vrblgrp_lbl" = i.vrblgrp_lbl),
-                                               on = "vrbl"] %>% 
-        rbind(c_vvs$dt_vrblinfo[, .(term = vrbl, vrbl, term_lbl = vrbl_lbl, vrblgrp, vrblgrp_lbl)])
-        
-    ## merge with dt_coefs, format cells, cast into wide, order
-    dt_viz_prep <- dt_termlbls[dt_coef, on = "term"] %>%
-        .[, cell_fmt := fmt_cell(coef, se, pvalue, type = "coef-se-stars"), 1:nrow(.)] %>%
-        dcast(term_lbl + term + vrblgrp + vrblgrp_lbl ~ mdl_name, value.var = "cell_fmt") %>% 
-        .[, term := factor(term, levels = levels(dt_termlbls$term))] %>% # re-add term factor order
-        .[order(vrblgrp, term)]
-        
-    ## select columns
-    dt_viz <- dt_viz_prep[, c("term_lbl", funique(dt_coef$mdl_name)), with = F] %>%
-        cbind(grp_filler = "", .) %>%
-        .[, term_lbl := latexTranslate(term_lbl)]
-
-    dt_grpstrs <- gc_grpstrs(dt_viz_prep, grp = "vrblgrp_lbl", 3)
-
-    signote <- gc_signote(se_mention = T,ncol = 4)
-
-    mdl_lbls <- list(r_more = "Model 1", r_less1 = "Model 2", r_less2 = "Model 3") # FIXME
-
-    c_colnames <- gc_colnames(names(dt_viz), col_lbls =
-                                                 c(list(grp_filler = "", term_lbl = "Variable"), mdl_lbls))
-                                                      
-    c_atr <- list(
-        pos = c(list(-1, nrow(dt_viz)), dt_grpstrs$pos),
-        command = c(c_colnames, signote, dt_grpstrs$grpstr))
-
-    list(dt_fmtd = dt_viz,
-         align_cfg = c("l", "p{0mm}", "l", rep("D{.}{.}{5}",3)), # FIXME
-         hline_after = -1,
-         add_to_row = c_atr,
-         number_cols = c(rep(F,2), rep(T,3)))
-
-
-}
-
-gtbl("t_reg")
-wtbl("t_reg")
-wtbl_pdf("t_reg_wcpF", F)
+gtbl("t_reg_coxph")
+wtbl("t_reg_coxph")
+dtblF("t_reg_wcpF")
+## wtbl_pdf("t_reg_coxph_wcpF", F)
 ## hmm question becomes whether I should use multiple groups
 
 
-gt_reg(dt_coef, dt_gof)
-
-
-gd_reg_coxph(l_mdls$r_more, "r_more")
-
-library(broom)
-broom::tidy(l_mdls$r_more) %>% adt
-                         
-
-attributes(l_mdls$r_more$coefficients)
-
-library(parameters)
-model_parameters(l_mdls$r_more) %>% adt
+## gd_reg_coxph(l_mdls$r_more, "r_more")
