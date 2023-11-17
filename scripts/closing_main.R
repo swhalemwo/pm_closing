@@ -658,6 +658,41 @@ gp_coxphdiag(l_mdls$r_more)
 check_if_file_is_open(paste0(c_dirs$tbls, "t_testtable.pdf"))
 
 
+screenreg(l_mdls$r_more)
 
 
+gd_reg_coxph <- function(rx, mdl_name) {
+    #' tidy coxph regression model into dt
+    #' needs: vrbl, mdl_name, coef, se, pvalue
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
 
+    
+    
+    ## maybe using term is indeed better than variable, better way of dealing with categorical variables
+    dt_coef <- broom::tidy(rx) %>% adt() %>%
+        .[, .(term, coef = estimate, se = std.error, pvalue= p.value, mdl_name = mdl_name)]
+        
+    dt_gof <- broom::glance(rx) %>% adt %>% # melt(measure.vars = names(.), variable.name = "gof_term") %>%
+        .[, .(nobs, nevent, logLik, AIC, BIC, mdl_name = mdl_name)]
+
+    ## apply(dt_gof, 2, typeof)
+    ## sapply(dt_gof, typeof)
+
+    return(list(
+        dt_coef = dt_coef,
+        dt_gof = dt_gof))
+
+
+}
+
+gd_reg_coxph(l_mdls$r_more, "r_more")
+
+library(broom)
+broom::tidy(l_mdls$r_more) %>% adt
+                         
+
+attributes(l_mdls$r_more$coefficients)
+
+library(parameters)
+model_parameters(l_mdls$r_more) %>% adt
