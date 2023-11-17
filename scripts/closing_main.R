@@ -51,7 +51,7 @@ gc_vvs <- function() {
 
     ## group variables thematically, add also labels
 
-    l_vrbl_lbls <- list(
+    l_vrbl_lbls <- list( # variable labels
         gender = "Founder Gender",
         founder_dead = "Founder died",
         slfidfcn = "Selfidentification",
@@ -63,23 +63,20 @@ gc_vvs <- function() {
         reg6 = "Region",
         GLOBAL = "Global") # from cox.zph
     
-
-    
-    l_vrblgrps <- list(
+    l_vrblgrps <- list(# variable groups
         founder = .c(gender, founder_dead),
         museum = .c(slfidfcn, muem_fndr_name, mow),
         envir = .c(pm_dens, "I(pm_dens^2)", west, reg6),
         misc = .c(GLOBAL)
     )
 
-    l_vrblgrp_lbls <- list(
+    l_vrblgrp_lbls <- list(# variable group labels
         founder = "Founder",
         museum = "Museum",
         envir = "Environment",
         misc = "Miscellaneous")
     
     
-
     dt_vrbl_lbls = data.table(vrbl = names(l_vrbl_lbls), vrbl_lbl = unlist(l_vrbl_lbls))
 
     dt_vrblgrp_lbls <- data.table(vrblgrp = names(l_vrblgrp_lbls), vrblgrp_lbl = unlist(l_vrblgrp_lbls)) %>%
@@ -88,6 +85,18 @@ gc_vvs <- function() {
     dt_vrblgrps <- imap(l_vrblgrps, ~data.table(vrbl = .x, vrblgrp = .y)) %>% rbindlist %>%
         .[, vrblgrp := factor(vrblgrp, levels = names(l_vrblgrps))]
 
+    l_ctgterm_lbls <- list(# labels of terms of categorical variables
+        list(vrbl = "gender",   term = "genderF",               term_lbl = "Female"),
+        list(vrbl = "gender",   term = "genderM",               term_lbl = "Male"),
+        list(vrbl = "gender",   term = "gendercouple",          term_lbl = "Couple"),
+        list(vrbl = "slfidfcn", term = "slfidfcnmuseum",        term_lbl = "Museum"),
+        list(vrbl = "slfidfcn", term = "slfidfcnfoundation",    term_lbl = "Foundation"),
+        list(vrbl = "slfidfcn", term = "slfidfcncollection",    term_lbl = "Collection"),
+        list(vrbl = "slfidfcn", term = "slfidfcnother",         term_lbl = "Other"))
+
+    dt_ctgterm_lbls <- rbindlist(l_ctgterm_lbls)
+
+
     ## check that the variables that are grouped/labelled are the same
     if (!setequal(dt_vrbl_lbls$vrbl, dt_vrblgrps$vrbl)) {
         stop("something wrong with vrbl labels and groups")}
@@ -95,16 +104,14 @@ gc_vvs <- function() {
     dt_vrblinfo <- join(dt_vrbl_lbls, dt_vrblgrps, on = "vrbl") %>%
         join(dt_vrblgrp_lbls, on = "vrblgrp")
 
-
-    
-    
     
     list(
         ## time-invariant variables
         vrbls_base = .c(ID, iso3c, year, tstart, tstop, age),
         vrbls_tiv = .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6),
         vrbls_tv= .c(pm_density, founder_dead),
-        dt_vrblinfo = dt_vrblinfo)
+        dt_vrblinfo = dt_vrblinfo,
+        dt_ctgterm_lbls = dt_ctgterm_lbls)
         
 
     
@@ -557,6 +564,9 @@ gc_clgrphattrs <- function() {
 ## }
 
 ## l_dts <- gl_dts(dt_pmdb)
+
+
+
 
 
 ## * main
