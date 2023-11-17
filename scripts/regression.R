@@ -378,10 +378,18 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         r_west_cpct = coxph(Surv(age, closing) ~ west, dt_pmcpct),
         r_west_year = coxph(Surv(age, closing) ~ west, dt_pmyear),
         r_west_year2 = coxph(Surv(age, closing) ~ west, dt_pmyear[, .SD[which.max(age)], ID]),
+        
+        ## test model for table testing
+        r_less1 = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2), dt_pmyear),
+        r_less2 = coxph(Surv(tstart, tstop, closing)~ founder_dead + mow + slfidfcn + muem_fndr_name, dt_pmyear),
 
         ## fullest model
         r_more = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + founder_dead + mow +
                            slfidfcn + muem_fndr_name, dt_pmyear)
+
+        
+
+        
     )
 
     attr(l_mdls, "gnrtdby") <- as.character(match.call()[[1]])
