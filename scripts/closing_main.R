@@ -450,36 +450,27 @@ gt_coxzph <- function(rx) {
                                                    .[, src := .x]) %>% list_rbind %>%
                       .[, .(vrbl, src, p)]
 
-    
+    ## merge with variable labels, cast to wide
     dt_coxzph <- gc_vvs() %>% chuck("dt_vrblinfo") %>% .[dt_coxzph_prep, on = "vrbl"] %>%
         .[, p_fmtd := fmt_cell(coef = p, pvalue = p,  type = "coef-stars", wcptbl = F), .(vrbl, src)] %>%
         dcast(vrbl_lbl + vrblgrp + vrblgrp_lbl ~ src, value.var = "p_fmtd") %>%
         .[order(vrblgrp)]
 
-                
+    
+    ## arrange table that in a way that it is to be written to file
+    dt_coxzph_viz <- dt_coxzph[, c("vrbl_lbl", names(coxzph_trfms)), with = F] %>%
+        cbind(grp_filler = "", .) %>% # add column in beginning for faking group indentation
+        .[, vrbl_lbl := latexTranslate(vrbl_lbl)]
+            
+    ## generate the variable add.to.row components      
+
     dt_grpstrs <- gc_grpstrs(dt_coxzph, "vrblgrp_lbl", 2) # get the group strings: go to add.to.row
 
     signote <- gc_signote(se_mention = F, ncol = 3) # get the significance note
 
+    c_colnames <- gc_colnames(col_names = names(dt_coxzph_viz), # generate the column names
+                              col_lbls = c(coxzph_trfms, list(grp_filler = "", vrbl_lbl = "Variable")))
 
-    dt_coxzph_viz <- dt_coxzph[, c("vrbl_lbl", names(coxzph_trfms)), with = F] %>%
-        cbind(grp_filler = "", .) %>%
-        .[, vrbl_lbl := latexTranslate(vrbl_lbl)]
-
-    ## put the names in the order they are in the table
-    c_colnames_base <- c(coxzph_trfms, list(grp_filler = "", vrbl_lbl = "Variable"))
-
-    c_colnames_fmtd <- map(names(dt_coxzph_viz),
-                              ~sprintf("\\multicolumn{1}{l}{%s}", chuck(c_colnames_base, .x))) %>%
-        paste0(collapse = " & ")
-
-    c_colnames <- paste0("\\hline \n ", c_colnames_fmtd, "\\\\ \n") ## add hline and linebreaks
-    
-    ## generate the title
-    ## multicolumns for everything to have proper fonts, not italics
-    ## c_colnames <- "\\hline \n & \\multicolumn{1}{l}{Variable} & \\multicolumn{1}{l}{p-value} \\\\ \n"
-
-    ## generate the variable add.to.row components      
 
     ## add to row cfg
     c_atr <- list(
@@ -490,7 +481,6 @@ gt_coxzph <- function(rx) {
     list(
         dt_fmtd = dt_coxzph_viz,
         align_cfg = c("l", "p{0mm}", "l", rep("D{.}{.}{5}",3)),
-        ## align_cfg = c("l", "p{0mm}", rep("l", 4)),
         ## hline_after = c(0, nrow(dt_coxzph)),
         hline_after = -1,
         add_to_row = c_atr,
@@ -646,8 +636,8 @@ jtls::gwd_clgrph()
 
 gtbl("t_coxzph")
 wtbl("t_coxzph")
-wtbl_pdf("t_coxzph_wcpT", landscape = F)
-## dtblF("t_coxzph")
+wtbl_pdf("t_coxzph_wcpF", landscape = F)
+dtblF("t_coxzph_wcpF")
 
 wtbl_pdf("r_more", landscape = F)
     
