@@ -655,7 +655,7 @@ dt_pmyear <- gd_pmyear(dt_pmx, dt_pmtiv)
 dt_pmcpct <- gd_pmcpct(dt_pmyear)
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct)
-l_mdlnames_coxph <- c("r_more", "r_less1", "r_less2", "r_west_cpct")
+l_mdlnames_coxph <- c("r_more")
 
 screenreg2(list(l_mdls$r_more))
 
@@ -683,24 +683,10 @@ plan(sequential)
 ## callgraph testing
 jtls::gwd_clgrph()
 ## dpltF("callgraph2")
-## dpltF("p_vrblcvrg")
-## gdplt("p_vrblcvrg_ratio")
 
 ## ** table testing 
 
 
-
-## gtbl("t_testtable")
-## wtbl("t_testtable")
-## dtblF("t_testtable")
-
-## gtbl("t_coxzph")
-## wtbl("t_coxzph")
-## wtbl_pdf("t_coxzph_wcpF", landscape = F)
-## dtblF("t_coxzph_wcpF")
-
-## wtbl_pdf("r_more", landscape = F)
-    
 ## texreg(l_mdls$r_more, single.row = T, file = paste0(c_dirs$tbls, "r_more.tex"), label = "tbl:t_r_more")
 
 gp_coxphdiag(l_mdls$r_more)
@@ -717,9 +703,9 @@ screenreg(l_mdls$r_more)
     
 gtbl("t_reg_coxph")
 wtbl("t_reg_coxph")
-dtblF("t_reg_wcpF")
+dtblF("t_reg_coxph_wcpF")
 ## wtbl_pdf("t_reg_coxph_wcpF", F)
 ## hmm question becomes whether I should use multiple groups
 
-
+gdtbl("t_reg_coxph")
 ## gd_reg_coxph(l_mdls$r_more, "r_more")
