@@ -172,8 +172,8 @@ gc_plts <- function() {
             caption = "Private Museum hazard function",
             cutwidth = 2,
             bw.smooth = 5,
-            width = 14,
-            height = 8),
+            width = 16,
+            height = 9),
         p_agedens = list(
             dt_pmcpct = quote(dt_pmcpct),
             caption = "Age distribution of private museums",

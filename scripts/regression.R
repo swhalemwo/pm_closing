@@ -182,10 +182,16 @@ gp_surv <- function(dt_pmcpct) {
 }
 
 gd_pehaz <- function(dt_pmcpct, cutwidth) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     #' get dt of "baseline" hazard (just don't account for anything, just age and closing)
     #' pehaz: Piecewise-Exponential Hazard
     #' cutwidth: allows different aggregations
     
+    
+
+    
+
     ## details of pehaz/muhaz functions can be figured out later
     res_pehaz <- pehaz(dt_pmcpct$age, dt_pmcpct$closing, width = cutwidth)
     dt_pehaz <- data.table(cuts = res_pehaz$Cuts,
@@ -203,21 +209,79 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
     ## smooth hazard curves
     ## i think the muhaz kernel is more appropriate than the default geom_smooth kernel (goes negative)
 
+    ## survfit2(Surv(age, closing) ~ 1, dt_pmcpct, stype= 1) %>% plot
+
+    ##     library(pch)
+    ##     rx <- pchreg(Surv(age, closing) ~ 1, data = dt_pmcpct)
+
+    ## some way to try to get SEs for hazard function
+    ##     summary(rx)
+    ##     dt_new <- data.table(age = unique(dt_pmcpct$age))[order(age)]
+    
+    ##     dt_new_pred <- cbind(dt_new, predict(rx, newdata = dt_new))
+
+    ##     ggplot(dt_new_pred, aes(x=age, y=f)) + geom_line()
+
+    ##     r_mdl <- coxph(Surv(age, closing) ~ 1, dt_pmcpct)
+    ##     survival_fit <- survfit(r_mdl)
+
+    ##     ## time_points <- survival_fit$time
+    ##     ## survival_prob <- survival_fit$surv
+
+    ##     ## hazard_func <- -diff(log(survival_prob)) / diff(time_points)
+
+    ##     ## cov_matrix <- vcov(r_mdl)
+
+    ##     # Extract the cumulative hazard estimates and time points
+    ##     cum_hazard <- -log(survival_fit$surv)
+    ##     time_points <- survival_fit$time
+
+    ##     ## Calculate the hazard function
+    ##     hazard_func <- c(diff(cum_hazard) / diff(time_points), NA)
+
+    ##     se_hazard <- sqrt(cumsum(survival_fit$std.err^2))
+
+
+
     dt_pehaz <- gd_pehaz(dt_pmcpct, cutwidth)
+
+    dt_pehaz5 <- gd_pehaz(dt_pmcpct, 5)
 
     ## Muhaz: probably "mu" because Mueller (guy who wrote some of the kernel algorithms)
 
-    res_muhaz <- muhaz(dt_pmcpct$age, dt_pmcpct$closing, bw.smooth = bw.smooth, b.cor = "none", max.time = 60,
+    res_muhaz <- muhaz(dt_pmcpct$age, dt_pmcpct$closing, bw.smooth = 5, b.cor = "none", max.time = 60,
                        bw.method = "local")
     dt_muhaz <- data.table(grid = res_muhaz$est.grid,
                            haz = res_muhaz$haz.est)
 
-    ggplot() +
-        geom_step(dt_pehaz, mapping = aes(x=cuts, y=haz), linetype = 2) +
-        geom_line(dt_muhaz, mapping = aes(x=grid, y=haz)) +
-        labs(x="year", y="hazard")
-
     
+    ## try to get SE out of muhaz, but doesn't seem like there is any reported
+    ## leave if for now.. 
+    ## data.table(msemin = res_muhaz$msemin,
+    ##            bias.min = res_muhaz$bias.min,
+    ##            var.min = res_muhaz$var.min)[, x := 1:.N] %>%
+    ##     melt(id.vars = "x") %>%
+    ##     ggplot(aes(x=x, y=value, color = variable)) + geom_line() + facet_grid(variable~., scales = "free")
+
+    y_upper_border <- 0.02 # FIXME: put as function argument
+
+    ggplot() +
+        geom_step(dt_pehaz, mapping = aes(x=cuts, y=haz, linetype = 'pehaz')) +
+        ## geom_step(dt_pehaz5, mapping = aes(x=cuts, y=haz, linetype = 'pehaz5')) +
+        geom_line(dt_muhaz, mapping = aes(x=grid, y=haz, linetype = "muhaz")) +
+        labs(x="year", y="hazard") +
+        coord_cartesian(ylim = c(0,y_upper_border)) +
+        geom_label(dt_pehaz[haz > y_upper_border],
+                   mapping = aes(x=cuts, y=y_upper_border, label = format(haz, digits = 2,nsmall = 2))) +
+        scale_linetype_manual(name = element_blank(), 
+            values = c('muhaz'=1, 'pehaz'=2, 'pehaz5' = 3),
+                              labels = c("Spline (5 years bandwidth)",
+                                         sprintf("Piecewise-Constant (%s years)", cutwidth)),
+                              guide = "legend") +
+        scale_x_continuous(breaks = seq(0,60,10)) + # FIXME : generalize upper limit
+        theme(legend.position = "bottom") + 
+        labs(caption = sprintf("Piecewise constant hazard rates above %s demarcated by text boxes", y_upper_border))
+     
     ## the peak after t=40: in the end: 16 are over 40 years old, 2 out of them die
 
 }
