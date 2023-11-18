@@ -49,7 +49,8 @@ dt_pmcpct;
 5; 
 l_mdls__r_more; 
 l_mdls; 
-l_mdlnames_coxph 
+l_mdlnames_coxph; 
+rx 
  2 -> gp_hazard; 
 5 -> gp_hazard; 
 dt_pmcpct -> gl_mdls; 
@@ -90,4 +91,5 @@ l_mdls__r_more -> gt_coxzph;
 l_vrblcvrg__dt_vrblcvrg_all -> gp_vrblcvrg; 
 l_vrblcvrg__dt_vrblcvrg_all -> gp_vrblcvrg_ugrpd; 
 l_vrblcvrg__dt_vrblcvrg_fcs -> gp_vrblcvrg_ratio; 
+rx -> gd_inflcases; 
 theme_closing -> gp_vrblcvrg_ratio }
