@@ -64,10 +64,16 @@ gd_pmyear <- function(dt_pmx, dt_pmtiv) {
         ## .[!(year > END_YEAR)] %>% # yeet pm years beyond END_YEAR
         ## .[!(year_opened > year)] %>% # yeet pm-years where expansion went into negative direction
         .[, age := year - year_opened] %>%
-        ## founder death: 1 if deathyear > year, else 0 (before death or not dead at all)
-        .[, founder_dead := fifelse(!is.na(deathyear),fifelse(deathyear > year, 1, 0), 0)] %>% 
+        ## founder death: 1 if year > deathyear, else 0 (before death or not dead at all)
+        .[, founder_dead := fifelse(!is.na(deathyear),fifelse(year > deathyear, 1, 0), 0)] %>% 
         .[, `:=`(tstart = age, tstop = age+1)] %>%
         .[, pm_dens := .N, .(iso3c, year)] # calculate PM density 
+
+    ## dt_pmyear[, .N, founder_dead]
+    ## dt_pmyear[, .SD[which.max(year)], ID][, .N, founder_dead]
+    ## dt_pmyear[, .SD[which.max(year)], ID][founder_dead==1]
+    ## dt_pmyear[founder_dead == 1, fnunique(ID)]
+    ## dt_pmyear[!is.na(deathyear)][founder_dead == 0]
 
     ## combine with time-invariant variables
     dt_pmyear2 <- merge(dt_pmyear,
