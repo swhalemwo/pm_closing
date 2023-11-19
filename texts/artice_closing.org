@@ -60,17 +60,151 @@ wd_nbrs(dt_nbrs)
 
 ** Introduction
 
+In recent years, private, collector-run museums have seen an unprecedented proliferation.
+#
+These museums, run by individual collectors, constitute an addition to established organizational forms of art provision such as museums run/financed by the state or foundations and associations.
+#
+Despite their sometimes spectacular press coverage, these institutions and the motivations of their founders have remained remarkably intransparent.
+#
+Financed in large parts by their founders private wealth, few reporting requirements exists; and while some founders highlight their charitable and distintersted intentions in media coverage, such statements intended for a public audience might not necessarily accurately reflect underlying founder motivations.
+
+
+
+This paper, rather than focusing on statements or case studies, employs a newly connected database to study the phenomenon of private museum closure. 
+
+interrelated question of sustainability/longevity
+
+What can factors which lead to the closure of private museum tell us about the internal processes and dependence relationships of these institutions, as well as about the motivations of their founders?
+
+
 
 
 ** Theory
 
 ** Data and Methods
 
+*** Dependent Variable
+A newly constructed database (see [[textcite:&Velthuis_etal_2023_boom]] for details) is used to measure museum survival.
+#
+The unit of analysis is the country year.
+#
+The main dependenent variable is an indicator of museum closure, which takes for the museums which close in the year of their closure, and zero otherwise.
+#
+Typically for survival data, museums that do not close during the observation period are right-censored, i.e. for such museums the dependent variable is 0 for all years.
+
+*** Predictors
+On the level of the founder, gender constitutes a time-invariant variable; with possible values being male, female and couple.
+#
+Founder death is constructed as a time-varying covariate, and is set to 1 for museum-years after the death of the founder. 
+
+On the museum level, selfidentification measures whether a museum's name includes the term "museum", "foundation", "collection", or other (such as "villa", "institute", "center" or "gallery", which are grouped together as they are less frequent).
+#
+Further analyzing the name, a binary indicator also measures whether the name of the founder is included.
+#
+Finally, a binary predictor measures whether the museum is included in the "Museums of the World" database [[parencite:&deGruyter_2021_MOW]], a database containig 55k museums.
+
+
+On the level of the environment, the density (number) of private museum per country is included both in linear and squared form. 
+
+#+latex: \noindent
+TODO: add
+- museum size indicator,
+- inclusion in Artnews collector ranking
+- Tax incentives (country-level)
+- densities: 
+  - per capita
+  - include MOW museums, for now density is based only on private museums
+  - within proximate environment (circle of X kilometer around museum)
+
+
+*** Analytical framework
+
+
+First, we investigate the relationship between age and closing descriptively using hazard rates and Kaplan-Meier survival function.
+#
+In a second step, I use Cox proportional hazard models which estimate the relationship between covariates and the hazard rate.
+#
+These models assume proportional hazards, i.e. that the coefficient of a variable stays constant over time.
+#
+So far, tests show violation of the proportionality assumption only for the variable indicating whether the museum name includes the name of the founder (table {{{reftbl_t_coxzph}}}, figure {{{refplt_p_coxphdiag_more}}}).  
+
+
 ** Results
 
-*** Age Dependence
+*** Summary statistics
+
+In total, 479 private museums are included in the database, 53 of them have closed
+#
+7282 museum-years are observed.
+
+#+latex: \noindent
+TODO: summary statistics for all the variables
+
+*** Hazard rate and Age Dependence
+
+{{{ynkplt_p_hazard}}}
+
+{{{ynkplt_p_surv}}}
+
+Figure {{{refplt_p_hazard}}} shows the hazard rate over time, figure {{{refplt_p_surv}}} the corresponding survival probability.
+#
+The hazard rate doubles over the first 10 years from approximately 0.45% 0.9%, at which value it approximately stays constant for the next 20 years, after which it appears to decline.
+#
+However, the decline after thirty years is presumably less certain as very few private museums have already reached this age (figure {{{refplt_p_agedens}}}).
+#
+
+The increase in the first years is likely due to endowments: As the establishment of a museum requires considerable resources, their founders appear to allocate enough resources to keep the risk of closure small in the first years after opening.
+#
+Given that founders are likely aware that their endeavor is unlikely to generate a profit, they are not vulnerable to the liability of newness [[parencite:&Stinchcombe_1965_structure]].
+#
+The relative stability of the hazard rate after ten years has no correspondence in classical theories on age dependence:
+#
+While an increase in mortality as observed here is predicted by the idea of "liability of adolescence" [[parencite:&Carroll_Khessina_2019_demography]], this framework also predicts a decline in mortality after a peak due to becoming established.
+# 
+Furthermore, while "liability of obsolescence" and "liability of senescence" (ibid.) predict higher mortality for older organizations due to mismatch with the environment and inertia (inflexible internal routines), it seems questionable whether museums would have reached obsolescence or senescence already after ten years.
+#
+Furthermore, the applicability of obsolescence and senescence might be limited for non-profit organizations.
+
+
+
+
+
+The Kaplan-Meier survival probability is around 75% after thirty years (figure {{{refplt_p_surv}}}).
+
+
+
+#+latex: \noindent
+TODO:
+- get confidence interval for hazard rate
+- see how age can be integrated into survival models (linear term doesn't work)
+
+
 
 *** Regression Results
 
+#+INCLUDE: "../tables/t_reg_coxph_wcpF.tex" export latex
+
+Table {{{reftbl_t_reg_coxph}}} shows the results of Cox proportional 
 
 
+
+#+Latex: \begin{sloppypar}
+#+Latex: \printbibliography
+#+Latex: \end{sloppypar}
+
+
+
+
+* Appendix
+
+{{{ynkplt_p_yeardens}}}
+
+{{{ynkplt_p_agedens}}}
+
+
+# #+latex: \begin{landscape}
+{{{ynkplt_p_coxphdiag_more}}}
+
+# #+latex: \end{landscape}
+
+#+INCLUDE: "../tables/t_coxzph_wcpF.tex" export latex
