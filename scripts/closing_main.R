@@ -183,8 +183,13 @@ gc_plts <- function() {
             dt_pmyear = quote(dt_pmyear),
             caption = "Private Museum-year Distribution",
             width = 19,
-            height = 12)
-        
+            height = 12),
+        p_coxphdiag_more = list(
+            rx = quote(l_mdls$r_more),
+            caption = "Model Diagnostics",
+            width = 19,
+            height = 25
+            )        
     )
 
     ## check that there are no duplicate 

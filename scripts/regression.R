@@ -281,7 +281,7 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
                    mapping = aes(x=cuts, y=y_upper_border, label = format(haz, digits = 2,nsmall = 2))) +
         scale_linetype_manual(name = element_blank(), 
             values = c('muhaz'=1, 'pehaz'=2, 'pehaz5' = 3),
-                              labels = c("Spline (5 years bandwidth)",
+                              labels = c("Epanechnikov-Kernel (5 years bandwidth)",
                                          sprintf("Piecewise-Constant (%s years)", cutwidth)),
                               guide = "legend") +
         scale_x_continuous(breaks = seq(0,60,10)) + # FIXME : generalize upper limit
@@ -405,17 +405,19 @@ gp_inflcases <- function(dt_inflcases, dt_coefs) {
     ## histogram is better than density: not so much drawn to heights by narrow spread by discretizing
     ggplot() +
         geom_histogram(dt_inflcases, mapping = aes(x=coef_wo)) +
-        geom_point(dt_coefs, mapping = aes(x=coef, y=0)) +
+        geom_point(dt_coefs, mapping = aes(x=coef, y=50)) +
         geom_vline(xintercept = 0, linetype = 2) + 
         geom_errorbarh(dt_coefs, mapping = aes(xmin = coef - 1.96*se, xmax = coef + 1.96*se, y=50), height = 50) + 
-        facet_wrap(~vrbl, scales = "free") +
-        labs(y="Frequency", x="coefficient without PM")
+        facet_wrap(~vrbl, scales = "free_x") +
+        labs(y="Frequency", x="coefficient without PM",
+             caption = paste0("Histogram: Distribution of coefficient with each PM excluded once\n",
+                              "Point, Error-bar: overal coefficient 95% Confidence interval"))
 
 }
 
 
 
-## ## * main
+## * main
 ## if (interactive()) {stop("it's interactive time")}
 
 ## memoise functions for more snappy iterations
@@ -533,13 +535,26 @@ gp_schoenfeld <- function(rx) {
     dt_coef <- adt(coef(rx), keep.rownames = T) %>% setnames(c("vrbl", "coef"))
         
     ggplot(dt_schoen_coxzph, aes(x=x, y=value)) +
-        geom_point(size = 1) +
-        geom_smooth(method = lm, formula = y ~ bs(x, df = 3)) +
+        geom_point(mapping = aes(color = "schoenfeld"), size = 0.7) +
+        geom_smooth(mapping = aes(linetype = "spline"), method = lm, formula = y ~ bs(x, df = 3), size = 0.7) + 
         ## geom_smooth(method = lm, formula = y ~ pspline(x, df = 4)) +
         ## geom_smooth(method = lm, formula = y ~ ns(x, df = 3)) +
-        geom_hline(dt_coef, mapping = aes(yintercept = coef), linetype = 2) + 
-        facet_wrap(~vrbl, scales ="free") +
-        labs(x="time", y="beta(t)")       
+        geom_hline(dt_coef, mapping = aes(yintercept = coef, linetype = "coef")) + 
+        facet_wrap(~vrbl, scales ="free_y") +
+        labs(x="time", y="beta(t)") +
+        scale_linetype_manual(name = element_blank(),
+                              values = c("spline" = 1, "coef" = 2),
+                              labels = c("spline" = "Spline", "coef" = "Cox-PH coefficient")) +
+        scale_color_manual(name = element_blank(),
+                           values = c("schoenfeld" = "black"),
+                           labels = c("schoenfeld" = "Schoenfeld residual")) + 
+        theme(legend.position = "bottom") 
+                              ## guide = "legend")
+        ## scale_color_manual(name = element_blank(),
+        ##                    values = c("schoenfeld" = "black", "spline" = "blue", "coef" = "grey"),
+        ##                    labels = c("Schoenfeld Residuals", "Spline", "Cox-PH coefficient"),
+        ##                    guide = "legend") +
+        
      
      
     
@@ -549,6 +564,7 @@ gp_schoenfeld <- function(rx) {
 
 }
 
+## gp_schoenfeld(l_mdls$r_more)
 
 ## gp_schoenfeld(l_mdls$r_west_cpct)
 
@@ -569,5 +585,7 @@ gp_coxphdiag <- function(rx) {
 
 }
 
+
 ##  gp_coxphdiag(l_mdls$r_west_cpct)
 
+gp_coxphdiag_more <- gp_coxphdiag
