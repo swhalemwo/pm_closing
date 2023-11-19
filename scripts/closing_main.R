@@ -54,7 +54,7 @@ gc_vvs <- function() {
     l_vrbl_lbls <- list( # variable labels
         gender = "Founder Gender",
         founder_dead = "Founder died",
-        slfidfcn = "Selfidentification",
+        slfidfcn = "Self- Identification",
         muem_fndr_name = "Founder name in Museum name",
         mow = "MOW inclusion",
         pm_dens = "PM density",
@@ -86,13 +86,13 @@ gc_vvs <- function() {
         .[, vrblgrp := factor(vrblgrp, levels = names(l_vrblgrps))]
 
     l_ctgterm_lbls <- list(# labels of terms of categorical variables
-        list(vrbl = "gender",   term = "genderF",               term_lbl = "Female"),
-        list(vrbl = "gender",   term = "gendercouple",          term_lbl = "Couple"),
-        list(vrbl = "gender",   term = "genderM",               term_lbl = "Male"),        
-        list(vrbl = "slfidfcn", term = "slfidfcnmuseum",        term_lbl = "Museum"),
-        list(vrbl = "slfidfcn", term = "slfidfcnfoundation",    term_lbl = "Foundation"),
-        list(vrbl = "slfidfcn", term = "slfidfcncollection",    term_lbl = "Collection"),
-        list(vrbl = "slfidfcn", term = "slfidfcnother",         term_lbl = "Other"))
+        list(vrbl = "gender",   term = "genderF",               term_lbl = "Gender - Female"),
+        list(vrbl = "gender",   term = "gendercouple",          term_lbl = "Gender - Couple"),
+        list(vrbl = "gender",   term = "genderM",               term_lbl = "Gender - Male"),        
+        list(vrbl = "slfidfcn", term = "slfidfcnmuseum",        term_lbl = "Self-Identification - Museum"),
+        list(vrbl = "slfidfcn", term = "slfidfcnfoundation",    term_lbl = "Self-Identification - Foundation"),
+        list(vrbl = "slfidfcn", term = "slfidfcncollection",    term_lbl = "Self-Identification - Collection"),
+        list(vrbl = "slfidfcn", term = "slfidfcnother",         term_lbl = "Self-Identification - Other"))
 
     dt_ctgterm_lbls <- rbindlist(l_ctgterm_lbls) %>%
         .[, term := factor(term, levels = term)]
