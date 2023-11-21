@@ -455,9 +455,10 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         r_less1 = coxph(Surv(tstart, tstop, closing) ~ mow + pm_dens + I(pm_dens^2), dt_pmyear),
         r_less2 = coxph(Surv(tstart, tstop, closing)~ founder_dead + mow + slfidfcn + muem_fndr_name, dt_pmyear),
 
-        ## fullest model
-        r_more = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + founder_dead + mow +
-                           slfidfcn + muem_fndr_name, dt_pmyear)
+        ## fullest model:
+        ## FIXME: add founder_dead*muem_fndr_name
+        r_more = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
+                           slfidfcn + founder_dead + muem_fndr_name, dt_pmyear)
 
         
 
