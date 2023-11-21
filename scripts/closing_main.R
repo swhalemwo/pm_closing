@@ -61,6 +61,8 @@ gc_vvs <- function() {
     #' dt_termlbls: EXPERIMENTAL combination of dt_vrblinfo and dt_ctgterm_lbls:
     #' should save merging the two dts in each function that needs both vrblinfo and lbls;
     #' for categorical variables contains both the information on vrbls and term (e.g. term=gender and term=genderF)
+    #' so far it works that by right-joining on dt_termlbls (dt_termlbls[dt_coef]) substantive coef tables can pick 
+    #' the things they need, and ignore those that they don't include
     #' vrbl, term, term_lbl, vrblgrp, vrblgrp_lbl
 
     #' ADDME: atm it's not super flexible with multiple variable groupings (e.g. different themes),
