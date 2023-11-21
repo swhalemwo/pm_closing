@@ -447,7 +447,7 @@ gc_tbls <- function(c_tblargs) {
         t_reg_coxph = list(
             l_mdls = quote(l_mdls),
             l_mdlnames = quote(l_mdlnames_coxph), # FIXME: gw_fargs should be able to handle vectors
-            caption = "kappa")
+            caption = "Cox Proportional Hazards Regression Results")
     )
 
     
