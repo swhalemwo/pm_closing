@@ -510,22 +510,23 @@ gt_coxzph <- function(rx) {
     coxzph_trfms <- list(km = "Kaplan-Meier", identity = "Identity", rank = "Rank")
 
     ## generate the actual data
-    dt_coxzph_prep <- map(names(coxzph_trfms), ~cox.zph(l_mdls$r_more, terms = T, transform = .x) %>%
-                                                   chuck("table") %>% adt(keep.rownames = "vrbl") %>%
+    dt_coxzph_prep <- map(names(coxzph_trfms), ~cox.zph(l_mdls$r_more, terms = F, transform = .x) %>%
+                                                   chuck("table") %>% adt(keep.rownames = "term") %>%
                                                    .[, src := .x]) %>% list_rbind %>%
-                      .[, .(vrbl, src, p)]
+                      .[, .(term, src, p)]
 
+    
     ## merge with variable labels, cast to wide
-    dt_coxzph <- gc_vvs() %>% chuck("dt_vrblinfo") %>% .[dt_coxzph_prep, on = "vrbl"] %>%
-        .[, p_fmtd := fmt_cell(coef = p, pvalue = p,  type = "coef-stars"), .(vrbl, src)] %>%
-        dcast(vrbl_lbl + vrblgrp + vrblgrp_lbl ~ src, value.var = "p_fmtd") %>%
+    dt_coxzph <- gc_vvs() %>% chuck("dt_termlbls") %>% .[dt_coxzph_prep, on = "term"] %>%
+        .[, p_fmtd := fmt_cell(coef = p, pvalue = p,  type = "coef-stars"), .(term, src)] %>%
+        dcast(term_lbl + vrblgrp + vrblgrp_lbl ~ src, value.var = "p_fmtd") %>%
         .[order(vrblgrp)]
 
     
     ## arrange table that in a way that it is to be written to file
-    dt_coxzph_viz <- dt_coxzph[, c("vrbl_lbl", names(coxzph_trfms)), with = F] %>%
+    dt_coxzph_viz <- dt_coxzph[, c("term_lbl", names(coxzph_trfms)), with = F] %>%
         cbind(grp_filler = "", .) %>% # add column in beginning for faking group indentation
-        .[, vrbl_lbl := latexTranslate(vrbl_lbl)]
+        .[, term_lbl := latexTranslate(term_lbl)]
             
     ## generate the variable add.to.row components      
 
@@ -534,7 +535,7 @@ gt_coxzph <- function(rx) {
     signote <- gc_signote(se_mention = F, ncol = 3) # get the significance note
 
     c_colnames <- gc_colnames(col_names = names(dt_coxzph_viz), # generate the column names
-                              col_lbls = c(coxzph_trfms, list(grp_filler = "", vrbl_lbl = "Variable")))
+                              col_lbls = c(coxzph_trfms, list(grp_filler = "", term_lbl = "Variable")))
 
 
     ## add to row cfg
