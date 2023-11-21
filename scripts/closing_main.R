@@ -46,8 +46,27 @@ gc_dirs <- function(dir_proj) {
 
 gc_vvs <- function() {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
+
+    #' generate variable vectors/data.tables with all kind of information
+    #' vrbls_base: vector of variables necessary for survival analysis
+    #' vrbls_tiv: vector of substantial time-invariant variables
+    #' vrbls_tv: vector of substantial time-varying variables
+    ## FIXME: see if I can integrate these vectors with dt_vrblinfo
+    #' dt_vrblinfo: data.table with vrbl (corresponding to columns in dt_pmyear/dt_pmcpct etc), vrbl_lbl (label),
+    #'   vrblgrp (variable group; some thematic substantial grouping to aid interpretation),
+    #'   vrblgrp_lbl (label of variable group)
+    #' dt_ctgterm_lbls: data.table with info of terms (values) of categorical variables: vrbl,
+    #' term (the particular value), term_lbl. 
+    #' dt_cof_cfg: data.table with info of goodness-of-fit stats: gof_name, digits (for rounding), gof_lbl (label)
+    #' dt_termlbls: EXPERIMENTAL combination of dt_vrblinfo and dt_ctgterm_lbls:
+    #' should save merging the two dts in each function that needs both vrblinfo and lbls;
+    #' for categorical variables contains both the information on vrbls and term (e.g. term=gender and term=genderF)
+    #' vrbl, term, term_lbl, vrblgrp, vrblgrp_lbl
+
+    #' ADDME: atm it's not super flexible with multiple variable groupings (e.g. different themes),
+    #' or different GOF for different models
+
     
-    #' generate variable vectors
 
     ## group variables thematically, add also labels
 
@@ -126,6 +145,13 @@ gc_vvs <- function() {
         join(dt_vrblgrp_lbls, on = "vrblgrp")
 
     
+    ## generate dt_term_lbls: get labels for all terms (still includes variables)
+    dt_termlbls <- copy(dt_ctgterm_lbls)[dt_vrblinfo,
+                                         `:=`("vrblgrp" = i.vrblgrp, "vrblgrp_lbl" = i.vrblgrp_lbl),
+                                         on = "vrbl"] %>% 
+        rbind(dt_vrblinfo[, .(term = vrbl, vrbl, term_lbl = vrbl_lbl, vrblgrp, vrblgrp_lbl)])    
+
+
     list(
         ## time-invariant variables
         vrbls_base = .c(ID, iso3c, year, tstart, tstop, age),
@@ -133,7 +159,8 @@ gc_vvs <- function() {
         vrbls_tv= .c(pm_density, founder_dead),
         dt_vrblinfo = dt_vrblinfo,
         dt_ctgterm_lbls = dt_ctgterm_lbls,
-        dt_gof_cfg = dt_gof_cfg)
+        dt_gof_cfg = dt_gof_cfg,
+        dt_termlbls = dt_termlbls)
         
 
     
