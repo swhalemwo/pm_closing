@@ -429,3 +429,5 @@ While the density-dependence paradigm predicts a negative effect of numbers of o
 # #+latex: \end{landscape}
 
 #+INCLUDE: "../tables/t_coxzph_wcpF.tex" export latex
+
+{{{ynkplt_p_vrblcvrg_ratio}}}
