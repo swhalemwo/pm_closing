@@ -139,19 +139,35 @@ gc_vvs <- function() {
     dt_gof_cfg <- rbindlist(c_gof) %>%
         .[, gof_name := factor(gof_name, levels = gof_name)]
 
-
-    
-
     ## l_mdl_lbls <- list()
         
-
 
     ## check that the variables that are grouped/labelled are the same
     if (!setequal(dt_vrbl_lbls$vrbl, dt_vrblgrps$vrbl)) {
         stop("something wrong with vrbl labels and groups")}
 
+    ## specify whether variable is time-varying or not
+    vrbls_tiv <- .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6)
+    vrbls_tv <- .c(pm_dens, "I(pm_dens^2)",  founder_dead)
+
+    ## specify variable type: binary, numeric, categorical
+    l_vrbltypes <- list(        
+        bin = .c(founder_dead, muem_fndr_name, mow, west),
+        num = .c(pm_dens, "I(pm_dens^2)"),
+        cat = .c(gender, slfidfcn, reg6))
+
+    dt_vrbltypes <- imap(l_vrbltypes, ~data.table(vrbl = .x, vrbltype = .y)) %>% rbindlist
+
     dt_vrblinfo <- join(dt_vrbl_lbls, dt_vrblgrps, on = "vrbl") %>%
-        join(dt_vrblgrp_lbls, on = "vrblgrp")
+        join(dt_vrblgrp_lbls, on = "vrblgrp") %>%
+        .[(vrbl %in% vrbls_tiv), vrbl_tv := 0] %>%
+        .[(vrbl %in% vrbls_tv), vrbl_tv := 1] %>%
+        .[dt_vrbltypes, vrbltype := i.vrbltype, on = "vrbl"]
+        
+          
+        
+        
+        
 
     
     ## generate dt_term_lbls: get labels for all terms (still includes variables)
@@ -164,8 +180,8 @@ gc_vvs <- function() {
     list(
         ## time-invariant variables
         vrbls_base = .c(ID, iso3c, year, tstart, tstop, age),
-        vrbls_tiv = .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6),
-        vrbls_tv= .c(pm_dens, founder_dead),
+        ## vrbls_tiv = .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6),
+        ## vrbls_tv= .c(pm_dens, founder_dead),
         dt_vrblinfo = dt_vrblinfo,
         dt_ctgterm_lbls = dt_ctgterm_lbls,
         dt_gof_cfg = dt_gof_cfg,

@@ -152,9 +152,11 @@ gd_pmtiv <- function(dt_pmx) {
     dt_mow_info <- gd_mow_info()[!is.na(PMDB_ID), .(PMDB_ID, mow = 1)]
 
     
-    ## construct tiv vrbl vector: yeet "mow" from tiv variables: not there yet
-    vrbls_tiv_temp <- setdiff(c("ID", "iso3c", "name", gc_vvs()$vrbls_tiv), "mow")
-
+    ## construct tiv vrbl vector: first get all time-invariant variables
+    vrbls_tiv_temp_prep <- c("ID", "iso3c", "name", gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl_tv==0, vrbl])
+    ## then yeet those that aren't there yet, .e.g MOW (gets added later)
+    vrbls_tiv_temp <- intersect(vrbls_tiv_temp_prep, names(dt_pmx2))
+    
 
     ## left join PMX subset with MOW
     ## later will probably have more sophisticated infrastructure
