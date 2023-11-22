@@ -107,13 +107,20 @@ gc_vvs <- function() {
         .[, vrblgrp := factor(vrblgrp, levels = names(l_vrblgrps))]
 
     l_ctgterm_lbls <- list(# labels of terms of categorical variables
-        list(vrbl = "gender",   term = "genderF",               term_lbl = "Gender - Female"),
-        list(vrbl = "gender",   term = "gendercouple",          term_lbl = "Gender - Couple"),
-        list(vrbl = "gender",   term = "genderM",               term_lbl = "Gender - Male"),        
-        list(vrbl = "slfidfcn", term = "slfidfcnmuseum",        term_lbl = "Self-Identification - Museum"),
-        list(vrbl = "slfidfcn", term = "slfidfcnfoundation",    term_lbl = "Self-Identification - Foundation"),
-        list(vrbl = "slfidfcn", term = "slfidfcncollection",    term_lbl = "Self-Identification - Collection"),
-        list(vrbl = "slfidfcn", term = "slfidfcnother",         term_lbl = "Self-Identification - Other"))
+        list(vrbl = "gender",   term = "genderF",            term_lbl = "Gender - Female"),
+        list(vrbl = "gender",   term = "gendercouple",       term_lbl = "Gender - Couple"),
+        list(vrbl = "gender",   term = "genderM",            term_lbl = "Gender - Male"),        
+        list(vrbl = "slfidfcn", term = "slfidfcnmuseum",     term_lbl = "Self-Identification - Museum"),
+        list(vrbl = "slfidfcn", term = "slfidfcnfoundation", term_lbl = "Self-Identification - Foundation"),
+        list(vrbl = "slfidfcn", term = "slfidfcncollection", term_lbl = "Self-Identification - Collection"),
+        list(vrbl = "slfidfcn", term = "slfidfcnother",      term_lbl = "Self-Identification - Other"),
+        list(vrbl = "reg6",     term = "reg6AF",             term_lbl = "Region - Africa"),
+        list(vrbl = "reg6",     term = "reg6AS",             term_lbl = "Region - Asia"),
+        list(vrbl = "reg6",     term = "reg6EU",             term_lbl = "Region - Europe"),
+        list(vrbl = "reg6",     term = "reg6LA",             term_lbl = "Region - Latin America"),
+        list(vrbl = "reg6",     term = "reg6NALUL",          term_lbl = "Region - North America"),
+        list(vrbl = "reg6",     term = "reg6OC",             term_lbl = "Region - Oceania")
+        )
 
     dt_ctgterm_lbls <- rbindlist(l_ctgterm_lbls) %>%
         .[, term := factor(term, levels = term)]
@@ -158,7 +165,7 @@ gc_vvs <- function() {
         ## time-invariant variables
         vrbls_base = .c(ID, iso3c, year, tstart, tstop, age),
         vrbls_tiv = .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6),
-        vrbls_tv= .c(pm_density, founder_dead),
+        vrbls_tv= .c(pm_dens, founder_dead),
         dt_vrblinfo = dt_vrblinfo,
         dt_ctgterm_lbls = dt_ctgterm_lbls,
         dt_gof_cfg = dt_gof_cfg,
