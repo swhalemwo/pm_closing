@@ -298,6 +298,8 @@ In total, 479 private museums are included in the database, 53 of them have clos
 #+latex: \noindent
 TODO: summary statistics for all the variables
 
+#+INCLUDE: "../tables/t_sumstats_wcpF.tex" export latex
+
 *** Hazard rate and Age Dependence
 
 {{{ynkplt_p_hazard}}}

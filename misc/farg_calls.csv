@@ -29,6 +29,8 @@ gp_surv,dt_pmcpct,dt_pmcpct
 gt_coxzph,rx,l_mdls$r_more
 gt_reg_coxph,l_mdls,l_mdls
 gt_reg_coxph,l_mdlnames,l_mdlnames_coxph
+gt_sumstats,dt_pmyear,dt_pmyear
+gt_sumstats,dt_pmcpct,dt_pmcpct
 gd_inflcases,rx,rx
 gt_reg_coxph,l_mdls,l_mdls
 gt_reg_coxph,l_mdlnames,l_mdlnames_coxph
