@@ -51,6 +51,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: reftbl_t_testtable \ref{tbl:t_testtable}
 #+MACRO: reftbl_t_coxzph \ref{tbl:t_coxzph}
 #+MACRO: reftbl_t_reg_coxph \ref{tbl:t_reg_coxph}
+#+MACRO: reftbl_t_sumstats \ref{tbl:t_sumstats}
 :end:
 
 
@@ -299,6 +300,8 @@ In total, 479 private museums are included in the database, 53 of them have clos
 TODO: summary statistics for all the variables
 
 #+INCLUDE: "../tables/t_sumstats_wcpF.tex" export latex
+
+Table {{{reftbl_t_sumstats}}} shows summary statistics for all variables.
 
 *** Hazard rate and Age Dependence
 
