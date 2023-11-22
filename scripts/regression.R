@@ -153,7 +153,8 @@ gd_pmtiv <- function(dt_pmx) {
 
     
     ## construct tiv vrbl vector: first get all time-invariant variables
-    vrbls_tiv_temp_prep <- c("ID", "iso3c", "name", gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl_tv==0, vrbl])
+    vrbls_tiv_temp_prep <- c("ID", "iso3c", "name",
+                             gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl_tv==0, as.character(vrbl)])
     ## then yeet those that aren't there yet, .e.g MOW (gets added later)
     vrbls_tiv_temp <- intersect(vrbls_tiv_temp_prep, names(dt_pmx2))
     

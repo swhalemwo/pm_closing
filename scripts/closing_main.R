@@ -96,15 +96,46 @@ gc_vvs <- function() {
         museum = "Museum",
         envir = "Environment",
         misc = "Miscellaneous")
+
     
-    
-    dt_vrbl_lbls = data.table(vrbl = names(l_vrbl_lbls), vrbl_lbl = unlist(l_vrbl_lbls))
+    dt_vrbl_lbls = data.table(vrbl = names(l_vrbl_lbls), vrbl_lbl = unlist(l_vrbl_lbls)) %>%
+        .[, vrbl := factor(vrbl, levels = vrbl)]
 
     dt_vrblgrp_lbls <- data.table(vrblgrp = names(l_vrblgrp_lbls), vrblgrp_lbl = unlist(l_vrblgrp_lbls)) %>%
         .[, vrblgrp := factor(vrblgrp, levels = names(l_vrblgrps))]
 
     dt_vrblgrps <- imap(l_vrblgrps, ~data.table(vrbl = .x, vrblgrp = .y)) %>% rbindlist %>%
         .[, vrblgrp := factor(vrblgrp, levels = names(l_vrblgrps))]
+
+    ## ## list of variable configs
+    ## l_cvrbl <- list(
+    ##     list(vrbl = "gender", vrbl_label = "Founder Gender", vrblgrp = "founder", vrblgrp_lbl = "Founder",
+    ##          tv = F, vrbltype = "cat"),
+    ## check that the variables that are grouped/labelled are the same
+    if (!setequal(dt_vrbl_lbls$vrbl, dt_vrblgrps$vrbl)) {
+        stop("something wrong with vrbl labels and groups")}
+
+    ## specify whether variable is time-varying or not
+    vrbls_tiv <- .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6)
+    vrbls_tv <- .c(pm_dens, "I(pm_dens^2)",  founder_dead)
+
+    ## specify variable type: binary, numeric, categorical
+    l_vrbltypes <- list(        
+        bin = .c(founder_dead, muem_fndr_name, mow, west),
+        num = .c(pm_dens, "I(pm_dens^2)"),
+        cat = .c(gender, slfidfcn, reg6))
+
+    dt_vrbltypes <- imap(l_vrbltypes, ~data.table(vrbl = .x, vrbltype = .y)) %>% rbindlist
+
+    ## combine variable labels, variable groups, time-varying indicators, and variable types
+
+    dt_vrblinfo <- join(dt_vrbl_lbls, dt_vrblgrps, on = "vrbl") %>%
+        join(dt_vrblgrp_lbls, on = "vrblgrp") %>%
+        .[(vrbl %in% vrbls_tiv), vrbl_tv := 0] %>%
+        .[(vrbl %in% vrbls_tv), vrbl_tv := 1] %>%
+        .[dt_vrbltypes, vrbltype := i.vrbltype, on = "vrbl"]        
+
+    ## make all the terms
 
     l_ctgterm_lbls <- list(# labels of terms of categorical variables
         list(vrbl = "gender",   term = "genderF",            term_lbl = "Gender - Female"),
@@ -142,32 +173,7 @@ gc_vvs <- function() {
     ## l_mdl_lbls <- list()
         
 
-    ## check that the variables that are grouped/labelled are the same
-    if (!setequal(dt_vrbl_lbls$vrbl, dt_vrblgrps$vrbl)) {
-        stop("something wrong with vrbl labels and groups")}
-
-    ## specify whether variable is time-varying or not
-    vrbls_tiv <- .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6)
-    vrbls_tv <- .c(pm_dens, "I(pm_dens^2)",  founder_dead)
-
-    ## specify variable type: binary, numeric, categorical
-    l_vrbltypes <- list(        
-        bin = .c(founder_dead, muem_fndr_name, mow, west),
-        num = .c(pm_dens, "I(pm_dens^2)"),
-        cat = .c(gender, slfidfcn, reg6))
-
-    dt_vrbltypes <- imap(l_vrbltypes, ~data.table(vrbl = .x, vrbltype = .y)) %>% rbindlist
-
-    dt_vrblinfo <- join(dt_vrbl_lbls, dt_vrblgrps, on = "vrbl") %>%
-        join(dt_vrblgrp_lbls, on = "vrblgrp") %>%
-        .[(vrbl %in% vrbls_tiv), vrbl_tv := 0] %>%
-        .[(vrbl %in% vrbls_tv), vrbl_tv := 1] %>%
-        .[dt_vrbltypes, vrbltype := i.vrbltype, on = "vrbl"]
-        
-          
-        
-        
-        
+    
 
     
     ## generate dt_term_lbls: get labels for all terms (still includes variables)
