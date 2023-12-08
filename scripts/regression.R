@@ -6,6 +6,44 @@
 
 ## ** data functions
 
+gd_artnews <- function() {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    #' get the artnews data
+    #' later merge on founder_id -> founder_id-year has to be UoA of this later on
+    #' kinda have to merge in circle: start with artnews time, then to go to artnews person,
+    #' then to PMDB person, then to founder_id
+
+    dt_artnews_time <- gd_artnews_time() %>% slt(year, an_entry_id = id)
+
+    dt_artnews_collector_person <- gd_artnews_collector_person() %>% slt(an_entry_id, an_person_id) 
+
+    dt_artnews_pmdb_matchres <- gd_artnews_pmdb_matchres()[an_person_id != "nomatch"]
+
+    dt_pmdb_founder_person <- gd_pmdb_founder_person()
+
+    ## first combine ranking-time and and an_clctr_person to get APE
+    dt_join1 <- dt_artnews_time[dt_artnews_collector_person, on = "an_entry_id", allow.cartesian = T]
+    
+    ## combine with matchres to get PPE
+    dt_join2 <- dt_join1[dt_artnews_pmdb_matchres, on ="an_person_id"]
+
+    ## summary(dt_join2)
+    
+
+    ## combine with dt_pmdb_founder_person to get founder_id
+    dt_join3 <- dt_pmdb_founder_person[dt_join2, on = "pmdb_person_id", allow.cartesian = T] 
+    
+    ## reduce multiple persons to get any match of AN collector to any PMDB founder
+    dt_artnews <- dt_join3[, .(an_inclusion = "included"), .(founder_id, year)]
+    
+    attr(dt_artnews, "gnrtdby") <- as.character(match.call()[[1]])
+    return(dt_artnews)
+
+
+}
+
+
 gd_pmx <- function(dt_pmdb) {
     gw_fargs(match.call())
     #' eXtract relevant PMDB data: do the case/variable selection here
@@ -32,7 +70,7 @@ gd_pmx <- function(dt_pmdb) {
     ## only basic variables for now to test overall flow, later add more variables
     dt_pmx <- copy(dt_pmdb_fltrd) %>% 
         .[, .(ID, name, iso3c, museum_status, year_opened, year_closed, deathyear,
-              slfidfcn, muem_fndr_name, gender)]
+              slfidfcn, muem_fndr_name, gender, founder_id)]
 
     
     
@@ -54,11 +92,12 @@ gd_pmyear <- function(dt_pmx, dt_pmtiv) {
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     #' generate dt in pm-year format
 
+    dt_artnews <- gd_artnews()
 
     dt_pmyear <- dt_pmx[, last_year := fifelse(museum_status == "closed", year_closed, END_YEAR)] %>%
         ## expand to pm_year UoA
         .[, .(year = year_opened:last_year), .(ID, iso3c, museum_status, year_opened, year_closed,
-                                               deathyear)] %>%
+                                               deathyear, founder_id)] %>%
         ## set closing variable
         .[, closing := fifelse(museum_status == "closed" & year_closed == year, 1, 0)] %>% 
         ## .[!(year > END_YEAR)] %>% # yeet pm years beyond END_YEAR
@@ -69,6 +108,25 @@ gd_pmyear <- function(dt_pmx, dt_pmtiv) {
         .[, `:=`(tstart = age, tstop = age+1)] %>%
         .[, pm_dens := .N, .(iso3c, year)] # calculate PM density 
 
+    
+    ## generate the artnews ranking states: not (yet) included, currently included, previously included
+    dt_pmyear2 <- dt_artnews[copy(dt_pmyear), on = .(founder_id, year)] %>% 
+        .[, ever_an_included := any(!is.na(an_inclusion)), ID] %>% # .[, .N, ever_an_included]
+        .[ever_an_included == T, first_an_inclusion := .SD[!is.na(an_inclusion), min(year)], ID] %>% 
+        ## .[, .(founder_id, year, an_inclusion, ever_an_included, first_inclusion)] %>% # .[ever_an_included == T]
+        .[ever_an_included == T & year < first_an_inclusion, an_inclusion := "not_included"] %>%
+        .[ever_an_included == T & year > first_an_inclusion & is.na(an_inclusion), an_inclusion := "dropped"] %>%
+        .[ever_an_included == F, an_inclusion := "not_included"] %>%
+        .[, `:=`(ever_an_included = NULL, first_an_inclusion = NULL)] %>%
+        .[, an_inclusion := factor(an_inclusion, levels = c("not_included", "included", "dropped"))] %>%
+        .[year >= 1990] # 1990 is when AN starts
+
+    if (dt_pmyear2[, any(is.na(an_inclusion))]) {stop("artnews variable not properly defined")}
+
+    ## ggplot(dt_pmyear2[ID %in% 500:600], aes(x=year, y=ID, fill = an_inclusion)) + geom_tile()
+        
+
+
     ## dt_pmyear[, .N, founder_dead]
     ## dt_pmyear[, .SD[which.max(year)], ID][, .N, founder_dead]
     ## dt_pmyear[, .SD[which.max(year)], ID][founder_dead==1]
@@ -76,11 +134,11 @@ gd_pmyear <- function(dt_pmx, dt_pmtiv) {
     ## dt_pmyear[!is.na(deathyear)][founder_dead == 0]
 
     ## combine with time-invariant variables
-    dt_pmyear2 <- merge(dt_pmyear,
+    dt_pmyear3 <- merge(dt_pmyear2,
                         copy(dt_pmtiv)[, `:=`(iso3c=NULL, name = NULL)], ## yeet non-essential columns
                         on = "ID") 
 
-    if (any(is.na(dt_pmyear2$mow))) {stop("some MOW is NA")}
+    if (any(is.na(dt_pmyear3$mow))) {stop("some MOW is NA")}
 
     ## try to get comfy groupby counts with collapse, but super incomprehensible API
     ## fcount(asdf = .c(iso3c, year), add = T, name = "pm_dens") # works, but name comes last -> not consistent
@@ -101,13 +159,15 @@ gd_pmyear <- function(dt_pmx, dt_pmtiv) {
     ## when setting END_YEAR to e.g. 2015, museums that close later don't have a closing year, as intended
 
     ## yeet unused variables
-    dt_pmyear2[, `:=`(museum_status = NULL, year_closed = NULL, deathyear = NULL)]
+    dt_pmyear3[, `:=`(museum_status = NULL, year_closed = NULL, deathyear = NULL)]
 
     
-    attr(dt_pmyear2, "gnrtdby") <- as.character(match.call()[[1]])
-    return(dt_pmyear2)
+    attr(dt_pmyear3, "gnrtdby") <- as.character(match.call()[[1]])
+    return(dt_pmyear3)
 
 }
+
+
 
 gd_pmcpct <- function(dt_pmyear) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
@@ -461,7 +521,7 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ## fullest model:
         ## FIXME: add founder_dead*muem_fndr_name
         r_more = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
-                           slfidfcn + founder_dead + muem_fndr_name, dt_pmyear)
+                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion, dt_pmyear)
 
         
 

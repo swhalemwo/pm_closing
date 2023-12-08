@@ -73,29 +73,30 @@ gc_vvs <- function() {
     ## group variables thematically, add also labels
 
     l_vrbl_lbls <- list( # variable labels
-        gender = "Founder Gender",
-        founder_dead = "Founder died",
-        slfidfcn = "Self- Identification",
-        muem_fndr_name = "Founder name in Museum name",
-        mow = "MOW inclusion",
-        pm_dens = "PM density",
-        "I(pm_dens^2)" = "PM density^2",
-        west = "Europe and North America",
-        reg6 = "Region",
-        GLOBAL = "Global") # from cox.zph
+        gender          = "Founder Gender",
+        founder_dead    = "Founder died",
+        slfidfcn        = "Self- Identification",
+        muem_fndr_name  = "Founder name in Museum name",
+        mow             = "MOW inclusion",
+        pm_dens         = "PM density",
+        "I(pm_dens^2)"  = "PM density^2",
+        west            = "Europe and North America",
+        reg6            = "Region",
+        an_inclusion    = "ArtNews Ranking inclusion",
+        GLOBAL          = "Global") # from cox.zph
     
-    l_vrblgrps <- list(# variable groups
-        founder = .c(gender, founder_dead),
-        museum = .c(slfidfcn, muem_fndr_name, mow),
-        envir = .c(pm_dens, "I(pm_dens^2)", west, reg6),
-        misc = .c(GLOBAL)
-    )
+     l_vrblgrps <- list(# variable groups
+         founder  = .c(gender, founder_dead),
+         museum   = .c(slfidfcn, muem_fndr_name, mow, an_inclusion),
+         envir    = .c(pm_dens, "I(pm_dens^2)", west, reg6),
+         misc     = .c(GLOBAL)
+     )
 
     l_vrblgrp_lbls <- list(# variable group labels
         founder = "Founder",
-        museum = "Museum",
-        envir = "Environment",
-        misc = "Miscellaneous")
+        museum  = "Museum",
+        envir   = "Environment",
+        misc    = "Miscellaneous")
 
     
     dt_vrbl_lbls = data.table(vrbl = names(l_vrbl_lbls), vrbl_lbl = unlist(l_vrbl_lbls)) %>%
@@ -117,13 +118,13 @@ gc_vvs <- function() {
 
     ## specify whether variable is time-varying or not
     vrbls_tiv <- .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6)
-    vrbls_tv <- .c(pm_dens, "I(pm_dens^2)",  founder_dead)
+    vrbls_tv <- .c(pm_dens, "I(pm_dens^2)",  founder_dead, an_inclusion)
 
     ## specify variable type: binary, numeric, categorical
     l_vrbltypes <- list(        
         bin = .c(founder_dead, muem_fndr_name, mow, west),
         num = .c(pm_dens, "I(pm_dens^2)"),
-        cat = .c(gender, slfidfcn, reg6))
+        cat = .c(gender, slfidfcn, reg6, an_inclusion))
 
     dt_vrbltypes <- imap(l_vrbltypes, ~data.table(vrbl = .x, vrbltype = .y)) %>% rbindlist
 
@@ -138,19 +139,23 @@ gc_vvs <- function() {
     ## make all the terms
 
     l_ctgterm_lbls <- list(# labels of terms of categorical variables
-        list(vrbl = "gender",   term = "genderF",            term_lbl = "Gender - Female"),
-        list(vrbl = "gender",   term = "gendercouple",       term_lbl = "Gender - Couple"),
-        list(vrbl = "gender",   term = "genderM",            term_lbl = "Gender - Male"),        
+        list(vrbl = "gender", term = "genderF",      term_lbl = "Gender - Female"),
+        list(vrbl = "gender", term = "gendercouple", term_lbl = "Gender - Couple"),
+        list(vrbl = "gender", term = "genderM",      term_lbl = "Gender - Male"),        
         list(vrbl = "slfidfcn", term = "slfidfcnmuseum",     term_lbl = "Self-Identification - Museum"),
         list(vrbl = "slfidfcn", term = "slfidfcnfoundation", term_lbl = "Self-Identification - Foundation"),
         list(vrbl = "slfidfcn", term = "slfidfcncollection", term_lbl = "Self-Identification - Collection"),
         list(vrbl = "slfidfcn", term = "slfidfcnother",      term_lbl = "Self-Identification - Other"),
-        list(vrbl = "reg6",     term = "reg6AF",             term_lbl = "Region - Africa"),
-        list(vrbl = "reg6",     term = "reg6AS",             term_lbl = "Region - Asia"),
-        list(vrbl = "reg6",     term = "reg6EU",             term_lbl = "Region - Europe"),
-        list(vrbl = "reg6",     term = "reg6LA",             term_lbl = "Region - Latin America"),
-        list(vrbl = "reg6",     term = "reg6NALUL",          term_lbl = "Region - North America"),
-        list(vrbl = "reg6",     term = "reg6OC",             term_lbl = "Region - Oceania")
+        list(vrbl = "reg6", term = "reg6AF",    term_lbl = "Region - Africa"),
+        list(vrbl = "reg6", term = "reg6AS",    term_lbl = "Region - Asia"),
+        list(vrbl = "reg6", term = "reg6EU",    term_lbl = "Region - Europe"),
+        list(vrbl = "reg6", term = "reg6LA",    term_lbl = "Region - Latin America"),
+        list(vrbl = "reg6", term = "reg6NALUL", term_lbl = "Region - North America"),
+        list(vrbl = "reg6", term = "reg6OC",    term_lbl = "Region - Oceania"),
+        list(vrbl = "an_inclusion", term = "an_inclusionincluded",     term_lbl = "AN Ranking - Included"),
+        list(vrbl = "an_inclusion", term = "an_inclusionnot_included", term_lbl = "AN Ranking - Not Included"),
+        list(vrbl = "an_inclusion", term = "an_inclusiondropped",      term_lbl = "AN Ranking - Dropped")
+        
         )
 
     dt_ctgterm_lbls <- rbindlist(l_ctgterm_lbls) %>%
@@ -272,7 +277,7 @@ gc_pmdb_vrblgrps <- function(dt_pmdb) {
         sm = .c(insta_handle, insta_flwrs, insta_posts, fb_flwrs, fb_likes, google_rating, google_nbrrvws,
                 trpadvsr_rating, trpadvsr_nbrrvws, twitter_flwrs, insta_bluetick, youtube_flwrs),
         founder = .c(gender, birthyear, deathyear, founder_gvrnc, an_nyears, an_lyear, an_fyear, founder_wealth,
-                     nationality, industry, founder_name, founder_weal_ustd),
+                     nationality, industry, founder_name, founder_weal_ustd, founder_id),
         clctn = .c(clctn_gnr_fcs, realism, clctn_modctmp, clctn_reg_fcs, avbl_clctnhldngs,
                    clctn_med_fcs, clctn_size,
                    clctn_med_fcs_nms, clctn_cry_fcs),
