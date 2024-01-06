@@ -19,8 +19,8 @@ wd_nbrs(dt_nbrs)
 #+RESULTS:
 :results:
 # meanhaz
-#+MACRO: meanhaz_upto_20 0.90%
-#+MACRO: meanhaz_upto_30 0.92%
+#+MACRO: meanhaz_upto_20 0.89%
+#+MACRO: meanhaz_upto_30 0.91%
 #+MACRO: meanhaz_upto_40 0.78%
 #+MACRO: meanhaz_upto_100 0.79%
 
