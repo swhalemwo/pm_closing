@@ -55,7 +55,7 @@ wd_nbrs(dt_nbrs)
 :end:
 
 
-* Private museum closures
+* Private museum closures: this is the way
 
 ** Abstract: TODO
 
