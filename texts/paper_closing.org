@@ -214,7 +214,7 @@ Reputation has been argued to enhance organizational survival [[parencite:&Rao_1
 #
 However, reputation effects could also be a spurious effect of organizational capabilities as more competent organizations are more able to both aquire reputation through certification contests and survive in long run parencite:&Goldfarb_Zavyalova_Pillai_2018_Rao.
 #
-Recognition might be measured by inclusion in the Artnews top 200 collector ranking.
+Reputation might be measured by inclusion in the Artnews top 200 collector ranking.
 
 #+latex: \bigbreak
 #+latex: \noindent
