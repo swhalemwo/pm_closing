@@ -55,21 +55,41 @@ wd_nbrs(dt_nbrs)
 :end:
 
 
-* Private museum closures: this is the way
+* The closure of private museums: Legitimacy, status, density
 
-** Abstract: TODO
 
 ** Introduction
 
-In recent years, private, collector-run museums have seen an unprecedented proliferation.
+In recent years, private collector-run museums have seen an unprecedented proliferation.
 #
-These museums, run by individual collectors, constitute an addition to established organizational forms of art provision such as museums run/financed by the state or foundations and associations.
+These museums, run by individual collectors, constitute an addition to established organizational forms of art provision such as museums operated and financed by the state or foundations and associations.
 #
-Despite their occasionally spectacular/sensationalist press coverage (TODO:ref), these institutions and the motivations of their founders have remained remarkably intransparent.
+While the emergence of this organizational form has attracted attention (cf. [[cite:&Kolbe_etal_2022_privatemuseum]] for a literature review), the process of closure has received considerably less attention.
+#
+In this paper, I investigate
+
+argue that studying closures does not only provide insights into private museums, but into more general processes of organizational identity, legitimation and reputation. 
+
+
+
+In particular concerning identity, I find that museums which are recognized by an international museum database are less likely to close than those which are not.
+#
+With regards to legitimation, results indicate that that museums with more ambiguous names are more likely to close.
+#
+Finally, a reputation effect is indicated by the fact that museums whose founders are dropped from a collector ranking are more likely to close than museums whose founders are included. 
+
+
+** introduction
+
+
+
+
+** Contributions
+- Intransparent founder motivations
+
+Despite their occasionally spectacular/sensationalist press coverage, these institutions and the motivations of their founders have remained remarkably intransparent.
 #
 Financed in large parts by their founders' private wealth, few reporting requirements exists; and while some founders highlight their charitable and distintersted intentions in media coverage, such statements intended for a public audience might not necessarily accurately reflect underlying founder motivations.
-
-
 
 This study (attempts to) elucidate the hard-to-observe collector motivations by studying one of the most decisive actions that their founder can take: the decision to close the museum.
 #
@@ -78,7 +98,7 @@ Besides investigating the longevity of members of this new organizational form, 
 In other words, what can the factors leading to the closure of private museums tell us about the internal processes and dependence relationships of these institutions, as well as about the motivations of their founders?
 
 
-
+- comparison to other forms (more descriptively)
 
 
 # interrelated question of sustainability/longevity and collector decision making
@@ -94,36 +114,48 @@ Private museums:
 - building of its own, limited public/corporate funding, has to be visitable -> requires substantial resources
 
 
-** Theory
+** Theoretical framework
 
-TODO: the theory section (including the hypotheses) is mostly copied from an earlier literature review on organizational closure, and while there are some references to how it could relate to private museums, it isn't integrated with the current focus on collector decision making and private museum sustainability. 
+ 
+*** Legitimacy and the survival prospects of non-profit organizations
+# provide legitimacy
 
-*** Size
-
-Larger NPOs are generally found to have lower mortality rates [[parencite:&Hager_1999_demise;&Duckles_Hager_Galaskiewicz_2005_close]], with size being measured through indicators such as assets [[parencite:&Lu_Shon_Zhang_2019_dissolution]], number of employees parencite:&Bielefeld_1994_survival and volunteers [[parencite:&Fernandez_2007_dissolution]], or revenues parencite:&Searing_2020_zombies.
+Legitimacy is necessary for being understood, tolerated and/or supported by other the organizations in the environemnt; to the extent that this influences resource acquisition it could influence survival prospects.
 #
-Smaller organiations are argued to face greater difficulty in collecting resources and recruiting staff as well as relatively higher costs for administration and regulation [[parencite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]], while being less able to diversify or benefit from economies of scale [[parencite:&Hager_1999_demise]]. 
+While [[textcite:&Bielefeld_1994_survival]] finds that NPOs who pursue less legitimation strategies (obtaining endorsements, lobbying or contributing to local causes) are more likely to close, other studies find limited impact of legitimacy on survival, both when measured via density parencite:&Bogaert_etal_2014_ecological or from archival sources and interviews [[parencite:&Fernandez_2007_dissolution]].
 #
-Larger organizations are also argued to be able to waste some resources during normal times which can be utilized effectively during situations of crisis without having to scale back services (which generate revenue) [[parencite:&Hager_2001_vulnerability]] and hence avoid downsizing, which can lead to dissolution [[parencite:&Duckles_Hager_Galaskiewicz_2005_close;&Bielefeld_1994_survival]]. 
+In the context of private museums, decline of legitimacy/status could lead to lower visitor numbers, less discounts from art dealers, less government grants or lower chances on collaborations with other museums or corporations, resulting in lower revenues and higher acquisition costs.
+
+
+Legitimacy might be obtained by isomorphism, i.e. adopting features associated with blueprints [[parencite:&diMaggio_1983_iron]].
+#
+Understandability [[parencite:&Glynn_Abzug_2002_names]] might thus be limited if an organization is atypical [[parencite:&Rosch_1975_family]], i.e. displays an unusual combination of features.
+#
+In the case of private museums, such cases might be combinations of features from house museums (e.g. accessibility only by appointment) with full-service museums (e.g. extensive activities). 
+#
+Next to "hard" organizational features, adherence to naming conventions has been found to enhance legitimacy [[parencite:&Glynn_Abzug_2002_names]]; organizations that adhere to field norms about name length, name ambiguity (usage of artificial names) and name domain specificity (mentioning industry) were judged more legitimate. 
+# 
+However, the category of museums could be relatively flexible (for example, it is generally not subject to state regulation), which might result in a relatively high tolerance of diversity as "anything goes" and hence limited "devaluation" of non-conforming, atypical members [[parencite:&Bogaert_etal_2014_ecological]]. 
 
 #+latex: \bigbreak
 #+latex: \noindent
-*H_size*: Larger private museums are less likely to close than smaller ones.
+# *H_mow*: Private museums included in the MOW database have higher survival chances.
+*Hypothesis 1*: Private museums which are considered more legitimate are less likely to close. 
 
 
+*** reputation
 
-
-*** Resource diversification
-
-A substantial amount of literature focuses on resources as resource depletion is a leading cause of (nonprofit) organizational demise. 
+Reputation has been argued to enhance organizational survival [[parencite:&Rao_1994_reputation]].
 #
-Diversification (i.e. a multitude of funding sources) is found to reduce mortality [[parencite:&Fernandez_2007_dissolution;&Bielefeld_1994_survival;&Hager_2001_vulnerability;&Lu_Shon_Zhang_2019_dissolution]]; similarly volatility (rapid changes in revenues) is found to increase mortality [[parencite:&Mayer_2022_slimmer]]. 
+However, reputation effects could also be a spurious effect of organizational capabilities as more competent organizations are more able to both aquire reputation through certification contests and survive in long run parencite:&Goldfarb_Zavyalova_Pillai_2018_Rao.
 #
-While private museums are likely already generally leaning toward higher concentration than NPOs generally due to high reliance on the financial contributions of the founder-collector, there might still be variation in the degree of revenue concentration as museums might vary in the proportion of revenues received from ticket prices, restaurants, cafes, museum shops or other activities. 
+Recognition might be measured by inclusion in the Artnews top 200 collector ranking.
 
 #+latex: \bigbreak
 #+latex: \noindent
-*H_diversification*: Private museums with more diversified revenue channels are less likely to close than more diversified ones.
+*H_artnews*: Private museums of collectors included in the Artnews top 200 collector ranking are less likely to close. 
+
+
 
 *** Age
 
@@ -176,49 +208,7 @@ Nevertheless as previous research has relied primarily on descriptive statistics
 *H_death*: A private museum is more likely to close after the death of the founder.
 
 
-*** legitimacy/understandability 
-# provide legitimacy
 
-Legitimacy is necessary for being understood/tolerated/supported by other the organizations in the environemnt; to the extent that this influences resource acquisition it could influence survival prospects.
-#
-While [[textcite:&Bielefeld_1994_survival]] finds that NPOs who pursue less legitimation strategies (obtaining endorsements, lobbying or contributing to local causes) are more likely to close, other studies find limited impact of legitimacy on survival, both when measured via density parencite:&Bogaert_etal_2014_ecological or from archival sources and interviews [[parencite:&Fernandez_2007_dissolution]].
-#
-In the context of private museums, decline of legitimacy/status could lead to lower visitor numbers, less discounts from art dealers, less government grants (?) or lower chances on collaborations with other museums or corporations, resulting in lower revenues and higher acquisition costs.
-
-
-Legitimacy might be obtained by isomorphism, i.e. adopting features associated with blueprints [[parencite:&diMaggio_1983_iron]].
-#
-Understandability/sense-making [[parencite:&Glynn_Abzug_2002_names]] might thus be limited if an organization is atypical [[parencite:&Rosch_1975_family]], i.e. displays an unusual combination of features.
-#
-In the case of private museums, such cases might be combinations of features from house museums (e.g. accessibility only by appointment) with full-service museums (e.g. extensive activities). 
-#
-Next to "hard" organizational features, adherence to naming conventions has been found to enhance legitimacy [[parencite:&Glynn_Abzug_2002_names]]; organizations that adhere to field norms about name length, name ambiguity (usage of artificial names) and name domain specificity (mentioning industry) were judged more legitimate. 
-# 
-However, the category of museums could be relatively flexible (for example, it is generally not subject to state regulation), which might result in a relatively high tolerance of diversity as "anything goes" and hence limited "devaluation" of non-conforming/atypical members. 
-
-#+latex: \bigbreak
-#+latex: \noindent
-*H_typicality*: Atypical private museums have higher mortality rates.
-
-Legitimacy might also be measured by inclusion in industry registers, such as the Museum of the World (MOW) database [[parencite:&deGruyter_2021_MOW]].
-
-#+latex: \bigbreak
-#+latex: \noindent
-*H_mow*: Private museums included in the MOW database have higher survival chances.
-
-
-
-*** reputation
-
-Reputation has been argued to enhance organizational survival [[parencite:&Rao_1994_reputation]].
-#
-However, reputation effects could also be a spurious effect of organizational capabilities as more competent organizations are more able to both aquire reputation through certification contests and survive in long run parencite:&Goldfarb_Zavyalova_Pillai_2018_Rao.
-#
-Recognition might be measured by inclusion in the Artnews top 200 collector ranking.
-
-#+latex: \bigbreak
-#+latex: \noindent
-*H_artnews*: Private museums of collectors included in the Artnews top 200 collector ranking are less likely to close. 
 
 
 ** Data and Methods
@@ -231,6 +221,17 @@ The unit of analysis is country year.
 The main dependenent variable is an indicator of museum closure, which takes for the museums which close in the year of their closure, and zero otherwise.
 #
 Typically for survival data, museums that do not close during the observation period are right-censored, i.e. for such museums the dependent variable is zero for all years.
+
+*** Legitimacy
+
+
+
+Legitimacy is also measured by inclusion in industry registers, such as the Museum of the World (MOW) database [[parencite:&deGruyter_2021_MOW]].
+
+
+
+*** Reputation
+
 
 *** Predictors
 TODO: the current do not yet measure all the concepts discussed in the theory, and some are not justified yet on theoretical grouns (founder name in museum name, gender, density).
