@@ -1,3 +1,6 @@
+:PROPERTIES:
+:ID:       2ce043a2-d70a-4636-be09-963d12d2c57a
+:END:
 #+PROPERTY: header-args:R :session *R:closing* 
 #+PROPERTY: header-args:R+ :output-dir /home/johannes/Dropbox/phd/papers/closing/notes/
 

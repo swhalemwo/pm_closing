@@ -33,16 +33,17 @@ library(Hmisc, include.only = "latexTranslate") # latexTranslate
 
 ## *** config functions
 
-gc_dirs <- function(dir_proj) {
-    list(
-        proj = dir_proj,
-        figs = paste0(dir_proj, "figures/"),
-        tbls = paste0(dir_proj, "tables/"),
-        data = paste0(dir_proj, "data/"),
-        code = paste0(dir_proj, "scripts/"),
-        misc = paste0(dir_proj, "misc/")
-    )
-}
+## moved to jtls
+## gc_dirs <- function(dir_proj) {
+##     list(
+##         proj = dir_proj,
+##         figs = paste0(dir_proj, "figures/"),
+##         tbls = paste0(dir_proj, "tables/"),
+##         data = paste0(dir_proj, "data/"),
+##         code = paste0(dir_proj, "scripts/"),
+##         misc = paste0(dir_proj, "misc/")
+##     )
+## }
 
 gc_vvs <- function() {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
@@ -862,6 +863,13 @@ check_if_file_is_open(paste0(c_dirs$tbls, "t_testtable.pdf"))
 
 
 screenreg(l_mdls$r_more)
+## ejj <- test_package("pmdata")
+
+## test_all("~/Dropbox/phd/pmdata")
+
+## build_install_test("~/Dropbox/phd/pmdata/", at_home = F)
+
+## build_install_test("~/home/johannes/R/x86_64-pc-linux-gnu-library/4.3/pmdata/")
 
 
 
