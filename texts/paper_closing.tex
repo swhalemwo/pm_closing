@@ -1,4 +1,4 @@
-% Created 2024-01-06 za 14:02
+% Created 2024-01-06 za 15:19
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 
@@ -184,7 +184,7 @@ Financed in large parts by their founders' private wealth, few reporting require
 
 
 
-This study (attempts to) elucidate the hard-to-observe collector motivations by studying the one of the most decisive actions that their founder can take: the decision to close the museum.
+This study (attempts to) elucidate the hard-to-observe collector motivations by studying one of the most decisive actions that their founder can take: the decision to close the museum.
 Besides investigating the longevity of members of this new organizational form, this study gives insights into the motivations and decision making of founders.
 In other words, what can the factors leading to the closure of private museums tell us about the internal processes and dependence relationships of these institutions, as well as about the motivations of their founders?
 
@@ -224,7 +224,7 @@ Larger organizations are also argued to be able to waste some resources during n
 
 
 A substantial amount of literature focuses on resources as resource depletion is a leading cause of (nonprofit) organizational demise. 
-Diversification and (i.e. a multitude of funding sources) is found to reduce mortality \parencite{Fernandez_2007_dissolution,Bielefeld_1994_survival,Hager_2001_vulnerability,Lu_Shon_Zhang_2019_dissolution}; similarly volatility (rapid changes in revenues) is found to increase mortality \parencite{Mayer_2022_slimmer}. 
+Diversification (i.e. a multitude of funding sources) is found to reduce mortality \parencite{Fernandez_2007_dissolution,Bielefeld_1994_survival,Hager_2001_vulnerability,Lu_Shon_Zhang_2019_dissolution}; similarly volatility (rapid changes in revenues) is found to increase mortality \parencite{Mayer_2022_slimmer}. 
 While private museums are likely already generally leaning toward higher concentration than NPOs generally due to high reliance on the financial contributions of the founder-collector, there might still be variation in the degree of revenue concentration as museums might vary in the proportion of revenues received from ticket prices, restaurants, cafes, museum shops or other activities. 
 
 \bigbreak
@@ -238,8 +238,8 @@ While private museums are likely already generally leaning toward higher concent
 The age of an organization is considered in different ways to be related to closing.
 What started with liability of newness \parencite{Stinchcombe_1965_structure}, which posited that organizational mortality decreases over time due to acquisition of capabilities and connections, has lead to a number of extensions \parencite{Carroll_Khessina_2019_demography,Hannan_1998_mortality}:
 Liability of adolescence argues that shortly after foundings organizations can still draw on endowments, the expiration of which leads to a peak of mortality some time after opening.
-While according this view mortality still decreases after the peak as the organization becomes more established, other perspectives argue also for a positive relationship between age and mortality:
-According to "liability of obsolescence" the environment changes faster than organizations which are seen as relatively constrained by inertia, which therefore leads to declining fitness and survival chances.
+While according to this view mortality still decreases after the peak as the organization becomes more established, other perspectives argue also for a positive relationship between age and mortality:
+According to the liability of obsolescence paradigm the environment changes faster than organizations which are seen as relatively constrained by inertia, which therefore leads to declining fitness and survival chances.
 Similar, according to "liability of senescence" capabilities/routines/coalitions can constrain the actions of organizations.
 Given such conflicting predictions, \textcite{Carroll_Khessina_2019_demography} propose to model age dependence with piece-wise constant hazard models (rather than parametric models) to estimate age-specific effects which can, but do not have to, indicate a relationship between age and mortality.
 
@@ -253,12 +253,12 @@ On the other hand, organizational transformation can be necessary to adapt to a 
 
 
 
-The death of the founder can potentially constitute a substantial transformation as authority has to be reconfigured.
+In the case of private museums, the death of the founder might constitute a substantial transformation as authority has to be reconfigured.
 Abandonment by insiders (such as divorce of directors) has been argued to contribute to NPO closure \parencite{Duckles_Hager_Galaskiewicz_2005_close}.\footnote{Conflict is similarly argued to contribute to closure but is not testable with the current data.}
-Even if plans have been made for a handover, the new leaders might not share quite the same commitment to art as the original founder, potentially decreasing museum sustainability. 
+Even if plans have been made for a handover, the new leaders might not share the same commitment to art as the original founder, potentially decreasing museum sustainability. 
 In the case of private museums, founder death has been speculated to pose a challenge to their sustainability as "seldom do heirs share a similar passion or wish to take on the financial burden of maintaining private museum indefinitely" \parencite[p.234]{Walker_2019_collector}.
 However, existing research has not found a straightforward effect of founder death on museum closure \parencite{Velthuis_Gera_forthcoming_fragility,Velthuis_etal_2023_boom}.
-Nevertheless as previous research has relied primarily on descriptive statistics, investigating founder death in a multivariate survival model allows to investigate the effect of founder death with more precision.
+Nevertheless as previous research has relied primarily on descriptive statistics, investigating founder death in a multivariate survival model allows to investigate the effect of founder death with higher precision.
 \bigbreak
 \noindent
 \textbf{H\textsubscript{death}}: A private museum is more likely to close after the death of the founder.
@@ -307,7 +307,7 @@ Recognition might be measured by inclusion in the Artnews top 200 collector rank
 \subsubsection*{Dependent Variable}
 
 A newly constructed database (see \textcite{Velthuis_etal_2023_boom} for details) is used to measure museum survival.
-The unit of analysis is the country year.
+The unit of analysis is country year.
 The main dependenent variable is an indicator of museum closure, which takes for the museums which close in the year of their closure, and zero otherwise.
 Typically for survival data, museums that do not close during the observation period are right-censored, i.e. for such museums the dependent variable is zero for all years.
 
@@ -320,11 +320,9 @@ TODO: the current do not yet measure all the concepts discussed in the theory, a
 On the level of the founder, gender constitutes a time-invariant variable; with possible values being male, female and couple.
 Founder death is constructed as a time-varying covariate, and is set to 1 for museum-years after the death of the founder. 
 
-On the museum level, selfidentification measures whether a museum's name includes the term "Museum", "Foundation", "Collection", or other (such as "Villa", "Institute", "Center" or "Gallery", which are grouped together as they are less frequent).
+On the museum level, self-identification measures whether a the name of a museum includes the term "Museum", "Foundation", "Collection", or other (such as "Villa", "Institute", "Center" or "Gallery", which are grouped together as they are less frequent).
 Further analyzing the name, a binary indicator also measures whether the name of the founder is included.
 Finally, a binary predictor measures whether the museum is included in the "Museums of the World" database \parencite{deGruyter_2021_MOW}, a database containig 55k museums.
-
-
 On the level of the environment, the density (number) of private museum per country is included both in linear and squared form.
 Organizational theory \parencite{hannan89_organ} predicts a U-shaped relationship between density and mortality: While at low levels, increases in the number of organizations are argued to primarily increase legitimacy/familiarity and lower exit rates, increases at higher numbers increase the competition over resources and thereby raise mortality rates.
 
@@ -370,11 +368,11 @@ So far, tests show a violation of the proportionality assumption only for the va
 \subsubsection*{Summary statistics}
 
 
-In total, 479 private museums are included in the database, 53 of them have closed
+In total, 479 private museums are included in the database, 53 of them have closed.
 7282 museum-years are observed.
 
 \noindent
-TODO: summary statistics for all the variables
+
 
 % latex table generated in R 4.3.2 by xtable 1.8-4 package
 % Fri Dec  8 22:31:01 2023
