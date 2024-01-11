@@ -56,13 +56,13 @@ wd_nbrs(dt_nbrs)
 
 
 * Identity and the closure of private art museums
-Johannes Aengenheyster
+# Johannes Aengenheyster
 
-#+latex: \noindent
-Phd student at University of Amsterdam
+# #+latex: \noindent
+# Phd student at University of Amsterdam
 
-#+latex: \noindent
-j.aengenheyster@uva.nl
+# #+latex: \noindent
+# j.aengenheyster@uva.nl
 
 
 ** Introduction
@@ -168,9 +168,9 @@ Given that founders are the very reason behind the existence of these organizati
 *Hypothesis 1*: Private museums with identities more understandable, legitimate and favorable are less likely to close. 
 
 
-*** Other predictors of organizational survival :noexport:
+*** Other predictors of organizational survival
 
-**** Age :noexport:
+**** Age 
 
 
 The age of an organization is considered in different ways to be related to closing.
@@ -189,7 +189,7 @@ Given such conflicting predictions, [[textcite:&Carroll_Khessina_2019_demography
 
 
 
-**** Organizational transformation :noexport:
+**** Organizational transformation 
 #
 [[textcite:&Carroll_Khessina_2019_demography]] argue that transformation of core features of organizations such as changes in technology or authority can have divergent consequences. 
 #
@@ -218,7 +218,7 @@ Nevertheless as previous research has relied primarily on descriptive statistics
 
 #+latex: \bigbreak
 #+latex: \noindent
-*H_death*: A private museum is more likely to close after the death of the founder.
+# *H_death*: A private museum is more likely to close after the death of the founder.
 
 
 
@@ -305,14 +305,14 @@ On the level of the environment, therefore the density (number) of private museu
 *** Analytical framework
 
 
-# First, we investigate the relationship between age and closing descriptively using hazard rates and the Kaplan-Meier survival function.
-# #
-# This non-parametric method estimates the hazard rate as the conditional probability of exiting at time t_i given being alive as $h(t_i) = \frac{d_i}{n_i}$, (with $n_i$ as the number of units at risk at time $t_i$ and $d_i$ as the number of exits at time $t_i$), and the survival function as the product of these conditional probabilities as $S(t) = \prod_{t_i \geq t} \left(1-h(t_i) \right)$.
+First, we investigate the relationship between age and closing descriptively using hazard rates and the Kaplan-Meier survival function.
+#
+This non-parametric method estimates the hazard rate as the conditional probability of exiting at time t_i given being alive as $h(t_i) = \frac{d_i}{n_i}$, (with $n_i$ as the number of units at risk at time $t_i$ and $d_i$ as the number of exits at time $t_i$), and the survival function as the product of these conditional probabilities as $S(t) = \prod_{t_i \geq t} \left(1-h(t_i) \right)$.
 
 
 
 # In a second step,
-We use Cox proportional hazard models which estimate the relationship between covariates and the hazard rate.
+Secondly, we use Cox proportional hazard models which estimate the relationship between covariates and the hazard rate.
 #
 The Cox-proportional hazard model has the form $h(t,\mathbf{x}) = h_0(t) \psi$, where $\psi = \exp(\sum_{j} \mathbf{x}_j \beta_j)$; with $h(t)$ as the hazard rate, $h_0(t)$ as the baseline hazard rate, $\mathbf{x}$ as the set of variables indexed by $j$, and $\beta$ as the coefficient vector.
 #
@@ -332,7 +332,7 @@ In total, 479 private museums are included in the database, 53 of them have clos
 #
 6903 museum-years are observed; table {{{reftbl_t_sumstats}}} shows summary statistics for all variables.
 
-*** Hazard rate and Age Dependence :noexport:
+*** Hazard rate and Age Dependence 
 
 {{{ynkplt_p_hazard}}}
 
@@ -396,11 +396,11 @@ While preliminary results indicate that private museums have dissolution rates l
 
 
 
-#+latex: \noindent
-TODO:
-- get confidence interval for hazard rate
-- see how age can be integrated into survival models (linear term doesn't work)
-- expand comparison to other studies
+# #+latex: \noindent
+# TODO:
+# - get confidence interval for hazard rate
+# - see how age can be integrated into survival models (linear term doesn't work)
+# - expand comparison to other studies
 
 
 

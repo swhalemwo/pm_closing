@@ -1,4 +1,4 @@
-% Created 2024-01-09 di 19:22
+% Created 2024-01-11 do 13:48
 % Intended LaTeX compiler: pdflatex
 \documentclass[12pt]{article}
 
@@ -153,13 +153,6 @@
 
 \section*{Identity and the closure of private art museums}
 
-Johannes Aengenheyster
-
-\noindent
-Phd student at University of Amsterdam
-
-\noindent
-j.aengenheyster@uva.nl
 
 
 \subsection*{Introduction}
@@ -213,6 +206,41 @@ Given that founders are the very reason behind the existence of these organizati
 \bigbreak
 \noindent
 \textbf{Hypothesis 1}: Private museums with identities more understandable, legitimate and favorable are less likely to close. 
+
+
+\subsubsection*{Other predictors of organizational survival}
+
+
+\paragraph*{Age}
+
+
+
+The age of an organization is considered in different ways to be related to closing.
+What started with liability of newness \parencite{Stinchcombe_1965_structure}, which posited that organizational mortality decreases over time due to acquisition of capabilities and connections, has lead to a number of extensions \parencite{Carroll_Khessina_2019_demography,Hannan_1998_mortality}:
+Liability of adolescence argues that shortly after foundings organizations can still draw on endowments, the expiration of which leads to a peak of mortality some time after opening.
+While according to this view mortality still decreases after the peak as the organization becomes more established, other perspectives argue also for a positive relationship between age and mortality:
+According to the liability of obsolescence paradigm the environment changes faster than organizations which are seen as relatively constrained by inertia, which therefore leads to declining fitness and survival chances.
+Similar, according to "liability of senescence" capabilities/routines/coalitions can constrain the actions of organizations.
+Given such conflicting predictions, \textcite{Carroll_Khessina_2019_demography} propose to model age dependence with piece-wise constant hazard models (rather than parametric models) to estimate age-specific effects which can, but do not have to, indicate a relationship between age and mortality.
+
+
+
+\paragraph*{Organizational transformation}
+
+\textcite{Carroll_Khessina_2019_demography} argue that transformation of core features of organizations such as changes in technology or authority can have divergent consequences. 
+On the one hand, it can disrupt internal routines as well as external customer relations by decreasing (perceived) reliability and accountability as the change upsets established perceptions, which can lead to higher mortality. 
+On the other hand, organizational transformation can be necessary to adapt to a changing environment, and hence be beneficial for survival.
+
+
+
+In the case of private museums, the death of the founder might constitute a substantial transformation as authority has to be reconfigured.
+Abandonment by insiders (such as divorce of directors) has been argued to contribute to NPO closure \parencite{Duckles_Hager_Galaskiewicz_2005_close}.\footnote{Conflict is similarly argued to contribute to closure but is not testable with the current data.}
+Even if plans have been made for a handover, the new leaders might not share the same commitment to art as the original founder, potentially decreasing museum sustainability. 
+In the case of private museums, founder death has been speculated to pose a challenge to their sustainability as "seldom do heirs share a similar passion or wish to take on the financial burden of maintaining private museum indefinitely" \parencite[p.234]{Walker_2019_collector}.
+However, existing research has not found a straightforward effect of founder death on museum closure \parencite{Velthuis_Gera_forthcoming_fragility,Velthuis_etal_2023_boom}.
+Nevertheless as previous research has relied primarily on descriptive statistics, investigating founder death in a multivariate survival model allows to investigate the effect of founder death with higher precision.
+\bigbreak
+\noindent
 
 
 
@@ -286,7 +314,12 @@ On the level of the environment, therefore the density (number) of private museu
 
 
 
-We use Cox proportional hazard models which estimate the relationship between covariates and the hazard rate.
+First, we investigate the relationship between age and closing descriptively using hazard rates and the Kaplan-Meier survival function.
+This non-parametric method estimates the hazard rate as the conditional probability of exiting at time t\textsubscript{i} given being alive as \(h(t_i) = \frac{d_i}{n_i}\), (with \(n_i\) as the number of units at risk at time \(t_i\) and \(d_i\) as the number of exits at time \(t_i\)), and the survival function as the product of these conditional probabilities as \(S(t) = \prod_{t_i \geq t} \left(1-h(t_i) \right)\).
+
+
+
+Secondly, we use Cox proportional hazard models which estimate the relationship between covariates and the hazard rate.
 The Cox-proportional hazard model has the form \(h(t,\mathbf{x}) = h_0(t) \psi\), where \(\psi = \exp(\sum_{j} \mathbf{x}_j \beta_j)\); with \(h(t)\) as the hazard rate, \(h_0(t)\) as the baseline hazard rate, \(\mathbf{x}\) as the set of variables indexed by \(j\), and \(\beta\) as the coefficient vector.
 Partial maximum likelihood allows estimation of \(\beta\) without defining the baseline hazard rate, which is therefore not constrained to a parametric form. 
 Coefficients are interpeted as log hazard ratios, i.e. as multipliers of the baseline hazard rate. 
@@ -340,6 +373,67 @@ Coefficients are interpeted as log hazard ratios, i.e. as multipliers of the bas
 
 In total, 479 private museums are included in the database, 53 of them have closed.
 6903 museum-years are observed; table \ref{tbl:t_sumstats} shows summary statistics for all variables.
+
+\subsubsection*{Hazard rate and Age Dependence}
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=16cm]{../figures/p_hazard.pdf}
+\caption{\label{fig:p_hazard}Private Museum hazard function}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=14cm]{../figures/p_surv.pdf}
+\caption{\label{fig:p_surv}Private Museum Survival probability}
+\end{figure}
+
+
+Figure \ref{fig:p_hazard} shows the hazard rate over time, figure \ref{fig:p_surv} the corresponding survival probability.
+The hazard rate doubles over the first 10 years from approximately 0.45\% to 0.9\%, at which value it approximately stays constant for the next 20 years, after which it appears to decline.
+However, the decline after thirty years is presumably less certain as very few private museums have already reached this age.
+
+
+The increase in the first years is likely due to endowments: As the establishment of a museum requires considerable resources, their founders appear to allocate enough resources to keep the risk of closure small in the first years after opening.
+Given that founders are likely aware that their endeavor is unlikely to generate a profit, they are not vulnerable to the liability of newness \parencite{Stinchcombe_1965_structure}.
+The relative stability of the hazard rate after ten years has no correspondence in classical theories on age dependence:
+While an increase in mortality as observed here is predicted by the idea of "liability of adolescence" \parencite{Carroll_Khessina_2019_demography}, this framework also predicts a decline in mortality after a peak due to becoming established.
+Furthermore, while "liability of obsolescence" and "liability of senescence" (ibid.) predict higher mortality for older organizations due to mismatch with the environment and inertia (inflexible internal routines), it seems questionable whether museums would have reached obsolescence or senescence already after ten years.
+Furthermore, the applicability of obsolescence and senescence might be limited for non-profit organizations.
+
+
+Overall the entire life span, the average hazard rate is 0.79\%, which allows comparison to other studies of NPO closure.
+While after very cursory search of the literature I did not find a systematic literature review or meta-analysis, a number of individual studies had investigated similar populations (see table \ref{tbl:litreview}).
+
+\begin{table}[htbp]
+\caption{\label{tbl:litreview}Hazard rates in studies of museums and other non-profits}
+\centering
+\begin{tabular}{llll}
+\hline
+study & population & avg. hazard rate & data source\\
+\hline
+\cite{Hager_2001_vulnerability} & Art Museums & 2.4\% & IRS\\
+\cite{Gordon_etal_2013_insolvency} & Museums & 0.7\% & IRS\\
+\hline
+\cite{Hager_2001_vulnerability} & all Art NPOs & 2.8\% & IRS\\
+\cite{Gordon_etal_2013_insolvency} & all Art NPOs & 2.08\% & IRS\\
+\cite{Gordon_etal_2013_insolvency} & all NPOs & 1.58\% & IRS\\
+\cite{Hager_Galaskiewicz_Larson_2007_liability} & NPOs & 1.25\% & own data\\
+\cite{Clifford_2018_reinforcing} & Charities & 2\%-5\% & Reg. of Charities (UK)\\
+\cite{Mayer_2022_slimmer} & NPOs & 0.17\% & IRS\\
+\hline
+\end{tabular}
+\end{table}
+
+\textcite{Hager_2001_vulnerability} and \textcite{Gordon_etal_2013_insolvency} both study NPOs more generally, but report survival estimates by organizational form.
+At the moment it is not clear which factors account for their hazard rates to differ substantially, but it might be due to selection criteria.
+Both these studies also report substantial variation in hazard rates between organizational forms.
+While preliminary results indicate that private museums have dissolution rates lower or similar to museums and non-profit organizations generally, more research is needed to establish the comparability of these hazard rates.
+
+
+
+
 
 \subsubsection*{Regression Results}
 
