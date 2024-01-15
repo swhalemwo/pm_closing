@@ -88,8 +88,9 @@ Both these findings possibly indicate that adherence to museum standards enhance
 #
 Finally, founder reputation, in particular its loss, is found to be substantial as museums whose founders are dropped from a collector ranking are more likely to close than museums whose founders both are and are not included.
 
-
-
+#+latex: \bigbreak
+#+latex: \noindent
+*keywords*: museum, closure, identity
 
 ** Contributions :noexport:
 - Intransparent founder motivations
