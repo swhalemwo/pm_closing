@@ -1,4 +1,4 @@
-#+latex_class: article_usual2
+#+latex_class: article_egos
 # erases make title
 # #+BIND: org-export-latex-title-command ""
 
@@ -55,21 +55,49 @@ wd_nbrs(dt_nbrs)
 :end:
 
 
-* Private museum closures
+* Identity and the closure of private art museums
+# Johannes Aengenheyster
 
-** Abstract: TODO
+# #+latex: \noindent
+# Phd student at University of Amsterdam
+
+# #+latex: \noindent
+# j.aengenheyster@uva.nl
+
 
 ** Introduction
 
-In recent years, private, collector-run museums have seen an unprecedented proliferation.
+In recent years, private collector-run museums have seen an unprecedented proliferation, with hundreds of organizations founded since the beginning of the millenium [[parencite:&Velthuis_etal_2023_boom;&LarrysList_2015_report]].
 #
-These museums, run by individual collectors, constitute an addition to established organizational forms of art provision such as museums run/financed by the state or foundations and associations.
+These museums, run by individual collectors, constitute an addition to established organizational forms of art provision such as museums operated and financed by the state, foundations or associations.
 #
-Despite their occasionally spectacular/sensationalist press coverage (TODO:ref), these institutions and the motivations of their founders have remained remarkably intransparent.
+While the emergence of this organizational form has attracted attention (cf. [[cite:&Kolbe_etal_2022_privatemuseum]] for a literature review), the process of closure has received considerably less attention.
 #
-Financed in large parts by their founders' private wealth, few reporting requirements exists; and while some founders highlight their charitable and distintersted intentions in media coverage, such statements intended for a public audience might not necessarily accurately reflect underlying founder motivations.
+In this paper, I address this gap by investigating the closure event of members of this new organizational form.
+#
+This exercise does not only provide insights into private museums in particular, but also more generally into processes of organizational identity, especially regarding legitimation and reputation. 
 
 
+A number of findings highlight the role of identity in the process of private museum closure. 
+# 
+First, I find that museums which are recognized by an international museum database are less likely to close than those which are not.
+#
+Secondly, the results furthermore indicate that museums with more ambiguous names are more likely to close.
+#
+Both these findings possibly indicate that adherence to museum standards enhances legitimacy, which in turn improves survival prospects.
+#
+Finally, founder reputation, in particular its loss, is found to be substantial as museums whose founders are dropped from a collector ranking are more likely to close than museums whose founders both are and are not included.
+
+#+latex: \bigbreak
+#+latex: \noindent
+*keywords*: museum, closure, identity
+
+** Contributions :noexport:
+- Intransparent founder motivations
+
+Despite their occasionally spectacular/sensationalist press coverage, these institutions and the motivations of their founders have remained remarkably intransparent.
+#
+Financed in large parts by their founders' private wealth, few reporting requirements exists; and while some founders highlight their charitable and distintersted intentions in media coverage, such statements intended for a public audience might not necessarily reflect underlying founder motivations accurately.
 
 This study (attempts to) elucidate the hard-to-observe collector motivations by studying one of the most decisive actions that their founder can take: the decision to close the museum.
 #
@@ -78,7 +106,7 @@ Besides investigating the longevity of members of this new organizational form, 
 In other words, what can the factors leading to the closure of private museums tell us about the internal processes and dependence relationships of these institutions, as well as about the motivations of their founders?
 
 
-
+- comparison to other forms (more descriptively)
 
 
 # interrelated question of sustainability/longevity and collector decision making
@@ -94,38 +122,56 @@ Private museums:
 - building of its own, limited public/corporate funding, has to be visitable -> requires substantial resources
 
 
-** Theory
 
-TODO: the theory section (including the hypotheses) is mostly copied from an earlier literature review on organizational closure, and while there are some references to how it could relate to private museums, it isn't integrated with the current focus on collector decision making and private museum sustainability. 
 
-*** Size
+** Theoretical framework
 
-Larger NPOs are generally found to have lower mortality rates [[parencite:&Hager_1999_demise;&Duckles_Hager_Galaskiewicz_2005_close]], with size being measured through indicators such as assets [[parencite:&Lu_Shon_Zhang_2019_dissolution]], number of employees parencite:&Bielefeld_1994_survival and volunteers [[parencite:&Fernandez_2007_dissolution]], or revenues parencite:&Searing_2020_zombies.
+ 
+*** Identity and the survival prospects of non-profit organizations
+# provide legitimacy
+
+An identity that is legitimate (understandable) and favorable (positive) has been shown to have a vast number of positive outcomes for organizations [[parencite:&Lange_Lee_Dai_2010_reputation]].
+# 
+As gaining the approval of different stakeholders is necessary for being understood and/or supported by other organizations in the environment, having a clearly defined and favorable identity influences resource acquisition and thereby survival prospects [[parencite:&Rao_1994_reputation]].
 #
-Smaller organiations are argued to face greater difficulty in collecting resources and recruiting staff as well as relatively higher costs for administration and regulation [[parencite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]], while being less able to diversify or benefit from economies of scale [[parencite:&Hager_1999_demise]]. 
+Even for non-profit organizations such as museums, which do not produce tangible goods (a domain where identity-related effects are present, e.g. [[cite:&Hsu_2015_granted;&Bogaert_etal_2014_ecological]]), a clear and positive identity might be helpful in a number of ways:
+# 
+In particular in the context of private museums, decline of legitimacy or reputation could lead to lower visitor numbers, less discounts from art dealers, less government grants or lower chances on collaborations with other museums or corporations, resulting in lower revenues and higher acquisition costs.
+
+
+The empirical record of the link between identity and survival for non-profit organizations is mixed: 
+# 
+For example [[textcite:&Bielefeld_1994_survival]] finds that NPOs who pursue less legitimation strategies (obtaining endorsements, lobbying or contributing to local causes) are more likely to close.
 #
-Larger organizations are also argued to be able to waste some resources during normal times which can be utilized effectively during situations of crisis without having to scale back services (which generate revenue) [[parencite:&Hager_2001_vulnerability]] and hence avoid downsizing, which can lead to dissolution [[parencite:&Duckles_Hager_Galaskiewicz_2005_close;&Bielefeld_1994_survival]]. 
+However, other studies find limited impact of legitimacy on survival, both when measured via density parencite:&Bogaert_etal_2014_ecological or from archival sources and interviews [[parencite:&Fernandez_2007_dissolution]].
+# 
+Thus, even while this study cannot conclusively answer the overall link between idenity and survival, it nevertheless contributes insights into which dimensions of organizational identity do, and which do not contribute to survival in a particular organizational population; namely that of private art museums.
+
+
+Legitimacy might be obtained by isomorphism, i.e. adopting features associated with blueprints [[parencite:&diMaggio_1983_iron]].
+#
+Understandability [[parencite:&Glynn_Abzug_2002_names]] might thus be limited if an organization is atypical [[parencite:&Rosch_1975_family]], i.e. displays an unusual combination of features.
+#
+In the case of private museums, such cases might be combinations of features from house museums (e.g. accessibility only by appointment) with full-service museums (e.g. extensive activities). 
+#
+Next to "hard" organizational features, adherence to naming conventions has been found to enhance legitimacy [[parencite:&Glynn_Abzug_2002_names]]; organizations that adhere to field norms about name length, name ambiguity (usage of artificial names) and name domain specificity (mentioning industry) were judged more legitimate. 
+# 
+However, the category of museums could be relatively flexible (for example, it is generally not subject to state regulation), which might result in a relatively high tolerance of diversity as "anything goes" and hence limited "devaluation" of non-conforming, atypical members [[parencite:&Bogaert_etal_2014_ecological]].
+
+
+Furthermore, identity of a private museum may be influenced by the identity of persons most closely affiliated with it, in particular the identity of its founders.
+#
+Given that founders are the very reason behind the existence of these organizations, and sometimes plan these as their personal legacies [[parencite:&Walker_2019_collector]], founder status gains or losses may very well reflect on the wider organization and affect its survival propspects.
+
 
 #+latex: \bigbreak
 #+latex: \noindent
-*H_size*: Larger private museums are less likely to close than smaller ones.
+*Hypothesis 1*: Private museums with identities more understandable, legitimate and favorable are less likely to close. 
 
 
+*** Other predictors of organizational survival
 
-
-*** Resource diversification
-
-A substantial amount of literature focuses on resources as resource depletion is a leading cause of (nonprofit) organizational demise. 
-#
-Diversification (i.e. a multitude of funding sources) is found to reduce mortality [[parencite:&Fernandez_2007_dissolution;&Bielefeld_1994_survival;&Hager_2001_vulnerability;&Lu_Shon_Zhang_2019_dissolution]]; similarly volatility (rapid changes in revenues) is found to increase mortality [[parencite:&Mayer_2022_slimmer]]. 
-#
-While private museums are likely already generally leaning toward higher concentration than NPOs generally due to high reliance on the financial contributions of the founder-collector, there might still be variation in the degree of revenue concentration as museums might vary in the proportion of revenues received from ticket prices, restaurants, cafes, museum shops or other activities. 
-
-#+latex: \bigbreak
-#+latex: \noindent
-*H_diversification*: Private museums with more diversified revenue channels are less likely to close than more diversified ones.
-
-*** Age
+**** Age 
 
 
 The age of an organization is considered in different ways to be related to closing.
@@ -144,7 +190,7 @@ Given such conflicting predictions, [[textcite:&Carroll_Khessina_2019_demography
 
 
 
-*** Organizational transformation
+**** Organizational transformation 
 #
 [[textcite:&Carroll_Khessina_2019_demography]] argue that transformation of core features of organizations such as changes in technology or authority can have divergent consequences. 
 #
@@ -173,98 +219,89 @@ Nevertheless as previous research has relied primarily on descriptive statistics
 
 #+latex: \bigbreak
 #+latex: \noindent
-*H_death*: A private museum is more likely to close after the death of the founder.
-
-
-*** legitimacy/understandability 
-# provide legitimacy
-
-Legitimacy is necessary for being understood/tolerated/supported by other the organizations in the environemnt; to the extent that this influences resource acquisition it could influence survival prospects.
-#
-While [[textcite:&Bielefeld_1994_survival]] finds that NPOs who pursue less legitimation strategies (obtaining endorsements, lobbying or contributing to local causes) are more likely to close, other studies find limited impact of legitimacy on survival, both when measured via density parencite:&Bogaert_etal_2014_ecological or from archival sources and interviews [[parencite:&Fernandez_2007_dissolution]].
-#
-In the context of private museums, decline of legitimacy/status could lead to lower visitor numbers, less discounts from art dealers, less government grants (?) or lower chances on collaborations with other museums or corporations, resulting in lower revenues and higher acquisition costs.
-
-
-Legitimacy might be obtained by isomorphism, i.e. adopting features associated with blueprints [[parencite:&diMaggio_1983_iron]].
-#
-Understandability/sense-making [[parencite:&Glynn_Abzug_2002_names]] might thus be limited if an organization is atypical [[parencite:&Rosch_1975_family]], i.e. displays an unusual combination of features.
-#
-In the case of private museums, such cases might be combinations of features from house museums (e.g. accessibility only by appointment) with full-service museums (e.g. extensive activities). 
-#
-Next to "hard" organizational features, adherence to naming conventions has been found to enhance legitimacy [[parencite:&Glynn_Abzug_2002_names]]; organizations that adhere to field norms about name length, name ambiguity (usage of artificial names) and name domain specificity (mentioning industry) were judged more legitimate. 
-# 
-However, the category of museums could be relatively flexible (for example, it is generally not subject to state regulation), which might result in a relatively high tolerance of diversity as "anything goes" and hence limited "devaluation" of non-conforming/atypical members. 
-
-#+latex: \bigbreak
-#+latex: \noindent
-*H_typicality*: Atypical private museums have higher mortality rates.
-
-Legitimacy might also be measured by inclusion in industry registers, such as the Museum of the World (MOW) database [[parencite:&deGruyter_2021_MOW]].
-
-#+latex: \bigbreak
-#+latex: \noindent
-*H_mow*: Private museums included in the MOW database have higher survival chances.
+# *H_death*: A private museum is more likely to close after the death of the founder.
 
 
 
-*** reputation
-
-Reputation has been argued to enhance organizational survival [[parencite:&Rao_1994_reputation]].
-#
-However, reputation effects could also be a spurious effect of organizational capabilities as more competent organizations are more able to both aquire reputation through certification contests and survive in long run parencite:&Goldfarb_Zavyalova_Pillai_2018_Rao.
-#
-Reputation might be measured by inclusion in the Artnews top 200 collector ranking.
-
-#+latex: \bigbreak
-#+latex: \noindent
-*H_artnews*: Private museums of collectors included in the Artnews top 200 collector ranking are less likely to close. 
 
 
 ** Data and Methods
 
 *** Dependent Variable
-A newly constructed database (see [[textcite:&Velthuis_etal_2023_boom]] for details) is used to measure museum survival.
+A newly constructed database, assembled from different sources,  is used to measure the survival of private museums (cf. [[textcite:&Velthuis_etal_2023_boom]] for details).
 #
-The unit of analysis is country year.
+First, existing databases of private art museums are harmonized.
 #
-The main dependenent variable is an indicator of museum closure, which takes for the museums which close in the year of their closure, and zero otherwise.
+Secondly, the online presences of 14 English art publications were exhaustively searched for any mention of private museums.
+#
+After identifying unique institutions, data on these organizations was collected such as opening year, closing year (of those which closed) and founder information.
+# 
+Currently, the database includes 547 museums (of which 446 are currently open, the remainder having closed or transformed into other organizational forms).
+#
+Using this database allows to reconstruct the lifecourse of the each institution with the the unit of analysis as museum-year:
+#
+The main dependenent variable is thus an indicator of museum closure, which takes the value of 1 for the museums which close in the year of their closure, and 0 otherwise.
 #
 Typically for survival data, museums that do not close during the observation period are right-censored, i.e. for such museums the dependent variable is zero for all years.
 
-*** Predictors
-TODO: the current do not yet measure all the concepts discussed in the theory, and some are not justified yet on theoretical grouns (founder name in museum name, gender, density).
+
+*** Main Predictors: Identity Measures
+
+The organizational identity of a museum is measured primarily in terms of its legitimacy, i.e. its adherence to museum standards, and reputation of its founders.
+
+**** Legitimacy
+
+Two measures are constructed that aim to capture an effect of legitimacy on closing.
+#
+First, self-identification measures whether a the name of a museum includes the term "Museum", "Foundation", "Collection", or other (such as "Villa", "Institute", "Center" or "Gallery", which are grouped together as they are less frequent).
+#
+Since the name is one of the first aspects that stakeholders perceive when engaging with an organization, it might very well shape expectations and influence forms of engagement.
+#
+In particular, it might be that museums that also refer to themselves as museums are seen as more favorable and worthy of visits, collaborations and support than other museums.
+
+
+Secondly, a binary predictor measures whether the museum is included in the "Museums of the World" (MOW) database [[parencite:&deGruyter_2021_MOW]], a database containing over 55.000 museums.
+#
+While the exact criteria of the research process leading to the MOW database are not known, it is plausible that museums who correspond to an ideal-typical museum are more likely to be included.
+#
+Assuming that museums are seen similarly by the creators of the MOW database and other audiences, inclusion in the MOW database constitutes a proxy for adherence to museum standards. 
+
+
+**** Reputation
+
+Reputation is measured via inclusion of the founder in the Artnews top 200 collector ranking [[parencite:&Artnews_ranking]].
+#
+This ranking, established in 1990, lists each year the 200 collectors the editors of the magazine consider most relevant.
+#
+For each year, a museums can have one of three values: "Not included"; in which case the founder is not included in the year in question and has not been so in the past, "Included"; when the founder is included, or "Dropped", for cases where the founder was included at some point in the past but is no longer included in the current year.
+#
+Cases where multiple individuals are involved in the founding of a private museum are resolved by aggregating the Artnews ranking inclusion history to the founder founder level (i.e., if one of two founders is dropped from the Artnews ranking but the other remains included, the founder couple as a whole is considered included).
+
+
+
+
+
+*** Control variables
 
 #+latex: \bigbreak
 #+latex: \noindent
+A number of control variables are used: 
+# 
 On the level of the founder, gender constitutes a time-invariant variable; with possible values being male, female and couple.
 #
-Founder death is constructed as a time-varying covariate, and is set to 1 for museum-years after the death of the founder. 
-
-On the museum level, self-identification measures whether a the name of a museum includes the term "Museum", "Foundation", "Collection", or other (such as "Villa", "Institute", "Center" or "Gallery", which are grouped together as they are less frequent).
+Organizational transformation, such as change of authority has been to increase chances of closure both generally [[parencite:&Carroll_Khessina_2019_demography]] and in the case of private museums specifically ([[cite:&Walker_2019_collector p.234]]: "seldom do heirs share a similar passion or wish to take on the financial burden of maintaining private museum indefinitely").
+Therefore, a measure of founder death is constructed as a time-varying covariate, and is set to 1 for museum-years after the death of the founder. 
 #
-Further analyzing the name, a binary indicator also measures whether the name of the founder is included.
+Centrality of the founder's vision is measured via the proxy of whether the name of the founder is included in the name of the museum.
+
+
+Furthermore, organizational theory [[parencite:&hannan89_organ]] predicts a U-shaped relationship between density and mortality:
+# 
+While at low levels, increases in the number of organizations are argued to primarily increase legitimacy and lower exit rates, increases at higher numbers increase the competition over resources and thereby raise mortality rates.
 #
-Finally, a binary predictor measures whether the museum is included in the "Museums of the World" database [[parencite:&deGruyter_2021_MOW]], a database containig 55k museums.
-#
+On the level of the environment, therefore the density (number) of private museum per country is included both in linear and squared form.
 
 
-
-On the level of the environment, the density (number) of private museum per country is included both in linear and squared form.
-#
-Organizational theory [[parencite:&hannan89_organ]] predicts a U-shaped relationship between density and mortality: While at low levels, increases in the number of organizations are argued to primarily increase legitimacy/familiarity and lower exit rates, increases at higher numbers increase the competition over resources and thereby raise mortality rates.
-
-#+latex: \bigbreak
-#+latex: \noindent
-TODO: 
-- add museum size/diversification indicators: most museum-level variables that we collected have many missing values (figure {{{refplt_p_vrblcvrg_ratio}}}), so it's challenging to get good estimates out of them. I'm thinking of using some dimensionality reduction like PCA.  
-- add inclusion in Artnews collector ranking
-- add Tax incentives (country-level)
-- expand densities: 
-  - per capita
-  - include MOW museums, for now density is based only on private museums
-  - within proximate environment (circle of X kilometer around museum), rather than country-level
-- account for clustering within countries/regions
 
 *** Analytical framework
 
@@ -275,37 +312,28 @@ This non-parametric method estimates the hazard rate as the conditional probabil
 
 
 
-In a second step, I use Cox proportional hazard models which estimate the relationship between covariates and the hazard rate.
+# In a second step,
+Secondly, we use Cox proportional hazard models which estimate the relationship between covariates and the hazard rate.
 #
-The Cox-proportional hazard model has the form $h(t,\mathbf{x}) = h_0(t) \psi$, with $\psi = \exp(\sum_{j=1}^p x_j \beta_j)$, with $h(t)$ as the hazard rate, $h_0(t)$ as the baseline hazard rate, $\mathbf{x}$ as the set of variables indexed by $j$, and $\beta$ as the coefficient of the $j$ -th variable.
+The Cox-proportional hazard model has the form $h(t,\mathbf{x}) = h_0(t) \psi$, where $\psi = \exp(\sum_{j} \mathbf{x}_j \beta_j)$; with $h(t)$ as the hazard rate, $h_0(t)$ as the baseline hazard rate, $\mathbf{x}$ as the set of variables indexed by $j$, and $\beta$ as the coefficient vector.
 #
-Estimation via partial maximum likelihood allows estimation of \beta without estimating the baseline hazard rate, which is therefore not constrained to a parametric form. 
+Partial maximum likelihood allows estimation of \beta without defining the baseline hazard rate, which is therefore not constrained to a parametric form. 
 # 
 Coefficients are interpeted as log hazard ratios, i.e. as multipliers of the baseline hazard rate. 
 
-
-
-This model assume proportional hazards, i.e. that the coefficient of a variable stays constant over time, which indicates that for a variable at every time point the hazard ratio is the same.
-#
-So far, tests show a violation of the proportionality assumption only for the variable indicating whether the museum name includes the name of the founder  which furthermore is marginal as it slightly varies by the type of time transformation (table {{{reftbl_t_coxzph}}}, figure {{{refplt_p_coxphdiag_more}}}).
 
 
 ** Results
 
 *** Summary statistics
 
-In total, 479 private museums are included in the database, 53 of them have closed.
-#
-7282 museum-years are observed.
-
-#+latex: \noindent
-
-
 #+INCLUDE: "../tables/t_sumstats_wcpF.tex" export latex
 
-Table {{{reftbl_t_sumstats}}} shows summary statistics for all variables.
+In total, 479 private museums are included in the database, 53 of them have closed.
+#
+6903 museum-years are observed; table {{{reftbl_t_sumstats}}} shows summary statistics for all variables.
 
-*** Hazard rate and Age Dependence
+*** Hazard rate and Age Dependence 
 
 {{{ynkplt_p_hazard}}}
 
@@ -316,7 +344,7 @@ Figure {{{refplt_p_hazard}}} shows the hazard rate over time, figure {{{refplt_p
 #
 The hazard rate doubles over the first 10 years from approximately 0.45% to 0.9%, at which value it approximately stays constant for the next 20 years, after which it appears to decline.
 #
-However, the decline after thirty years is presumably less certain as very few private museums have already reached this age (figure {{{refplt_p_agedens}}}).
+However, the decline after thirty years is presumably less certain as very few private museums have already reached this age.
 
 
 The increase in the first years is likely due to endowments: As the establishment of a museum requires considerable resources, their founders appear to allocate enough resources to keep the risk of closure small in the first years after opening.
@@ -369,11 +397,11 @@ While preliminary results indicate that private museums have dissolution rates l
 
 
 
-#+latex: \noindent
-TODO:
-- get confidence interval for hazard rate
-- see how age can be integrated into survival models (linear term doesn't work)
-- expand comparison to other studies
+# #+latex: \noindent
+# TODO:
+# - get confidence interval for hazard rate
+# - see how age can be integrated into survival models (linear term doesn't work)
+# - expand comparison to other studies
 
 
 
@@ -382,36 +410,63 @@ TODO:
 #+INCLUDE: "../tables/t_reg_coxph_wcpF.tex" export latex
 
 Table {{{reftbl_t_reg_coxph}}} shows the results of Cox proportional hazard regression model.
-#
-Founder-level variables are not substantial, as neither gender nor the death of the founder is associated with a significant difference in private museum closure.
-#
-While there is no particular reason to expect a gender effect, the not substantially higher likelihood for museums to close after their founder has died indicates that private museums might be less dependent on the mood of a single person (or couple), and have in fact become institutionalized to an extent that heirs of founders feel as motivated to continue the original founders' efforts as these founders themselves.
 
 
-Museums which include the term "museum" in their name are the least likely to close, while those with the term "foundation" or "collection" have higher closure rates (but not significantly higher).
+**** Control Variables
+
 #
-Museums which include neither of these are the most likely to close, and have mortality rates more than three times as high ($e$^1.12 = 3.06 , p<0.01) than institutions including the term "museum".
+Neither gender nor the death of the founder is associated with a significant difference in private museum closure.
 #
-The usage of unconventional names might reflect adherence to museum standards which makes museums more understandable and familiar to third parties (e.g. audiences, other museums, companies or the government) and thereby facilitates interactions which are beneficial for long-term survival (e.g. attracting visitors, cooperations, sponsorships or subsidies).
-# 
-However, as founders can choose their museum’s name arbitrarily, they might choose a name without reference to organizational forms associated with perpetuity precisely because their intention is not an institution enduring in perpetuity but rather a more temporally bounded project.
+While there is no particular reason to expect a gender effect, the not substantially higher likelihood for a museums to close after its founder has died indicates that private museums might be less dependent on the mood of a single person (or couple), and have in fact become institutionalized to an extent that heirs of founders feel as motivated to continue the original founders' efforts as these founders themselves.
 
 Inclusion of founder name is not significantly associated with mortality rates.
 #
-While generally organizations whose name include the name of their founder might be more centered around the founder, and hence display higher inertia, making them less able to adapt to changing environments (TODO: add reference, very speculative!!), these results indicate that it does not seem to be case for private museums.
+# (TODO: add reference, very speculative!!)
+While generally organizations whose name include the name of their founder might be more centered around the founder, and hence display higher inertia, making them less able to adapt to changing environments, these results indicate that it does not seem to be case for private museums.
+
+# (TODO: this might be due to no per capita numbers).
+Environmental variables show no association with mortality.
+#
+While the density-dependence paradigm predicts a negative effect of numbers of organizations on closing rate at low numbers (due to legitimacy, i.e. growing familiarity with a new organizational form), and a positive effect at high numbers (due to competition over resources), neither relationship is significant in the case of private museums.
 
 
-Museums included in the Museum of the World Database are $e$^-0.97 = 0.38 times as likely to close than museums which are not, yet this result might be produced by different mechanisms.
+**** Identity Variables
+
+Museums which include the term "museum" in their name are the least likely to close, while those with the term "foundation" or "collection" have higher closure rates (but not significantly higher).
+#
+Museums which include neither of these are the most likely to close, and have mortality rates more than three times as high ($e$^1.18 = 3.25, p<0.01) than institutions including the term "museum".
+#
+The usage of unconventional names might reflect adherence to museum standards which makes museums more understandable and familiar to third parties (e.g. audiences, other museums, companies or the government) and thereby facilitates interactions which are beneficial for long-term survival (e.g. attracting visitors, cooperations, sponsorships or subsidies).
+# 
+However, as founders can choose the name of their museum arbitrarily, they might choose a name without reference to organizational forms associated with perpetuity precisely because their intention is not an institution enduring in perpetuity but rather a more temporally bounded project.
+
+
+
+
+Museums included in the Museum of the World Database are $e$^-0.88 = 0.41 (p < 0.05) times as likely to close than museums which are not, yet this result might be produced by different mechanisms.
 #
 On the one hand, it might reflect that larger and richer institutions are both more likely to be noticed by the MOW and more likely to survive (MOW inclusion would then be a proxy for resources).
 #
+#
+# (TODO: Because of this I wonder if it even makes even sense to include MOW)
+# Thirdly, the MOW effect might be endogenous: As no longitudinal MOW data is available, museums might be absent in the MOW because they have closed.
 On the other hand, similar to unconventional naming patterns, lack of inclusion in the MOW could be an indicator of deviance from museum standards, which could increase the unfamiliarity of the museum vis-a-vis third parties, reducing the chance of survival-enhancing interactions.
-#
-Thirdly, the MOW effect might be endogenous: As no longitudinal MOW data is available, museums might be absent in the MOW because they have closed (TODO: Because of this I wonder if it even makes even sense to include MOW).
 
-Environmental variables show no association with mortality (TODO: this might be due to no per capita numbers).
+
+ 
+
+The reputation of the founder is related to closure to some extent. 
 #
-While the density-dependence paradigm predicts a negative effect of numbers of organizations on closing rate at low numbers (due to legitimacy, i.e. growing familiarity with a new organizational form), and a positive effect at high numbers (due to competition over resources), neither relationship is significant in the case of private museums. 
+Museums whose founders are not included in the ARTnews collector ranking (reference category) are the least likely to close, followed by museums whose founders are included (not statistically significant) and by founders who were included at some point but are no longer included (statistically significant).
+#
+While the order of the categories does not fully correspond to the expected order, according to which museums whose collectors are not included would be more likely to close than collectors who are, it nevertheless provides some evidence that status matters; as in particular the loss of status appears to be substantially associated with museum closure.
+
+** Conclusion
+The conducted analysis shows a substantial association between private museum identity and closures.
+#
+While alternative explanations cannot be completely ruled out, a clearly understandable identity and a favorable founder reputation emerge as important predictors of the chance of a private museum to close.
+#
+Future research can expand on these findings by in more detail investigating the resource perspective of private museums, the intransparency of which has so far aggravated insights about budgetary aspects, in particular how these financial and material characteristics are moderated or mediated by processes of organizational identity.
 
 
 
@@ -422,19 +477,3 @@ While the density-dependence paradigm predicts a negative effect of numbers of o
 
 
 
-
-* Appendix
-
-{{{ynkplt_p_yeardens}}}
-
-{{{ynkplt_p_agedens}}}
-
-
-# #+latex: \begin{landscape}
-{{{ynkplt_p_coxphdiag_more}}}
-
-# #+latex: \end{landscape}
-
-#+INCLUDE: "../tables/t_coxzph_wcpF.tex" export latex
-
-{{{ynkplt_p_vrblcvrg_ratio}}}
