@@ -6,6 +6,55 @@
 
 ## ** data functions
 
+gd_popcircle <- function(dt_pmx) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+
+    ## set up GSHL years
+    GHSL_YEARS <- seq(1975,2020, by = 5)
+    dt_ghsl_years <- data.table(ghsl_year = GHSL_YEARS)
+
+    dt_pmx %>% copy() %>% .[, N := .N, .(lat, long)] %>% .[N > 1] %>% print(n=300)
+
+    ## construct base for GSHL queries: get unique time points per museum
+    ## keep this dt to merge GHSL results back to full years later on
+    dt_pmyear_popprep <- dt_pmx[, .(ID, year_opened, year_closed, lat, long)] %>%
+        .[is.na(year_closed), year_closed := END_YEAR] %>%
+        .[, .(year = seq(year_opened, year_closed)), .(ID,lat, long)] %>%
+        .[, year5 := floor(year/5)*5] %>% # round dow to 5 year intervals
+        .[year >= min(GHSL_YEARS)]
+
+    ## construct DT of positions to query
+    dt_pmdb_year5 <- funique(dt_pmyear_popprep[, .(ID, year5, lat, lon = long)])
+
+    ## split into year lists for more comfy parallel processing
+    ## could squeeze out some more optimization by yeeting duplicate locations, but they shouldn't exist..
+    l_dt_pmdb_ghsl <- split(dt_pmdb_year5, dt_pmdb_year5$year5)
+
+
+    ## imp_ghsl(dt_pmdb_ghsl[year_5  == 2010, .SD[1:10]], # [, ID2 := as.character(ID)],
+    ##          id_vrbl = "ID", year = 2010, radius = 10000)    
+    
+    ## actual multithreaded processing
+    plan(multicore, workers = 6)
+    l_popres <- future_imap(l_dt_pmdb_ghsl, ~imp_ghsl(.x, id_vrbl = "ID", year = .y, radius = 10000))
+    plan(sequential)
+
+    ## process results
+    ## year5 needs to be re-assigned as int probably since future_imap's .y converts it to string
+    dt_popres2 <- rbindlist(l_popres)[, `:=`(year5 = as.integer(year), year = NULL)]
+
+    ## merge to yearly data
+    dt_popcircle <- join(dt_pmyear_popprep, dt_popres2, on = c("ID", "year5"))
+    
+    attr(dt_popcircle, "gnrtdby") <- as.character(match.call()[[1]])
+
+    return(dt_popcircle)
+
+
+
+}
+
 gd_artnews <- function() {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
@@ -70,7 +119,7 @@ gd_pmx <- function(dt_pmdb) {
     ## only basic variables for now to test overall flow, later add more variables
     dt_pmx <- copy(dt_pmdb_fltrd) %>% 
         .[, .(ID, name, iso3c, museum_status, year_opened, year_closed, deathyear,
-              slfidfcn, muem_fndr_name, gender, founder_id)]
+              slfidfcn, muem_fndr_name, gender, founder_id, lat, long)]
 
     
     
