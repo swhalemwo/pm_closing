@@ -14,7 +14,7 @@ gd_popcircle <- function(dt_pmx) {
     GHSL_YEARS <- seq(1975,2020, by = 5)
     dt_ghsl_years <- data.table(ghsl_year = GHSL_YEARS)
 
-    dt_pmx %>% copy() %>% .[, N := .N, .(lat, long)] %>% .[N > 1] %>% print(n=300)
+    ## dt_pmx %>% copy() %>% .[, N := .N, .(lat, long)] %>% .[N > 1] %>% print(n=300)
 
     ## construct base for GSHL queries: get unique time points per museum
     ## keep this dt to merge GHSL results back to full years later on
@@ -27,13 +27,14 @@ gd_popcircle <- function(dt_pmx) {
     ## construct DT of positions to query
     dt_pmdb_year5 <- funique(dt_pmyear_popprep[, .(ID, year5, lat, lon = long)])
 
+    ## ## some testing code
+    ## imp_ghsl(dt_pmdb_year5[year5  == 2010, .SD[1:10]], # [, ID2 := as.character(ID)],
+    ##          id_vrbl = "ID", year = 2010, radius = 10000) %>% .[, pop]
+
     ## split into year lists for more comfy parallel processing
     ## could squeeze out some more optimization by yeeting duplicate locations, but they shouldn't exist..
     l_dt_pmdb_ghsl <- split(dt_pmdb_year5, dt_pmdb_year5$year5)
 
-
-    ## imp_ghsl(dt_pmdb_ghsl[year_5  == 2010, .SD[1:10]], # [, ID2 := as.character(ID)],
-    ##          id_vrbl = "ID", year = 2010, radius = 10000)    
     
     ## actual multithreaded processing
     plan(multicore, workers = 6)
@@ -42,7 +43,8 @@ gd_popcircle <- function(dt_pmx) {
 
     ## process results
     ## year5 needs to be re-assigned as int probably since future_imap's .y converts it to string
-    dt_popres2 <- rbindlist(l_popres)[, `:=`(year5 = as.integer(year), year = NULL)]
+    dt_popres2 <- rbindlist(l_popres)[, `:=`(year5 = as.integer(year), year = NULL)] %>%
+        .[, pop := pop/1e6]
 
     ## merge to yearly data
     dt_popcircle <- join(dt_pmyear_popprep, dt_popres2, on = c("ID", "year5"))
@@ -135,31 +137,28 @@ gd_pmx <- function(dt_pmdb) {
 
     
 
-gd_pmyear <- function(dt_pmx, dt_pmtiv) {
+gd_pmyear_prep <- function(dt_pmx, dt_pmtiv) {
     gw_fargs(match.call())
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     #' generate dt in pm-year format
-
-    dt_artnews <- gd_artnews()
-
     dt_pmyear <- dt_pmx[, last_year := fifelse(museum_status == "closed", year_closed, END_YEAR)] %>%
         ## expand to pm_year UoA
         .[, .(year = year_opened:last_year), .(ID, iso3c, museum_status, year_opened, year_closed,
                                                deathyear, founder_id)] %>%
         ## set closing variable
         .[, closing := fifelse(museum_status == "closed" & year_closed == year, 1, 0)] %>% 
-        ## .[!(year > END_YEAR)] %>% # yeet pm years beyond END_YEAR
-        ## .[!(year_opened > year)] %>% # yeet pm-years where expansion went into negative direction
-        .[, age := year - year_opened] %>%
+        .[, age := year - year_opened] %>% # set age
         ## founder death: 1 if year > deathyear, else 0 (before death or not dead at all)
         .[, founder_dead := fifelse(!is.na(deathyear),fifelse(year > deathyear, 1, 0), 0)] %>% 
-        .[, `:=`(tstart = age, tstop = age+1)] %>%
+        .[, `:=`(tstart = age, tstop = age+1)] %>% # set survival time interval variables
         .[, pm_dens := .N, .(iso3c, year)] # calculate PM density 
 
     
     ## generate the artnews ranking states: not (yet) included, currently included, previously included
-    dt_pmyear2 <- dt_artnews[copy(dt_pmyear), on = .(founder_id, year)] %>% 
+    dt_artnews <- gd_artnews()
+    
+    dt_pmyear_wan <- dt_artnews[copy(dt_pmyear), on = .(founder_id, year)] %>%  # wan: with artnews
         .[, ever_an_included := any(!is.na(an_inclusion)), ID] %>% # .[, .N, ever_an_included]
         .[ever_an_included == T, first_an_inclusion := .SD[!is.na(an_inclusion), min(year)], ID] %>% 
         ## .[, .(founder_id, year, an_inclusion, ever_an_included, first_inclusion)] %>% # .[ever_an_included == T]
@@ -168,44 +167,27 @@ gd_pmyear <- function(dt_pmx, dt_pmtiv) {
         .[ever_an_included == F, an_inclusion := "not_included"] %>%
         .[, `:=`(ever_an_included = NULL, first_an_inclusion = NULL)] %>%
         .[, an_inclusion := factor(an_inclusion, levels = c("not_included", "included", "dropped"))] %>%
-        .[year >= 1990] # 1990 is when AN starts
+        .[ year < 1990, an_inclusion := NA] # AN starts in 1990
 
-    if (dt_pmyear2[, any(is.na(an_inclusion))]) {stop("artnews variable not properly defined")}
-
-    ## ggplot(dt_pmyear2[ID %in% 500:600], aes(x=year, y=ID, fill = an_inclusion)) + geom_tile()
-        
+    if (dt_pmyear_wan[year >= 1990, any(is.na(an_inclusion))]) {stop("artnews variable not properly defined")}
 
 
-    ## dt_pmyear[, .N, founder_dead]
-    ## dt_pmyear[, .SD[which.max(year)], ID][, .N, founder_dead]
-    ## dt_pmyear[, .SD[which.max(year)], ID][founder_dead==1]
-    ## dt_pmyear[founder_dead == 1, fnunique(ID)]
-    ## dt_pmyear[!is.na(deathyear)][founder_dead == 0]
+    ## integrate population circle data
+    dt_popcircle <- gd_popcircle(dt_pmx)
+
+    dt_pmyear_wpop <- join(dt_pmyear_wan, dt_popcircle[, .(ID, year, pop)], on = c("ID", "year"))
+
+    if (dt_pmyear_wpop[year >= 1975,  any(is.na(pop))]) {stop("some pop is NA")}
+
 
     ## combine with time-invariant variables
-    dt_pmyear3 <- merge(dt_pmyear2,
+    dt_pmyear3 <- join(dt_pmyear_wpop,
                         copy(dt_pmtiv)[, `:=`(iso3c=NULL, name = NULL)], ## yeet non-essential columns
                         on = "ID") 
 
     if (any(is.na(dt_pmyear3$mow))) {stop("some MOW is NA")}
 
-    ## try to get comfy groupby counts with collapse, but super incomprehensible API
-    ## fcount(asdf = .c(iso3c, year), add = T, name = "pm_dens") # works, but name comes last -> not consistent
-    ## fmutate(pm_dens = fcount(ID, .c(iso3c, year))) # doesn't work
-    ## fmutate(pm_dens = fmean(year, iso3c)) ## doesn't work
-    ## gby(iso3c, year) %>% #  fmutate(pm_dens = fcount(year_opened))
-    ## fmutate(pm_dens = fnobs(ID, g = .c(iso3c))) ## requires gby call
-    ## ftransform(fcount(pm_dens = ID), iso3c, year) ## doesn't work either
-        
     
-    ## dt_pmyear[, .N, .(closing, museum_status)] # check closing variable, looks good
-    ## dt_pmyear[year > END_YEAR]
-    ## fnunique(dt_pmyear$ID)
-    
-    ## filter out late entries: but wanna keep musuems that closed
-    ## later: should be marked as not closed should be good now: 
-    ## dt_pmyear[museum_status == "closed", max(closing), name]
-    ## when setting END_YEAR to e.g. 2015, museums that close later don't have a closing year, as intended
 
     ## yeet unused variables
     dt_pmyear3[, `:=`(museum_status = NULL, year_closed = NULL, deathyear = NULL)]
@@ -215,6 +197,18 @@ gd_pmyear <- function(dt_pmx, dt_pmtiv) {
     return(dt_pmyear3)
 
 }
+
+gd_pmyear <- function(dt_pmyear_prep) {
+    #' yeet observations with NAs on an_inclusion (starts 1990) and pop (starts 1975)
+    gw_fargs(match.call())
+    
+
+    dt_pmyear <- dt_pmyear_prep[!is.na(an_inclusion) & !is.na(pop)]
+
+    attr(dt_pmyear, "gnrtdby") <- as.character(match.call()[[1]])
+    return(dt_pmyear)
+}
+
 
 
 
@@ -570,7 +564,7 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ## fullest model:
         ## FIXME: add founder_dead*muem_fndr_name
         r_more = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
-                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion, dt_pmyear)
+                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop, dt_pmyear)
 
         
 

@@ -81,6 +81,7 @@ gc_vvs <- function() {
         mow             = "MOW inclusion",
         pm_dens         = "PM density",
         "I(pm_dens^2)"  = "PM density^2",
+        pop             = "Population (10km Circle)",
         west            = "Europe and North America",
         reg6            = "Region",
         an_inclusion    = "ArtNews Ranking inclusion",
@@ -89,7 +90,7 @@ gc_vvs <- function() {
      l_vrblgrps <- list(# variable groups
          founder  = .c(gender, founder_dead),
          museum   = .c(slfidfcn, muem_fndr_name, mow, an_inclusion),
-         envir    = .c(pm_dens, "I(pm_dens^2)", west, reg6),
+         envir    = .c(pm_dens, "I(pm_dens^2)", pop, west, reg6),
          misc     = .c(GLOBAL)
      )
 
@@ -119,12 +120,12 @@ gc_vvs <- function() {
 
     ## specify whether variable is time-varying or not
     vrbls_tiv <- .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6)
-    vrbls_tv <- .c(pm_dens, "I(pm_dens^2)",  founder_dead, an_inclusion)
+    vrbls_tv <- .c(pm_dens, "I(pm_dens^2)", pop, founder_dead, an_inclusion)
 
     ## specify variable type: binary, numeric, categorical
     l_vrbltypes <- list(        
         bin = .c(founder_dead, muem_fndr_name, mow, west),
-        num = .c(pm_dens, "I(pm_dens^2)"),
+        num = .c(pm_dens, "I(pm_dens^2)", pop),
         cat = .c(gender, slfidfcn, reg6, an_inclusion))
 
     dt_vrbltypes <- imap(l_vrbltypes, ~data.table(vrbl = .x, vrbltype = .y)) %>% rbindlist
@@ -289,7 +290,7 @@ gc_pmdb_vrblgrps <- function(dt_pmdb) {
                        .c(cafe_restrnt, avbl_floorsize, avbl_exhibsize, museumshop, buildgtype, website,
                           reducedtickets, staff_size, rentalpossblt, webshop, nbr_visitrs, ticket_price,
                           opng_time, temp_exhibs, avbl_exhibhist, architect)),
-        existence = .c(city, iso3c, multiplelocs, year_opened, year_closed), #
+        existence = .c(city, iso3c, multiplelocs, year_opened, year_closed, lat, long, address_formatted), #
         technical = .c(ID, name, museum_status, llid, origin)
     )
 
@@ -629,7 +630,7 @@ gt_sumstats <- function(dt_pmyear, dt_pmcpct) {
     ## requires calling model.matrix for each variable
 
     dt_dummies <- map(chuck(c_vvs, "dt_vrblinfo")[vrbltype == "cat", vrbl],
-        ~model.matrix(as.formula(sprintf("~ %s -1", .x)), dt_pmyear)) %>%
+                      ~model.matrix(as.formula(sprintf("~ %s -1", .x)), dt_pmyear)) %>%
         Reduce(cbind, .) %>% adt %>%
         melt(measure.vars = names(.), variable.name = "term")
 
@@ -671,13 +672,18 @@ gt_sumstats <- function(dt_pmyear, dt_pmcpct) {
                        "mean" = "Mean", "sd" = "SD", min = "Min.", max = "Max.")
     
     ## format the columns
-    dt_cbn_viz <- copy(dt_cbn2)[, .(grp_filler = "", term_lbl, pm_sum = as.character(pm_sum),
-                                    pm_mean = format(pm_mean, digits=2, trim = T),
-                                    mean = format(mean, digits = 2, trim = F),
-                                    sd = format(sd, digits = 2, trim = F),
-                                    min = format(min, digits = 2, trim = F),
-                                    max = format(max, digits = 2, trim = F)
-                                    )] %>%
+    dt_cbn_viz <- copy(dt_cbn2) %>%
+        .[, min_fmtd := format(min, digits = 2, scientific = F, trim = F), .I] %>% # row-wise min for small mins
+        .[, max_fmtd := format(max, digits = 2, scientific = F, trim = F,
+                               nsmall = fifelse(max %% 1 == 0, 0, 2)), .I] %>% # non-Ints: two decimal places
+        .[, .(grp_filler = "", term_lbl, pm_sum = as.character(pm_sum),
+              pm_mean = format(pm_mean, digits=2, trim = T),
+              mean = format(mean, digits = 2, trim = F),
+              sd = format(sd, digits = 2, trim = F),
+              min = min_fmtd,
+              max = max_fmtd
+              ## max = format(max, digits = 2, trim = F)
+              )] %>%        
         recode_char("NA" = NA) # recode "NA"-strings to actual NA (format() can't deal with it in numeric)
 
     
@@ -819,7 +825,11 @@ source(paste0(c_dirs$code, "regression.R"))
 dt_pmx <- gd_pmx(dt_pmdb)
 dt_pmtiv <- gd_pmtiv(dt_pmx)
 
-dt_pmyear <- gd_pmyear(dt_pmx, dt_pmtiv)
+
+dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv)
+dt_pmyear <- gd_pmyear(dt_pmyear_prep)
+
+
 dt_pmcpct <- gd_pmcpct(dt_pmyear)
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct)
