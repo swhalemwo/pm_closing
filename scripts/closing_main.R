@@ -7,24 +7,24 @@
 args <- commandArgs(trailingOnly = T)
 options(width = 115)
 
-library(jtls)
-library(pmdata)
-library(memoise)
-library(collapse)
-library(purrr)
-library(docstring) # for annotating 
-library(ggbeeswarm) # move points up/down on vrblcvrg plots.. hopefully avoid
-library(survival) 
-library(ggsurvfit) # easy visualizations of survival objects, hopefully avoid
-library(countrycode) 
-library(muhaz) # for smooth hazard curves
-library(patchwork) # for stichting plots together, hopefully avoid
-library(texreg, include.only = c("screenreg", "texreg")) ## inspection of results
-library(tinytest) # for looking at pmdata tests
+library(jtls)        # custom functions package
+library(pmdata)      # private museum data package
+library(memoise)     # caching time intensive functions
+library(collapse)    # some fast but incomprehensible data transformation framework
+library(purrr)       # parallel processing
+library(docstring)   # for annotating 
+library(ggbeeswarm)  # move points up/down on vrblcvrg plots.. hopefully avoid
+library(survival)    # survival/event history models
+library(ggsurvfit)   # easy visualizations of survival objects, hopefully avoid
+library(countrycode) # will always be necessary when working with countries
+library(muhaz)       # for smooth hazard curves
+library(patchwork)   # for stichting plots together, hopefully avoid
+library(tinytest)    # for looking at pmdata tests
 ## library(parallel) # parallel processing
-library(furrr) # parallel processing
-library(splines) # for gp_schoenfeld, maybe neeeded later too for regressions
-library(Hmisc, include.only = "latexTranslate") # latexTranslate
+library(furrr)       # parallel processing
+library(splines)     # for gp_schoenfeld, maybe neeeded later too for regressions
+library(texreg, include.only = c("screenreg", "texreg")) ## inspection of results
+library(Hmisc, include.only = "latexTranslate")  # latexTranslate
 
 ## LOCS <- list(PROJDIR = "/home/johannes/Dropbox/phd/papers/closing/")
 ## LOCS$FIGDIR <- paste0(FIG
