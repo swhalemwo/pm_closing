@@ -65,6 +65,33 @@ gd_pmdb_popcircle <- function(dt_pmx, radius_km) {
 
 }
 
+gd_proxcnt <- function(dt_pmx, radius_km) {
+
+    
+    ## generate list PMs open for each year
+    l_dt_pmcoords <- dt_pmx[, last_year := fifelse(museum_status == "closed", year_closed, END_YEAR)] %>%
+        .[, .(year = year_opened:last_year), .(ID, lat, long)] %>% ## expand to pm_year UoA
+        split(by = "year") # split by year
+
+    ## calculate proximity counts using parallized pairwise distance (from pmdata)
+    plan(multicore, workers = 6)
+    l_proxcnt_res <- future_imap(l_dt_pmcoords,
+                                 ~gd_pmdb_proxcnt(.x, radius_km = radius_km)[, year := as.integer(.y)])
+    plan(sequential)
+
+    dt_proxcnt_res <- rbindlist(l_proxcnt_res) # aggregate results
+
+    ## visualization check, looks good
+    ## ggplot(dt_proxcnt_res, aes(x=year, y=proxcnt10, group = ID)) +
+    ##     geom_line(alpha = 0.2, position = position_jitter())
+
+    return(dt_proxcnt_res)
+
+}
+
+
+
+
 gd_artnews <- function() {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
@@ -149,6 +176,7 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv) {
     gw_fargs(match.call())
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+
     #' generate dt in pm-year format
     dt_pmyear <- dt_pmx[, last_year := fifelse(museum_status == "closed", year_closed, END_YEAR)] %>%
         ## expand to pm_year UoA
