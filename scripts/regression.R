@@ -6,7 +6,7 @@
 
 ## ** data functions
 
-gd_popcircle <- function(dt_pmx) {
+gd_pmdb_popcircle <- function(dt_pmx, radius_km) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
 
@@ -25,11 +25,14 @@ gd_popcircle <- function(dt_pmx) {
         .[year >= min(GHSL_YEARS)]
 
     ## construct DT of positions to query
-    dt_pmdb_year5 <- funique(dt_pmyear_popprep[, .(ID, year5, lat, lon = long)])
+    dt_pmdb_year5 <- funique(dt_pmyear_popprep[, .(ID, year5, lat, long)])
 
     ## ## some testing code
-    ## imp_ghsl(dt_pmdb_year5[year5  == 2010, .SD[1:10]], # [, ID2 := as.character(ID)],
-    ##          id_vrbl = "ID", year = 2010, radius = 10000) %>% .[, pop]
+    ## gd_popcircle(dt_pmdb_year5[year5  == 2010, .SD[1:10]], # [, ID2 := as.character(ID)],
+             ## id_vrbl = "ID", year = 2010, radius_km = 10) %>% .[, pop]
+
+    ## 3409326.47   13646.44 1495132.81 2738349.75 3549412.25  447843.49 1551780.82 2189097.23   71458.25  223607.55
+    ## 3455098.75   13710.06 1507754.35 2760191.15 3574606.98  454468.42 1580232.92 2205837.25   73393.40  228170.74
 
     ## split into year lists for more comfy parallel processing
     ## could squeeze out some more optimization by yeeting duplicate locations, but they shouldn't exist..
@@ -38,7 +41,7 @@ gd_popcircle <- function(dt_pmx) {
     
     ## actual multithreaded processing
     plan(multicore, workers = 6)
-    l_popres <- future_imap(l_dt_pmdb_ghsl, ~imp_ghsl(.x, id_vrbl = "ID", year = .y, radius = 10000))
+    l_popres <- future_imap(l_dt_pmdb_ghsl, ~gd_popcircle(.x, id_vrbl = "ID", year = .y, radius_km = 10))
     plan(sequential)
 
     ## process results
@@ -49,6 +52,11 @@ gd_popcircle <- function(dt_pmx) {
     ## merge to yearly data
     dt_popcircle <- join(dt_pmyear_popprep, dt_popres2, on = c("ID", "year5"))
     
+    ## ggplot(dt_popcircle, aes(x=year, y=pop, group = ID)) +
+    ##     geom_line(alpha = 0.2)
+
+    
+
     attr(dt_popcircle, "gnrtdby") <- as.character(match.call()[[1]])
 
     return(dt_popcircle)
@@ -173,28 +181,36 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv) {
 
 
     ## integrate population circle data
-    dt_popcircle <- gd_popcircle(dt_pmx)
+    dt_popcircle <- gd_pmdb_popcircle(dt_pmx, radius_km = 10)
 
     dt_pmyear_wpop <- join(dt_pmyear_wan, dt_popcircle[, .(ID, year, pop)], on = c("ID", "year"))
 
     if (dt_pmyear_wpop[year >= 1975,  any(is.na(pop))]) {stop("some pop is NA")}
 
+    ## integrate PM proximity counts 
+    dt_proxcnt <- gd_proxcnt(dt_pmx, radius_km = 10)
+
+    dt_pmyear_wproxcnt <- join(dt_pmyear_wpop, dt_proxcnt, on = c("ID", "year"))
+
+    if (dt_pmyear_wproxcnt[, any(is.na(.SD)), .SDcols = keep(names(dt_pmyear_wproxcnt), ~grepl("proxcnt", .x))]) {
+        stop("some NAs in proxcnt")}
+
 
     ## combine with time-invariant variables
-    dt_pmyear3 <- join(dt_pmyear_wpop,
+    dt_pmyear_wtiv <- join(dt_pmyear_wproxcnt,
                         copy(dt_pmtiv)[, `:=`(iso3c=NULL, name = NULL)], ## yeet non-essential columns
                         on = "ID") 
 
-    if (any(is.na(dt_pmyear3$mow))) {stop("some MOW is NA")}
+    if (any(is.na(dt_pmyear_wtiv$mow))) {stop("some MOW is NA")}
 
     
 
     ## yeet unused variables
-    dt_pmyear3[, `:=`(museum_status = NULL, year_closed = NULL, deathyear = NULL)]
+    dt_pmyear_wtiv[, `:=`(museum_status = NULL, year_closed = NULL, deathyear = NULL)]
 
     
-    attr(dt_pmyear3, "gnrtdby") <- as.character(match.call()[[1]])
-    return(dt_pmyear3)
+    attr(dt_pmyear_wtiv, "gnrtdby") <- as.character(match.call()[[1]])
+    return(dt_pmyear_wtiv)
 
 }
 
