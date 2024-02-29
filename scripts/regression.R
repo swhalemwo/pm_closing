@@ -608,7 +608,7 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ## fullest model:
         ## FIXME: add founder_dead*muem_fndr_name
         r_more = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
-                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop, dt_pmyear)
+                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10, dt_pmyear)
 
         
 

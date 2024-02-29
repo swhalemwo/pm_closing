@@ -81,7 +81,8 @@ gc_vvs <- function() {
         mow             = "MOW inclusion",
         pm_dens         = "PM density",
         "I(pm_dens^2)"  = "PM density^2",
-        pop             = "Population (10km Circle)",
+        pop             = "Pop. (millions) within 10km",
+        proxcnt10       = "Nbr PM within 10km",
         west            = "Europe and North America",
         reg6            = "Region",
         an_inclusion    = "ArtNews Ranking inclusion",
@@ -90,7 +91,7 @@ gc_vvs <- function() {
      l_vrblgrps <- list(# variable groups
          founder  = .c(gender, founder_dead),
          museum   = .c(slfidfcn, muem_fndr_name, mow, an_inclusion),
-         envir    = .c(pm_dens, "I(pm_dens^2)", pop, west, reg6),
+         envir    = .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10, west, reg6),
          misc     = .c(GLOBAL)
      )
 
@@ -120,12 +121,12 @@ gc_vvs <- function() {
 
     ## specify whether variable is time-varying or not
     vrbls_tiv <- .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6)
-    vrbls_tv <- .c(pm_dens, "I(pm_dens^2)", pop, founder_dead, an_inclusion)
+    vrbls_tv <- .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10, founder_dead, an_inclusion)
 
     ## specify variable type: binary, numeric, categorical
     l_vrbltypes <- list(        
         bin = .c(founder_dead, muem_fndr_name, mow, west),
-        num = .c(pm_dens, "I(pm_dens^2)", pop),
+        num = .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10),
         cat = .c(gender, slfidfcn, reg6, an_inclusion))
 
     dt_vrbltypes <- imap(l_vrbltypes, ~data.table(vrbl = .x, vrbltype = .y)) %>% rbindlist
