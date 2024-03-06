@@ -26,7 +26,7 @@ gd_dimred_loads <- function(loadmat) {
 }
 
 
-gp_dimred_loads <- function(dt_dimred_loads) {
+gp_dimred_loads <- function(dt_dimred_loads, include_row_clusters = F) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     gw_fargs(match.call())
     #' plot factor loadings with ggplot in col + facetted
@@ -54,20 +54,30 @@ gp_dimred_loads <- function(dt_dimred_loads) {
         .[order(dim)]
 
     ## in the end: want rows in an order within cluster: select from dt_dimred_loads_clustered
-    ## pmap(dt_clusters_ordered, ~sprintf("%s + %s", .x, .y))
-    row_ordered <- pmap(dt_clusters_ordered,
-                        ~dt_dimred_loads_clustered[cluster == .x & dim == .y][order(abs(value)), vrbl]) %>%
-        unlist
-
+    ## some arbitrary reordering necessary (-abs(value), rev) due to ggplot nonsense
+    row_ordered <- dt_dimred_loads_clustered[dt_clusters_ordered, on = .(cluster, dim)] %>%
+        .[, .SD[order(-abs(value))][, vrbl], .(dim, cluster), ] %>% .[, V1] %>% rev
+    
+    
     ## assign order of rows and row clusters/sections
     dt_dimred_loads_clustered[, `:=`(vrbl = factor(vrbl, levels = row_ordered),
                                      cluster = factor(cluster, dt_clusters_ordered[, cluster]))]
 
 
-    ggplot(dt_dimred_loads_clustered, aes(x=abs(value),y=vrbl, fill = value)) +
+    p_dimred_loads <- ggplot(dt_dimred_loads_clustered, aes(x=abs(value),y=vrbl, fill = value)) +
         geom_col() +
-        facet_grid(cluster ~ dim, scales = "free", space = "free_y") +
         scale_fill_gradient2(high = "red", low = "blue")
+
+    ## include row clusters, if so specified (debugging)
+    if (include_row_clusters) {
+        p_dimred_loads <- p_dimred_loads + 
+            facet_grid(cluster ~ dim, scales = "free", space = "free_y")
+    } else if (!include_row_clusters) {
+        p_dimred_loads <- p_dimred_loads + 
+            facet_grid( ~ dim, scales = "free", space = "free_y")
+    }
+
+    return(p_dimred_loads)
     
 }
 
@@ -90,6 +100,8 @@ gp_scree <- function(scree_vlus, dims_to_display = 10) {
 
 
 gl_pca <- function(dt_pmdb, vrbls_dimred, ncomp) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1
     #' calculate PCA scores of vrbls
     #' @param dt_pdmb dt_pmdb
     #' @param vrbls variables to include in PCA
@@ -102,9 +114,15 @@ gl_pca <- function(dt_pmdb, vrbls_dimred, ncomp) {
     l_pcares_prcomp <- prcomp(dt_pca_prepped, scale=T)
 
     
-    rawLoadings <- l_pcares_prcomp$rotation[,1:ncomp] %*% diag(l_pcares_prcomp$sdev, ncomp, ncomp)
+    rawLoadings <- l_pcares_prcomp$rotation[,1:ncomp, drop = F] %*% diag(l_pcares_prcomp$sdev, ncomp, ncomp)
     ## diag = eigenvalues?
-    rotatedLoadings <- varimax(rawLoadings)$loadings
+
+    ## rotate, processing depends on number of factors
+    if (ncomp > 1) {
+        rotatedLoadings <- varimax(rawLoadings)$loadings
+    } else if (ncomp == 1) {
+        rotatedLoadings <- varimax(rawLoadings)
+    }
 
 
     ## calculating/inspecting scores, in particular size
@@ -185,13 +203,30 @@ gt_dimred <- function(dt_pmdb, vrbls) {
     
 
 gd_pca <- function(dt_pmdb) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    #' run a PCA on a set of variables, return scores
+    
+    ## set variables
     vrbls_dimred2 <- c(keep(names(dt_pmdb), ~grepl("^act_", .x)),
                        keep(names(dt_pmdb), ~grepl("^avbl_", .x)),
                        gc_pmdb_vrblgrps(dt_pmdb)[grp == "relations", vrbl],
                        .c(temp_exhibs, cafe_restrnt, reducedtickets, museumshop,
                           rentalpossblt, webshop))
 
+    ## debug: visualize coverage 
+    ## dt_pmdb_dimred_splong <- dt_pmdb[, .SD, .SDcols = c("ID", "museum_status", vrbls_dimred2)] %>%
+    ##     melt(id.vars = c("ID", "museum_status"), variable.name = "vrbl")
+
+    ## gd_vrblcvrg(dt_pmdb_dimred_splong, all_statuses = F) %>% gp_vrblcvrg_ratio
+        
+
+    ## run analysis
     l_pca_dimred2 <- gl_pca(dt_pmdb, vrbls_dimred2, ncomp = 2)
+
+    ## debug: visualize loadings
+    ## l_pca_dimred2$rotatedLoadings %>% gd_dimred_loads %>% gp_dimred_loads(include_row_clusters = F)
+    
 
     return(l_pca_dimred2$dt_scores[, .(ID, V1, V2)])
 
