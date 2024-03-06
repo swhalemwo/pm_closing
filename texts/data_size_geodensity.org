@@ -1,0 +1,130 @@
+#+latex_class: article_usual2
+# erases make title
+# #+BIND: org-export-latex-title-command ""
+
+# fucks all the maketitlestuff just to be sure
+#+OPTIONS: num:nil
+#+OPTIONS: toc:nil
+#+OPTIONS: h:5
+#+OPTIONS: ^:nil
+
+
+#+BEGIN_SRC R :session calc :exports none :results values drawer :dir /home/johannes/
+library(jtls)
+dt_nbrs <- fread("/home/johannes/Dropbox/phd/papers/closing/misc/nbrs.csv")
+wd_nbrs(dt_nbrs)
+## quit(save="no")
+#+end_src
+
+#+RESULTS:
+:results:
+# meanhaz
+#+MACRO: meanhaz_upto_20 0.89%
+#+MACRO: meanhaz_upto_30 0.91%
+#+MACRO: meanhaz_upto_40 0.78%
+#+MACRO: meanhaz_upto_100 0.79%
+
+
+# pltcfgs
+#+MACRO: ynkplt_p_vrblcvrg_ugrpd (eval (concat "#+label: fig:p_vrblcvrg_ugrpd\n" "#+caption: PMDB variable coverage by museum status\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_vrblcvrg_ugrpd.pdf]]"))
+#+MACRO: ynkplt_p_vrblcvrg (eval (concat "#+label: fig:p_vrblcvrg\n" "#+caption: PMDB variable coverage by museum status and variable group\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_vrblcvrg.pdf]]"))
+#+MACRO: ynkplt_p_vrblcvrg_ratio (eval (concat "#+label: fig:p_vrblcvrg_ratio\n" "#+caption: PMDB variable coverage (abs/rel prop) by museum status and variable group\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_vrblcvrg_ratio.pdf]]"))
+#+MACRO: ynkplt_p_vrblcvrg_pca (eval (concat "#+label: fig:p_vrblcvrg_pca\n" "#+caption: coverage of variables used in PCA\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_vrblcvrg_pca.pdf]]"))
+#+MACRO: ynkplt_p_scree (eval (concat "#+label: fig:p_scree\n" "#+caption: Scree plot of PCA dimensionality reduction\n" "#+attr_latex: :width 14cm\n" "[[file:../figures/p_scree.pdf]]"))
+#+MACRO: ynkplt_p_pca_loadings (eval (concat "#+label: fig:p_pca_loadings\n" "#+caption: loadings of first 2 PCs\n" "#+attr_latex: :width 14cm\n" "[[file:../figures/p_pca_loadings.pdf]]"))
+#+MACRO: ynkplt_p_pca_scores (eval (concat "#+label: fig:p_pca_scores\n" "#+caption: scores on first PCs\n" "#+attr_latex: :width 16cm\n" "[[file:../figures/p_pca_scores.pdf]]"))
+#+MACRO: ynkplt_p_surv (eval (concat "#+label: fig:p_surv\n" "#+caption: Private Museum Survival probability\n" "#+attr_latex: :width 14cm\n" "[[file:../figures/p_surv.pdf]]"))
+#+MACRO: ynkplt_p_hazard (eval (concat "#+label: fig:p_hazard\n" "#+caption: Private Museum hazard function\n" "#+attr_latex: :width 16cm\n" "[[file:../figures/p_hazard.pdf]]"))
+#+MACRO: ynkplt_p_agedens (eval (concat "#+label: fig:p_agedens\n" "#+caption: Age distribution of private museums\n" "#+attr_latex: :width 17cm\n" "[[file:../figures/p_agedens.pdf]]"))
+#+MACRO: ynkplt_p_yeardens (eval (concat "#+label: fig:p_yeardens\n" "#+caption: Private Museum-year Distribution\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_yeardens.pdf]]"))
+#+MACRO: ynkplt_p_coxphdiag_more (eval (concat "#+label: fig:p_coxphdiag_more\n" "#+caption: Model Diagnostics\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_coxphdiag_more.pdf]]"))
+
+
+# figlbls
+#+MACRO: refplt_p_vrblcvrg_ugrpd \ref{fig:p_vrblcvrg_ugrpd}
+#+MACRO: refplt_p_vrblcvrg \ref{fig:p_vrblcvrg}
+#+MACRO: refplt_p_vrblcvrg_ratio \ref{fig:p_vrblcvrg_ratio}
+#+MACRO: refplt_p_vrblcvrg_pca \ref{fig:p_vrblcvrg_pca}
+#+MACRO: refplt_p_scree \ref{fig:p_scree}
+#+MACRO: refplt_p_pca_loadings \ref{fig:p_pca_loadings}
+#+MACRO: refplt_p_pca_scores \ref{fig:p_pca_scores}
+#+MACRO: refplt_p_surv \ref{fig:p_surv}
+#+MACRO: refplt_p_hazard \ref{fig:p_hazard}
+#+MACRO: refplt_p_agedens \ref{fig:p_agedens}
+#+MACRO: refplt_p_yeardens \ref{fig:p_yeardens}
+#+MACRO: refplt_p_coxphdiag_more \ref{fig:p_coxphdiag_more}
+
+
+# reftbl
+#+MACRO: reftbl_t_testtable \ref{tbl:t_testtable}
+#+MACRO: reftbl_t_coxzph \ref{tbl:t_coxzph}
+#+MACRO: reftbl_t_reg_coxph \ref{tbl:t_reg_coxph}
+#+MACRO: reftbl_t_sumstats \ref{tbl:t_sumstats}
+:end:
+
+* data update size and geodensity
+
+** geographical density
+
+I've integrated a geospatial population dataset (The global human settlement Layer, GHSL), a raster (i.e. grid) with cells of size 1km * 1km, updated in 5-year intervals) which can be used to measure the population around a coordinate within a certain radius at a point in time.
+# 
+So far I'm constructing a 10km radius around each museum.
+# 
+I looked up the coordinates for our museums via the google maps API and addded them to the database (there are some which google didn't find, then it used the city center; these can be identified as having an "address_formatted" column of just "city, country", while those that google could find have a full address).
+#
+I also construct a measure of the number of private museums within 10km around each private museum.
+#
+I'm still not quite sure what is the best specification (size of the radius, count density or per capita density, link between national and circle density, squared), but the raw data for those is there (summary stats for the variables are in table {{{reftbl_t_sumstats}}}).
+#
+When I include numbers of PMs in surroundings and population in surroundings (table {{{reftbl_t_reg_coxph}}}), local density has a positive effect, indicating higher mortality when number of private museums is higher.
+#
+This isn't really a perfect measure of competition since it only includes private museums and not other museums, but I think it works for a start.
+
+
+#+INCLUDE: "../tables/t_sumstats_wcpF.tex" export latex
+
+
+#+INCLUDE: "../tables/t_reg_coxph_wcpF.tex" export latex
+
+** size
+{{{ynkplt_p_vrblcvrg_ratio}}}
+
+{{{ynkplt_p_vrblcvrg_pca}}}
+
+{{{ynkplt_p_pca_loadings}}}
+
+{{{ynkplt_p_scree}}}
+
+{{{ynkplt_p_pca_scores}}}
+
+
+Museum size has been less straightforward to measure, as data coverage in our database is much lower for closed museums (figure {{{refplt_p_vrblcvrg_ratio}}}; previously I called it "reverse causality", but actually I think it's more data missing at random (MAR), which means that observed variables (here, museum_status) influence the missingness of museum characteristics).
+#
+I used the variables where a missing value is meaningful to imply absence (e.g. if e.g. wealth is missing, it's not plausible to assume 0 wealth, but if there is no data on e.g. cafe/restaurant, it's possible that there just is no cafe), replaced missing values by zero, and constructed a PCA from them (for this subset of variables (figure {{{refplt_p_vrblcvrg_pca}}}) variable coverage is again much lower for closed museums).
+# 
+Figure {{{refplt_p_scree}}} shows the scree plot and figure {{{refplt_p_pca_loadings}}} the factor loadings on the first two (varimax-rotated) principal components (PCs). 
+# 
+Interpretation of the factors is not super straightforward (from the scree plot, one could also argue that just one factor makes sense), but I think it's somewhat possible to argue that PC1 would refers to museum facilities (shop, cafe/restaurant, webshop), or other things that require resources (rental possibility, sponsorship, donor program), which makes it a measure of size, while PC2 is more about artist support and audience engagement (support, education, talks, events, research, publications).
+#
+As is somewhat expected from the data coverage, closed museums are strongly overrepresented at the lower end of PC1 (figure {{{refplt_p_pca_scores}}} shows the scores of the museums on the factors, with some noise added to spread out the points at the extremes).
+#
+Hence, higher values on PC1 are strongly associated with lower mortality (table {{{reftbl_t_reg_coxph}}}).
+
+
+I'm curious to hear what you think about including such measures (I'm somewhat skeptical).
+#
+Also I've been thinking of other ways to measure museum size, the most promising ones that came to my mind are:
+- newspaper databases such as Lexis Nexis and the EBSCO Arts premium collection (more focused on art publications). A relative simple measurement would be how many articles are published in a year which mention the name of the museum. The assumption would generally be that larger museums have more capacities, and are more able to produce newsworthy "behaviors" (e.g. about exhibitions, events), but the downside is that this measures more directly recognition/interest, and would thus also be increased by articles that are decidated to news unrelated to museums capacities/activities, such as news/scandals about the founder. Furthermore english language media might be overrepresented there, and non-english media might use non-english names for the museums. Also it would be necessary to write/re-use scrapers, which doesn't seem impossible but would be some work. 
+- number of times the museum's url has been archived the wayback machine (archive.org), which relies on the logic similar to newspapers that as museums are more active, they generate more traffic, which means the crawler of the wayback machine are more likely to encounter it. The wayback machine has a straightforward API, so I checked how feasible this would be with our current database, but when I checked the museum URLs, I found that many are not the main links. The main issues I found when checking the first 34 links were additions that shouldn't be there (e.g. museum.com/en instead of museum.com), lack of additions that should be there (e.g. hotel.com instead of hotel.com/museum, inconsistent handling of branches, url changes, and no urls for closed museums which had one in the past. Of the 34 entries I checked, I would change 15 (I put them in column Museum_website2), which took around 1.5 hours, so I wanted to discuss it with you before spending more time on this.
+- Using the Artfacts data to measure the number of exhibitions or artists shown in a year. I'll start merging the Artfacts data since it's anyways necessary for the next paper.
+
+If you have other ideas how to measure size, let me know!
+  
+  
+
+
+
+
+
+
+
