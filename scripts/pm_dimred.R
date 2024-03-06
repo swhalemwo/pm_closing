@@ -129,6 +129,61 @@ gl_pca <- function(dt_pmdb, vrbls_dimred, ncomp) {
 
 }
 
+gp_cormat <- function(dt_pmdb, vrbls, nclust) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()};1;1;1;1;1;1;1;1;1;1;1;1;1
+
+    ## correlations
+    dt_matcor <- slt(dt_pmdb, vrbls) %>% replace_NA %>% cor %>% adt(keep.rownames = "vrblx")
+
+    clusters <- (1-(copy(dt_matcor)[, vrblx := NULL])) %>% as.dist %>% hclust(method = "complete")
+    ## plot(clusters)
+
+    
+    vrbl_order <- copy(dt_matcor)[, .(vrblx, cluster = cutree(clusters, nclust))] %>%
+        .[order(cluster), vrblx]
+
+    ## in long format
+    dt_corlong <- melt(dt_matcor, id.vars = "vrblx", variable.name = "vrbly", value.name = "cor") %>%
+        .[vrblx  == vrbly, cor := NA] %>% # make diag NA
+        .[, `:=`(vrblx = factor(vrblx, levels = vrbl_order),
+                 vrbly = factor(vrbly, levels = vrbl_order))] 
+        
+    
+    ggplot(dt_corlong, aes(x=vrblx, y=vrbly, fill = cor)) + geom_tile() +
+        theme(axis.text.x = element_text(angle = 25, hjust = 1)) +
+        scale_fill_gradient2(high = "red", low = "blue", na.value = "grey95", mid = "white")
+
+    
+    
+    ## library(heatmaply)
+    ## my_cor <- cor(mtcars)
+    ## heatmaply_cor(my_cor)
+    
+    ## cor_vrbls <- slt(dt_pmdb, vrbls) %>% replace_NA %>% cor
+    ## diag(cor_vrbls) <- NA
+    ## heatmaply_cor(cor_vrbls)
+    
+
+
+}
+
+gt_dimred <- function(dt_pmdb, vrbls) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+
+    #' construct summary table of how dimred vrbls change after NA imputation
+    
+    melt(dt_pmdb, measure.vars = vrbls, id.vars = "ID", variable.name = "vrbl", value.name = "orig") %>%
+        .[, filled := replace_NA(orig)] %>% # construct filled values (NA -> 0)
+        melt(id.vars = c("ID", "vrbl"), variable.name = "procstep") %>% # melt again (org/filled are procstep)
+        .[, map(list(mean, min, sd), ~.x(value, na.rm = T)), .(vrbl, procstep)] %>% # generate summary stats
+        setnames(old = paste0("V", seq(1,3)), new = .c(mean, min, sd)) %>% 
+        dcast(vrbl ~ procstep, value.var = .c(mean, min, sd))
+
+    
+}
+    
+
 
 ## ** dimension reduction fun
 
@@ -144,6 +199,8 @@ vrbls_dimred1 <- setdiff(num_vars(dt_pmdb_prep, return = "names"),
 ## hmm looks not unconvincing: the big museums are all quite well known
 ## social media is probably what makes Saatchi so big: shrinks basically all other to zeroes on all social medias
 
+l_pca_dimred1 <- gl_pca(dt_pmdb, vrbls_dimred1, ncomp = 2)
+l_pca_dimred1$rotatedLoadings %>% gd_dimred_loads %>% gp_dimred_loads
 
 ## use only variables where absence can plausibly be understood as 0 (absence)
 vrbls_dimred2 <- c(keep(names(dt_pmdb), ~grepl("^act_", .x)),
@@ -152,9 +209,14 @@ vrbls_dimred2 <- c(keep(names(dt_pmdb), ~grepl("^act_", .x)),
                    .c(temp_exhibs, cafe_restrnt, reducedtickets, museumshop,
                       rentalpossblt, webshop))
 
-
 l_pca_dimred2 <- gl_pca(dt_pmdb, vrbls_dimred2, ncomp = 2)
 l_pca_dimred2$rotatedLoadings %>% gd_dimred_loads %>% gp_dimred_loads
+
+gp_cormat(dt_pmdb, vrbls_dimred2, nclust = 2)
+
+
+
+
 
 
 
