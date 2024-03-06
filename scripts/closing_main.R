@@ -726,7 +726,7 @@ gt_sumstats <- function(dt_pmyear, dt_pmcpct) {
          align_cfg = c(rep("l",3), rep("r", 6)),
          hline_after = c(-1, nrow(dt_cbn_viz)),
          add_to_row = c_atr,
-         number_cols = c(rep(2, F), rep(T, 6)))
+         number_cols = c(rep(F, 2), rep(T, 6)))
     
     
     ## pm_density doesn't really make sense on museum-level
