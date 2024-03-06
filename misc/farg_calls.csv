@@ -9,6 +9,8 @@ gd_vrblcvrg,all_statuses,F
 gc_pmdb_vrblgrps,dt_pmdb,dt_pmdb
 gd_pmx,dt_pmdb,dt_pmdb
 gd_pmtiv,dt_pmx,dt_pmx
+gd_pmtiv,dt_pmdb,dt_pmdb
+gc_pmdb_vrblgrps,dt_pmdb,dt_pmdb
 gd_pmyear_prep,dt_pmx,dt_pmx
 gd_pmyear_prep,dt_pmtiv,dt_pmtiv
 gd_pmyear,dt_pmyear_prep,dt_pmyear_prep

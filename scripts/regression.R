@@ -277,7 +277,7 @@ gd_pmcpct <- function(dt_pmyear) {
     return(dt_pmcpct)
 }
 
-gd_pmtiv <- function(dt_pmx) {
+gd_pmtiv <- function(dt_pmx, dt_pmdb) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     gw_fargs(match.call())
@@ -314,8 +314,11 @@ gd_pmtiv <- function(dt_pmx) {
         .[, mow := fifelse(is.na(mow), 0, mow)]
     ## dt_mow_info[dt_pmx, on = .(PMDB_ID =  ID)]
 
-    attr(dt_pmtiv, "gnrtdby") <- as.character(match.call()[[1]])
-    return(dt_pmtiv)
+    dt_pca <- gd_pca(dt_pmdb)
+    dt_pmtiv_wpca <- join(dt_pmtiv, dt_pca, on = "ID")
+
+    attr(dt_pmtiv_wpca, "gnrtdby") <- as.character(match.call()[[1]])
+    return(dt_pmtiv_wpca)
 
 
 }
@@ -608,7 +611,8 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ## fullest model:
         ## FIXME: add founder_dead*muem_fndr_name
         r_more = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
-                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10, dt_pmyear)
+                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10 +
+                     V1 + V2, dt_pmyear)
 
         
 

@@ -184,35 +184,50 @@ gt_dimred <- function(dt_pmdb, vrbls) {
 }
     
 
+gd_pca <- function(dt_pmdb) {
+    vrbls_dimred2 <- c(keep(names(dt_pmdb), ~grepl("^act_", .x)),
+                       keep(names(dt_pmdb), ~grepl("^avbl_", .x)),
+                       gc_pmdb_vrblgrps(dt_pmdb)[grp == "relations", vrbl],
+                       .c(temp_exhibs, cafe_restrnt, reducedtickets, museumshop,
+                          rentalpossblt, webshop))
+
+    l_pca_dimred2 <- gl_pca(dt_pmdb, vrbls_dimred2, ncomp = 2)
+
+    return(l_pca_dimred2$dt_scores[, .(ID, V1, V2)])
+
+
+
+}
+
 
 ## ** dimension reduction fun
 
 
 ## will have different variable sets, e.g. whether founder should be there or not
 ## doesn't matter so much now which variables to use, just set up framework for plotting
-## just use for now all numeric
-vrbls_dimred1 <- setdiff(num_vars(dt_pmdb_prep, return = "names"),
-                         .c(llid, ID, # technical
-                            ## all time related
-                            year_opened, year_closed, birthyear, deathyear, an_fyear, an_lyear, an_nyears,
-                            lat, long))
-## hmm looks not unconvincing: the big museums are all quite well known
-## social media is probably what makes Saatchi so big: shrinks basically all other to zeroes on all social medias
+## ## just use for now all numeric
+## vrbls_dimred1 <- setdiff(num_vars(dt_pmdb_prep, return = "names"),
+##                          .c(llid, ID, # technical
+##                             ## all time related
+##                             year_opened, year_closed, birthyear, deathyear, an_fyear, an_lyear, an_nyears,
+##                             lat, long))
+## ## hmm looks not unconvincing: the big museums are all quite well known
+## ## social media is probably what makes Saatchi so big: shrinks basically all other to zeroes on all social medias
 
-l_pca_dimred1 <- gl_pca(dt_pmdb, vrbls_dimred1, ncomp = 2)
-l_pca_dimred1$rotatedLoadings %>% gd_dimred_loads %>% gp_dimred_loads
+## l_pca_dimred1 <- gl_pca(dt_pmdb, vrbls_dimred1, ncomp = 2)
+## l_pca_dimred1$rotatedLoadings %>% gd_dimred_loads %>% gp_dimred_loads
 
-## use only variables where absence can plausibly be understood as 0 (absence)
-vrbls_dimred2 <- c(keep(names(dt_pmdb), ~grepl("^act_", .x)),
-                   keep(names(dt_pmdb), ~grepl("^avbl_", .x)),
-                   gc_pmdb_vrblgrps(dt_pmdb)[grp == "relations", vrbl],
-                   .c(temp_exhibs, cafe_restrnt, reducedtickets, museumshop,
-                      rentalpossblt, webshop))
+## ## use only variables where absence can plausibly be understood as 0 (absence)
+## vrbls_dimred2 <- c(keep(names(dt_pmdb), ~grepl("^act_", .x)),
+##                    keep(names(dt_pmdb), ~grepl("^avbl_", .x)),
+##                    gc_pmdb_vrblgrps(dt_pmdb)[grp == "relations", vrbl],
+##                    .c(temp_exhibs, cafe_restrnt, reducedtickets, museumshop,
+##                       rentalpossblt, webshop))
 
-l_pca_dimred2 <- gl_pca(dt_pmdb, vrbls_dimred2, ncomp = 2)
-l_pca_dimred2$rotatedLoadings %>% gd_dimred_loads %>% gp_dimred_loads
+## l_pca_dimred2 <- gl_pca(dt_pmdb, vrbls_dimred2, ncomp = 2)
+## l_pca_dimred2$rotatedLoadings %>% gd_dimred_loads %>% gp_dimred_loads
 
-gp_cormat(dt_pmdb, vrbls_dimred2, nclust = 2)
+## gp_cormat(dt_pmdb, vrbls_dimred2, nclust = 2)
 
 
 
