@@ -230,6 +230,26 @@ gc_plts <- function() {
             caption = "PMDB variable coverage (abs/rel prop) by museum status and variable group",
             width = 18,
             height = 24),
+        p_vrblcvrg_pca = list(
+            dt_pmdb = quote(dt_pmdb),
+            l_pca_dimred2 = quote(l_pca_dimred2),
+            caption = "coverage of variables used in PCA",
+            width = 18, height = 16),
+        p_scree = list(
+            scree_vlus = quote(l_pca_dimred2$eigenvalues),
+            caption = "Scree plot of PCA dimensionality reduction",
+            width = 14,
+            height = 8),
+        p_pca_loadings = list(
+            l_pca_dimred2 = quote(l_pca_dimred2),
+            caption = "loadings of first 2 PCs",
+            width = 14, 
+            height = 12),
+        p_pca_scores = list(
+            l_pca_dimred2 = quote(l_pca_dimred2),
+            caption = "scores on first PCs",
+            width = 16,
+            height = 9),
         p_surv = list(
             dt_pmcpct = quote(dt_pmcpct),
             caption = "Private Museum Survival probability",
@@ -826,37 +846,33 @@ source(paste0(c_dirs$code, "pm_dimred.R"))
 source(paste0(c_dirs$code, "regression.R"))
 
 
+## actual pm data
+l_pca_dimred2 <- gl_pca_dimred2(dt_pmdb)
 
-dt_pmx <- gd_pmx(dt_pmdb)
-dt_pmtiv <- gd_pmtiv(dt_pmx, dt_pmdb)
-
-
-dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv)
-dt_pmyear <- gd_pmyear(dt_pmyear_prep)
-
-
-dt_pmcpct <- gd_pmcpct(dt_pmyear)
-
-l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct)
-l_mdlnames_coxph <- c("r_more")
-
-screenreg2(list(l_mdls$r_more))
-
-screenreg2(list(l_mdls$r_west_cpct, l_mdls$r_west_year, l_mdls$r_west_year2), digits = 4)
+dt_pmx <- gd_pmx(dt_pmdb) # extract of main variables
+dt_pmtiv <- gd_pmtiv(dt_pmx, l_pca_dimred2) # time invariant variables
 
 
 
-## generate plots and write them to file
-## FIXME: parallelize this: can use some overarching mclapply
-## mclapply(names(gc_plts()), \(x) lapply(c(gplt, wplt), \(f) f(x)), mc.cores = 6)
-## mclapply seems to break gwd_clgrph (?????) for whatever reason..
+dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv) # combine all data sources, as complete as possible
+dt_pmyear <- gd_pmyear(dt_pmyear_prep) # trim down dt to no NAs
+
+
+dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-year)
+
+l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
+l_mdlnames_coxph <- c("r_more") # set model names for t_reg_coxph
+
+screenreg2(list(l_mdls$r_more)) # just smoe display
+
+## screenreg2(list(l_mdls$r_west_cpct, l_mdls$r_west_year, l_mdls$r_west_year2), digits = 4)
 
 
 ## write numbers
 dt_nbrs <- gd_nbrs()
 fwrite(dt_nbrs, paste0(c_dirs$misc, "nbrs.csv"), quote = F)
 
-
+## generate plots/tables and write them to file
 plan(multicore, workers = 4)
 future_walk(names(gc_plts()), ~lapply(c(gplt, wplt), \(f) f(.x)))
 future_walk(names(gc_tbls()), ~lapply(c(gtbl, wtbl), \(f) f(.x)))

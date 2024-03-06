@@ -127,7 +127,8 @@ gl_pca <- function(dt_pmdb, vrbls_dimred, ncomp) {
 
     ## calculating/inspecting scores, in particular size
     dt_scores <- scale(dt_pca_prepped) %*% rawLoadings %>% adt %>%
-        cbind(dt_pmdb[museum_status %in% c("private museum", "closed"), .(ID, name, iso3c)], .) %>% adt 
+        cbind(dt_pmdb[museum_status %in% c("private museum", "closed"), .(ID, name, museum_status, iso3c)], .) %>%
+        adt 
 
 
     ## ggplot(dt_scores, aes(x=V1, y=V2)) + geom_jitter(width = 0.3, height = 0.3)
@@ -200,9 +201,40 @@ gt_dimred <- function(dt_pmdb, vrbls) {
 
     
 }
+
+gp_vrblcvrg_pca <- function(dt_pmdb, l_pca_dimred2) {
+    #' coverage of variables used in PCA
+
+    dt_pmdb_dimred_splong <- dt_pmdb[, .SD, .SDcols = c("ID", "museum_status",
+                                                        rownames(l_pca_dimred2$rawLoading))] %>%
+        melt(id.vars = c("ID", "museum_status"), variable.name = "vrbl")
+
+    dt_vrblcvrg_pca <- gd_vrblcvrg(dt_pmdb_dimred_splong, all_statuses = F)
+    p_vrblcvrg_pca <- gp_vrblcvrg_ratio(dt_vrblcvrg_pca)
+
+    return(p_vrblcvrg_pca)
+
+}
+
+
+gp_pca_loadings <- function(l_pca_dimred2) {
+    #' loadings
+
+    dt_dimred_loads <- gd_dimred_loads(l_pca_dimred2$rotatedLoadings)
+
+    gp_dimred_loads(dt_dimred_loads)
+}
+
+gp_pca_scores <- function(l_pca_dimred2) {
+    #' scores on PC1/2 by 
+
+    l_pca_dimred2$dt_scores %>% ggplot(aes(x=V1, y=V2, color = museum_status)) +
+        geom_jitter(width = 1, height = 1, size = 0.5)
+}
+
     
 
-gd_pca <- function(dt_pmdb) {
+gl_pca_dimred2 <- function(dt_pmdb) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     #' run a PCA on a set of variables, return scores
@@ -228,10 +260,10 @@ gd_pca <- function(dt_pmdb) {
     ## l_pca_dimred2$rotatedLoadings %>% gd_dimred_loads %>% gp_dimred_loads(include_row_clusters = F)
     
 
-    return(l_pca_dimred2$dt_scores[, .(ID, V1, V2)])
+    ## return(l_pca_dimred2$dt_scores[, .(ID, museum_status, iso3c, V1, V2)])
 
-
-
+    attr(l_pca_dimred2, "gnrtdby") <- as.character(match.call()[[1]])
+    return(l_pca_dimred2)
 }
 
 

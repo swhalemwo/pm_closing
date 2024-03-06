@@ -6,6 +6,10 @@ meanhaz_upto_100,0.79%,meanhaz
 ynkplt_p_vrblcvrg_ugrpd,(eval (concat "#+label: fig:p_vrblcvrg_ugrpd\n" "#+caption: PMDB variable coverage by museum status\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_vrblcvrg_ugrpd.pdf]]")),pltcfgs
 ynkplt_p_vrblcvrg,(eval (concat "#+label: fig:p_vrblcvrg\n" "#+caption: PMDB variable coverage by museum status and variable group\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_vrblcvrg.pdf]]")),pltcfgs
 ynkplt_p_vrblcvrg_ratio,(eval (concat "#+label: fig:p_vrblcvrg_ratio\n" "#+caption: PMDB variable coverage (abs/rel prop) by museum status and variable group\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_vrblcvrg_ratio.pdf]]")),pltcfgs
+ynkplt_p_vrblcvrg_pca,(eval (concat "#+label: fig:p_vrblcvrg_pca\n" "#+caption: coverage of variables used in PCA\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_vrblcvrg_pca.pdf]]")),pltcfgs
+ynkplt_p_scree,(eval (concat "#+label: fig:p_scree\n" "#+caption: Scree plot of PCA dimensionality reduction\n" "#+attr_latex: :width 14cm\n" "[[file:../figures/p_scree.pdf]]")),pltcfgs
+ynkplt_p_pca_loadings,(eval (concat "#+label: fig:p_pca_loadings\n" "#+caption: loadings of first 2 PCs\n" "#+attr_latex: :width 14cm\n" "[[file:../figures/p_pca_loadings.pdf]]")),pltcfgs
+ynkplt_p_pca_scores,(eval (concat "#+label: fig:p_pca_scores\n" "#+caption: scores on first PCs\n" "#+attr_latex: :width 16cm\n" "[[file:../figures/p_pca_scores.pdf]]")),pltcfgs
 ynkplt_p_surv,(eval (concat "#+label: fig:p_surv\n" "#+caption: Private Museum Survival probability\n" "#+attr_latex: :width 14cm\n" "[[file:../figures/p_surv.pdf]]")),pltcfgs
 ynkplt_p_hazard,(eval (concat "#+label: fig:p_hazard\n" "#+caption: Private Museum hazard function\n" "#+attr_latex: :width 16cm\n" "[[file:../figures/p_hazard.pdf]]")),pltcfgs
 ynkplt_p_agedens,(eval (concat "#+label: fig:p_agedens\n" "#+caption: Age distribution of private museums\n" "#+attr_latex: :width 17cm\n" "[[file:../figures/p_agedens.pdf]]")),pltcfgs
@@ -14,6 +18,10 @@ ynkplt_p_coxphdiag_more,(eval (concat "#+label: fig:p_coxphdiag_more\n" "#+capti
 refplt_p_vrblcvrg_ugrpd,\ref{fig:p_vrblcvrg_ugrpd},figlbls
 refplt_p_vrblcvrg,\ref{fig:p_vrblcvrg},figlbls
 refplt_p_vrblcvrg_ratio,\ref{fig:p_vrblcvrg_ratio},figlbls
+refplt_p_vrblcvrg_pca,\ref{fig:p_vrblcvrg_pca},figlbls
+refplt_p_scree,\ref{fig:p_scree},figlbls
+refplt_p_pca_loadings,\ref{fig:p_pca_loadings},figlbls
+refplt_p_pca_scores,\ref{fig:p_pca_scores},figlbls
 refplt_p_surv,\ref{fig:p_surv},figlbls
 refplt_p_hazard,\ref{fig:p_hazard},figlbls
 refplt_p_agedens,\ref{fig:p_agedens},figlbls
