@@ -62,19 +62,17 @@ wd_nbrs(dt_nbrs)
 #+MACRO: reftbl_t_sumstats \ref{tbl:t_sumstats}
 :end:
 
-* data update size and geodensity
+* data update geo density and size
 
 ** geographical density
 
 I've integrated a geospatial population dataset (The global human settlement Layer, GHSL), a raster (i.e. grid) with cells of size 1km * 1km, updated in 5-year intervals) which can be used to measure the population around a coordinate within a certain radius at a point in time.
-# 
-So far I'm constructing a 10km radius around each museum.
-# 
-I looked up the coordinates for our museums via the google maps API and addded them to the database (there are some which google didn't find, then it used the city center; these can be identified as having an "address_formatted" column of just "city, country", while those that google could find have a full address).
 #
-I also construct a measure of the number of private museums within 10km around each private museum.
+I looked up the coordinates for our museums via the google maps API and addded them to the database (there are some which google didn't find, it then used the city center; these museums can be identified as having an "address_formatted" column of just "city, country", while those that google could find have a full address).
 #
-I'm still not quite sure what is the best specification (size of the radius, count density or per capita density, link between national and circle density, squared), but the raw data for those is there (summary stats for the variables are in table {{{reftbl_t_sumstats}}}).
+So far I'm constructing a 10km radius around each museum for each year that it is open and measure the population and the number of other private museums within this radius. 
+#
+I'm still not quite sure what is the best specification (size of the radius, count density or per capita density, link between national and circle density, linear or squared), but the raw data for those is there (summary stats for the variables are in table {{{reftbl_t_sumstats}}}).
 #
 When I include numbers of PMs in surroundings and population in surroundings (table {{{reftbl_t_reg_coxph}}}), local density has a positive effect, indicating higher mortality when number of private museums is higher.
 #
@@ -91,9 +89,9 @@ This isn't really a perfect measure of competition since it only includes privat
 
 {{{ynkplt_p_vrblcvrg_pca}}}
 
-{{{ynkplt_p_pca_loadings}}}
-
 {{{ynkplt_p_scree}}}
+
+{{{ynkplt_p_pca_loadings}}}
 
 {{{ynkplt_p_pca_scores}}}
 
@@ -103,18 +101,19 @@ Museum size has been less straightforward to measure, as data coverage in our da
 I used the variables where a missing value is meaningful to imply absence (e.g. if e.g. wealth is missing, it's not plausible to assume 0 wealth, but if there is no data on e.g. cafe/restaurant, it's possible that there just is no cafe), replaced missing values by zero, and constructed a PCA from them (for this subset of variables (figure {{{refplt_p_vrblcvrg_pca}}}) variable coverage is again much lower for closed museums).
 # 
 Figure {{{refplt_p_scree}}} shows the scree plot and figure {{{refplt_p_pca_loadings}}} the factor loadings on the first two (varimax-rotated) principal components (PCs). 
-# 
-Interpretation of the factors is not super straightforward (from the scree plot, one could also argue that just one factor makes sense), but I think it's somewhat possible to argue that PC1 would refers to museum facilities (shop, cafe/restaurant, webshop), or other things that require resources (rental possibility, sponsorship, donor program), which makes it a measure of size, while PC2 is more about artist support and audience engagement (support, education, talks, events, research, publications).
+
+
+Interpretation of the factors is not super straightforward (from the scree plot, one could also argue that only one factor should be extracted), but I think it's somewhat possible to argue that PC1 would refers to museum facilities (shop, cafe/restaurant, webshop), or other things that require resources (rental possibility, sponsorship, donor program), which makes it a measure of size, while PC2 is more about artist support and audience engagement (support, education, talks, events, research, publications).
 #
 As is somewhat expected from the data coverage, closed museums are strongly overrepresented at the lower end of PC1 (figure {{{refplt_p_pca_scores}}} shows the scores of the museums on the factors, with some noise added to spread out the points at the extremes).
 #
-Hence, higher values on PC1 are strongly associated with lower mortality (table {{{reftbl_t_reg_coxph}}}).
+Hence, higher values on PC1 are strongly associated with lower mortality (table {{{reftbl_t_reg_coxph}}}), while PC2 is not significant.
 
 
-I'm curious to hear what you think about including such measures (I'm somewhat skeptical).
+I'm curious to hear what you think about including these measures (I'm somewhat skeptical).
 #
 Also I've been thinking of other ways to measure museum size, the most promising ones that came to my mind are:
-- newspaper databases such as Lexis Nexis and the EBSCO Arts premium collection (more focused on art publications). A relative simple measurement would be how many articles are published in a year which mention the name of the museum. The assumption would generally be that larger museums have more capacities, and are more able to produce newsworthy "behaviors" (e.g. about exhibitions, events), but the downside is that this measures more directly recognition/interest, and would thus also be increased by articles that are decidated to news unrelated to museums capacities/activities, such as news/scandals about the founder. Furthermore english language media might be overrepresented there, and non-english media might use non-english names for the museums. Also it would be necessary to write/re-use scrapers, which doesn't seem impossible but would be some work. 
+- newspaper databases such as Lexis Nexis and the EBSCO Arts premium collection (the latter is more focused on art publications). A relative simple measurement would be how many articles are published in a year which mention the name of the museum. The assumption would generally be that larger museums have more capacities, and are more able to produce newsworthy "behaviors" (e.g. about exhibitions, events), but the downside is that this measures more directly recognition/interest, and would thus also be increased by articles that are decidated to news unrelated to museums capacities/activities, such as news/scandals about the founder. Furthermore english language media might be overrepresented there, and non-english media might use non-english names for the museums. Also it would be necessary to write/re-use scrapers, which doesn't seem impossible but would be some work. 
 - number of times the museum's url has been archived the wayback machine (archive.org), which relies on the logic similar to newspapers that as museums are more active, they generate more traffic, which means the crawler of the wayback machine are more likely to encounter it. The wayback machine has a straightforward API, so I checked how feasible this would be with our current database, but when I checked the museum URLs, I found that many are not the main links. The main issues I found when checking the first 34 links were additions that shouldn't be there (e.g. museum.com/en instead of museum.com), lack of additions that should be there (e.g. hotel.com instead of hotel.com/museum, inconsistent handling of branches, url changes, and no urls for closed museums which had one in the past. Of the 34 entries I checked, I would change 15 (I put them in column Museum_website2), which took around 1.5 hours, so I wanted to discuss it with you before spending more time on this.
 - Using the Artfacts data to measure the number of exhibitions or artists shown in a year. I'll start merging the Artfacts data since it's anyways necessary for the next paper.
 
