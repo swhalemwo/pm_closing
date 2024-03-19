@@ -211,7 +211,7 @@ dt_other_papers %>% fcount(child) %>% roworder(-N) %>% sbt(1:30)
 
 [[cite:&Dupuy_Ron_Prakash_2014_crackdown]]: can cite it as extreme case, or even use their measurement
 
-[[cite:&Vance_2010_funding]]
+[[cite:&Vance_2010_funding]]: more government funding -> less failure
 
 [[cite:&Shon_Lu_2023_demographic]]: heh really milking your IRS data aren't you
 [[cite:&Park_Shon_Lu_2021_mortality]]: meh IRS
@@ -278,14 +278,19 @@ cite:&Dobrev_etal_2006_interdependence: also interesting in regards to theory-da
 check Dieuwke's lit
 
 [[cite:&Thornton_Lecy_2022_funding]]: government funding -> financial health
+Jeremy Thornton: His current research emphasizes the influence of market competition on nonprofit organizations and financing for social enterprises.
 
 [[cite:&Fernandez_2007_dissolution]]: gets cited a lot me thinks
 
 [[cite:&Hannan_1998_mortality]]: probably good for age dependence, but also not NPO-specific
 
+[[cite:&Hager_Galaskiewicz_Larson_2007_liability]]
 
 
-** donesies 
+** donesies
+:PROPERTIES:
+:ID:       75057010-55c0-4782-915d-84602e1bf321
+:END:
 
 [[cite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]]:
 success/failure: not really closing; closing rather can be a type of either -> paper is more abstracted
@@ -706,6 +711,253 @@ althrough IIRC the
 more local shows/PMDB -> lower mortality?
 # but this could also be competition -> resources basically turns pretty quickly into density dependence
 
+***** [[cite:&Hager_1999_demise]]: 
+has competition
+
+p.2:  an organization may cease to exist if its structured work activities are ineffective, the organization is not able to compete against other organizations or organizational representatives fail to sustain the resources necessary to maintain the work structure.
+
+p.12 table
+|----------+--------------------+-------------+--------------+--------------------|
+|          | ecology/structural | legitimacy  | relational   | strat mgmt         |
+|----------+--------------------+-------------+--------------+--------------------|
+| internal | newness/small size | leaders not | internal     | lack of human      |
+|          |                    | committed   | conflict     | capital/skills     |
+|----------+--------------------+-------------+--------------+--------------------|
+| external | dense niche        | lack of     | network: NPO | mission completion |
+|          | -> competition     | legitimacy  | is isolated  |                    |
+|----------+--------------------+-------------+--------------+--------------------|
+
+
+p.172: A popular misconception about nonprofit organizations is that they do not 
+compete for clients and operating capital as for-profits do. While the nature of services 
+between nonprofit organizations and for-profits may generally differ, nonprofits are 
+subject to strong competitive pressures. The Niche Theory captures this argument.  
+Organizations reside in particular resource spaces, sharing resources and competing for 
+clients and funds with organizations they most resemble (Galaskiewicz and Bielefeld 
+1998)
+
+p.173: Ten organizations cited an inability to compete as a proximate cause for closure, 
+making it the most popular proximate cause of organizational closure.
+
+p.173: Both [art organizations] noted that 
+the majority of the community’s arts dollars, both individual donations/subscriptions and 
+community and corporate grants, tended to go to the singular, most reputable arts 
+organizations of their types (e.g. museums, orchestras, dance troupes) in the metro area. Other arts organizations faced strong competitive pressures from these flagship 
+organizations, a factor which caused the demise of Organizations 276 and 293
+
+main mechanisms: density, concentration
+
+***** [[cite:&Hager_Galaskiewicz_Larson_2007_liability]]
+
+p.163: competition part of density: 
+
+According to the ecologists, the dynamics underlying
+the density effect is an oversupply of providers that find themselves competing
+against one another for a limited number of *customers, funders, donors and other*
+*resources*. Eventually the ‘fittest’ survive. It then follows that organizations in less
+dense niches should have better survival chances because they face less competition.
+
+
+
+p.183: We were more surprised to find that older organizations with public funding were
+more susceptible to closing. In contrast, public funding had no effect on closure among
+very young organizations. There are many possible explanations for this, although our
+data did not allow us to test alternative explanations. For instance, government
+demands for accountability may choke an organization to death. The cost of meeting
+these demands may put a nonprofit at a *competitive* disadvantage vis-a-vis those who do
+not have these reporting responsibilities. Another explanation is that government
+funding may be more ‘fickle’. Funding is tied both to changes in political regimes and
+the economy. Organizations can lose their funding through no fault of their own, and
+loss of funding may not reflect the nonprofit’s true value to the community or the
+quality of its services. Alternatively, government funders may be particularly poor
+judges of quality and resiliency. In other words, the positive effect on failure may be
+symptomatic of government’s poor judgment in whom they select as partners or to
+whom the make grant awards. Or, government may tend to fund organizations that are
+already down the ‘slippery slope’. More research is needed on government funding
+effects.
+
+# competition is kinda always there, and  therefore lower capabilities/more demands increase chance of failure
+
+main mechanism: density
+
+
+***** [[cite:&Thornton_Gonas_Lohrke_2012_trailblazer]] :irrelevant:
+
+
+more about consequences of NPO: spillover, public goods
+profit maximizing (PM) vs profit deviating (PD) entrepreneur
+more about entry based on motivations/goals, not exit
+
+cites: [[cite:&Harrison_Laincz_2008_nonprofit]]
+
+
+Jesse Lecy is an assistant professor at the Maxwell School of Policy Studies at Syracuse University and a research fellow with the Transnational NGO Initiative at Syracuse University. His research focuses on understanding how nonprofits compete for resources and the effects of competition on organizational survival and performance.
+
+***** [[cite:&Harrison_Laincz_2008_nonprofit]] :irrelevant:
+:PROPERTIES:
+:CREATED:  [2024-03-19 di 18:24]
+:ID:       42a9df04-acc9-41ee-8689-281a54d58272
+:END:
+
+competition mostly about competition between NPOs and POs
+not really about competition as cause of exit
+
+p.3: One explanation for low exit rates among nonprofits may be that there ex-
+ists a cooperative element in their behavior. New nonprofit entrepreneurs may be
+more likely to internalize their impact on existing nonprofits when making entry
+or location decisions. Thus, exit rates would fall because NP entrepreneurs “care”
+about their counterparts as partners rather than rivals and behave less competi-
+tively. If so, we would expect low exit rates among sectors dominated by NPs, but
+not necessarily in mixed markets where for-profit competition is often substantial.
+Table 2 shows mean annual gross entry and exit rates and the net entry rate across
+nonprofit sectors from 1989-2000. The rates vary by sector, with Public Safety
+and Environment showing the highest gross and net entry rates, while Diseases has the lowest. The gross entry rate across all sectors is 5.6% and the exit rate is
+only 2.1%. Table 2 demonstrates that *the pattern of low exit rates and high net en-*
+*try rates applies across all types of nonprofit sectors where for-profit competition*
+*varies greatly*. None of the sectors has an exit rate higher than 3.5%. The highest
+exit rate comes from International which also has a gross entry rate of 7.8%, well
+above average.
+
+# i guess this means that low exit rates are not due to less competitive mindset of NPOs, because exit rate is also "low" when there are FPOs around?
+# table 2 doesn't show percentage of FPOs tho -> variation in exit rate could still be due to rate of FPOs?
+
+
+*Avg exit rate for Arts, Culture and Humanities: 2.29%*
+
+p.35: Matching our detailed sectoral information with data
+on competing for-profits should better reveal whether exit threshold differences
+by type of organization are substantial. It would also allow for assessing how the
+degree of for-profit competition affects entry and exit.
+
+***** [[cite:&Thornton_Lecy_2022_funding]]
+:PROPERTIES:
+:CREATED:  [2024-03-19 di 17:59]
+:ID:       d37d880e-4f28-4a73-847a-5b90b2cb6f1c
+:END:
+
+grants -> size, operating margins, financial reserves
+likely that is increases survival
+
+i guess you could argue that more competition means these grants are less likely to be obtained
+
+2.5% of NPOs are arts, get around 1.2% of funds
+# -> i'm not looking in a good spot: there's no way you can squeeze a general organizational, or even NPO argument from this topic
+
+main mechanism: resources? 
+
+
+
+***** [[cite:&Lecy_2010_nonprofit]]:
+
+p.4: Nonprofit competition has been addressed in a variety of ways in the literature.  Early research 
+on the economics of nonprofits focused on how nonprofits compete with for-profit firms in 
+mixed markets (Hansmann 1979; Weisbrod 1988).  Much of the research has examined ways 
+that nonprofits compete for private donations (Andreoni 1990; Brooks 2000; Barman 2001; Thornton 2006), or ways that nonprofits differentiate their brand in order to attract funding 
+(James 1983; Kotler and Andreasen 1996; Barman 2001; Fruttero and Gauri 2005).  Others have 
+looked at ways nonprofits can respond to competitive markets through optimal mixes of private 
+donations, government grants, and commercial activities (Kingma 1993; Froelich 1999).  
+Missing from these studies, though, is an analysis of how nonprofits compete for contracts and 
+grants.
+
+p.6:  Competition for contracts or grants is unlike 
+competition for clients, members, or individual donors, though, because the lumpiness of 
+resources leads to sporadic revenue structures.  These three essays each provide building blocks 
+for the study of these marketplaces.
+# he can write his entire diss about one mechanism of competition, while I have to have to consider all competition * all other factors * three other RQs :((((((((((((((((((((
+
+p.9: Chapter 2, for example, will show that large organizations are able to absorb a significant 
+proportion of new resources that enter a sector, leading to increased vulnerability for small 
+organizations
+# seems a lot about the specific form of competition/selection due to grant making
+
+p.12: We know from other 
+research that nonprofits are vulnerable to resource downturns.  This chapter provides insight 
+about how nonprofits compete for resources in a case where a sector is expanding.  The 
+international sector experiences a large influx of resources at one particular point, which leads to interesting dynamics.  The picture of competition that emerges is one of non-equitable sector 
+expansion.  Large organizations capture new sector resources and benefit disproportionately 
+from expansion.  Sector expansion also leads to higher rates of mortality for existing 
+organizations.
+
+essay2:
+p.21: The implication is that the sector continues to expand during the period of 
+high resources – the entry rate is still higher than the exit rate so the number of 
+organizations is growing – but the increase in mortality rates has implications for the 
+nature of competition within the sector. 
+
+IRS 990 data
+competition: basically amount of organizations,
+also argument that more concentration -> more competition?
+
+Much could be gained by linking the nonprofit density literature to the nonprofit ecological studies???
+
+p.27: The analysis shows that a period of rapid sector expansion – a period where 
+many additional resources are being poured into the sector – creates a more competitive 
+environment as evidenced by higher rates of organizational mortality.
+# funny circular argument: competition increases mortality because mortality (which increases) is caused by competition
+
+p.28: The results from the study are counter-intuitive – more resources lead to increased 
+mortality rates and inequality
+
+main mechanism: concentration
+
+***** [[cite:&Fernandez_2007_dissolution]]
+:PROPERTIES:
+:CREATED:  [2024-03-19 di 18:51]
+:ID:       70d85137-daac-4afd-9482-93608996f014
+:END:
+
+p.116: competition via density: 
+as the niche grows, the population will become more legitimate, and closure rates will fall until the growing density and subsequent competition for resources start to raise mortality rates again.
+
+main mechanism: density
+
+***** [[cite:&Vance_2010_funding]] :irrelevant:
+:PROPERTIES:
+:CREATED:  [2024-03-19 di 18:59]
+:ID:       96303c71-2707-4995-b789-99fe92a8c656
+:END:
+
+holy table dumb batman: table 3Z
+more government funding -> less failure
+
+
+***** [[cite:&Shon_Lu_2023_demographic]]
+:PROPERTIES:
+:CREATED:  [2024-03-19 di 19:13]
+:ID:       54265b9a-cf6f-4073-834a-12dc64f6f012
+:END:
+
+p.6: we controlled for nonprofit sector size and competition within a county, as 
+the competitive landscape impacts nonprofits’ survival prospects (Hager et al., 2004; 
+Hannan & Freeman, 1988). The total number of nonprofits per 10,000 people in county 
+per year is employed as a proxy for nonprofit sector size (Grønbjerg & Paarlberg, 
+2001). Similar to previous studies (Seaman et al., 2014; Shea & Hamilton, 2015), we 
+employed the Herfindahl–Hirschman Index (HHI) to gauge nonprofit resource compe-
+tition.6 Since we also divided nonprofits into five subsectors, subsector size and com-
+petition in a county per year were used in subsector analyses. Fifth, we included two 
+sets of dummy variables for each county and each fiscal year for the fixed-effects 
+specifications.
+
+competition -> more closing
+
+main mechanism: concentration
+
+
+***** [[cite:&Park_Shon_Lu_2021_mortality]]
+:PROPERTIES:
+:CREATED:  [2024-03-19 di 19:37]
+:ID:       3c948c1a-d72b-41ce-a823-d482c1e9fc42
+:END:
+
+p.837: Nonprofit density, the number of nonprofits per 1,000 people in a 
+county, is included to capture potential competition
+
+p.844: Furthermore, nonprofits that run their busi-
+ness in a county with greater organizational density and population size are 
+more likely to dissolve, which implies that competition, as well as demand 
+for service, prevents nonprofits from surviving
+
+main mechanism: density
 
 **** data
 PMDB density: could be proxy for how much art there is?
@@ -777,7 +1029,6 @@ could rather be indicator of organizational resources
 
 **** data
 pmdb: cooperation with other organizations
-
 
 
 
