@@ -284,7 +284,7 @@ Jeremy Thornton: His current research emphasizes the influence of market competi
 
 [[cite:&Hannan_1998_mortality]]: probably good for age dependence, but also not NPO-specific
 
-[[cite:&Hager_Galaskiewicz_Larson_2007_liability]]
+
 
 
 ** donesies
@@ -735,6 +735,17 @@ subject to strong competitive pressures. The Niche Theory captures this argument
 Organizations reside in particular resource spaces, sharing resources and competing for 
 clients and funds with organizations they most resemble (Galaskiewicz and Bielefeld 
 1998)
+      Two different situations stemming from niche competition may cause financial 
+hardships for nonprofit organizations.  The first is some characteristic of the organization 
+or some change in the composition of the niche that compromises the ability of the organization to compete for funds. [...]  The environment favored larger 
+organizations, and third party payers were no longer available to the smaller ones.  In this 
+situation, which is the one captured by the /displaced by competing organizations/ focused 
+code, there is nothing in the narrative that necessarily suggests a decline in the resources 
+available to the entire niche.  The second niche competition situation which breeds 
+hardship for nonprofits is when the total amount of resources available to a particular 
+niche is decreased, thereby increasing competition for the scarce resources.  I capture 
+these events with the /decreased funding availability/ code, described in the next subpoint.
+
 
 p.173: Ten organizations cited an inability to compete as a proximate cause for closure, 
 making it the most popular proximate cause of organizational closure.
@@ -745,7 +756,7 @@ community and corporate grants, tended to go to the singular, most reputable art
 organizations of their types (e.g. museums, orchestras, dance troupes) in the metro area. Other arts organizations faced strong competitive pressures from these flagship 
 organizations, a factor which caused the demise of Organizations 276 and 293
 
-main mechanisms: density, concentration
+main mechanism: density, concentration
 
 ***** [[cite:&Hager_Galaskiewicz_Larson_2007_liability]]
 
@@ -958,6 +969,184 @@ more likely to dissolve, which implies that competition, as well as demand
 for service, prevents nonprofits from surviving
 
 main mechanism: density
+
+***** [[cite:&HernandezOrtiz_2022_discontinuity]]
+:PROPERTIES:
+:CREATED:  [2024-03-20 wo 10:19]
+:ID:       68eb1aa9-88c6-41a9-a415-a42bfc3aa461
+:END:
+
+p.32: ccording to this theory, the mortality of organizations is 
+dependent on the density of the market (organizations within the same niche) (Hannan & 
+Freeman, 1989). This is explained by two mechanisms: legitimation and competition. The 
+first helps to increase the number of organizations within a niche. As more organizations 
+are founded, competition increases. The exit rates of organizations would be low as the 
+niche legitimizes, but high as competition increases (Hannan & Freeman, 1989)
+
+p.116:  A crowded niche increased 
+the competition and limited their access to resources and clients. As reported by 
+informant of organization #C07: 
+Well, there was less money to go around and more organizations seeking the 
+money. Here we have the same, the same group of people that were supporting 
+the organization, you know, donating to it and that only goes so far. So, we had a 
+full-time grant writer, we were always applying for grants. But there are so many 
+organizations applying for the same grants. (P31, Pos. 49-51)
+
+p.118: "denser niche"
+p.121: Increased competition -> denser niche
+[[file:./images/screenshot-01.png]]
+
+also has stuff competition -> mergers
+
+p.168: Size itself is not the issue in small nonprofits, but rather how small size limits 
+their organizational capacity to access critical resources, including financial and human 
+resources (Frumkin, 2002b).
+
+main mechanism: density
+
+***** cite:&Lu_Shon_Zhang_2019_dissolution
+:PROPERTIES:
+:CREATED:  [2024-03-20 wo 10:38]
+:ID:       c1536596-f71a-44fa-9bc7-d2d11f52c572
+:END:
+
+p.37: Nonprofit density, measured as the number of 
+nonprofits (regardless of their service fields) per 10,000 residents in a county, is used 
+to capture the competition landscape that a nonprofit confronts in its operating envi-
+ronment.
+
+p.43: For example, nonprofits operating in a more competitive environment with a higher degree of organizational density would experience a higher chance of dissolution.
+
+main mechanism: density 
+
+
+***** [[cite:&Arbogust_2020_closure]] :irrelevant:
+:PROPERTIES:
+:CREATED:  [2024-03-20 wo 10:52]
+:ID:       6b2285f3-9a95-4fe2-98ff-d9f45414fe72
+:END:
+
+mentions competition but only in introduction
+mostly about organizational finance
+
+***** [[cite:&Herlin_2013_sorry]] :irrelevant:
+:PROPERTIES:
+:CREATED:  [2024-03-20 wo 10:55]
+:ID:       eb32ed5d-87d5-4050-a2a7-17e560b48162
+:END:
+
+***** [[cite:&Haugh_etal_2021_nascent]]
+:PROPERTIES:
+:CREATED:  [2024-03-20 wo 10:58]
+:ID:       733ae8af-71a6-410b-b9c5-2a92ff5e666f
+:END:
+
+p.1227: SEs are likely
+to compete with non-profit organizations for grants,
+donations, and programme-related investments. Second,
+both SEs and non-profit organizations serve the disad-
+vantaged and socially excluded and thus may also com-
+pete for service users. Although collaboration between
+SEs and charities could increase the supply of services
+to those in need (Smiddy 2010), they compete with each
+other for resources and beneficiaries. The more similar
+the resource needs and markets served, the greater the
+competition between the organizational forms (Baum
+and Haveman 1997). Hence, the population density of
+registered non-profit organizations will thus have a det-
+rimental effect on SE survival.
+2.5.2 H2b.The higher the population density
+of registered non-profit organizations, the lower
+the likelihood of SE survival
+
+
+CIC: community interest company
+CIC LAA: population CICs at local authority area
+SME: small-medium enterprise
+SME-LAA: SME population at local authority area
+
+p.1231: As the
+population density of CICs increases, the lower the
+likelihood of CIC dissolution at the 0.001 level.
+
+p.1231:  Results in models 5 and 7 find
+a statistically significant positive relationship between
+the population density of SMEs and SE survival. [..]
+Hypothesis 2b predicted that
+the higher the population density of non-profit organi-
+zations, the lower the likelihood of SE survival. The
+results in model 6 and model 7 support hypothesis 2b.
+
+p.1236: There is a strong degree of
+intertwining between the relationships that means
+the results need to be treated with caution. There is
+a positive inter-population relationship between SE
+survival and SMEs and a negative relationship be-
+tween SEs and charities.
+# not squared
+
+main mechanism: density
+
+***** [[cite:&Lounsbury_Ventresca_Hirsch_2003_recycling]]
+:PROPERTIES:
+:CREATED:  [2024-03-20 wo 11:14]
+:ID:       ea4d4240-61dc-4cdd-a8c5-b9adef5b08f8
+:END:
+
+p.89: Grassroots recycling advocates believed
+that W-T-E (a) was bad for the environment due to its air emissions and production
+of toxic ash, and (b) would eliminate the potential for recycling because W-T-E
+incineration is generally a directly competing solution to recycling
+
+main mechanism: "concentration" ("resources" (garbage) go not to NPOs but elsehwere)
+
+***** [[cite:&Dobrev_etal_2006_interdependence]]
+:PROPERTIES:
+:CREATED:  [2024-03-20 wo 11:24]
+:ID:       21b8d448-48c0-4575-a25f-006aecaa8751
+:END:
+
+p.578: Commensalistic interdependence at the community
+level, which we investigate here, gives rise to both
+mutualism and competition among populations (Hawley
+1950). Ecological research on this topic seeks to under-
+stand how organizational proliferation of one population
+shapes the growth and survival chances of another, and
+generally follows the logic of the density-dependence
+model (Hannan and Freeman 1977, Hannan and Carroll
+1992). This theory posits that social forces of constitu-
+tive legitimation and diffuse competition for resources
+are the primary drivers of organizational interdepen-
+dence.
+
+p.580: Here we adopt a modeling framework proposed by
+Dobrev (2001) that provides theoretical and empirical
+bases for allowing the proliferation of one type of orga-
+nization to simultaneously drive legitimation and inten-
+sify competition experienced by another population, in
+the same nonmonotonic fashion predicted by the origi-
+nal model of density-dependent evolution within a pop-
+ulation (Hannan and Freeman 1977). In his study of
+the Bulgarian postsocialist newspaper industry, Dobrev
+(2001) showed that the proliferation of political parties
+and organizations (PPOs) helped to legitimate the inde-
+pendent press, but that continued growth in the num-
+ber of PPOs led to depleted resources on which both
+populations relied, and thus decreased the founding rate
+of newspaper enterprises. The basic argument is that
+the two populations overlapped both in resource space
+(political activists needed to staff organizations of both
+forms) and in identity space (pro- or anticommunist ide-
+ological conviction).
+
+resource space, identity overlap
+# -> hmm what did Sara find with her idenity stuff?
+[[orgit-rev:~/Dropbox/phd/papers/closing/::f507ea2528dc655b108cac2872ec9630019de7eb][~/Dropbox/phd/papers/closing/ (magit-rev f507ea2)]]
+no way I can use mission for closed museums
+
+
+
+
 
 **** data
 PMDB density: could be proxy for how much art there is?
