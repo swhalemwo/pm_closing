@@ -255,7 +255,9 @@ https://www.theinternationalman.com/art-museums.php LUL
 
 [[cite:&Wakefield_2017_superrich]]
 
-[[cite:&Petersen_Koput_1991_heterogeneity]]: decreasing mortality when density increases could be unobserved heterogeneity -> should measure legitimation directly
+[[cite:&Petersen_Koput_1991_heterogeneity]]: decreasing mortality when density increases could be unobserved heterogeneity in frailty/survival capabilities:
+frail organizations die first -> if each year founding of each frailty is equally likely, total population becomes less frail
+-> should measure legitimation directly
 see how it relates to [[cite:&Lomi_1995_population]]
 [[cite:&Tasselli_Zappa_Lomi_2020_holes]]
 
@@ -854,7 +856,8 @@ i guess you could argue that more competition means these grants are less likely
 2.5% of NPOs are arts, get around 1.2% of funds
 # -> i'm not looking in a good spot: there's no way you can squeeze a general organizational, or even NPO argument from this topic
 
-main mechanism: resources? 
+main mechanism: resources?
+
 
 
 
@@ -1098,7 +1101,7 @@ that W-T-E (a) was bad for the environment due to its air emissions and producti
 of toxic ash, and (b) would eliminate the potential for recycling because W-T-E
 incineration is generally a directly competing solution to recycling
 
-main mechanism: "concentration" ("resources" (garbage) go not to NPOs but elsehwere)
+main mechanism: "concentration" ("resources" (trash) go not to NPOs but elsehwere)
 
 ***** [[cite:&Dobrev_etal_2006_interdependence]]
 :PROPERTIES:
@@ -1144,9 +1147,28 @@ resource space, identity overlap
 [[orgit-rev:~/Dropbox/phd/papers/closing/::f507ea2528dc655b108cac2872ec9630019de7eb][~/Dropbox/phd/papers/closing/ (magit-rev f507ea2)]]
 no way I can use mission for closed museums
 
+As we argued, an
+established population (commercial banks, in our case)
+exerts both mutualistic and competitive effects on an
+emergent one (financial co-ops) with which it overlaps
+in resource and identity space. The effects are simulta-
+neous, yet the extent to which they affect organizational
+life chances is uneven. Following density-dependence
+theory, we expect that legitimation dominates competi-
+tion at low counts but this effect reverses as the number
+of organizations in the established population increases.
+It follows that
+Hypothesis 1. Low-level increases in the number of
+banks (low density) will decrease the failure rate of
+financial cooperatives
+Hypothesis 2. High-level increases in the number of
+banks (high density) will elevate the failure rate of finan-
+cial cooperatives.
 
+main mechanism: mutualism?, density
+also stuff about form identity/form violation
 
-
+also some time interactions
 
 **** data
 PMDB density: could be proxy for how much art there is?
