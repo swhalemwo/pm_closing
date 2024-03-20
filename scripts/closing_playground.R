@@ -194,3 +194,22 @@ wtbl2("t_gttest")
 dtblF("t_gttest")
 
 wtbl_pdf("t_gttest", F)
+
+## ** mission comparison
+
+## mean
+dt_pmdb[, .(nchar_mission = replace_NA(nchar(mission)), museum_status)] %>%
+    .[, .(mean_nchar_mission = mean(nchar_mission)), museum_status]
+## mean 3.2x higher for open museums -> can pretty much forget it
+
+## density
+dt_pmdb[, .(nchar_mission = replace_NA(nchar(mission)), museum_status)] %>%
+    ggplot(aes(x=nchar_mission, fill  = museum_status)) + geom_density(alpha = 0.2)
+
+
+## barplot
+dt_pmdb[, .(nchar_mission = floor(replace_NA(nchar(mission)/100)), museum_status)] %>%
+    .[, .N, .(museum_status, nchar_mission)] %>%
+    ggplot(aes(x=nchar_mission, y=N, fill = museum_status)) +
+    geom_col() +
+    facet_grid(museum_status ~.)
