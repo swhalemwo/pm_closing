@@ -232,21 +232,21 @@ gc_plts <- function() {
             height = 24),
         p_vrblcvrg_pca = list(
             dt_pmdb = quote(dt_pmdb),
-            l_pca_dimred2 = quote(l_pca_dimred2),
+            l_pca_dimred = quote(l_pca_dimred),
             caption = "coverage of variables used in PCA",
             width = 18, height = 16),
         p_scree = list(
-            scree_vlus = quote(l_pca_dimred2$eigenvalues),
+            scree_vlus = quote(l_pca_dimred$eigenvalues),
             caption = "Scree plot of PCA dimensionality reduction",
             width = 14,
             height = 8),
         p_pca_loadings = list(
-            l_pca_dimred2 = quote(l_pca_dimred2),
+            l_pca_dimred = quote(l_pca_dimred),
             caption = "loadings of first 2 PCs",
             width = 14, 
             height = 12),
         p_pca_scores = list(
-            l_pca_dimred2 = quote(l_pca_dimred2),
+            l_pca_dimred = quote(l_pca_dimred),
             caption = "scores on first PCs",
             width = 16,
             height = 9),
@@ -847,10 +847,11 @@ source(paste0(c_dirs$code, "regression.R"))
 
 
 ## actual pm data
-l_pca_dimred2 <- gl_pca_dimred2(dt_pmdb)
+l_pca_dimred <- gl_pca_dimred(dt_pmdb)
+l_pca_dimred_woclosed <- gl_pca_dimred(dt_pmdb[museum_status != "closed"])
 
 dt_pmx <- gd_pmx(dt_pmdb) # extract of main variables
-dt_pmtiv <- gd_pmtiv(dt_pmx, l_pca_dimred2) # time invariant variables
+dt_pmtiv <- gd_pmtiv(dt_pmx, l_pca_dimred) # time invariant variables
 
 
 

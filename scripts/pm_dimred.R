@@ -56,7 +56,7 @@ gp_dimred_loads <- function(dt_dimred_loads, include_row_clusters = F) {
     ## in the end: want rows in an order within cluster: select from dt_dimred_loads_clustered
     ## some arbitrary reordering necessary (-abs(value), rev) due to ggplot nonsense
     row_ordered <- dt_dimred_loads_clustered[dt_clusters_ordered, on = .(cluster, dim)] %>%
-        .[, .SD[order(-abs(value))][, vrbl], .(dim, cluster), ] %>% .[, V1] %>% rev
+        .[, .SD[order(-abs(value))][, vrbl], .(dim, cluster), ] %>% .[, PC1] %>% rev
     
     
     ## assign order of rows and row clusters/sections
@@ -108,13 +108,13 @@ gl_pca <- function(dt_pmdb, vrbls_dimred, ncomp) {
     #' @param ncomp number of factors to extract
     
     dt_pca_prepped <- slt(dt_pmdb[museum_status %in% c("private museum", "closed")], vrbls_dimred) %>%
-        tfmv(vars = names(.), FUN = replace_NA) 
+        tfmv(vars = names(.), FUN = replace_NA)  # fill up missing values with 0: NA assumed to mean absence
     
     ## actual PCA, scale = T
-    l_pcares_prcomp <- prcomp(dt_pca_prepped, scale=T)
+    l_pcares_prcomp <- prcomp(dt_pca_prepped, scale=T, center = T)
 
     
-    rawLoadings <- l_pcares_prcomp$rotation[,1:ncomp, drop = F] %*% diag(l_pcares_prcomp$sdev, ncomp, ncomp)
+    rawLoadings <- l_pcares_prcomp$rotation[,1:ncomp, drop = F] # %*% diag(l_pcares_prcomp$sdev, ncomp, ncomp)
     ## diag = eigenvalues?
 
     ## rotate, processing depends on number of factors
@@ -124,11 +124,22 @@ gl_pca <- function(dt_pmdb, vrbls_dimred, ncomp) {
         rotatedLoadings <- varimax(rawLoadings)
     }
 
+    
+    ## unrotated scores
+    ## dt_scores <- scale(dt_pca_prepped, center = T, scale = T) %*% l_pcares_prcomp$rotation %>% adt %>%
+    ##     cbind(dt_pmdb[museum_status %in% c("private museum", "closed"), .(ID, name, museum_status, iso3c)], .) %>%
+    ##     adt
+    
 
-    ## calculating/inspecting scores, in particular size
-    dt_scores <- scale(dt_pca_prepped) %*% rawLoadings %>% adt %>%
+    ## rotated scores
+    dt_scores <- scale(dt_pca_prepped, center = T, scale = T) %*% rotatedLoadings %>% adt %>%
         cbind(dt_pmdb[museum_status %in% c("private museum", "closed"), .(ID, name, museum_status, iso3c)], .) %>%
-        adt 
+        adt
+    
+    ## m_pca_score_rot %>% .[, c(1,2)] %>% adt %>%
+    ##     ggplot(aes(x=PC1, y=PC2)) + geom_jitter(width = 0.3, height = .3)
+
+    ## predict(l_pcares_prcomp, dt_pca_prepped) %>% adt %>% .[, .(PC1, PC2)]
 
 
     ## ggplot(dt_scores, aes(x=V1, y=V2)) + geom_jitter(width = 0.3, height = 0.3)
@@ -140,7 +151,8 @@ gl_pca <- function(dt_pmdb, vrbls_dimred, ncomp) {
     ## https://stats.stackexchange.com/questions/59213/how-to-compute-varimax-rotated-principal-components-in-r
 
     list(
-        eigenvalues = l_pcares_prcomp$sdev^2,
+        prcomp_obj = l_pcares_prcomp, # also return PCA object for comfy predictions
+        eigenvalues = l_pcares_prcomp$sdev^2, # for scree
         rawLoading = rawLoadings,
         rotatedLoadings = rotatedLoadings,
         dt_scores = dt_scores)
@@ -202,11 +214,11 @@ gt_dimred <- function(dt_pmdb, vrbls) {
     
 }
 
-gp_vrblcvrg_pca <- function(dt_pmdb, l_pca_dimred2) {
+gp_vrblcvrg_pca <- function(dt_pmdb, l_pca_dimred) {
     #' coverage of variables used in PCA
 
     dt_pmdb_dimred_splong <- dt_pmdb[, .SD, .SDcols = c("ID", "museum_status",
-                                                        rownames(l_pca_dimred2$rawLoading))] %>%
+                                                        rownames(l_pca_dimred$rawLoading))] %>%
         melt(id.vars = c("ID", "museum_status"), variable.name = "vrbl")
 
     dt_vrblcvrg_pca <- gd_vrblcvrg(dt_pmdb_dimred_splong, all_statuses = F)
@@ -217,30 +229,30 @@ gp_vrblcvrg_pca <- function(dt_pmdb, l_pca_dimred2) {
 }
 
 
-gp_pca_loadings <- function(l_pca_dimred2) {
+gp_pca_loadings <- function(l_pca_dimred) {
     #' loadings
 
-    dt_dimred_loads <- gd_dimred_loads(l_pca_dimred2$rotatedLoadings)
+    dt_dimred_loads <- gd_dimred_loads(l_pca_dimred$rotatedLoadings)
 
     gp_dimred_loads(dt_dimred_loads)
 }
 
-gp_pca_scores <- function(l_pca_dimred2) {
+gp_pca_scores <- function(l_pca_dimred) {
     #' scores on PC1/2 by 
 
-    l_pca_dimred2$dt_scores %>% ggplot(aes(x=V1, y=V2, color = museum_status)) +
+    l_pca_dimred$dt_scores %>% ggplot(aes(x=PC1, y=PC2, color = museum_status)) +
         geom_jitter(width = 1, height = 1, size = 0.5)
 }
 
     
 
-gl_pca_dimred2 <- function(dt_pmdb) {
+gl_pca_dimred <- function(dt_pmdb) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     #' run a PCA on a set of variables, return scores
     
     ## set variables
-    vrbls_dimred2 <- c(keep(names(dt_pmdb), ~grepl("^act_", .x)),
+    vrbls_dimred <- c(keep(names(dt_pmdb), ~grepl("^act_", .x)),
                        keep(names(dt_pmdb), ~grepl("^avbl_", .x)),
                        gc_pmdb_vrblgrps(dt_pmdb)[grp == "relations", vrbl],
                        .c(temp_exhibs, cafe_restrnt, reducedtickets, museumshop,
@@ -254,7 +266,7 @@ gl_pca_dimred2 <- function(dt_pmdb) {
         
 
     ## run analysis
-    l_pca_dimred2 <- gl_pca(dt_pmdb, vrbls_dimred2, ncomp = 2)
+    l_pca_dimred <- gl_pca(dt_pmdb, vrbls_dimred, ncomp = 2)
 
     ## debug: visualize loadings
     ## l_pca_dimred2$rotatedLoadings %>% gd_dimred_loads %>% gp_dimred_loads(include_row_clusters = F)
@@ -262,10 +274,136 @@ gl_pca_dimred2 <- function(dt_pmdb) {
 
     ## return(l_pca_dimred2$dt_scores[, .(ID, museum_status, iso3c, V1, V2)])
 
-    attr(l_pca_dimred2, "gnrtdby") <- as.character(match.call()[[1]])
-    return(l_pca_dimred2)
+    attr(l_pca_dimred, "gnrtdby") <- as.character(match.call()[[1]])
+    return(l_pca_dimred)
 }
 
+
+
+## * main
+if (interactive()) {stop("it's interactive time")}
+
+l_pca_dimred <- gl_pca_dimred(dt_pmdb)
+l_pca_dimred_woclosed <- gl_pca_dimred(dt_pmdb[museum_status != "closed"])
+
+## replace_NA(dt_pmdb[museum_status %in% c("private museum", "closed"), .SD,
+##                    .SDcols = rownames(l_pca_dimred$rotatedLoadings)]) %>% scale %>% adt %>% .[1:5]
+
+## ## scale variables before calculating scores
+## replace_NA(dt_pmdb[museum_status %in% c("private museum", "closed"), .SD[1:5],
+##                          .SDcols = rownames(l_pca_dimred$rotatedLoadings)]) %>% as.matrix %>%
+##       subtract(matrix(l_pca_dimred$prcomp_obj$center, nrow = 5,  byrow = T,
+##                       ncol = len(l_pca_dimred$prcomp_obj$center))) %>%
+##             ## add(rep(-l_pca_dimred$prcomp_obj$center, each = nrow(.)))
+##       multiply_by(matrix(1/l_pca_dimred$prcomp_obj$scale, nrow = 5, byrow = T,
+##                          ncol = len(l_pca_dimred$prcomp_obj$scale))) %>%
+##       multiply_by_matrix(l_pca_dimred$rotatedLoading)
+        
+
+## predict scores for closed ones
+        
+
+dt_pca_scores_closed_imputed <- replace_NA(
+    dt_pmdb[museum_status == "closed", .SD, # prep data: replace NAs with 0s
+            .SDcols = rownames(l_pca_dimred_woclosed$rotatedLoadings)]) %>% as.matrix %>%
+    subtract(matrix(l_pca_dimred_woclosed$prcomp_obj$center, # undo centering
+                    nrow = dt_pmdb[museum_status == "closed", .N], byrow = T,
+                    ncol = len(l_pca_dimred_woclosed$prcomp_obj$center))) %>%
+    multiply_by(matrix(1/l_pca_dimred_woclosed$prcomp_obj$scale, # undo scaling
+                       nrow = dt_pmdb[museum_status == "closed", .N] , byrow = T,
+                       ncol = len(l_pca_dimred_woclosed$prcomp_obj$scale))) %>%
+    multiply_by_matrix(l_pca_dimred_woclosed$rotatedLoadings) %>% adt # calculating scores
+ 
+
+## assign imputed scores for closed PMs back to to l_pca result
+l_pca_dimred_woclosed$dt_scores <- rbind(
+    l_pca_dimred_woclosed$dt_scores,
+    cbind(dt_pca_scores_closed_imputed, dt_pmdb[museum_status == "closed", .(ID, name, museum_status, iso3c)]))
+
+
+
+
+
+
+## dt_pmdb[museum_status == "closed", .SD, .SDcols = rownames(l_pca_dimred_woclosed$rotatedLoadings)] %>%
+    
+## %*% l_pca_dimred_woclosed$rotatedLoadings
+
+
+
+## compare loadings
+dt_pca_cpr_loads <- map2(list(l_pca_dimred, l_pca_dimred_woclosed), list("all", "woclosed"),
+     ~chuck(.x, "rotatedLoadings")[, 1:2] %>% adt(keep.rownames = "vrbl") %>% .[, src := .y]) %>%
+    rbindlist %>% dcast(vrbl ~ src, value.var  = c("PC1", "PC2")) 
+
+
+library(ggrepel)
+## reshaping fun https://cran.r-project.org/web/packages/data.table/vignettes/datatable-reshape.html
+## value.name keyword
+
+## compare loadings plot 1
+dt_pca_cpr_loads %>% melt(id.vars = "vrbl", measure.vars = measure(value.name, src, sep = "_")) %>%
+    .[src == "woclosed", `:=`(PC1 = PC1 * -1, PC2 = PC2 * -1)] %>% # align PCs (get twisted sometimes/how)
+    ggplot(aes(x=PC1, y=PC2, label = vrbl, color = src)) +
+    geom_point() +  geom_text_repel(show.legend = F, size = 3) + 
+    geom_segment(dt_pca_cpr_loads, mapping = aes(x=PC1_all, y=PC2_all, xend = PC1_woclosed*-1,
+                                                 yend = PC2_woclosed*-1), color = "black")
+
+## compare loadings plot2
+dt_pca_cpr_loads %>% melt(id.vars = "vrbl", measure.vars = measure(PC, src, sep = "_")) %>%
+    .[src == "woclosed", value := value *-1] %>% 
+    ggplot(aes(x=value, y=vrbl, fill = src)) + geom_col(position = position_dodge()) +
+    facet_grid(~PC)
+
+
+
+## correlations of loadings are super high: 0.99, 0.98
+dt_pca_cpr_loads[, .SD, .SDcols = patterns("^PC")] %>% cor
+
+## compare scores
+dt_pca_cpr_scores <- map2(list(l_pca_dimred, l_pca_dimred_woclosed), list("all", "woclosed"),
+                          ~chuck(.x, "dt_scores")[, src := .y]) %>% rbindlist %>%
+                     dcast(ID + museum_status ~ src, value.var  = c("PC1", "PC2")) 
+
+## correlation of scores are pretty high too: 0.99
+dt_pca_cpr_scores[, .SD, .SDcols = patterns("^PC")] %>% cor(use = "complete.obs")
+
+
+## https://cran.r-project.org/web/packages/data.table/vignettes/datatable-reshape.html
+## somehow using sep + cols doesn't work -> have to use pattern, which does work: 
+## this doesn't work
+## melt(dt_pca_cpr_scores, id.vars =  c("ID", "museum_status"),
+##      measure.vars = measure(value.name, src, sep = "_",
+##                             cols = c("PC1_all", "PC1_woclosed","PC2_all", "PC2_woclosed")))
+
+
+melt(dt_pca_cpr_scores, id.vars =  c("ID", "museum_status"),
+     measure.vars = measure(value.name, src, pattern = "(PC.*)_(.*)")) %>%
+    .[src == "woclosed" , `:=`(PC1 = PC1*-1, PC2 = PC2 *-1)] %>% 
+    ggplot(aes(x=PC1, y=PC2, color = museum_status)) +
+    geom_jitter(width = 0.3, height = 0.3, size = 1) + 
+    facet_wrap(~src, scales = "free")
+
+## change of scores between all and woclosed
+ggplot(dt_pca_cpr_scores, aes(x=PC1_all, y=PC2_all, xend = PC1_woclosed*-1, yend = PC2_woclosed*-1,
+                                 color = museum_status)) +
+    geom_point(position = position_jitter(width = 0.2, height = 0.2, seed = 10), show.legend = F, size = 0.5) + 
+    geom_segment(arrow = arrow(length = unit(0.1, "cm")),
+                 alpha = 0.7,
+                 position = position_jitter(width = 0.2, height = 0.2, seed = 10))
+
+## mean scores
+melt(dt_pca_cpr_scores, id.vars =  c("ID", "museum_status"),
+     measure.vars = measure(PC, src, pattern = "(PC.*)_(.*)")) %>%
+    .[src == "woclosed", value := value *-1] %>% 
+    .[, .(mean_value = mean(value)), .(PC, museum_status, src)] %>%
+    ggplot(aes(x=museum_status, y=mean_value, fill = src, color = src)) +
+    geom_col(position = position_dodge()) +
+    geom_point(position = position_dodge(width = 1)) +
+    geom_text(mapping = aes(label = round(mean_value, digits = 2)), position = position_dodge(width = 1),
+              color = "black") + 
+    facet_wrap(~PC)
+    
 
 ## ** dimension reduction fun
 
