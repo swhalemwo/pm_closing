@@ -16,7 +16,7 @@
 :ID:       61593c59-cb66-48e6-b019-07bf29a2d980
 :END:
 
-** look at stability if only open museums are used for principal component construction
+** PCA
 
 #+begin_src R :exports none
 library(pmdata)
@@ -25,6 +25,7 @@ library(patchwork) # combining complex plots
 library(purrr) # looping
 library(ggrepel) # plotting 
 library(collapse) # data processing
+library(ggbeeswarm)
 
 c_dirs <- gc_dirs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## project dirs
 PMDATA_LOCS <- gc_pmdata_locs()
@@ -36,7 +37,7 @@ dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
 
 END_YEAR <- 2021
 
-
+source(paste0(c_dirs$code, "cfg.R"))
 source(paste0(c_dirs$code, "vrblcvrg.R"))
 source(paste0(c_dirs$code, "regression.R"))
 source(paste0(c_dirs$code, "pm_dimred.R"))
@@ -46,7 +47,6 @@ source(paste0(c_dirs$code, "pm_dimred.R"))
 
 #+RESULTS:
 
-woclosed: PCA loadings are calculated only with open museums, then scores for closed museums are calculated from those loadings
 
 #+begin_src R :exports none
 l_pca_dimred <- gl_pca_dimred(dt_pmdb)
@@ -87,6 +87,44 @@ l_pca_dimred_woclosed$dt_scores <- rbind(
 
 #+end_src
 
+
+#+name: p_vrblcvrg_pca
+#+begin_src R :exports results :results output graphics file :file p_vrblcvrg_pca.pdf :width 6 :height 5.5
+gp_vrblcvrg_pca(dt_pmdb, l_pca_dimred)
+#+end_src
+
+#+attr_latex: :width 6in
+#+RESULTS: p_vrblcvrg_pca
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_vrblcvrg_pca.pdf]]
+
+coverage of variables used for PCA is worse for closed museum by factor of around exp(1) = 2.8.
+
+#+name: p_scree
+#+begin_src R :exports results :results output graphics file :file p_scree.pdf :width 5.5 :height 4
+gp_scree(l_pca_dimred$eigenvalues)
+#+end_src
+
+#+attr_latex: :width 5.5in
+#+RESULTS: p_scree
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_scree.pdf]]
+
+Scree plot: maybe just one PC worth extracting, but just use two because that's standard
+
+#+name: p_pca_loadings
+#+begin_src R :exports results :results output graphics file :file p_pca_loadings.pdf :width 5.5 :height 4.5
+gp_pca_loadings(l_pca_dimred)
+#+end_src
+
+#+attr_latex: :width 5.5in
+#+RESULTS: p_pca_loadings
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_pca_loadings.pdf]]
+
+
+
+
+** look at stability if only open museums are used for principal component construction
+
+woclosed: PCA loadings are calculated only with open museums, then scores for closed museums are calculated from those loadings
 
 
 #+name: p_cpr_loads_scatter

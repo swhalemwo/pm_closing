@@ -56,7 +56,7 @@ gp_dimred_loads <- function(dt_dimred_loads, include_row_clusters = F) {
     ## in the end: want rows in an order within cluster: select from dt_dimred_loads_clustered
     ## some arbitrary reordering necessary (-abs(value), rev) due to ggplot nonsense
     row_ordered <- dt_dimred_loads_clustered[dt_clusters_ordered, on = .(cluster, dim)] %>%
-        .[, .SD[order(-abs(value))][, vrbl], .(dim, cluster), ] %>% .[, PC1] %>% rev
+        .[, .SD[order(-abs(value))][, vrbl], .(dim, cluster), ] %>% .[, V1] %>% rev
     
     
     ## assign order of rows and row clusters/sections
@@ -231,6 +231,7 @@ gp_vrblcvrg_pca <- function(dt_pmdb, l_pca_dimred) {
 
 gp_pca_loadings <- function(l_pca_dimred) {
     #' loadings
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
 
     dt_dimred_loads <- gd_dimred_loads(l_pca_dimred$rotatedLoadings)
 
