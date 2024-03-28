@@ -281,65 +281,9 @@ gl_pca_dimred <- function(dt_pmdb) {
 
 
 ## * main
-if (interactive()) {stop("it's interactive time")}
-
-l_pca_dimred <- gl_pca_dimred(dt_pmdb)
-l_pca_dimred_woclosed <- gl_pca_dimred(dt_pmdb[museum_status != "closed"])
-
-## replace_NA(dt_pmdb[museum_status %in% c("private museum", "closed"), .SD,
-##                    .SDcols = rownames(l_pca_dimred$rotatedLoadings)]) %>% scale %>% adt %>% .[1:5]
-
-## ## scale variables before calculating scores
-## replace_NA(dt_pmdb[museum_status %in% c("private museum", "closed"), .SD[1:5],
-##                          .SDcols = rownames(l_pca_dimred$rotatedLoadings)]) %>% as.matrix %>%
-##       subtract(matrix(l_pca_dimred$prcomp_obj$center, nrow = 5,  byrow = T,
-##                       ncol = len(l_pca_dimred$prcomp_obj$center))) %>%
-##             ## add(rep(-l_pca_dimred$prcomp_obj$center, each = nrow(.)))
-##       multiply_by(matrix(1/l_pca_dimred$prcomp_obj$scale, nrow = 5, byrow = T,
-##                          ncol = len(l_pca_dimred$prcomp_obj$scale))) %>%
-##       multiply_by_matrix(l_pca_dimred$rotatedLoading)
-        
-
-## predict scores for closed ones
-        
-
-dt_pca_scores_closed_imputed <- replace_NA(
-    dt_pmdb[museum_status == "closed", .SD, # prep data: replace NAs with 0s
-            .SDcols = rownames(l_pca_dimred_woclosed$rotatedLoadings)]) %>% as.matrix %>%
-    subtract(matrix(l_pca_dimred_woclosed$prcomp_obj$center, # undo centering
-                    nrow = dt_pmdb[museum_status == "closed", .N], byrow = T,
-                    ncol = len(l_pca_dimred_woclosed$prcomp_obj$center))) %>%
-    multiply_by(matrix(1/l_pca_dimred_woclosed$prcomp_obj$scale, # undo scaling
-                       nrow = dt_pmdb[museum_status == "closed", .N] , byrow = T,
-                       ncol = len(l_pca_dimred_woclosed$prcomp_obj$scale))) %>%
-    multiply_by_matrix(l_pca_dimred_woclosed$rotatedLoadings) %>% adt # calculating scores
- 
-
-## assign imputed scores for closed PMs back to to l_pca result
-l_pca_dimred_woclosed$dt_scores <- rbind(
-    l_pca_dimred_woclosed$dt_scores,
-    cbind(dt_pca_scores_closed_imputed, dt_pmdb[museum_status == "closed", .(ID, name, museum_status, iso3c)]))
 
 
 
-
-
-
-## dt_pmdb[museum_status == "closed", .SD, .SDcols = rownames(l_pca_dimred_woclosed$rotatedLoadings)] %>%
-    
-## %*% l_pca_dimred_woclosed$rotatedLoadings
-
-
-
-## compare loadings
-dt_pca_cpr_loads <- map2(list(l_pca_dimred, l_pca_dimred_woclosed), list("all", "woclosed"),
-     ~chuck(.x, "rotatedLoadings")[, 1:2] %>% adt(keep.rownames = "vrbl") %>% .[, src := .y]) %>%
-    rbindlist %>% dcast(vrbl ~ src, value.var  = c("PC1", "PC2")) 
-
-
-library(ggrepel)
-## reshaping fun https://cran.r-project.org/web/packages/data.table/vignettes/datatable-reshape.html
-## value.name keyword
 
 ## compare loadings plot 1
 dt_pca_cpr_loads %>% melt(id.vars = "vrbl", measure.vars = measure(value.name, src, sep = "_")) %>%
@@ -390,7 +334,8 @@ ggplot(dt_pca_cpr_scores, aes(x=PC1_all, y=PC2_all, xend = PC1_woclosed*-1, yend
     geom_point(position = position_jitter(width = 0.2, height = 0.2, seed = 10), show.legend = F, size = 0.5) + 
     geom_segment(arrow = arrow(length = unit(0.1, "cm")),
                  alpha = 0.7,
-                 position = position_jitter(width = 0.2, height = 0.2, seed = 10))
+                 position = position_jitter(width = 0.2, height = 0.2, seed = 10)) +
+    coord_cartesian(xlim = c(-2.5, -1.75), ylim = c(-2.5, -2))
 
 ## mean scores
 melt(dt_pca_cpr_scores, id.vars =  c("ID", "museum_status"),
@@ -403,7 +348,73 @@ melt(dt_pca_cpr_scores, id.vars =  c("ID", "museum_status"),
     geom_text(mapping = aes(label = round(mean_value, digits = 2)), position = position_dodge(width = 1),
               color = "black") + 
     facet_wrap(~PC)
-    
+## differences between groups by museum_status is much larger than differences between src
+   
+## ** comparison with size numeric variables
+l_vrbls_size <- .c(clctn_size, staff_size, insta_flwrs, insta_posts, fb_flwrs, fb_likes, google_nbrrvws,
+                  trpadvsr_nbrrvws, twitter_flwrs, youtube_flwrs)
+
+## melt size variables into long
+dt_pmdb_size_long <- dt_pmdb[museum_status %in% c("private museum", "closed"), .SD,
+        .SDcols = c("ID", "museum_status", l_vrbls_size)] %>% copy() %>%
+    .[, staff_size := as.numeric(factor(staff_size, # staff_size has to be recoded
+                                        levels = c("1-5 employees", "6-10 employees", "11–20 employees",
+                                                   "21–40 employees", "more than 40 employees")))] %>%
+    melt(id.vars = c("ID", "museum_status"), variable.name = "vrbl_size", value.name = "vlu_size")
+
+## melt PC scores into long
+dt_pmdb_pca_long <- melt(dt_pca_cpr_scores, id.vars =  "ID",
+                         measure.vars = measure(PC, src, pattern = "(PC.*)_(.*)"),
+                         value.name = "vlu_pc") %>%
+    .[src == "woclosed", vlu_pc := vlu_pc *-1]
+   
+## combine both PCA scores and size variable scores with cross join
+dt_cpr_size_prep <- merge(dt_pmdb_size_long, dt_pmdb_pca_long, by = "ID", allow.cartesian = T)
+
+dt_cpr_size <- rbind(copy(dt_cpr_size_prep)[, tfm := "orig"],
+                     copy(dt_cpr_size_prep)[, `:=`(vlu_size = log(vlu_size), tfm = "log")])
+
+
+library(jtls) # for formatting p values
+
+
+## calculate correlation, p, N for each combination
+dt_size_pca_corcoefs <- dt_cpr_size[complete.cases(vlu_size, vlu_pc) & !is.infinite(vlu_size),
+                                    cor.test(vlu_pc, vlu_size) %$% list(r = estimate, p = p.value, N = .N),
+                                    .(vrbl_size, PC, src, tfm)] %>%
+    .[, label := sprintf("r=%s%s, N=%s", format(round(r, 2), digits = 2, nsmall = 2),
+                         fmt_pvlu(p) %>% substr(3, nchar(.)-1), N), .I]
+
+
+## plot on original size variables
+p_sizecor_orig <- dt_cpr_size[tfm == "orig"] %>% 
+    ggplot(aes(x=vlu_pc, y=vlu_size)) +
+    geom_point(size = 0.2, color = "gray60") +
+    geom_smooth(method = "lm") + 
+    facet_grid(vrbl_size ~ PC + src, scales = "free") +
+    geom_text(dt_size_pca_corcoefs[tfm == "orig"], mapping = aes(x=Inf, y=Inf,
+                                                  label = label),
+              hjust = 1.05, vjust = 1.5)
+
+## plot on log-scaled size variables
+p_sizecor_log <- dt_cpr_size[tfm == "log"] %>% 
+    ggplot(aes(x=vlu_pc, y=vlu_size)) +
+    geom_point(size = 0.2, color = "gray60") +
+    geom_smooth(method = "lm") + 
+    facet_grid(vrbl_size ~ PC + src, scales = "free") +
+    geom_text(dt_size_pca_corcoefs[tfm == "log"], mapping = aes(x=Inf, y=Inf,
+                                                  label = label),
+              hjust = 1.05, vjust = 1.5)
+## p_sizecor_log
+
+library(patchwork)
+p_sizecor_orig + p_sizecor_log
+
+ggplot(dt_size_pca_corcoefs, aes(x=r, y=vrbl_size, color = tfm, shape = src, size = N)) + geom_point() +
+    facet_grid(~PC) +
+    scale_shape_manual(values = c(23,22)) +
+    scale_size_continuous(range = c(3,7))
+
 
 ## ** dimension reduction fun
 

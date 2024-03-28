@@ -1,0 +1,87 @@
+#+PROPERTY: header-args:R :session *R:dimred*
+#+PROPERTY: header-args:R+ :output-dir /home/johannes/Dropbox/phd/papers/closing/notes/dimred/
+#+PROPERTY: header-args:R+ :tangle yes
+
+
+* dimensionality reduction notebook
+
+#+begin_src R
+library(pmdata)
+library(jtls)
+library(patchwork)
+library(purrr)
+library(ggrepel)
+
+c_dirs <- gc_dirs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## project dirs
+PMDATA_LOCS <- gc_pmdata_locs()
+
+dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%
+    .[museum_status %in% c("private museum", "closed")] # yeet bad PMs
+dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
+
+
+END_YEAR <- 2021
+
+source(paste0(c_dirs$code, "pm_dimred.R"))
+source(paste0(c_dirs$code, "regression.R"))
+
+
+
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+l_pca_dimred <- gl_pca_dimred(dt_pmdb)
+l_pca_dimred_woclosed <- gl_pca_dimred(dt_pmdb[museum_status != "closed"])
+
+## replace_NA(dt_pmdb[museum_status %in% c("private museum", "closed"), .SD,
+##                    .SDcols = rownames(l_pca_dimred$rotatedLoadings)]) %>% scale %>% adt %>% .[1:5]
+
+## ## scale variables before calculating scores
+## replace_NA(dt_pmdb[museum_status %in% c("private museum", "closed"), .SD[1:5],
+##                          .SDcols = rownames(l_pca_dimred$rotatedLoadings)]) %>% as.matrix %>%
+##       subtract(matrix(l_pca_dimred$prcomp_obj$center, nrow = 5,  byrow = T,
+##                       ncol = len(l_pca_dimred$prcomp_obj$center))) %>%
+##             ## add(rep(-l_pca_dimred$prcomp_obj$center, each = nrow(.)))
+##       multiply_by(matrix(1/l_pca_dimred$prcomp_obj$scale, nrow = 5, byrow = T,
+##                          ncol = len(l_pca_dimred$prcomp_obj$scale))) %>%
+##       multiply_by_matrix(l_pca_dimred$rotatedLoading)
+        
+
+## predict scores for closed ones
+        
+
+dt_pca_scores_closed_imputed <- replace_NA(
+    dt_pmdb[museum_status == "closed", .SD, # prep data: replace NAs with 0s
+            .SDcols = rownames(l_pca_dimred_woclosed$rotatedLoadings)]) %>% as.matrix %>%
+    subtract(matrix(l_pca_dimred_woclosed$prcomp_obj$center, # undo centering
+                    nrow = dt_pmdb[museum_status == "closed", .N], byrow = T,
+                    ncol = len(l_pca_dimred_woclosed$prcomp_obj$center))) %>%
+    multiply_by(matrix(1/l_pca_dimred_woclosed$prcomp_obj$scale, # undo scaling
+                       nrow = dt_pmdb[museum_status == "closed", .N] , byrow = T,
+                       ncol = len(l_pca_dimred_woclosed$prcomp_obj$scale))) %>%
+    multiply_by_matrix(l_pca_dimred_woclosed$rotatedLoadings) %>% adt # calculating scores
+
+## assign imputed scores for closed PMs back to to l_pca result
+l_pca_dimred_woclosed$dt_scores <- rbind(
+    l_pca_dimred_woclosed$dt_scores,
+    cbind(dt_pca_scores_closed_imputed, dt_pmdb[museum_status == "closed", .(ID, name, museum_status, iso3c)]))
+
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R
+## compare loadings
+
+## reshaping fun https://cran.r-project.org/web/packages/data.table/vignettes/datatable-reshape.html
+## value.name keyword
+
+dt_pca_cpr_loads <- map2(list(l_pca_dimred, l_pca_dimred_woclosed), list("all", "woclosed"),
+     ~chuck(.x, "rotatedLoadings")[, 1:2] %>% adt(keep.rownames = "vrbl") %>% .[, src := .y]) %>%
+    rbindlist %>% dcast(vrbl ~ src, value.var  = c("PC1", "PC2")) 
+
+
+#+end_src
