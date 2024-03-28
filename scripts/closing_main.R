@@ -362,13 +362,11 @@ if ("memoised" %!in% class(gd_mow_info)) {
 
 END_YEAR <- 2021
 
-source(paste0(c_dirs$code, "pm_dimred.R"))
-source(paste0(c_dirs$code, "regression.R"))
 
 
 ## actual pm data
-l_pca_dimred <- gl_pca_dimred(dt_pmdb)
-l_pca_dimred_woclosed <- gl_pca_dimred(dt_pmdb[museum_status != "closed"])
+## l_pca_dimred <- gl_pca_dimred(dt_pmdb)
+## l_pca_dimred_woclosed <- gl_pca_dimred(dt_pmdb[museum_status != "closed"])
 
 dt_pmx <- gd_pmx(dt_pmdb) # extract of main variables
 dt_pmtiv <- gd_pmtiv(dt_pmx, l_pca_dimred) # time invariant variables

@@ -315,10 +315,10 @@ gd_pmtiv <- function(dt_pmx, l_pca_dimred2) {
     ## dt_mow_info[dt_pmx, on = .(PMDB_ID =  ID)]
 
     ## join PCA
-    dt_pmtiv_wpca <- join(dt_pmtiv, l_pca_dimred2$dt_scores[, .(ID, V1, V2)], on = "ID")
+    ## dt_pmtiv_wpca <- join(dt_pmtiv, l_pca_dimred2$dt_scores[, .(ID, V1, V2)], on = "ID")
 
-    attr(dt_pmtiv_wpca, "gnrtdby") <- as.character(match.call()[[1]])
-    return(dt_pmtiv_wpca)
+    attr(dt_pmtiv, "gnrtdby") <- as.character(match.call()[[1]])
+    return(dt_pmtiv)
 
 
 }
@@ -611,8 +611,8 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ## fullest model:
         ## FIXME: add founder_dead*muem_fndr_name
         r_more = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
-                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10 +
-                     V1 + V2, dt_pmyear)
+                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+                       dt_pmyear) # V1 + V2
 
         
 
