@@ -277,7 +277,7 @@ gd_pmcpct <- function(dt_pmyear) {
     return(dt_pmcpct)
 }
 
-gd_pmtiv <- function(dt_pmx, l_pca_dimred2) {
+gd_pmtiv <- function(dt_pmx) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     gw_fargs(match.call())
