@@ -2,15 +2,29 @@
 #+PROPERTY: header-args:R+ :output-dir /home/johannes/Dropbox/phd/papers/closing/notes/dimred/
 #+PROPERTY: header-args:R+ :tangle yes
 
+#+latex_class: article_usual2
+# erases make title
+# #+BIND: org-export-latex-title-command ""
+
+# fucks all the maketitlestuff just to be sure
+#+OPTIONS: num:nil
+#+OPTIONS: toc:nil
+#+OPTIONS: h:5
 
 * dimensionality reduction notebook
+:PROPERTIES:
+:ID:       61593c59-cb66-48e6-b019-07bf29a2d980
+:END:
 
-#+begin_src R
+** look at stability if only open museums are used for principal component construction
+
+#+begin_src R :exports none
 library(pmdata)
 library(jtls)
-library(patchwork)
-library(purrr)
-library(ggrepel)
+library(patchwork) # combining complex plots
+library(purrr) # looping
+library(ggrepel) # plotting 
+library(collapse) # data processing
 
 c_dirs <- gc_dirs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## project dirs
 PMDATA_LOCS <- gc_pmdata_locs()
@@ -22,16 +36,19 @@ dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
 
 END_YEAR <- 2021
 
-source(paste0(c_dirs$code, "pm_dimred.R"))
-source(paste0(c_dirs$code, "regression.R"))
 
+source(paste0(c_dirs$code, "vrblcvrg.R"))
+source(paste0(c_dirs$code, "regression.R"))
+source(paste0(c_dirs$code, "pm_dimred.R"))
 
 
 #+end_src
 
 #+RESULTS:
 
-#+begin_src R
+woclosed: PCA loadings are calculated only with open museums, then scores for closed museums are calculated from those loadings
+
+#+begin_src R :exports none
 l_pca_dimred <- gl_pca_dimred(dt_pmdb)
 l_pca_dimred_woclosed <- gl_pca_dimred(dt_pmdb[museum_status != "closed"])
 
@@ -70,10 +87,10 @@ l_pca_dimred_woclosed$dt_scores <- rbind(
 
 #+end_src
 
-#+RESULTS:
 
 
-#+begin_src R
+#+name: p_cpr_loads_scatter
+#+begin_src R :exports results :results output graphics file :file p_cpr_loads_scatter.pdf :width 14 :height 8
 ## compare loadings
 
 ## reshaping fun https://cran.r-project.org/web/packages/data.table/vignettes/datatable-reshape.html
@@ -83,5 +100,246 @@ dt_pca_cpr_loads <- map2(list(l_pca_dimred, l_pca_dimred_woclosed), list("all", 
      ~chuck(.x, "rotatedLoadings")[, 1:2] %>% adt(keep.rownames = "vrbl") %>% .[, src := .y]) %>%
     rbindlist %>% dcast(vrbl ~ src, value.var  = c("PC1", "PC2")) 
 
+## compare loadings plot 1
+
+dt_pca_cpr_loads %>% melt(id.vars = "vrbl", measure.vars = measure(value.name, src, sep = "_")) %>%
+    .[src == "woclosed", `:=`(PC1 = PC1 * -1, PC2 = PC2 * -1)] %>% # align PCs (get twisted sometimes/how)
+    ggplot(aes(x=PC1, y=PC2, label = vrbl, color = src)) +
+    geom_point() +  geom_text_repel(show.legend = F, size = 5) + 
+    geom_segment(dt_pca_cpr_loads, mapping = aes(x=PC1_all, y=PC2_all, xend = PC1_woclosed*-1,
+                                                 yend = PC2_woclosed*-1), color = "black")
+
 
 #+end_src
+
+#+attr_latex: :width 16cm
+#+RESULTS: p_cpr_loads_scatter
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_cpr_loads_scatter.pdf]]
+
+#+name: p_cpr_loads_cols
+#+begin_src R :exports results :results output graphics file :file p_cpr_loads_cols.pdf :width 7 :height 5
+## compare loadings plot2
+dt_pca_cpr_loads %>% melt(id.vars = "vrbl", measure.vars = measure(PC, src, sep = "_")) %>%
+    .[src == "woclosed", value := value *-1] %>% 
+    ggplot(aes(x=value, y=vrbl, fill = src)) + geom_col(position = position_dodge()) +
+    facet_grid(~PC)
+#+end_src
+
+#+attr_latex: width 7in
+#+RESULTS: p_cpr_loads_cols
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_cpr_loads_cols.pdf]]
+
+-> not a big difference between factor loadings with all museums (all) and without closed (woclosed, i.e. only open museums)
+
+look at correlations of loadings: 
+
+#+begin_src R :exports results :results output
+dt_pca_cpr_loads[, .SD, .SDcols = patterns("^PC")] %>% cor %>% round(3)
+#+end_src
+
+#+RESULTS:
+:              PC1_all PC1_woclosed PC2_all PC2_woclosed
+: PC1_all        1.000       -0.998  -0.827        0.829
+: PC1_woclosed  -0.998        1.000   0.821       -0.822
+: PC2_all       -0.827        0.821   1.000       -0.986
+: PC2_woclosed   0.829       -0.822  -0.986        1.000
+
+-> correlations of loadings are super high: 0.99, 0.98
+
+
+next: compare scores:
+
+#+begin_src R :exports results :results output
+## compare scores
+dt_pca_cpr_scores <- map2(list(l_pca_dimred, l_pca_dimred_woclosed), list("all", "woclosed"),
+                          ~chuck(.x, "dt_scores")[, src := .y]) %>% rbindlist %>%
+                     dcast(ID + museum_status ~ src, value.var  = c("PC1", "PC2")) 
+
+## correlation of scores are pretty high too: 0.99
+dt_pca_cpr_scores[, .SD, .SDcols = patterns("^PC")] %>% cor(use = "complete.obs") %>% round(3)
+#+end_src
+
+#+RESULTS:
+:              PC1_all PC1_woclosed PC2_all PC2_woclosed
+: PC1_all        1.000       -0.999   0.364       -0.332
+: PC1_woclosed  -0.999        1.000  -0.396        0.364
+: PC2_all        0.364       -0.396   1.000       -0.997
+: PC2_woclosed  -0.332        0.364  -0.997        1.000
+
+also super high: 0.99 for both PC1 and PC2
+
+look at scores: 
+
+#+name: p_cpr_scores_scat
+#+begin_src R :exports results :results output graphics file :file p_cpr_scores_scat.pdf :width 7 :height 4
+
+## https://cran.r-project.org/web/packages/data.table/vignettes/datatable-reshape.html
+## somehow using sep + cols doesn't work -> have to use pattern, which does work: 
+## this doesn't work
+## melt(dt_pca_cpr_scores, id.vars =  c("ID", "museum_status"),
+##      measure.vars = measure(value.name, src, sep = "_",
+##                             cols = c("PC1_all", "PC1_woclosed","PC2_all", "PC2_woclosed")))
+
+melt(dt_pca_cpr_scores, id.vars =  c("ID", "museum_status"),
+     measure.vars = measure(value.name, src, pattern = "(PC.*)_(.*)")) %>%
+    .[src == "woclosed" , `:=`(PC1 = PC1*-1, PC2 = PC2 *-1)] %>% 
+    ggplot(aes(x=PC1, y=PC2, color = museum_status)) +
+    geom_jitter(width = 0.3, height = 0.3, size = 0.5) + 
+    facet_wrap(~src, scales = "free") +
+    theme(legend.position = "bottom")
+
+#+end_src
+
+#+attr_latex: :width 7in
+#+RESULTS: p_cpr_scores_scat
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_cpr_scores_scat.pdf]]
+
+
+very similar: in both cases, closed ones at bottom left
+
+look at changes within museums: end of tip is woclosed position
+
+#+name: p_cpr_scores_diff
+#+begin_src R :exports results :results output graphics file :file p_cpr_scores_diff.pdf :width 7 :height 4
+p_cpr_scores_diff <- ggplot(dt_pca_cpr_scores,
+                            aes(x=PC1_all, y=PC2_all, xend = PC1_woclosed*-1, yend = PC2_woclosed*-1,
+                                color = museum_status)) +
+  geom_point(position = position_jitter(width = 0.2, height = 0.2, seed = 10), show.legend = F, size = 0.2) + 
+  geom_segment(arrow = arrow(length = unit(0.1, "cm")),
+               linewidth = 0.3,
+               alpha = 0.7,
+               position = position_jitter(width = 0.2, height = 0.2, seed = 10))
+
+
+p_cpr_scores_diff + (p_cpr_scores_diff + 
+                     coord_cartesian(xlim = c(-2.5, -1.75), ylim = c(-2.5, -2))) +
+  plot_layout(guides = "collect") & theme(legend.position = "bottom")
+
+#+end_src
+
+#+attr_latex: :width 7in
+#+RESULTS: p_cpr_scores_diff
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_cpr_scores_diff.pdf]]
+
+overall change for each PM isn't so large, most closed PMs still stay at bottom left corner
+
+look at mean scores on principal components by museum_status and PC construction mechanism (all vs woclosed): 
+
+#+name: p_cpr_scores_means
+#+begin_src R :exports results :results output graphics file :file p_cpr_scores_means.pdf :width 7 :height 4
+melt(dt_pca_cpr_scores, id.vars =  c("ID", "museum_status"),
+     measure.vars = measure(PC, src, pattern = "(PC.*)_(.*)")) %>%
+    .[src == "woclosed", value := value *-1] %>% 
+    .[, .(mean_value = mean(value)), .(PC, museum_status, src)] %>%
+    ggplot(aes(x=museum_status, y=mean_value, fill = src, color = src)) +
+    geom_col(position = position_dodge()) +
+    geom_point(position = position_dodge(width = 1)) +
+    geom_text(mapping = aes(label = round(mean_value, digits = 2)), position = position_dodge(width = 1),
+              color = "black") + 
+    facet_wrap(~PC)
+
+#+end_src
+
+#+attr_latex: :width 7in
+#+RESULTS: p_cpr_scores_means
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_cpr_scores_means.pdf]]
+
+differences between groups by museum_status is much larger than differences between src
+
+*** conclusion
+It doesn't really matter for PC loadings/scores whether closed museums are used in PC construction or not
+
+** comparison with size numeric variables
+
+see how well the PCs correlate with other, numeric indicators of size for which there is some data
+
+#+begin_src R :exports none
+l_vrbls_size <- .c(clctn_size, staff_size, insta_flwrs, insta_posts, fb_flwrs, fb_likes, google_nbrrvws,
+                  trpadvsr_nbrrvws, twitter_flwrs, youtube_flwrs)
+
+## melt size variables into long
+dt_pmdb_size_long <- dt_pmdb[museum_status %in% c("private museum", "closed"), .SD,
+        .SDcols = c("ID", "museum_status", l_vrbls_size)] %>% copy() %>%
+    .[, staff_size := as.numeric(factor(staff_size, # staff_size has to be recoded
+                                        levels = c("1-5 employees", "6-10 employees", "11–20 employees",
+                                                   "21–40 employees", "more than 40 employees")))] %>%
+    melt(id.vars = c("ID", "museum_status"), variable.name = "vrbl_size", value.name = "vlu_size")
+
+## melt PC scores into long
+dt_pmdb_pca_long <- melt(dt_pca_cpr_scores, id.vars =  "ID",
+                         measure.vars = measure(PC, src, pattern = "(PC.*)_(.*)"),
+                         value.name = "vlu_pc") %>%
+    .[src == "woclosed", vlu_pc := vlu_pc *-1]
+   
+## combine both PCA scores and size variable scores with cross join
+dt_cpr_size_prep <- merge(dt_pmdb_size_long, dt_pmdb_pca_long, by = "ID", allow.cartesian = T)
+
+dt_cpr_size <- rbind(copy(dt_cpr_size_prep)[, tfm := "orig"],
+                     copy(dt_cpr_size_prep)[, `:=`(vlu_size = log(vlu_size), tfm = "log")])
+
+## calculate correlation, p, N for each combination
+dt_size_pca_corcoefs <- dt_cpr_size[complete.cases(vlu_size, vlu_pc) & !is.infinite(vlu_size),
+                                    cor.test(vlu_pc, vlu_size) %$% list(r = estimate, p = p.value, N = .N),
+                                    .(vrbl_size, PC, src, tfm)] %>%
+    .[, label := sprintf("r=%s%s, N=%s", format(round(r, 2), digits = 2, nsmall = 2),
+                         fmt_pvlu(p) %>% substr(3, nchar(.)-1), N), .I]
+#+end_src
+
+#+RESULTS:
+
+
+#+name: p_sizecor
+#+begin_src R :exports results :results output graphics file :file p_sizecor.pdf :width 7 :height 9
+
+
+## plot on original size variables
+p_sizecor_orig <- dt_cpr_size[tfm == "orig" & src == "all"] %>% 
+    ggplot(aes(x=vlu_pc, y=vlu_size)) +
+    geom_point(size = 0.1, color = "gray20", alpha = 0.5) +
+    geom_smooth(method = "lm") + 
+    facet_grid(vrbl_size ~ PC, scales = "free") +
+    geom_text(dt_size_pca_corcoefs[tfm == "orig" & src == "all"], mapping = aes(x=Inf, y=Inf,
+                                                  label = label),
+              hjust = 1.05, vjust = 1.5)
+
+## plot on log-scaled size variables
+p_sizecor_log <- dt_cpr_size[tfm == "log" & src == "all"] %>% 
+    ggplot(aes(x=vlu_pc, y=vlu_size)) +
+    geom_point(size = 0.1, color = "gray20", alpha= 0.5) +
+    geom_smooth(method = "lm") + 
+    facet_grid(vrbl_size ~ PC, scales = "free") +
+    geom_text(dt_size_pca_corcoefs[tfm == "log" & src == "all"], mapping = aes(x=Inf, y=Inf,
+                                                  label = label),
+              hjust = 1.05, vjust = 1.5)
+## p_sizecor_log
+
+p_sizecor_orig + p_sizecor_log
+
+#+end_src
+
+#+attr_latex: :width 7in
+#+RESULTS: p_sizecor
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_sizecor.pdf]]
+
+#+name: p_sizecor_col
+#+begin_src R :exports results :results output graphics file :file p_sizecor_col.pdf :width 7 :height 3.5
+ggplot(dt_size_pca_corcoefs, aes(x=r, y=vrbl_size, color = tfm, shape = src, size = N)) + geom_point() +
+    facet_grid(~PC) +
+    scale_shape_manual(values = c(23,22)) +
+    scale_size_continuous(range = c(3,7))
+
+#+end_src
+
+#+attr_latex: :width 7in
+#+RESULTS: p_sizecor_col
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_sizecor_col.pdf]]
+
+quite some substantial correlations, especially with PC1 -> good evidence that PC1 measures something like size/capabilities/outreach/diversification
+
+** conclusion overall
+
+Even if PC1 measures size, this doesn't mean that the data for closed museums has been properly collected -> even if the logic is right, the variable coverage of closed museums is just bad -> PC1 scores are lower than they should be
+
+*hmm it's really only my intuition that this effect is too big to be real*
+
+
