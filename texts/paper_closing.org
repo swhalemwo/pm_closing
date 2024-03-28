@@ -325,7 +325,7 @@ Secondly, we use Cox proportional hazard models which estimate the relationship 
 #
 The Cox-proportional hazard model has the form $h(t,\mathbf{x}) = h_0(t) \psi$, where $\psi = \exp(\sum_{j} \mathbf{x}_j \beta_j)$; with $h(t)$ as the hazard rate, $h_0(t)$ as the baseline hazard rate, $\mathbf{x}$ as the set of variables indexed by $j$, and $\beta$ as the coefficient vector.
 #
-Partial maximum likelihood allows estimation of \beta without defining the baseline hazard rate, which is therefore not constrained to a parametric form. 
+Partial maximum likelihood estimation allows calculating \beta without defining the baseline hazard rate, which therefore is not constrained to a parametric form. 
 # 
 Coefficients are interpeted as log hazard ratios, i.e. as multipliers of the baseline hazard rate. 
 
