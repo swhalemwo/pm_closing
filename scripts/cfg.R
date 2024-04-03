@@ -182,13 +182,14 @@ gc_vvs <- function() {
         west            = "Europe and North America",
         reg6            = "Region",
         an_inclusion    = "ArtNews Ranking inclusion",
+        exhbqntl        = "Exhibition Quantile", 
         ## V1              = "PC1 (Size)",
         ## V2              = "PC2 (Support)",
         GLOBAL          = "Global") # from cox.zph
     
      l_vrblgrps <- list(# variable groups
          founder  = .c(gender, founder_dead),
-         museum   = .c(slfidfcn, muem_fndr_name, mow, an_inclusion), # V1, V2
+         museum   = .c(slfidfcn, muem_fndr_name, mow, an_inclusion, exhbqntl), # V1, V2
          envir    = .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10, west, reg6),
          misc     = .c(GLOBAL)
      )
@@ -224,7 +225,7 @@ gc_vvs <- function() {
     ## specify variable type: binary, numeric, categorical
     l_vrbltypes <- list(        
         bin = .c(founder_dead, muem_fndr_name, mow, west),
-        num = .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10), # V1, V2
+        num = .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10, exhbqntl), # V1, V2
         cat = .c(gender, slfidfcn, reg6, an_inclusion))
 
     dt_vrbltypes <- imap(l_vrbltypes, ~data.table(vrbl = .x, vrbltype = .y)) %>% rbindlist

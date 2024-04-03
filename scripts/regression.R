@@ -6,6 +6,77 @@
 
 ## ** data functions
 
+gd_af_size <- function(dt_pmx) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+
+    ## get AF dts 
+    dt_matches_pmdb_af <- gd_af_pmdb_matches()
+    dt_af_exhbs <- gd_af_exhbs()[, iso3c := countrycode(CountryName, "country.name", "iso3c")] %>%
+        .[, CountryName := NULL]
+    
+    ## doesn't seem a lot of issues
+    ## dt_af_exhbs[CountryName == "Kosovo"]
+    ## dt_af_exhbs[is.na(iso3c), .N, CountryName]
+
+    ## expand to pm_year UoA
+    dt_pmyear_size <- copy(dt_pmx)[, last_year := fifelse(museum_status == "closed", year_closed, END_YEAR)] %>%
+        .[, .(year = year_opened:last_year), .(ID, iso3c, year_opened, year_closed)]
+                                               
+
+    ## add info for merging AF data to PDMB
+    dt_pmdb_af <- join(dt_pmx[, .(ID, name, iso3c, museum_status)], dt_matches_pmdb_af,
+                       on = c("ID" = "PMDB_ID"), how = "left", verbose = F) %>%
+        .[, InstitutionID := as.integer(AF_IID)]
+
+    ## merge AF exhibitions data to PMDB
+    dt_af_exhbs_pmdb <- join(dt_af_exhbs[, .(ID, InstitutionID, begin_year = year(BeginDate), iso3c)],
+                         dt_pmdb_af[, .(InstitutionID, PMDB_ID = ID, name)],
+                         on = "InstitutionID", how = 'left', verbose = 0)
+
+    ## first construct grid (expand institution-exhibition link to institution year (fill gaps)):
+    ## all possible combinations with full join?
+    dt_af_grid <- join(dt_af_exhbs_pmdb[!is.na(begin_year), .(begin_year = min(begin_year):max(begin_year)),
+                          .(InstitutionID, PMDB_ID, iso3c)], # AF data
+                       dt_pmyear_size[, .(ID, year, iso3c)],
+                       on = c(PMDB_ID = "ID", begin_year = "year", "iso3c"), how = "full", overid = 2)
+
+    ## debug: more rows with non-NA PMDB_ID than in dt_af_size
+    ## dt_af_grid[!is.na(PMDB_ID), .N, .(PMDB_ID, begin_year)][N > 1]
+    ## dt_af_grid[PMDB_ID == 620] %>% print(n=30)
+    ## seems to be that CountryName can vary within Institution: institutions can organize stuff elsewhere,
+    ## doesn't seem much tho, only handful cases
+              
+         
+    ## join with institution counts
+    dt_af_qntlprep <- join(dt_af_grid,
+                           dt_af_exhbs_pmdb[, .N, .(InstitutionID, begin_year)],
+                           on = c("InstitutionID", "begin_year"), verbose = 0) %>%
+        replace_NA(cols = "N", value = 0) %>% # fill up no exhbs with 0
+        .[!is.na(iso3c)] # yeet ~300 institutions without countrycode
+ 
+    ecdf_fun <- function(x,perc) ecdf(x)(perc) # get quantile of value
+
+    ## calculate quantile using all orgs, filter down to PMs
+    dt_af_qntl <- copy(dt_af_qntlprep)[, quantile := ecdf_fun(N, N), .(iso3c, begin_year)] %>%
+        .[!is.na(PMDB_ID)] %>% # focus on PMs
+        ## only include CYs where half of active PMs have at least one show 
+        .[, .SD[!any(N == 0 & quantile > 0.3)], .(iso3c, begin_year)] 
+
+    ## dt_af_qntl[, .SD[any(N == 0 & quantile > 0.5)], .(iso3c, begin_year)] %>%
+    ##     .[, .N, iso3c] %>% print(n=300)
+
+    ## ggplot(dt_af_qntl[iso3c == "USA"], aes(x=begin_year, y=quantile, group = PMDB_ID)) +
+        ## geom_line(alpha = 0.1, position = position_jitter(width = 0.2,  height = 0.02))
+
+    attr(dt_af_qntl, "gnrtdby") <- as.character(match.call()[[1]])
+    return(dt_af_qntl)
+    
+}
+
+
+
+
 gd_pmdb_popcircle <- function(dt_pmx, radius_km) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
@@ -224,8 +295,12 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv) {
         stop("some NAs in proxcnt")}
 
 
+    dt_af_size <- gd_af_size(dt_pmx)[, .(ID = PMDB_ID, year = begin_year, exhbqntl = quantile, exbhcnt = N)]
+    dt_pmyear_waf <- join(dt_pmyear_wproxcnt, dt_af_size, on = c("ID", "year"))
+
+
     ## combine with time-invariant variables
-    dt_pmyear_wtiv <- join(dt_pmyear_wproxcnt,
+    dt_pmyear_wtiv <- join(dt_pmyear_waf,
                         copy(dt_pmtiv)[, `:=`(iso3c=NULL, name = NULL)], ## yeet non-essential columns
                         on = "ID") 
 
@@ -612,9 +687,11 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ## FIXME: add founder_dead*muem_fndr_name
         r_more = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
-                       dt_pmyear) # V1 + V2
+                       dt_pmyear),
 
-        
+        r_waf = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl + 
+                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+                       dt_pmyear)
 
         
     )

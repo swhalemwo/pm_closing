@@ -14,8 +14,8 @@ l_vrblcvrg__dt_pmdb_splong [label=dt_pmdb_splong]
  gc_pmdb_tests; 
 gc_pmdb_vrblgrps; 
 gc_vvs; 
+gd_af_size; 
 gd_artnews; 
-gd_dimred_loads; 
 gd_inflcases; 
 gd_mow_info; 
 gd_pehaz; 
@@ -84,6 +84,7 @@ gc_vvs -> gd_pmtiv;
 gc_vvs -> gt_coxzph; 
 gc_vvs -> gt_reg_coxph; 
 gc_vvs -> gt_sumstats; 
+gd_af_size -> gd_pmyear_prep; 
 gd_artnews -> gd_pmyear_prep; 
 gd_inflcases -> gp_coxphdiag; 
 gd_inflcases -> gp_coxphdiag_more; 

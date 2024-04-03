@@ -37,3 +37,5 @@ gt_reg_coxph,l_mdls,l_mdls
 gt_reg_coxph,l_mdlnames,l_mdlnames_coxph
 gt_reg_coxph,l_mdls,l_mdls
 gt_reg_coxph,l_mdlnames,l_mdlnames_coxph
+gt_sumstats,dt_pmyear,dt_pmyear
+gt_sumstats,dt_pmcpct,dt_pmcpct

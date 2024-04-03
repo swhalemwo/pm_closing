@@ -1,4 +1,4 @@
-% Created 2024-03-20 wo 16:51
+% Created 2024-04-03 wo 13:56
 % Intended LaTeX compiler: pdflatex
 \documentclass[12pt]{article}
 
@@ -322,7 +322,7 @@ This non-parametric method estimates the hazard rate as the conditional probabil
 
 Secondly, we use Cox proportional hazard models which estimate the relationship between covariates and the hazard rate.
 The Cox-proportional hazard model has the form \(h(t,\mathbf{x}) = h_0(t) \psi\), where \(\psi = \exp(\sum_{j} \mathbf{x}_j \beta_j)\); with \(h(t)\) as the hazard rate, \(h_0(t)\) as the baseline hazard rate, \(\mathbf{x}\) as the set of variables indexed by \(j\), and \(\beta\) as the coefficient vector.
-Partial maximum likelihood allows estimation of \(\beta\) without defining the baseline hazard rate, which is therefore not constrained to a parametric form. 
+Partial maximum likelihood estimation allows calculating \(\beta\) without defining the baseline hazard rate, which therefore is not constrained to a parametric form. 
 Coefficients are interpeted as log hazard ratios, i.e. as multipliers of the baseline hazard rate. 
 
 
@@ -333,8 +333,8 @@ Coefficients are interpeted as log hazard ratios, i.e. as multipliers of the bas
 \subsubsection*{Summary statistics}
 
 
-% latex table generated in R 4.3.2 by xtable 1.8-4 package
-% Wed Mar  6 21:27:16 2024
+% latex table generated in R 4.3.3 by xtable 1.8-4 package
+% Wed Apr  3 13:38:27 2024
 \begin{table}[ht]
 \centering
 \begin{tabular}{llrrrrrr}
@@ -357,8 +357,7 @@ Coefficients are interpeted as log hazard ratios, i.e. as multipliers of the bas
    & AN Ranking - Not Included &  &  &  0.794 &  0.40 & 0 & 1 \\ 
    & AN Ranking - Included &  &  &  0.149 &  0.36 & 0 & 1 \\ 
    & AN Ranking - Dropped &  &  &  0.057 &  0.23 & 0 & 1 \\ 
-   & PC1 (Size) &  &  &  0.344 &  4.26 & -6.2 & 13.90 \\ 
-   & PC2 (Support) &  &  & -0.046 &  1.99 & -5.6 & 6.70 \\ 
+   & Exhibition Quantile &  &  &  0.428 &  0.24 & 0.083 & 1 \\ 
    \multicolumn{8}{l}{\textbf{Environment}} \\ 
  & PM density &  &  & 20.541 & 18.37 & 1 & 62 \\ 
    & Pop. (millions) within 10km &  &  &  1.382 &  1.74 & 0.000087 & 10.81 \\ 
@@ -443,41 +442,40 @@ While preliminary results indicate that private museums have dissolution rates l
 \subsubsection*{Regression Results}
 
 
-% latex table generated in R 4.3.2 by xtable 1.8-4 package
-% Wed Mar  6 21:27:26 2024
+% latex table generated in R 4.3.3 by xtable 1.8-4 package
+% Wed Apr  3 13:14:43 2024
 \begin{table}[ht]
 \centering
-\begin{tabular}{p{0mm}lD{)}{)}{8)3}}
+\begin{tabular}{p{0mm}lD{)}{)}{8)3}D{)}{)}{8)3}}
   \hline 
- \multicolumn{1}{l}{} & \multicolumn{1}{l}{Variable} & \multicolumn{1}{l}{r\_more}\\ 
+ \multicolumn{1}{l}{} & \multicolumn{1}{l}{Variable} & \multicolumn{1}{l}{r\_more} & \multicolumn{1}{l}{r\_waf}\\ 
  \hline
-  \multicolumn{3}{l}{\textbf{Founder}} \\ 
- & Gender - Female & .42 \; (0.37) \\ 
-   & Gender - Couple & .66 \; (0.38) \\ 
-   & Founder died & 1.33 \; (0.55)^{*} \\ 
-   \multicolumn{3}{l}{\textbf{Museum}} \\ 
- & Self-Identification - Foundation & .94 \; (0.50) \\ 
-   & Self-Identification - Collection & .07 \; (0.60) \\ 
-   & Self-Identification - Other & 1.16 \; (0.39)^{**} \\ 
-   & AN Ranking - Included & .33 \; (0.43) \\ 
-   & AN Ranking - Dropped & 1.26 \; (0.49)^{*} \\ 
-   & Founder name in Museum name & -.57 \; (0.33) \\ 
-   & MOW inclusion & -.28 \; (0.41) \\ 
-   & PC1 (Size) & -.34 \; (0.06)^{***} \\ 
-   & PC2 (Support) & -.11 \; (0.11) \\ 
-   \multicolumn{3}{l}{\textbf{Environment}} \\ 
- & PM density & -.05 \; (0.03) \\ 
-   & PM density$^{2}$ & .00 \; (0.00) \\ 
-   & Pop. (millions) within 10km & .00 \; (0.11) \\ 
-   & Nbr PM within 10km & .13 \; (0.06)^{*} \\ 
+  \multicolumn{4}{l}{\textbf{Founder}} \\ 
+ & Gender - Female & .19 \; (0.36) & .52 \; (0.47) \\ 
+   & Gender - Couple & .08 \; (0.36) & .24 \; (0.44) \\ 
+   & Founder died & .11 \; (0.53) & -.09 \; (0.69) \\ 
+   \multicolumn{4}{l}{\textbf{Museum}} \\ 
+ & Self-Identification - Foundation & .81 \; (0.48) & 1.01 \; (0.67) \\ 
+   & Self-Identification - Collection & .45 \; (0.58) & .85 \; (0.73) \\ 
+   & Self-Identification - Other & 1.29 \; (0.38)^{***} & 1.40 \; (0.56)^{*} \\ 
+   & AN Ranking - Included & .38 \; (0.41) & .38 \; (0.51) \\ 
+   & AN Ranking - Dropped & 1.15 \; (0.45)^{*} & 1.31 \; (0.62)^{*} \\ 
+   & Founder name in Museum name & -.31 \; (0.33) & -.35 \; (0.41) \\ 
+   & MOW inclusion & -.81 \; (0.40)^{*} & -.66 \; (0.51) \\ 
+   & Exhibition Quantile &  & -.70 \; (0.82) \\ 
+   \multicolumn{4}{l}{\textbf{Environment}} \\ 
+ & PM density & -.05 \; (0.03) & -.02 \; (0.04) \\ 
+   & PM density$^{2}$ & .00 \; (0.00) & .00 \; (0.00) \\ 
+   & Pop. (millions) within 10km & .02 \; (0.11) & .10 \; (0.12) \\ 
+   & Nbr PM within 10km & .11 \; (0.06)^{*} & .07 \; (0.09) \\ 
    \hline
- & Museum-years & 6903 \\ 
-   & Closures & 53 \\ 
-   & log. Likelihood & -236.48 \\ 
-   & AIC & 504.96 \\ 
-   & BIC & 536.48 \\ 
+ & Museum-years & 6903 & 3292 \\ 
+   & Closures & 53 & 33 \\ 
+   & log. Likelihood & -263.16 & -137.85 \\ 
+   & AIC & 554.31 & 305.71 \\ 
+   & BIC & 581.90 & 328.16 \\ 
    \hline 
- \multicolumn{3}{l}{\footnotesize{standard errors in parantheses.\textsuperscript{***}p $<$ 0.001;\textsuperscript{**}p $<$ 0.01;\textsuperscript{*}p $<$ 0.05.}}
+ \multicolumn{4}{l}{\footnotesize{standard errors in parantheses.\textsuperscript{***}p $<$ 0.001;\textsuperscript{**}p $<$ 0.01;\textsuperscript{*}p $<$ 0.05.}}
 \end{tabular}
 \caption{Cox Proportional Hazards Regression Results} 
 \label{tbl:t_reg_coxph}

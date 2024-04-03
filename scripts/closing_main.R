@@ -192,7 +192,7 @@ gt_sumstats <- function(dt_pmyear, dt_pmcpct) {
 
     ## apply summary functions, merge with term labels to get variables names and groupings
     dt_cbn <- rbind(dt_dummies, dt_numvrbls) %>%
-        .[, map(funcs_sumry, ~get(.x)(value)), term] %>%
+        .[, map(funcs_sumry, ~get(.x)(value, na.rm = T)), term] %>%
         setnames(old = paste0("V", 1:len(funcs_sumry)), new = funcs_sumry) %>%
         c_vvs$dt_termlbls[., on = "term"]
         
@@ -380,9 +380,9 @@ dt_pmyear <- gd_pmyear(dt_pmyear_prep) # trim down dt to no NAs
 dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-year)
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
-l_mdlnames_coxph <- c("r_more") # set model names for t_reg_coxph
+l_mdlnames_coxph <- c("r_more", "r_waf") # set model names for t_reg_coxph
 
-screenreg2(list(l_mdls$r_more)) # just smoe display
+screenreg2(list(l_mdls$r_waf)) # just smoe display
 
 ## screenreg2(list(l_mdls$r_west_cpct, l_mdls$r_west_year, l_mdls$r_west_year2), digits = 4)
 
@@ -434,3 +434,9 @@ dtblF("t_reg_coxph_wcpF")
 
 gdtbl("t_reg_coxph")
 ## gd_reg_coxph(l_mdls$r_more, "r_more")
+
+
+print("everything is DONE")
+
+
+
