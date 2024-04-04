@@ -25,7 +25,9 @@ library(patchwork) # combining complex plots
 library(purrr) # looping
 library(ggrepel) # plotting 
 library(collapse) # data processing
-library(ggbeeswarm)
+library(ggbeeswarm) # for vrblcvrg plots
+library(countrycode) # for getting gd_af_size to work
+library(ggcorrplot) # for correlation matrix
 
 c_dirs <- gc_dirs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## project dirs
 PMDATA_LOCS <- gc_pmdata_locs()
@@ -48,7 +50,7 @@ source(paste0(c_dirs$code, "pm_dimred.R"))
 #+RESULTS:
 
 
-#+begin_src R :exports none
+#+begin_src R :results none
 l_pca_dimred <- gl_pca_dimred(dt_pmdb)
 l_pca_dimred_woclosed <- gl_pca_dimred(dt_pmdb[museum_status != "closed"])
 
@@ -86,6 +88,10 @@ l_pca_dimred_woclosed$dt_scores <- rbind(
     cbind(dt_pca_scores_closed_imputed, dt_pmdb[museum_status == "closed", .(ID, name, museum_status, iso3c)]))
 
 #+end_src
+
+
+
+
 
 
 #+name: p_vrblcvrg_pca
@@ -291,16 +297,18 @@ It doesn't really matter for PC loadings/scores whether closed museums are used 
 
 see how well the PCs correlate with other, numeric indicators of size for which there is some data
 
-#+begin_src R :exports none
+#+begin_src R :exports none :results none
 l_vrbls_size <- .c(clctn_size, staff_size, insta_flwrs, insta_posts, fb_flwrs, fb_likes, google_nbrrvws,
                   trpadvsr_nbrrvws, twitter_flwrs, youtube_flwrs)
 
 ## melt size variables into long
-dt_pmdb_size_long <- dt_pmdb[museum_status %in% c("private museum", "closed"), .SD,
+dt_pmdb_size_wide <- dt_pmdb[museum_status %in% c("private museum", "closed"), .SD,
         .SDcols = c("ID", "museum_status", l_vrbls_size)] %>% copy() %>%
     .[, staff_size := as.numeric(factor(staff_size, # staff_size has to be recoded
                                         levels = c("1-5 employees", "6-10 employees", "11–20 employees",
-                                                   "21–40 employees", "more than 40 employees")))] %>%
+                                                   "21–40 employees", "more than 40 employees")))]
+
+dt_pmdb_size_long <- dt_pmdb_size_wide %>%
     melt(id.vars = c("ID", "museum_status"), variable.name = "vrbl_size", value.name = "vlu_size")
 
 ## melt PC scores into long
@@ -323,7 +331,7 @@ dt_size_pca_corcoefs <- dt_cpr_size[complete.cases(vlu_size, vlu_pc) & !is.infin
                          fmt_pvlu(p) %>% substr(3, nchar(.)-1), N), .I]
 #+end_src
 
-#+RESULTS:
+
 
 
 #+name: p_sizecor
@@ -379,5 +387,40 @@ quite some substantial correlations, especially with PC1 -> good evidence that P
 Even if PC1 measures size, this doesn't mean that the data for closed museums has been properly collected -> even if the logic is right, the variable coverage of closed museums is just bad -> PC1 scores are lower than they should be
 
 *hmm it's really only my intuition that this effect is too big to be real*
+
+
+
+** compare with Arfacts data
+
+#+name: p_cormat_size
+#+begin_src R :exports results :results output graphics file :file p_cormat_size.pdf :width 10 :height 9
+
+dt_pmx <- gd_pmx(dt_pmdb)
+
+dt_af_size <- gd_af_size(dt_pmx)
+
+dt_af_size_mean <- dt_af_size[, lapply(.SD, mean), .SDcols = patterns("quant|exhb|^N"), .(ID = PMDB_ID)]
+
+## generate all the comparisons
+cormat_cprn <- join(dt_af_size_mean, # need to flip woclosed scores.. FIXME
+                    copy(l_pca_dimred_woclosed$dt_scores)[, `:=`(PC1 = PC1*-1, PC2 = PC2*-1)], 
+                    on = "ID") %>%
+  join(copy(dt_pmdb_size_wide)[, museum_status := NULL], on = "ID") %>%
+  num_vars %>% .[, ID := NULL] %>% cor(use = "pairwise.complete.obs")
+  
+cormat_cprn %>% ggcorrplot(show.diag = F, type = "full", lab = T, lab_size = 3)
+  
+
+#+end_src
+
+#+attr_latex: :width 7in
+#+RESULTS: p_cormat_size
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_cormat_size.pdf]]
+
+hmm the AF variables are pretty much the same, super high correlations among them
+
+but correlation with PCs and other size variables is only around 0.2
+
+tbf that is similar to the correlations between PCs and other original variables, but logged size variables can get to 0.3-0.6, many 0.4, which is kinda more impressive
 
 
