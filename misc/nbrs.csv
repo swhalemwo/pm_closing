@@ -1,8 +1,8 @@
 nbr_name,nbr_fmt,grp
-meanhaz_upto_20,0.89%,meanhaz
+meanhaz_upto_20,0.88%,meanhaz
 meanhaz_upto_30,0.91%,meanhaz
 meanhaz_upto_40,0.78%,meanhaz
-meanhaz_upto_100,0.79%,meanhaz
+meanhaz_upto_100,0.78%,meanhaz
 ynkplt_p_vrblcvrg_ugrpd,(eval (concat "#+label: fig:p_vrblcvrg_ugrpd\n" "#+caption: PMDB variable coverage by museum status\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_vrblcvrg_ugrpd.pdf]]")),pltcfgs
 ynkplt_p_vrblcvrg,(eval (concat "#+label: fig:p_vrblcvrg\n" "#+caption: PMDB variable coverage by museum status and variable group\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_vrblcvrg.pdf]]")),pltcfgs
 ynkplt_p_vrblcvrg_ratio,(eval (concat "#+label: fig:p_vrblcvrg_ratio\n" "#+caption: PMDB variable coverage (abs/rel prop) by museum status and variable group\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_vrblcvrg_ratio.pdf]]")),pltcfgs

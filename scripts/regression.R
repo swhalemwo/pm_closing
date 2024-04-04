@@ -40,7 +40,7 @@ gd_af_size <- function(dt_pmx) {
     dt_af_grid <- join(dt_af_exhbs_pmdb[!is.na(begin_year), .(begin_year = min(begin_year):max(begin_year)),
                           .(InstitutionID, PMDB_ID, iso3c)], # AF data
                        dt_pmyear_size[, .(ID, year, iso3c)],
-                       on = c(PMDB_ID = "ID", begin_year = "year", "iso3c"), how = "full", overid = 2)
+                       on = c(PMDB_ID = "ID", begin_year = "year", "iso3c"), how = "full", overid = 2, verbose = 0)
 
     ## debug: more rows with non-NA PMDB_ID than in dt_af_size
     ## dt_af_grid[!is.na(PMDB_ID), .N, .(PMDB_ID, begin_year)][N > 1]
@@ -328,17 +328,17 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv) {
     if (dt_pmyear_wproxcnt[, any(is.na(.SD)), .SDcols = keep(names(dt_pmyear_wproxcnt), ~grepl("proxcnt", .x))]) {
         stop("some NAs in proxcnt")}
 
-    ## integrate artfacts size indicators
-    dt_af_size <- gd_af_size(dt_pmx)[, .(ID = PMDB_ID, year = begin_year,
-                                         exhbqntl_year, exhbqntl_cy, exhbcnt, # simple quantiles
-                                         exhbprop_top10_log, exhbprop_top10_utf, # proportions of top10
-                                         exhbrollsum5, exhbnNA, exhbrollsum_avg, exhbqntl_roll)]
+    ## ## integrate artfacts size indicators
+    ## dt_af_size <- gd_af_size(dt_pmx)[, .(ID = PMDB_ID, year = begin_year,
+    ##                                      exhbqntl_year, exhbqntl_cy, exhbcnt, # simple quantiles
+    ##                                      exhbprop_top10_log, exhbprop_top10_utf, # proportions of top10
+    ##                                      exhbrollsum5, exhbnNA, exhbrollsum_avg, exhbqntl_roll)]
     
-    dt_pmyear_waf <- join(dt_pmyear_wproxcnt, dt_af_size, on = c("ID", "year"))
+    ## dt_pmyear_waf <- join(dt_pmyear_wproxcnt, dt_af_size, on = c("ID", "year"))
 
 
     ## combine with time-invariant variables
-    dt_pmyear_wtiv <- join(dt_pmyear_waf,
+    dt_pmyear_wtiv <- join(dt_pmyear_wproxcnt,
                         copy(dt_pmtiv)[, `:=`(iso3c=NULL, name = NULL)], ## yeet non-essential columns
                         on = "ID") 
 
@@ -369,8 +369,9 @@ gd_pmyear <- function(dt_pmyear_prep) {
     ## - pop: kinda doubt it, pop is so much bigger
     ## - founder_dead: nope, separate processes
     
-    vrbls_tolag <- c("an_inclusion", "exhbqntl_year", "exhbqntl_cy", "exhbprop_top10_log", "exhbprop_top10_utf",
-                     "exhbrollsum5", "exhbrollsum_avg", "exhbqntl_roll")
+    vrbls_tolag <- c("an_inclusion")
+    ## "exhbqntl_year", "exhbqntl_cy", "exhbprop_top10_log", "exhbprop_top10_utf",
+    ## "exhbrollsum5", "exhbrollsum_avg", "exhbqntl_roll")
 
     dt_pm_lagged <- dt_pmyear_prep[order(year), .SD, ID] %>% copy() %>% 
         .[, (vrbls_tolag) := shift(.SD), ID, .SDcols = vrbls_tolag]
@@ -743,24 +744,24 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ## FIXME: add founder_dead*muem_fndr_name
         r_more = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
-                       dt_pmyear),
+                       dt_pmyear)
 
-        r_woaf = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
-                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
-                       dt_pmyear[complete.cases(exhbqntl_cy)]),
+        ## r_woaf = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
+        ##                    slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+        ##                dt_pmyear[complete.cases(exhbqntl_cy)]),
 
-        r_waf_year = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl_year + 
-                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
-                           dt_pmyear),
+        ## r_waf_year = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl_year + 
+        ##                    slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+        ##                    dt_pmyear),
 
-        r_waf_roll = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl_roll + 
-                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
-                           dt_pmyear),
+        ## r_waf_roll = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl_roll + 
+        ##                    slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+        ##                    dt_pmyear),
 
-        r_waf_roll2 = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl_roll +
-                                I(exhbqntl_roll^2) + 
-                                slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
-                            dt_pmyear)
+        ## r_waf_roll2 = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl_roll +
+        ##                         I(exhbqntl_roll^2) + 
+        ##                         slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+        ##                     dt_pmyear)
 
         ## r_waf_year_sqrd = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
         ##                      exhbqntl_year + I(exhbqntl_year^2) + 

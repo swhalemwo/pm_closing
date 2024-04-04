@@ -84,7 +84,6 @@ gc_vvs -> gd_pmtiv;
 gc_vvs -> gt_coxzph; 
 gc_vvs -> gt_reg_coxph; 
 gc_vvs -> gt_sumstats; 
-gd_af_size -> gd_pmyear_prep; 
 gd_artnews -> gd_pmyear_prep; 
 gd_inflcases -> gp_coxphdiag; 
 gd_inflcases -> gp_coxphdiag_more; 

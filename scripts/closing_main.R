@@ -386,13 +386,14 @@ dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-yea
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
 # set model names for t_reg_coxph
-l_mdlnames_coxph <- c("r_more", "r_woaf", "r_waf_year", "r_waf_roll", "r_waf_roll2")
+l_mdlnames_coxph <- c("r_more")
+## "r_woaf", "r_waf_year", "r_waf_roll", "r_waf_roll2")
 ## "r_waf_cy", "r_waf_proplog", "r_waf_prop", "r_waf_year_sqrd") 
 
 
 
 
-screenreg2(list(l_mdls$r_waf)) # just smoe display
+screenreg2(list(l_mdls$r_more)) # just smoe display
 
 ## screenreg2(list(l_mdls$r_west_cpct, l_mdls$r_west_year, l_mdls$r_west_year2), digits = 4)
 

@@ -302,30 +302,45 @@ While at low levels, increases in the number of organizations are argued to prim
 On the level of the environment, therefore the density (number) of private museum per country is included both in linear and squared form.
 
 
-*** Size
+# *** Size
 # Organizational size has been found to be increase survival as larger organizations
 # # 
 # : liability of middle -> huh
 # #
 # In the research of non-profit organizations, larger size has been usually found to increased survival chances [[parencite:&Harrison_Laincz_2008_nonprofit;&Helmig_Ingerfurth_Pinz_2013_nonprofit]]
 
-Larger NPOs are generally found to have lower mortality rates [[parencite:&Hager_1999_demise;&Duckles_Hager_Galaskiewicz_2005_close]], with size being measured through indicators such as assets [[parencite:&Lu_Shon_Zhang_2019_dissolution]], number of employees parencite:&Bielefeld_1994_survival and volunteers [[parencite:&Fernandez_2007_dissolution]], or revenues parencite:&Searing_2020_zombies.
-#
-Smaller organiations are argued to face greater difficulty in collecting resources and recruiting staff as well as relatively higher costs for administration and regulation [[parencite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]], while being less able to diversify or benefit from economies of scale [[parencite:&Hager_1999_demise]][fn:: This pattern that does not necessarily hold for organizations generally, which led to the term of liability of the middle [[parencite:&Carroll_Khessina_2019_demography]], who argue that medium-sized organizations compete with both small (specialist) as well as large (generalist) organizations and therefore face the highest competition and lowest survival prospects.]
-#
-Larger organizations are also argued to be able to waste some resources during normal times which can be utilized effectively during situations of crisis without having to scale back services (which generate revenue) [[parencite:&Hager_2001_vulnerability]] and hence avoid downsizing, which can lead to dissolution [[parencite:&Duckles_Hager_Galaskiewicz_2005_close;&Bielefeld_1994_survival]].
+# Larger NPOs are generally found to have lower mortality rates [[parencite:&Hager_1999_demise;&Duckles_Hager_Galaskiewicz_2005_close]], with size being measured through indicators such as assets [[parencite:&Lu_Shon_Zhang_2019_dissolution]], number of employees parencite:&Bielefeld_1994_survival and volunteers [[parencite:&Fernandez_2007_dissolution]], or revenues parencite:&Searing_2020_zombies.
+# #
+# Smaller organiations are argued to face greater difficulty in collecting resources and recruiting staff as well as relatively higher costs for administration and regulation [[parencite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]], while being less able to diversify or benefit from economies of scale [[parencite:&Hager_1999_demise]][fn:: This pattern that does not necessarily hold for organizations generally, which led to the term of liability of the middle [[parencite:&Carroll_Khessina_2019_demography]], who argue that medium-sized organizations compete with both small (specialist) as well as large (generalist) organizations and therefore face the highest competition and lowest survival prospects.]
+# #
+# # Larger organizations are also argued to be able to waste some resources during normal times which can be utilized effectively during situations of crisis without having to scale back services (which generate revenue) [[parencite:&Hager_2001_vulnerability]] and hence avoid downsizing, which can lead to dissolution [[parencite:&Duckles_Hager_Galaskiewicz_2005_close;&Bielefeld_1994_survival]].
 
 
 
 
-Measuring size constitutes a number of challenges:
-#
-Private museums are relatively intransparent, and therefor do not always publish financial statements.
-#
-Furthermore, as their locations are spread across the globe, even those institutions that do publish them do so according to different regulatory frameworks, sometimes in different languages, and often only make available those of the last couple of years. 
-#
-Instead
-[[cite:&Carroll_Khessina_2019_demography]]
+# Measuring size constitutes a number of challenges:
+# #
+# Private museums are relatively intransparent, and therefor do not always publish financial statements.
+# #
+# Furthermore, as their locations are spread across the globe, even those institutions that do publish them do so according to different regulatory frameworks, sometimes in different languages, and often only make available those of the last couple of years. 
+# #
+# Instead, I use exhibition data to estimate size, assuming larger private museums will organize more exhibitions than smaller ones.
+# # FIXME: order: artists first
+# I use a subset of the Artfacts database of 37,224 organizations, 544,982 exhibitions by 43,593 artists with complete demographics and born from 1945 onwards.
+# #
+# As the coverage of the Artfacts database varies over time, a exhibition count is not feasible as it would 
+# #
+# I therefore instead assign to each museum a quantile score based on its number of exhibitions; the score corresponds to the fraction of organizations with less or equal the number of exhibitions in each given year.
+# #
+
+
+# limitations:
+# - how many are matched: around 60% -> complain that rest isn't included
+# - 
+
+
+
+
 
 
 *** Analytical framework
