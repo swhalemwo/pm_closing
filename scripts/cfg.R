@@ -170,32 +170,34 @@ gc_vvs <- function() {
     ## group variables thematically, add also labels
 
     l_vrbl_lbls <- list( # variable labels
-        gender          = "Founder Gender",
-        founder_dead    = "Founder died",
-        slfidfcn        = "Self- Identification",
-        muem_fndr_name  = "Founder name in Museum name",
-        mow             = "MOW inclusion",
-        pm_dens         = "PM density",
-        "I(pm_dens^2)"  = "PM density^2",
-        pop             = "Pop. (millions) within 10km",
-        proxcnt10       = "Nbr PM within 10km",
-        west            = "Europe and North America",
-        reg6            = "Region",
-        an_inclusion    = "ArtNews Ranking inclusion",
-        exhbqntl_year   = "Exhibition Quantile (year)",
+        gender               = "Founder Gender",
+        founder_dead         = "Founder died",
+        slfidfcn             = "Self- Identification",
+        muem_fndr_name       = "Founder name in Museum name",
+        mow                  = "MOW inclusion",
+        pm_dens              = "PM density",
+        "I(pm_dens^2)"       = "PM density^2",
+        pop                  = "Pop. (millions) within 10km",
+        proxcnt10            = "Nbr PM within 10km",
+        west                 = "Europe and North America",
+        reg6                 = "Region",
+        an_inclusion         = "ArtNews Ranking inclusion",
+        exhbqntl_year        = "Exhibition Quantile (year)",
         "I(exhbqntl_year^2)" = "Exhibition Quantile (year)^2",
-        exhbqntl_cy     = "Exhibition Quantile (CY)",
-        exhbprop_top10_log = "Exh. top 10% (log)",
-        exhbprop_top10_utf = "Exh. top 10%",
-        ## V1              = "PC1 (Size)",
-        ## V2              = "PC2 (Support)",
+        exhbqntl_cy          = "Exhibition Quantile (CY)",
+        exhbprop_top10_log   = "Exh. top 10% (log)",
+        exhbprop_top10_utf   = "Exh. top 10%",
+        exhbqntl_roll        = "Exhibition Quantile (year, rolled)",
+        "I(exhbqntl_roll^2)" = "Exhibition Quantile^2 (year, rolled)",
+        ## V1                = "PC1 (Size)",
+        ## V2                = "PC2 (Support)",
         GLOBAL          = "Global") # from cox.zph
     
      l_vrblgrps <- list(# variable groups
          founder  = .c(gender, founder_dead),
          museum   = .c(slfidfcn, muem_fndr_name, mow, an_inclusion, exhbqntl_cy,
                        exhbqntl_year, "I(exhbqntl_year^2)",
-                       exhbprop_top10_log, exhbprop_top10_utf), # V1, V2
+                       exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"), # V1, V2
          envir    = .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10, west, reg6),
          misc     = .c(GLOBAL)
      )
@@ -227,13 +229,14 @@ gc_vvs <- function() {
     ## specify whether variable is time-varying or not
     vrbls_tiv <- .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6)
     vrbls_tv <- .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10, founder_dead, an_inclusion,
-                   exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)", exhbprop_top10_log, exhbprop_top10_utf)
+                   exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)", exhbprop_top10_log, exhbprop_top10_utf,
+                   exhbqntl_roll, "I(exhbqntl_roll^2)")
 
     ## specify variable type: binary, numeric, categorical
     l_vrbltypes <- list(        
         bin = .c(founder_dead, muem_fndr_name, mow, west),
         num = .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10, exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)",
-                 exhbprop_top10_log, exhbprop_top10_utf), # V1, V2
+                 exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"), # V1, V2
         cat = .c(gender, slfidfcn, reg6, an_inclusion))
 
     dt_vrbltypes <- imap(l_vrbltypes, ~data.table(vrbl = .x, vrbltype = .y)) %>% rbindlist

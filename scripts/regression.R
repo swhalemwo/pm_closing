@@ -58,16 +58,42 @@ gd_af_size <- function(dt_pmx) {
  
     ecdf_fun <- function(x,perc) ecdf(x)(perc) # get quantile of value
 
+    ## rolling sum of last 5 years
+    dt_af_roll <- copy(dt_af_qntlprep) %>%
+        .[, org_id := sprintf("AF%s-PM%s", InstitutionID, PMDB_ID)] %>% # need to combine PMDB and AF IDs
+        .[order(org_id, begin_year)] %>% 
+        .[, paste0("rollsum_prep", 1:5) := shift(N, 0:4), org_id] %>% # set up shift columns
+        .[, `:=`(exhbrollsum5 = rowSums(.SD, na.rm = T), # summing: include those with NAs
+                 exhbnNA = Reduce(`+`, lapply(.SD, is.na))), # get nbr of NA indicator
+          .SDcols = paste0("rollsum_prep", 1:5)] %>%
+        .[, paste0("rollsum_prep", 1:5) := NULL] %>% # yeet prep columns
+        .[, exhbrollsum_avg := exhbrollsum5/(5-exhbnNA)] %>%
+        .[, exhbqntl_roll := ecdf_fun(exhbrollsum_avg, exhbrollsum_avg), begin_year] %>%
+        .[!is.na(PMDB_ID)]
+    
+    ## dt_af_roll[iso3c == "DEU" & !is.na(PMDB_ID)] %>%
+    ##     melt(id.vars = c("PMDB_ID", "begin_year"), measure.vars = c("quantile_roll")) %>%
+    ##     ggplot(aes(x=begin_year, y=value, color = variable)) + facet_wrap(~PMDB_ID) + geom_line()
+        
+    ## dt_af_roll[!is.na(PMDB_ID)]    
+
     ## calculate quantile using all orgs, filter down to PMs
     ## dt_af_qntl <- copy(dt_af_qntlprep)[, quantile := ecdf_fun(N, N), .(iso3c, begin_year)] %>%
-    dt_af_qntl <- copy(dt_af_qntlprep) %>%
-        .[, quantile_cy := ecdf_fun(N, N), .(begin_year, iso3c)] %>%
-        .[, quantile_year := ecdf_fun(N, N), .(begin_year)] %>%
-        .[, exhbprop_top10_utf := N/quantile(N, probs = 0.90), begin_year] %>% 
-        .[, exhbprop_top10_log := log(N+1)/quantile(log(N+1), probs = 0.90), begin_year] %>% 
-        .[!is.na(PMDB_ID)] %>% # focus on PMs
-        ## only include CYs where half of active PMs have at least one show 
-        .[, .SD[!any(N == 0 & quantile_cy > 0.5)], .(iso3c, begin_year)] 
+    dt_af_qntl_simple <- copy(dt_af_qntlprep) %>%
+        .[, exhbcnt := N] %>% # renaming
+        .[, exhbqntl_cy := ecdf_fun(N, N), .(begin_year, iso3c)] %>% # quantile by country year
+        .[, exhbqntl_year := ecdf_fun(N, N), .(begin_year)] %>% # quantile by year
+        .[, exhbprop_top10_utf := N/quantile(N, probs = 0.90), begin_year] %>%  # prop by year
+        .[, exhbprop_top10_log := log(N+1)/quantile(log(N+1), probs = 0.90), begin_year] %>% # prop (log) by year
+        .[!is.na(PMDB_ID)]
+                ## focus on PMs
+        ## only include CYs where half of active PMs have at least one show
+
+    ## combine "simple quantiles" (dt_af_qntl) and rolled sums (dt_af_roll), yeet stuff
+    dt_af_qntl <- join(dt_af_qntl_simple,
+                       dt_af_roll[, .(PMDB_ID, begin_year, exhbrollsum5, exhbnNA, exhbrollsum_avg, exhbqntl_roll)],
+         on = c("PMDB_ID", "begin_year"), verbose = 0) %>%
+        .[, .SD[!any(N == 0 & exhbqntl_cy > 0.5)], .(iso3c, begin_year)] 
 
     ## dt_af_qntl[, .SD[any(N == 0 & quantile > 0.5)], .(iso3c, begin_year)] %>%
     ##     .[, .N, iso3c] %>% print(n=300)
@@ -304,11 +330,10 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv) {
 
     ## integrate artfacts size indicators
     dt_af_size <- gd_af_size(dt_pmx)[, .(ID = PMDB_ID, year = begin_year,
-                                         exhbqntl_year = quantile_year,
-                                         exhbqntl_cy = quantile_cy,
-                                         exbhcnt = N,
-                                         exhbprop_top10_log, exhbprop_top10_utf
-                                         )]
+                                         exhbqntl_year, exhbqntl_cy, exhbcnt, # simple quantiles
+                                         exhbprop_top10_log, exhbprop_top10_utf, # proportions of top10
+                                         exhbrollsum5, exhbnNA, exhbrollsum_avg, exhbqntl_roll)]
+    
     dt_pmyear_waf <- join(dt_pmyear_wproxcnt, dt_af_size, on = c("ID", "year"))
 
 
@@ -344,7 +369,8 @@ gd_pmyear <- function(dt_pmyear_prep) {
     ## - pop: kinda doubt it, pop is so much bigger
     ## - founder_dead: nope, separate processes
     
-    vrbls_tolag <- c("an_inclusion", "exhbqntl_year", "exhbqntl_cy", "exhbprop_top10_log", "exhbprop_top10_utf")
+    vrbls_tolag <- c("an_inclusion", "exhbqntl_year", "exhbqntl_cy", "exhbprop_top10_log", "exhbprop_top10_utf",
+                     "exhbrollsum5", "exhbrollsum_avg", "exhbqntl_roll")
 
     dt_pm_lagged <- dt_pmyear_prep[order(year), .SD, ID] %>% copy() %>% 
         .[, (vrbls_tolag) := shift(.SD), ID, .SDcols = vrbls_tolag]
@@ -727,10 +753,19 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
                            dt_pmyear),
 
-        r_waf_year_sqrd = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
-                             exhbqntl_year + I(exhbqntl_year^2) + 
-                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
-                             dt_pmyear)
+        r_waf_roll = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl_roll + 
+                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+                           dt_pmyear),
+
+        r_waf_roll2 = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl_roll +
+                                I(exhbqntl_roll^2) + 
+                                slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+                            dt_pmyear)
+
+        ## r_waf_year_sqrd = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
+        ##                      exhbqntl_year + I(exhbqntl_year^2) + 
+        ##                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+        ##                      dt_pmyear)
 
         ## r_waf_cy = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl_cy + 
         ##                    slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,

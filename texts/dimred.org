@@ -401,7 +401,8 @@ dt_pmx <- gd_pmx(dt_pmdb)
 
 dt_af_size <- gd_af_size(dt_pmx)
 
-dt_af_size_mean <- dt_af_size[, lapply(.SD, mean), .SDcols = patterns("quant|exhb|^N"), .(ID = PMDB_ID)]
+dt_af_size_mean <- dt_af_size[, lapply(.SD, mean), .SDcols = patterns("quant|exhb|^N"), .(ID = PMDB_ID)] %>%
+  .[, c("exhbnNA", "N") := NULL]
 
 ## generate all the comparisons
 cormat_cprn <- join(dt_af_size_mean, # need to flip woclosed scores.. FIXME
