@@ -7,6 +7,7 @@
 ## ** data functions
 
 gd_af_size <- function(dt_pmx) {
+    gw_fargs(match.call())
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
 
@@ -324,12 +325,29 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv) {
 }
 
 gd_pmyear <- function(dt_pmyear_prep) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
     #' yeet observations with NAs on an_inclusion (starts 1990) and pop (starts 1975)
     gw_fargs(match.call())
     
+    ## lag time-varying variables: only lag variables where it makes sense:
+    ## - an_inclusion: possible rev causality
+    ## - exhbqntl: possible rev causality
 
-    dt_pmyear <- dt_pmyear_prep[!is.na(an_inclusion) & !is.na(pop)]
+    ## doesn't make sense:
+    ## - proxcnt, pm_dens: pretty sure a PM still counts as there when closed that year
+    ## - pop: kinda doubt it, pop is so much bigger
+    ## - founder_dead: nope, separate processes
+    
+    vrbls_tolag <- c("an_inclusion", "exhbqntl_year", "exhbqntl_cy")
 
+    dt_pm_lagged <- dt_pmyear_prep[order(year), .SD, ID] %>% copy() %>% 
+        .[, (vrbls_tolag) := shift(.SD), ID, .SDcols = vrbls_tolag]
+
+    ## filter out missing values
+    ## don't filter on exhbqntl yet.. still iffy -> FIXME
+    dt_pmyear <- dt_pm_lagged[!is.na(an_inclusion) & !is.na(pop)]
+
+    
     attr(dt_pmyear, "gnrtdby") <- as.character(match.call()[[1]])
     return(dt_pmyear)
 }
