@@ -633,9 +633,13 @@ Firms depend on resources.
 While non-profits do not have to run profitably (and are indeed often dependent on cash infusions or endowments), parts of the revenue are still gained from other income sources such as ticket sales and museum shop and restaurent income. 
 #
 liability of size: 
-- [[cite:&Hager_2001_demise]],
+- [[cite:&Hager_1999_demise]],
 - [[cite:&Carroll_Khessina_2019_demography]],
-- 
+- [[cite:&Hager_etal_1996_grave]]
+- [[cite:&Bielefeld_1994_survival]]
+- [[cite:&Duckles_Hager_Galaskiewicz_2005_close]]
+- [[cite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]]
+- [X] [[cite:&Harrison_Laincz_2008_nonprofit]]
 
 
 Do these and other organizational characteristics reflect organizational resources, which in turn affect survival chances? 
