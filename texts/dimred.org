@@ -392,8 +392,10 @@ Even if PC1 measures size, this doesn't mean that the data for closed museums ha
 
 ** compare with Arfacts data
 
+use PM-mean of AF variables (ignore longitudinal variation)
+
 #+name: p_cormat_size
-#+begin_src R :exports results :results output graphics file :file p_cormat_size.pdf :width 10 :height 9
+#+begin_src R :exports results :results output graphics file :file p_cormat_size.pdf :width 10 :height 10
 
 dt_pmx <- gd_pmx(dt_pmdb)
 
@@ -408,7 +410,8 @@ cormat_cprn <- join(dt_af_size_mean, # need to flip woclosed scores.. FIXME
   join(copy(dt_pmdb_size_wide)[, museum_status := NULL], on = "ID") %>%
   num_vars %>% .[, ID := NULL] %>% cor(use = "pairwise.complete.obs")
   
-cormat_cprn %>% ggcorrplot(show.diag = F, type = "full", lab = T, lab_size = 3)
+cormat_cprn %>% ggcorrplot(show.diag = F, type = "full", lab = T, lab_size = 3) +
+  theme(legend.position = "bottom")
   
 
 #+end_src
