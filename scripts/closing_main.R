@@ -386,7 +386,8 @@ dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-yea
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
 # set model names for t_reg_coxph
-l_mdlnames_coxph <- c("r_more", "r_woaf", "r_waf_year", "r_waf_cy", "r_waf_proplog", "r_waf_prop") 
+l_mdlnames_coxph <- c("r_more", "r_woaf", "r_waf_year", "r_waf_year_sqrd")
+## "r_waf_cy", "r_waf_proplog", "r_waf_prop") 
 
 
 

@@ -723,23 +723,29 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
                        dt_pmyear[complete.cases(exhbqntl_cy)]),
 
-        r_waf_cy = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl_cy + 
-                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
-                       dt_pmyear),
-
         r_waf_year = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl_year + 
                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
                            dt_pmyear),
 
-        r_waf_proplog = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
-                                  exhbprop_top10_log + 
-                                  slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
-                              dt_pmyear),
+        r_waf_year_sqrd = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
+                             exhbqntl_year + I(exhbqntl_year^2) + 
+                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+                             dt_pmyear)
 
-        r_waf_prop = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
-                                  exhbprop_top10_utf + 
-                                  slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
-                           dt_pmyear)
+        ## r_waf_cy = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl_cy + 
+        ##                    slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+        ##                  dt_pmyear),
+
+        
+        ## r_waf_proplog = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
+        ##                           exhbprop_top10_log + 
+        ##                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+        ##                       dt_pmyear),
+
+        ## r_waf_prop = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
+        ##                           exhbprop_top10_utf + 
+        ##                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+        ##                    dt_pmyear)
 
         
 
