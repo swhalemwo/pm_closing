@@ -63,6 +63,8 @@ gd_af_size <- function(dt_pmx) {
     dt_af_qntl <- copy(dt_af_qntlprep) %>%
         .[, quantile_cy := ecdf_fun(N, N), .(begin_year, iso3c)] %>%
         .[, quantile_year := ecdf_fun(N, N), .(begin_year)] %>%
+        .[, exhbprop_top10_utf := N/quantile(N, probs = 0.90), begin_year] %>% 
+        .[, exhbprop_top10_log := log(N+1)/quantile(log(N+1), probs = 0.90), begin_year] %>% 
         .[!is.na(PMDB_ID)] %>% # focus on PMs
         ## only include CYs where half of active PMs have at least one show 
         .[, .SD[!any(N == 0 & quantile_cy > 0.5)], .(iso3c, begin_year)] 
@@ -72,6 +74,8 @@ gd_af_size <- function(dt_pmx) {
 
     ## ggplot(dt_af_qntl[iso3c == "USA"], aes(x=begin_year, y=quantile, group = PMDB_ID)) +
         ## geom_line(alpha = 0.1, position = position_jitter(width = 0.2,  height = 0.02))
+
+    ## ggplot(dt_af_qntl[exhbprop_top10_utf > 0], aes(x= exhbprop_top10_utf)) + geom_density()
 
     attr(dt_af_qntl, "gnrtdby") <- as.character(match.call()[[1]])
     return(dt_af_qntl)
@@ -298,11 +302,13 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv) {
     if (dt_pmyear_wproxcnt[, any(is.na(.SD)), .SDcols = keep(names(dt_pmyear_wproxcnt), ~grepl("proxcnt", .x))]) {
         stop("some NAs in proxcnt")}
 
-
+    ## integrate artfacts size indicators
     dt_af_size <- gd_af_size(dt_pmx)[, .(ID = PMDB_ID, year = begin_year,
                                          exhbqntl_year = quantile_year,
                                          exhbqntl_cy = quantile_cy,
-                                         exbhcnt = N)]
+                                         exbhcnt = N,
+                                         exhbprop_top10_log, exhbprop_top10_utf
+                                         )]
     dt_pmyear_waf <- join(dt_pmyear_wproxcnt, dt_af_size, on = c("ID", "year"))
 
 
@@ -338,7 +344,7 @@ gd_pmyear <- function(dt_pmyear_prep) {
     ## - pop: kinda doubt it, pop is so much bigger
     ## - founder_dead: nope, separate processes
     
-    vrbls_tolag <- c("an_inclusion", "exhbqntl_year", "exhbqntl_cy")
+    vrbls_tolag <- c("an_inclusion", "exhbqntl_year", "exhbqntl_cy", "exhbprop_top10_log", "exhbprop_top10_utf")
 
     dt_pm_lagged <- dt_pmyear_prep[order(year), .SD, ID] %>% copy() %>% 
         .[, (vrbls_tolag) := shift(.SD), ID, .SDcols = vrbls_tolag]
@@ -713,13 +719,29 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
                        dt_pmyear),
 
+        r_woaf = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
+                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+                       dt_pmyear[complete.cases(exhbqntl_cy)]),
+
         r_waf_cy = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl_cy + 
                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
                        dt_pmyear),
 
         r_waf_year = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl_year + 
                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
-                       dt_pmyear)
+                           dt_pmyear),
+
+        r_waf_proplog = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
+                                  exhbprop_top10_log + 
+                                  slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+                              dt_pmyear),
+
+        r_waf_prop = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
+                                  exhbprop_top10_utf + 
+                                  slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+                           dt_pmyear)
+
+        
 
         
     )

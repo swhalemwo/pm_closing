@@ -161,8 +161,13 @@ gt_reg_coxph <- function(l_mdls, l_mdlnames) {
 
     c_vvs <- gc_vvs()
 
-    gt_reg(dt_coef, dt_gof, dt_vrblinfo = c_vvs$dt_vrblinfo, dt_ctgterm_lbls = c_vvs$dt_ctgterm_lbls,
-           dt_gof_cfg = c_vvs$dt_gof_cfg, mdl_lbls = setNames(l_mdlnames, l_mdlnames))
+    gt_reg(dt_coef,
+           dt_gof,
+           dt_vrblinfo = c_vvs$dt_vrblinfo,
+           dt_ctgterm_lbls = c_vvs$dt_ctgterm_lbls,
+           dt_gof_cfg = c_vvs$dt_gof_cfg,
+           mdl_lbls = setNames(l_mdlnames, l_mdlnames)) %>%
+        c(list(landscape = T))
     
     
 }
@@ -380,8 +385,11 @@ dt_pmyear <- gd_pmyear(dt_pmyear_prep) # trim down dt to no NAs
 dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-year)
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
-l_mdlnames_coxph <- c("r_more", "r_waf_cy", "r_waf_year") # set model names for t_reg_coxph
-gdtbl("t_reg_coxph")
+# set model names for t_reg_coxph
+l_mdlnames_coxph <- c("r_more", "r_woaf", "r_waf_year", "r_waf_cy", "r_waf_proplog", "r_waf_prop") 
+
+
+
 
 screenreg2(list(l_mdls$r_waf)) # just smoe display
 

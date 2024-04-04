@@ -183,14 +183,17 @@ gc_vvs <- function() {
         reg6            = "Region",
         an_inclusion    = "ArtNews Ranking inclusion",
         exhbqntl_year   = "Exhibition Quantile (year)",
-        exhbqntl_cy     = "Exhibition Quantile (CY)", 
+        exhbqntl_cy     = "Exhibition Quantile (CY)",
+        exhbprop_top10_log = "Exh. top 10% (log)",
+        exhbprop_top10_utf = "Exh. top 10%",
         ## V1              = "PC1 (Size)",
         ## V2              = "PC2 (Support)",
         GLOBAL          = "Global") # from cox.zph
     
      l_vrblgrps <- list(# variable groups
          founder  = .c(gender, founder_dead),
-         museum   = .c(slfidfcn, muem_fndr_name, mow, an_inclusion, exhbqntl_cy, exhbqntl_year), # V1, V2
+         museum   = .c(slfidfcn, muem_fndr_name, mow, an_inclusion, exhbqntl_cy, exhbqntl_year,
+                       exhbprop_top10_log, exhbprop_top10_utf), # V1, V2
          envir    = .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10, west, reg6),
          misc     = .c(GLOBAL)
      )
@@ -221,12 +224,14 @@ gc_vvs <- function() {
 
     ## specify whether variable is time-varying or not
     vrbls_tiv <- .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6)
-    vrbls_tv <- .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10, founder_dead, an_inclusion, exhbqntl_cy, exhbqntl_year)
+    vrbls_tv <- .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10, founder_dead, an_inclusion,
+                   exhbqntl_cy, exhbqntl_year, exhbprop_top10_log, exhbprop_top10_utf)
 
     ## specify variable type: binary, numeric, categorical
     l_vrbltypes <- list(        
         bin = .c(founder_dead, muem_fndr_name, mow, west),
-        num = .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10, exhbqntl_cy, exhbqntl_year), # V1, V2
+        num = .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10, exhbqntl_cy, exhbqntl_year,
+                 exhbprop_top10_log, exhbprop_top10_utf), # V1, V2
         cat = .c(gender, slfidfcn, reg6, an_inclusion))
 
     dt_vrbltypes <- imap(l_vrbltypes, ~data.table(vrbl = .x, vrbltype = .y)) %>% rbindlist
