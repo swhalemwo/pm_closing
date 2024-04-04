@@ -380,7 +380,8 @@ dt_pmyear <- gd_pmyear(dt_pmyear_prep) # trim down dt to no NAs
 dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-year)
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
-l_mdlnames_coxph <- c("r_more", "r_waf") # set model names for t_reg_coxph
+l_mdlnames_coxph <- c("r_more", "r_waf_cy", "r_waf_year") # set model names for t_reg_coxph
+gdtbl("t_reg_coxph")
 
 screenreg2(list(l_mdls$r_waf)) # just smoe display
 

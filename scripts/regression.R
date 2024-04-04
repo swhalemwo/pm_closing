@@ -58,10 +58,13 @@ gd_af_size <- function(dt_pmx) {
     ecdf_fun <- function(x,perc) ecdf(x)(perc) # get quantile of value
 
     ## calculate quantile using all orgs, filter down to PMs
-    dt_af_qntl <- copy(dt_af_qntlprep)[, quantile := ecdf_fun(N, N), .(iso3c, begin_year)] %>%
+    ## dt_af_qntl <- copy(dt_af_qntlprep)[, quantile := ecdf_fun(N, N), .(iso3c, begin_year)] %>%
+    dt_af_qntl <- copy(dt_af_qntlprep) %>%
+        .[, quantile_cy := ecdf_fun(N, N), .(begin_year, iso3c)] %>%
+        .[, quantile_year := ecdf_fun(N, N), .(begin_year)] %>%
         .[!is.na(PMDB_ID)] %>% # focus on PMs
         ## only include CYs where half of active PMs have at least one show 
-        .[, .SD[!any(N == 0 & quantile > 0.3)], .(iso3c, begin_year)] 
+        .[, .SD[!any(N == 0 & quantile_cy > 0.5)], .(iso3c, begin_year)] 
 
     ## dt_af_qntl[, .SD[any(N == 0 & quantile > 0.5)], .(iso3c, begin_year)] %>%
     ##     .[, .N, iso3c] %>% print(n=300)
@@ -295,7 +298,10 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv) {
         stop("some NAs in proxcnt")}
 
 
-    dt_af_size <- gd_af_size(dt_pmx)[, .(ID = PMDB_ID, year = begin_year, exhbqntl = quantile, exbhcnt = N)]
+    dt_af_size <- gd_af_size(dt_pmx)[, .(ID = PMDB_ID, year = begin_year,
+                                         exhbqntl_year = quantile_year,
+                                         exhbqntl_cy = quantile_cy,
+                                         exbhcnt = N)]
     dt_pmyear_waf <- join(dt_pmyear_wproxcnt, dt_af_size, on = c("ID", "year"))
 
 
@@ -689,7 +695,11 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
                        dt_pmyear),
 
-        r_waf = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl + 
+        r_waf_cy = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl_cy + 
+                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+                       dt_pmyear),
+
+        r_waf_year = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow + exhbqntl_year + 
                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
                        dt_pmyear)
 
