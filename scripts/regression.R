@@ -152,7 +152,7 @@ gd_pmdb_popcircle <- function(dt_pmx, radius_km) {
     ## process results
     ## year5 needs to be re-assigned as int probably since future_imap's .y converts it to string
     dt_popres2 <- rbindlist(l_popres)[, `:=`(year5 = as.integer(year), year = NULL)] %>%
-        .[, pop := pop/1e6]
+        .[, popm_circle10 := pop/1e6] %>% .[, pop := NULL]
 
     ## merge to yearly data
     dt_popcircle <- join(dt_pmyear_popprep, dt_popres2, on = c("ID", "year5"))
@@ -276,6 +276,20 @@ gd_pmx <- function(dt_pmdb) {
 }
 
     
+gd_pop <- function() {
+    #' generate population data from WB and UN
+    dt_pop_wb <- gd_WB(c("SP.POP.TOTL"), DIR_WBproc = c_dirs$data) %>%
+        .[, popm_country := SP.POP.TOTL/1e6] %>% .[, SP.POP.TOTL := NULL]
+
+    ## for Taiwan use wpp2022 (https://github.com/PPgp/wpp2022)
+    dt_pop_un <- pop1dt[country_code == 158] %>%
+        .[, .(iso3c = "TWN", country = "Taiwan", year, popm_country = pop/1e3)]
+    
+    dt_pop <- rbind(dt_pop_wb, dt_pop_un)
+    return(dt_pop)
+}
+
+
 
 gd_pmyear_prep <- function(dt_pmx, dt_pmtiv) {
     gw_fargs(match.call())
@@ -292,14 +306,24 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv) {
         .[, age := year - year_opened] %>% # set age
         ## founder death: 1 if year > deathyear, else 0 (before death or not dead at all)
         .[, founder_dead := fifelse(!is.na(deathyear),fifelse(year > deathyear, 1, 0), 0)] %>% 
-        .[, `:=`(tstart = age, tstop = age+1)] %>% # set survival time interval variables
-        .[, pm_dens := .N, .(iso3c, year)] # calculate PM density 
+        .[, `:=`(tstart = age, tstop = age+1)] # set survival time interval variables
+        
 
+    ## get country population data
+    dt_pop_country <- gd_pop()
+
+    ## calculate PM country density
+    dt_pmyear_wpop_country <- join(dt_pmyear, dt_pop_country, on = c("iso3c", "year"),
+                                   how = "left", verbose = 1) %>%
+        .[, pmdens_cry := .N/popm_country, .(iso3c, year)]
+        
+    ## dt_pmyear_wpop_country[, .SD[ID < 10]] %>% ggplot(aes(x=year, y=pmdens_cry, group = ID, color = iso3c)) +
+    ## geom_line()
     
     ## generate the artnews ranking states: not (yet) included, currently included, previously included
     dt_artnews <- gd_artnews()
     
-    dt_pmyear_wan <- dt_artnews[copy(dt_pmyear), on = .(founder_id, year)] %>%  # wan: with artnews
+    dt_pmyear_wan <- dt_artnews[copy(dt_pmyear_wpop_country), on = .(founder_id, year)] %>%  # wan: with artnews
         .[, ever_an_included := any(!is.na(an_inclusion)), ID] %>% # .[, .N, ever_an_included]
         .[ever_an_included == T, first_an_inclusion := .SD[!is.na(an_inclusion), min(year)], ID] %>% 
         ## .[, .(founder_id, year, an_inclusion, ever_an_included, first_inclusion)] %>% # .[ever_an_included == T]
@@ -316,14 +340,30 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv) {
     ## integrate population circle data
     dt_popcircle <- gd_pmdb_popcircle(dt_pmx, radius_km = 10)
 
-    dt_pmyear_wpop <- join(dt_pmyear_wan, dt_popcircle[, .(ID, year, pop)], on = c("ID", "year"))
+    dt_pmyear_wpop_circle <- join(dt_pmyear_wan, dt_popcircle[, .(ID, year, popm_circle10)],
+                                  on = c("ID", "year"))        
 
-    if (dt_pmyear_wpop[year >= 1975,  any(is.na(pop))]) {stop("some pop is NA")}
+    if (dt_pmyear_wpop_circle[year >= 1975,  any(is.na(popm_circle10))]) {stop("some popm_circle10 is NA")}
 
-    ## integrate PM proximity counts 
+    ## ## integrate PM proximity counts 
     dt_proxcnt <- gd_proxcnt(dt_pmx, radius_km = 10)
 
-    dt_pmyear_wproxcnt <- join(dt_pmyear_wpop, dt_proxcnt, on = c("ID", "year"))
+    dt_pmyear_wproxcnt <- join(dt_pmyear_wpop_circle, dt_proxcnt, on = c("ID", "year")) %>%
+        .[, proxcnt10 := proxcnt10-1] %>% # -1: don't count itself
+        .[, pmdens_circle10 := (proxcnt10)/popm_circle10] # 
+
+    ## ## all museums
+    ## ggplot(dt_pmyear_wproxcnt[, .SD, ID], aes(x=year, y=pmdens_circle10, group = ID)) + geom_line()
+
+    ## dt_pmyear_wproxcnt[, .SD[any(pmdens_circle10 > 30)], ID] %>% .[, head(.SD,1), ID] %>% .[, .N, iso3c]
+    ##     ggplot(aes(x=year, y=pmdens_circle10, group = ID)) + geom_line()
+
+    
+    ## dt_pmyear_wproxcnt[, head(.SD[any(pmdens_circle10 > 10)],1), ID][, .(ID)] %>%
+    ##     ## dt_pmx[., on = "ID"] %>% .[, .(ID, achr(lat), achr(long))]
+    ##     dt_pmdb[., on = "ID"] %>% .[, .(name, museum_status, address_formatted, founder_name, city,
+    ##                                     achr(lat), achr(long))] %>% view_xl
+    
 
     if (dt_pmyear_wproxcnt[, any(is.na(.SD)), .SDcols = keep(names(dt_pmyear_wproxcnt), ~grepl("proxcnt", .x))]) {
         stop("some NAs in proxcnt")}
@@ -378,7 +418,7 @@ gd_pmyear <- function(dt_pmyear_prep) {
 
     ## filter out missing values
     ## don't filter on exhbqntl yet.. still iffy -> FIXME
-    dt_pmyear <- dt_pm_lagged[!is.na(an_inclusion) & !is.na(pop)]
+    dt_pmyear <- dt_pm_lagged[!is.na(an_inclusion) & !is.na(popm_circle10)]
 
     
     attr(dt_pmyear, "gnrtdby") <- as.character(match.call()[[1]])
@@ -737,14 +777,56 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         r_west_year2 = coxph(Surv(age, closing) ~ west, dt_pmyear[, .SD[which.max(age)], ID]),
         
         ## test model for table testing
-        r_less1 = coxph(Surv(tstart, tstop, closing) ~ mow + pm_dens + I(pm_dens^2), dt_pmyear),
+        r_less1 = coxph(Surv(tstart, tstop, closing) ~ mow + pmdens_cry + I(pmdens_cry^2), dt_pmyear),
         r_less2 = coxph(Surv(tstart, tstop, closing)~ founder_dead + mow + slfidfcn + muem_fndr_name, dt_pmyear),
 
         ## fullest model:
         ## FIXME: add founder_dead*muem_fndr_name
-        r_more = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
-                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
+        ## r_more = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+        ##                    slfidfcn + founder_dead + muem_fndr_name + an_inclusion + popm_circle10 +
+        ##                    proxcnt10,
+        ##                dt_pmyear),
+
+        ## r_pop1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                            ## slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                       ##      pmdens_circle10 + I(pmdens_circle10^2),
+                       ## dt_pmyear),
+
+        ## r_pop2 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+        ##                     pmdens_circle10 + popm_circle10,
+        ##                dt_pmyear),
+
+        ## r_pop3 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+        ##                     pmdens_circle10 + I(pmdens_circle10^2) + popm_circle10,
+        ##                dt_pmyear),
+
+        r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                            proxcnt10*popm_circle10,
                        dt_pmyear)
+
+        ## r_pop5 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+        ##                     proxcnt10 + I(proxcnt10^2) + popm_circle10,
+        ##                dt_pmyear),
+
+        
+        ## r_pop6 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+        ##                     proxcnt10 + I(proxcnt10^2) + popm_circle10 + proxcnt10:popm_circle10,
+        ##                dt_pmyear)
+
+
+        ## ## new convoluted model
+        ## r_pop7 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion + 
+        ##                     proxcnt10*popm_circle10 + I(proxcnt10^2) +
+        ##                     pmdens_circle10 + I(pmdens_circle10^2),
+        ##                dt_pmyear)
+
+        
 
         ## r_woaf = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
         ##                    slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
@@ -913,3 +995,119 @@ gp_coxphdiag <- function(rx) {
 ##  gp_coxphdiag(l_mdls$r_west_cpct)
 
 gp_coxphdiag_more <- gp_coxphdiag
+
+
+## mode function https://stackoverflow.com/questions/2547402/how-to-find-the-statistical-mode
+Mode <- function(x, na.rm = FALSE) {
+  if(na.rm){
+    x = x[!is.na(x)]
+  }
+
+  ux <- unique(x)
+  return(ux[which.max(tabulate(match(x, ux)))])
+}
+
+
+## generate some prediction data to test pop3
+
+gd_predprep_popprxcnt <- function(dt_pmyear) {
+    #' generate prediction DT
+
+    ## variables that don't change
+    dt_pred_prep <- cbind(
+        dt_pmyear[, lapply(.SD, Mode), # categorical/binary variables: use mode
+                  .SDcols = gc_vvs()$dt_vrblinfo[vrbltype %in% c("bin", "cat"), achr(vrbl)]],
+        dt_pmyear[, lapply(.SD, median), .SDcols = c("pmdens_cry")]) # numeric: use median
+
+    ## variables to vary              
+    dt_pred_prep2 <- expand.grid(proxcnt10 = c(0:15),
+                                 popm_circle10 = c(0.01, 0.3, 1, 3, 5))
+    ## quantile(dt_pmyear$popm_circle10, seq(0.05, 0.95, 0.1)))
+                                                              
+    dt_pred <- cbind(dt_pred_prep2, dt_pred_prep) %>% adt %>%
+        .[, pmdens_circle10 := proxcnt10/popm_circle10]
+
+    return(dt_pred)
+
+}
+
+
+gd_pred <- function(mdlname, dt_pred) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+
+    ## xx <- survfit(l_mdls$r_pop4, newdata = dt_pred, se.fit = T)
+
+    ## ## extract CI info from upper/lower vs from std.error
+    ## rbind(adt(xx$cumhaz)[, `:=`(src = "cumhaz", time = 1:.N)],
+    ##       adt(xx$upper) %>% setnames(old = names(.), new = paste0("V", names(.))) %>%
+    ##       .[, `:=`(src = "upper", time = 1:.N)],
+    ##       adt(xx$lower) %>% setnames(old = names(.), new = paste0("V", names(.))) %>%
+    ##       .[, `:=`(src = "lower", time = 1:.N)],
+    ##       adt(xx$std.err) %>% .[, `:=`(src = "se", time = 1:.N)]) %>%        
+    ##     melt(id.vars = c("src", "time"), measure.vars = patterns("^V")) %>%
+    ##     dcast(time + variable ~ src) %>%
+    ##     .[variable == "V20"] %>%
+    ##     .[, `:=`(haz = cumhaz - shift(cumhaz), se_shift = se - shift(se))] %>% 
+    ##     .[, `:=`(haz_hi = (1-lower) - shift(1-lower) , haz_lo = (1-upper) - shift(1-upper))] %>%
+    ##     .[, `:=`(haz_hi2 = haz + 1.96*se_shift, haz_lo2 = haz - 1.96*se_shift)] %>% 
+    ##     melt(id.vars = "time", measure.vars = patterns("^haz")) %>%
+    ##     ggplot(aes(x=time, y = value, color = variable)) + geom_line()
+        
+                    
+    ## extract CI info from std.er
+    
+    basehaz(chuck(l_mdls, mdlname), dt_pred) %>% adt %>%
+        ## transform each settings cumhaz into hazard and take mean
+        .[time < 20, lapply(.SD, \(x) mean(x - shift(x),  na.rm = T)), .SDcols = patterns("^hazard")] %>%
+        melt(measure.vars = patterns("^hazard"), variable.name = "condition",
+             value.name = "avghaz") %>%
+        join(dt_pred[, .(condition = sprintf("hazard.%s", seq(1:fnrow(dt_pred))),
+                         proxcnt10, popm_circle10)], on = "condition") %>%
+        .[, src := mdlname]
+    ## ggplot(aes(x=time, y=cumhaz, group = condition)) + geom_line()
+    ## join(dt_pred[, .(condition = sprintf("hazard.%s", seq(1:fnrow(dt_pred))),
+    ##                  proxcnt10, popm_circle10)], on = "condition") %>%
+    ## ggplot(aes(x=factor(proxcnt10), y=factor(popm_circle10), fill = mult)) + geom_tile()
+    ## ggplot(aes(y=avghaz, x=proxcnt10, color = factor(popm_circle10))) + geom_line()
+
+}
+
+## adjust line width
+## dt_cutwidth <- dt_pmyear %>% copy %>%
+##     .[, popm_circle10_cut := cut(popm_circle10,
+##                                  breaks = quantile(dt_pmyear$popm_circle10, seq(0.05, 0.95, 0.1)),
+##                                  labels = quantile(dt_pmyear$popm_circle10, seq(0.05, 0.85, 0.1)))] %>%
+##     .[, popm_circle10_cut2 := cut(popm_circle10,
+##                                   breaks = quantile(dt_pmyear$popm_circle10, seq(0.05, 0.95, 0.1)))] %>%
+##     na.omit() %>% 
+##     ## .[, .(ID, year, popm_circle10, popm_circle10_cut, popm_circle10_cut2)] %>%
+##     .[, .N, .(proxcnt10, popm_circle10_cut = round(as.numeric(as.character(popm_circle10_cut)),5))]
+
+
+gp_pred_popprxcnt <- function() {
+    #' generate plot of predicted avg hazard rate under different PM proximity counts and population numbers
+
+    dt_predres_mult <- map(l_mdlnames_coxph, ~gd_pred(.x, gd_predprep_popprxcnt(dt_pmyear))) %>% rbindlist
+    ## .[, popm_circle10_cut := round(popm_circle10, 5)]
+
+## join(dt_predres_mult, dt_cutwidth, on = c("proxcnt10", "popm_circle10_cut")) %>% 
+##     replace_NA %>% # fill up NAs in N with 0
+##     .[proxcnt10 < 8] %>%
+
+    dt_predres_mult %>% 
+        ggplot(aes(x=proxcnt10, y=avghaz, group = popm_circle10, color = factor(popm_circle10))) + 
+        ## linewidth = N, alpha = N)) +
+        geom_line(linewidth = 2) +
+        ## facet_wrap(~src, scales = "free") +
+        scale_color_discrete(type = color("sunset")(5)) + 
+        coord_cartesian(ylim = c(0, 0.013), xlim = c(0,12)) +
+        theme_bw()
+}
+
+## ## look at distribution of PMs
+## dt_pmyear %>%
+##     .[, c(lapply(.SD, \(x) log(mean(x+1))), museum_status = max(closing)), ID,
+##       .SDcols =c("proxcnt10", "popm_circle10")] %>% 
+##     ggplot(aes(x=proxcnt10, y=popm_circle10, color = factor(museum_status))) +
+##     geom_jitter(size = 0.8, width = 0.2)
+    

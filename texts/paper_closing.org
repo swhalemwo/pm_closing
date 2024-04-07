@@ -19,10 +19,10 @@ wd_nbrs(dt_nbrs)
 #+RESULTS:
 :results:
 # meanhaz
-#+MACRO: meanhaz_upto_20 0.89%
+#+MACRO: meanhaz_upto_20 0.88%
 #+MACRO: meanhaz_upto_30 0.91%
 #+MACRO: meanhaz_upto_40 0.78%
-#+MACRO: meanhaz_upto_100 0.79%
+#+MACRO: meanhaz_upto_100 0.78%
 
 
 # pltcfgs
@@ -34,6 +34,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: ynkplt_p_agedens (eval (concat "#+label: fig:p_agedens\n" "#+caption: Age distribution of private museums\n" "#+attr_latex: :width 17cm\n" "[[file:../figures/p_agedens.pdf]]"))
 #+MACRO: ynkplt_p_yeardens (eval (concat "#+label: fig:p_yeardens\n" "#+caption: Private Museum-year Distribution\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_yeardens.pdf]]"))
 #+MACRO: ynkplt_p_coxphdiag_more (eval (concat "#+label: fig:p_coxphdiag_more\n" "#+caption: Model Diagnostics\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_coxphdiag_more.pdf]]"))
+#+MACRO: ynkplt_p_pred_popprxcnt (eval (concat "#+label: fig:p_pred_popprxcnt\n" "#+caption: Predicted Avg. Hazard Rate on Regional PM Density and Population\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_pred_popprxcnt.pdf]]"))
 
 
 # figlbls
@@ -45,6 +46,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: refplt_p_agedens \ref{fig:p_agedens}
 #+MACRO: refplt_p_yeardens \ref{fig:p_yeardens}
 #+MACRO: refplt_p_coxphdiag_more \ref{fig:p_coxphdiag_more}
+#+MACRO: refplt_p_pred_popprxcnt \ref{fig:p_pred_popprxcnt}
 
 
 # reftbl

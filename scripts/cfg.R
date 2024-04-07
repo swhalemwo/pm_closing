@@ -19,7 +19,7 @@ gc_tbls <- function(c_tblargs) {
             input_data = quote(mtcars),
             caption = "this is a great test table"),
         t_coxzph = list(
-            rx = quote(l_mdls$r_more),
+            rx = quote(l_mdls$r_pop4),
             caption = "Z-test of proportional hazards"),
         t_reg_coxph = list(
             l_mdls = quote(l_mdls),
@@ -121,11 +121,14 @@ gc_plts <- function() {
             width = 19,
             height = 12),
         p_coxphdiag_more = list(
-            rx = quote(l_mdls$r_more),
+            rx = quote(l_mdls$r_pop4),
             caption = "Model Diagnostics",
             width = 19,
-            height = 25
-            )        
+            height = 25),
+        p_pred_popprxcnt = list(
+            caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population",
+            width = 18,
+            height = 8)
     )
 
     ## check that there are no duplicate 
@@ -170,18 +173,23 @@ gc_vvs <- function() {
     ## group variables thematically, add also labels
 
     l_vrbl_lbls <- list( # variable labels
-        gender               = "Founder Gender",
-        founder_dead         = "Founder died",
-        slfidfcn             = "Self- Identification",
-        muem_fndr_name       = "Founder name in Museum name",
-        mow                  = "MOW inclusion",
-        pm_dens              = "PM density",
-        "I(pm_dens^2)"       = "PM density^2",
-        pop                  = "Pop. (millions) within 10km",
-        proxcnt10            = "Nbr PM within 10km",
-        west                 = "Europe and North America",
-        reg6                 = "Region",
-        an_inclusion         = "ArtNews Ranking inclusion",
+        gender                    = "Founder Gender",
+        founder_dead              = "Founder died",
+        slfidfcn                  = "Self- Identification",
+        muem_fndr_name            = "Founder name in Museum name",
+        mow                       = "MOW inclusion",
+        pmdens_cry                = "PM density (country)",
+        "I(pmdens_cry^2)"         = "PM density^2 (country)",
+        popm_circle10             = "Pop. (millions) within 10km",
+        popm_country              = "Pop. (millions) country",        
+        proxcnt10                 = "Nbr PM within 10km",
+        "I(proxcnt10^2)"          = "Nbr PM^2 within 10km",
+        pmdens_circle10           = "PM density (10km)",
+        "I(pmdens_circle10^2)"    = "PM density^2 (10km)",
+        "proxcnt10:popm_circle10" = "Nbr PM (10km) * Pop (10km)",
+        west                      = "Europe and North America",
+        reg6                      = "Region",
+        an_inclusion              = "ArtNews Ranking inclusion",
         ## exhbqntl_year        = "Exhibition Quantile (year)",
         ## "I(exhbqntl_year^2)" = "Exhibition Quantile (year)^2",
         ## exhbqntl_cy          = "Exhibition Quantile (CY)",
@@ -193,14 +201,34 @@ gc_vvs <- function() {
         ## V2                = "PC2 (Support)",
         GLOBAL          = "Global") # from cox.zph
     
-     l_vrblgrps <- list(# variable groups
-         founder  = .c(gender, founder_dead),
-         museum   = .c(slfidfcn, muem_fndr_name, mow, an_inclusion), # exhbqntl_cy),
-                       ## exhbqntl_year, "I(exhbqntl_year^2)",
-                       ## exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"), # V1, V2
-         envir    = .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10, west, reg6),
-         misc     = .c(GLOBAL)
-     )
+    l_vrblgrps <- list(# variable groups
+        founder  = .c(gender, founder_dead),
+        museum   = .c(slfidfcn, muem_fndr_name, mow, an_inclusion), # exhbqntl_cy),
+        ## exhbqntl_year, "I(exhbqntl_year^2)",
+        ## exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"), # V1, V2
+        envir    = .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
+                      west, reg6,
+                      pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10"),
+        misc     = .c(GLOBAL)
+    )
+
+    ## specify whether variable is time-varying or not
+    vrbls_tiv <- .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6)
+    vrbls_tv <- .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
+                   founder_dead,
+                   an_inclusion, pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10")
+    ## exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)", exhbprop_top10_log, exhbprop_top10_utf,
+    ## exhbqntl_roll, "I(exhbqntl_roll^2)")
+
+    ## specify variable type: binary, numeric, categorical
+    l_vrbltypes <- list(        
+        bin = .c(founder_dead, muem_fndr_name, mow, west),
+        num = .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
+                 pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10"),
+        ## exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)",
+        ## exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"), # V1, V2
+        cat = .c(gender, slfidfcn, reg6, an_inclusion))
+
 
     l_vrblgrp_lbls <- list(# variable group labels
         founder = "Founder",
@@ -226,18 +254,7 @@ gc_vvs <- function() {
     if (!setequal(dt_vrbl_lbls$vrbl, dt_vrblgrps$vrbl)) {
         stop("something wrong with vrbl labels and groups")}
 
-    ## specify whether variable is time-varying or not
-    vrbls_tiv <- .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6)
-    vrbls_tv <- .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10, founder_dead, an_inclusion)
-                   ## exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)", exhbprop_top10_log, exhbprop_top10_utf,
-                   ## exhbqntl_roll, "I(exhbqntl_roll^2)")
-
-    ## specify variable type: binary, numeric, categorical
-    l_vrbltypes <- list(        
-        bin = .c(founder_dead, muem_fndr_name, mow, west),
-        num = .c(pm_dens, "I(pm_dens^2)", pop, proxcnt10), # exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)",
-                 ## exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"), # V1, V2
-        cat = .c(gender, slfidfcn, reg6, an_inclusion))
+    
 
     dt_vrbltypes <- imap(l_vrbltypes, ~data.table(vrbl = .x, vrbltype = .y)) %>% rbindlist
 

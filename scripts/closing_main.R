@@ -25,6 +25,10 @@ library(furrr)       # parallel processing
 library(splines)     # for gp_schoenfeld, maybe neeeded later too for regressions
 library(texreg, include.only = c("screenreg", "texreg")) ## inspection of results
 library(Hmisc, include.only = "latexTranslate")  # latexTranslate
+library(wpp2022)     # population data for Taiwan
+data(pop1dt) # population data for taiwan
+library(khroma)      # plotting
+
 
 ## LOCS <- list(PROJDIR = "/home/johannes/Dropbox/phd/papers/closing/")
 ## LOCS$FIGDIR <- paste0(FIG
@@ -101,7 +105,7 @@ gt_coxzph <- function(rx) {
     coxzph_trfms <- list(km = "Kaplan-Meier", identity = "Identity", rank = "Rank")
 
     ## generate the actual data
-    dt_coxzph_prep <- map(names(coxzph_trfms), ~cox.zph(l_mdls$r_more, terms = F, transform = .x) %>%
+    dt_coxzph_prep <- map(names(coxzph_trfms), ~cox.zph(rx, terms = F, transform = .x) %>%
                                                    chuck("table") %>% adt(keep.rownames = "term") %>%
                                                    .[, src := .x]) %>% list_rbind %>%
                       .[, .(term, src, p)]
@@ -367,15 +371,12 @@ if ("memoised" %!in% class(gd_mow_info)) {
 
 END_YEAR <- 2021
 
-
-
 ## actual pm data
 ## l_pca_dimred <- gl_pca_dimred(dt_pmdb)
 ## l_pca_dimred_woclosed <- gl_pca_dimred(dt_pmdb[museum_status != "closed"])
 
 dt_pmx <- gd_pmx(dt_pmdb) # extract of main variables
 dt_pmtiv <- gd_pmtiv(dt_pmx) # time invariant variables
-
 
 
 dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv) # combine all data sources, as complete as possible
@@ -386,14 +387,14 @@ dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-yea
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
 # set model names for t_reg_coxph
-l_mdlnames_coxph <- c("r_more")
+l_mdlnames_coxph <- "r_pop4"
+## c("r_more", paste0("r_pop", c(1, 3:6)))
 ## "r_woaf", "r_waf_year", "r_waf_roll", "r_waf_roll2")
 ## "r_waf_cy", "r_waf_proplog", "r_waf_prop", "r_waf_year_sqrd") 
 
 
 
-
-screenreg2(list(l_mdls$r_more)) # just smoe display
+screenreg2(list(l_mdls$r_pop4)) # just smoe display
 
 ## screenreg2(list(l_mdls$r_west_cpct, l_mdls$r_west_year, l_mdls$r_west_year2), digits = 4)
 
@@ -403,8 +404,9 @@ dt_nbrs <- gd_nbrs()
 fwrite(dt_nbrs, paste0(c_dirs$misc, "nbrs.csv"), quote = F)
 
 ## generate plots/tables and write them to file
-plan(multicore, workers = 4)
-future_walk(names(gc_plts()), ~lapply(c(gplt, wplt), \(f) f(.x)))
+## plan(multicore, workers = 4)
+plan(sequential)
+future_walk(names(gc_plts())[1:5], ~lapply(c(gplt, wplt), \(f) f(.x)))
 future_walk(names(gc_tbls()), ~lapply(c(gtbl, wtbl), \(f) f(.x)))
 plan(sequential)
 
@@ -418,12 +420,12 @@ jtls::gwd_clgrph()
 
 ## texreg(l_mdls$r_more, single.row = T, file = paste0(c_dirs$tbls, "r_more.tex"), label = "tbl:t_r_more")
 
-gp_coxphdiag(l_mdls$r_more)
+gp_coxphdiag(l_mdls$r_pop4)
 
 check_if_file_is_open(paste0(c_dirs$tbls, "t_testtable.pdf"))
 
 
-screenreg(l_mdls$r_more)
+screenreg(l_mdls$r_pop4)
 ## ejj <- test_package("pmdata")
 
 ## test_all("~/Dropbox/phd/pmdata")
