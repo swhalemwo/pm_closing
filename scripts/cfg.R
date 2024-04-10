@@ -112,7 +112,7 @@ gc_plts <- function() {
             caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population",
             width = 18,
             height = 8)
-    )
+    ))
 
     ## check that there are no duplicate 
     if (any_duplicated(names(l_pltcfgs))) stop("duplicated names")

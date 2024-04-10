@@ -344,6 +344,7 @@ dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%
 dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
 
 ## variable coverage
+source(paste0(c_dirs$code, "vrblcvrg.R"))
 l_vrblcvrg <- gl_vrblcvrg(dt_pmdb)
 
 if ("memoised" %!in% class(gd_mow_info)) {
