@@ -372,8 +372,9 @@ dt_pmyear <- gd_pmyear(dt_pmyear_prep) # trim down dt to no NAs
 dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-year)
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
-# set model names for t_reg_coxph
-l_mdlnames_coxph <- "r_pop4"
+                                        # set model names for t_reg_coxph
+l_mdlnames_coxph <- c("r_pop4")
+l_mdlnames_coxph <- c("r_pop4", paste0("r_wsize", 3:1))
 ## c("r_more", paste0("r_pop", c(1, 3:6)))
 ## "r_woaf", "r_waf_year", "r_waf_roll", "r_waf_roll2")
 ## "r_waf_cy", "r_waf_proplog", "r_waf_prop", "r_waf_year_sqrd") 
@@ -392,7 +393,7 @@ fwrite(dt_nbrs, paste0(c_dirs$misc, "nbrs.csv"), quote = F)
 ## generate plots/tables and write them to file
 ## plan(multicore, workers = 4)
 plan(sequential)
-future_walk(names(gc_plts())[1:5], ~lapply(c(gplt, wplt), \(f) f(.x)))
+future_walk(names(gc_plts()), ~lapply(c(gplt, wplt), \(f) f(.x)))
 future_walk(names(gc_tbls()), ~lapply(c(gtbl, wtbl), \(f) f(.x)))
 plan(sequential)
 

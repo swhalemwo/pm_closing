@@ -805,7 +805,23 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
                             proxcnt10*popm_circle10,
-                       dt_pmyear)
+                       dt_pmyear),
+        
+        r_wsize1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                            proxcnt10*popm_circle10 + PC1,
+                         dt_pmyear),
+        
+
+        r_wsize2 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                            proxcnt10*popm_circle10 + PC2,
+                         dt_pmyear),
+        
+        r_wsize3 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                            proxcnt10*popm_circle10 + PC1 + PC2,
+                         dt_pmyear)
 
         ## r_pop5 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
         ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
@@ -1017,7 +1033,7 @@ gd_predprep_popprxcnt <- function(dt_pmyear) {
     dt_pred_prep <- cbind(
         dt_pmyear[, lapply(.SD, Mode), # categorical/binary variables: use mode
                   .SDcols = gc_vvs()$dt_vrblinfo[vrbltype %in% c("bin", "cat"), achr(vrbl)]],
-        dt_pmyear[, lapply(.SD, median), .SDcols = c("pmdens_cry")]) # numeric: use median
+        dt_pmyear[, lapply(.SD, median), .SDcols = c("pmdens_cry", "PC1", "PC2")]) # numeric: use median
 
     ## variables to vary              
     dt_pred_prep2 <- expand.grid(proxcnt10 = c(0:15),
@@ -1085,6 +1101,8 @@ gd_pred <- function(mdlname, dt_pred) {
 
 
 gp_pred_popprxcnt <- function() {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    
     #' generate plot of predicted avg hazard rate under different PM proximity counts and population numbers
 
     dt_predres_mult <- map(l_mdlnames_coxph, ~gd_pred(.x, gd_predprep_popprxcnt(dt_pmyear))) %>% rbindlist
@@ -1094,7 +1112,7 @@ gp_pred_popprxcnt <- function() {
 ##     replace_NA %>% # fill up NAs in N with 0
 ##     .[proxcnt10 < 8] %>%
 
-    dt_predres_mult %>% 
+    p_pred_popprxnct <- dt_predres_mult %>% 
         ggplot(aes(x=proxcnt10, y=avghaz, group = popm_circle10, color = factor(popm_circle10))) + 
         ## linewidth = N, alpha = N)) +
         geom_line(linewidth = 2) +
@@ -1102,6 +1120,19 @@ gp_pred_popprxcnt <- function() {
         scale_color_discrete(type = color("sunset")(5)) + 
         coord_cartesian(ylim = c(0, 0.013), xlim = c(0,12)) +
         theme_bw()
+
+    ## if multiple models, add facetting by model
+    if (dt_predres_mult[, fnunique(src) > 1]) {
+        
+        p_pred_popprxnct <- p_pred_popprxnct +
+            facet_wrap(~src, scales = "free")
+        
+    }
+
+    return(p_pred_popprxnct)
+        
+
+    
 }
 
 ## ## look at distribution of PMs
