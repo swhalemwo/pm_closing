@@ -57,24 +57,10 @@ theme_closing <- function(extra_space_top=0) {
 gc_plts <- function() {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
 
-    l_pltcfgs <- list(
-        p_vrblcvrg_ugrpd = list(
-            dt_vrblcvrg = quote(l_vrblcvrg$dt_vrblcvrg_all),
-            yeet_acts = F,
-            caption = "PMDB variable coverage by museum status",
-            width = 19,
-            height = 24),
-        p_vrblcvrg = list(
-            dt_vrblcvrg = quote(l_vrblcvrg$dt_vrblcvrg_all),
-            yeet_acts = F,
-            caption = "PMDB variable coverage by museum status and variable group",
-            width = 19,
-            height = 24),
-        p_vrblcvrg_ratio = list(
-            dt_vrblcvrg = quote(l_vrblcvrg$dt_vrblcvrg_fcs),
-            caption = "PMDB variable coverage (abs/rel prop) by museum status and variable group",
-            width = 18,
-            height = 24),
+    l_pltcfgs <- c(
+        if (exists("gc_plts_vrblcvrg")) gc_plts_vrblcvrg(),
+        list(
+        
         ## p_vrblcvrg_pca = list(
         ##     dt_pmdb = quote(dt_pmdb),
         ##     l_pca_dimred = quote(l_pca_dimred),

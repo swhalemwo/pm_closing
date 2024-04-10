@@ -333,10 +333,10 @@ l_tbls <- list() # list of tables
 c_tblargs <- list() # arguments to pass to gc_tbls
 system(sprintf("rm %s", paste0(c_dirs$misc, "farg_calls.csv")))
 
-source(paste0(c_dirs$code, "cfg.R"))
+
 source(paste0(c_dirs$code, "pm_dimred.R")) 
 source(paste0(c_dirs$code, "regression.R"))
-source(paste0(c_dirs$code, "vrblcvrg.R"))
+source(paste0(c_dirs$code, "cfg.R"))
 
 
 dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%

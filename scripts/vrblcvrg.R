@@ -196,3 +196,25 @@ gp_vrblcvrg_ratio <- function(dt_vrblcvrg) {
         labs(x="data availability", y = element_blank()) +
         theme_closing()
 }
+
+
+gc_plts_vrblcvrg <- function() {
+    list(
+        p_vrblcvrg_ugrpd = list(
+            dt_vrblcvrg = quote(l_vrblcvrg$dt_vrblcvrg_all),
+            yeet_acts = F,
+            caption = "PMDB variable coverage by museum status",
+            width = 19,
+            height = 24),
+        p_vrblcvrg = list(
+            dt_vrblcvrg = quote(l_vrblcvrg$dt_vrblcvrg_all),
+            yeet_acts = F,
+            caption = "PMDB variable coverage by museum status and variable group",
+            width = 19,
+            height = 24),
+        p_vrblcvrg_ratio = list(
+            dt_vrblcvrg = quote(l_vrblcvrg$dt_vrblcvrg_fcs),
+            caption = "PMDB variable coverage (abs/rel prop) by museum status and variable group",
+            width = 18,
+            height = 24))
+}
