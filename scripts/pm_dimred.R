@@ -254,9 +254,9 @@ gl_pca_dimred <- function(dt_pmdb) {
     
     ## set variables
     vrbls_dimred <- c(keep(names(dt_pmdb), ~grepl("^act_", .x)),
-                       keep(names(dt_pmdb), ~grepl("^avbl_", .x)),
-                       gc_pmdb_vrblgrps(dt_pmdb)[grp == "relations", vrbl],
-                       .c(temp_exhibs, cafe_restrnt, reducedtickets, museumshop,
+                      keep(names(dt_pmdb), ~grepl("^avbl_", .x)),
+                      .c(gvtsupport, donorprogram, endowment, sponsorship,  cooperation),
+                      .c(temp_exhibs, cafe_restrnt, reducedtickets, museumshop,
                           rentalpossblt, webshop))
 
     ## debug: visualize coverage 
@@ -279,7 +279,68 @@ gl_pca_dimred <- function(dt_pmdb) {
     return(l_pca_dimred)
 }
 
+gd_pca_score <- function(dt_toscore, prcomp_obj, rotatedLoadings) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    
+    #' calculates scores for PCs
+    #' comfy way of scoring cases when not using all cases for estimation
+    #' is necessary because prcomp scores don't take rotation into account
+    #' assumes prcomp is run with scale = T and center = T
+    #' @param dt_toscore data.table to calculate PC scores
+    #' @prcomp_obj ojbejc
 
+    ## check that PCA uses centering and scaling (rest of scoring depends on it)
+    ## if prcomp(center/scale =F, prcomp_obj$center/scale will be boolean, else vector -> can check with is.logical
+    if (is.logical(prcomp_obj$center) | is.logical(prcomp_obj$scale)) {
+        stop(sprintf("prcomp center = %s, scale = %s", prcomp_obj$center, prcomp_obj$scale))
+    }
+
+    if (!all(rownames(rotatedLoadings) %in% names(dt_toscore))) {
+        stop("not all variables needed for score calculation are present in dt_toscore")}
+
+    dt_pca_scored <- replace_NA(
+        dt_toscore[, .SD, # prep data: replace NAs with 0s
+                .SDcols = rownames(rotatedLoadings)]) %>% as.matrix %>%
+        subtract(matrix(prcomp_obj$center, # undo centering
+                        nrow = dt_toscore[, .N], byrow = T,
+                        ncol = len(prcomp_obj$center))) %>%
+        multiply_by(matrix(1/prcomp_obj$scale, # undo scaling
+                           nrow = dt_toscore[, .N] , byrow = T,
+                           ncol = len(prcomp_obj$scale))) %>%
+        multiply_by_matrix(rotatedLoadings) %>% adt # calculating scores
+
+    return(dt_pca_scored)
+
+    
+}
+
+
+gl_pca_dimred_closed_imputed <- function(dt_pmdb, dt_pmx) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    gw_fargs(match.call())
+    ## run PCA for those PMs that are open, score the closed one according to the structure of the open ones
+    
+    ## run the PCA with open museums: get all those that are used by pmx
+    ## l_pca_dimred <- gl_pca_dimred(dt_pmdb)
+    l_pca_dimred_woclosed <- gl_pca_dimred(dt_pmdb[dt_pmx[museum_status == "private museum", .(ID)], on = "ID"])
+
+    ## score closed ones
+    dt_closed_pca_scored <- gd_pca_score(
+        dt_toscore = dt_pmdb[dt_pmx[museum_status == "closed"], on = "ID"], # closed museums
+        prcomp_obj = l_pca_dimred_woclosed$prcomp_obj, # PCA (prcomp) object
+        rotatedLoadings = l_pca_dimred_woclosed$rotatedLoadings) # varimax-rotated loadings
+
+    ## merge scores of closed ones to scores of open ones
+    l_pca_dimred_woclosed$dt_scores <- rbind(
+        l_pca_dimred_woclosed$dt_scores,
+        cbind(dt_closed_pca_scored,
+              dt_pmdb[dt_pmx[museum_status == "closed"], on = "ID"][, .(ID, name, museum_status, iso3c)]))
+
+    attr(l_pca_dimred_woclosed, "gnrtdby") <- as.character(match.call()[[1]])
+    return(l_pca_dimred_woclosed)
+
+}
+    
 
 ## * main
 

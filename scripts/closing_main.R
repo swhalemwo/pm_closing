@@ -353,7 +353,7 @@ c_tblargs <- list() # arguments to pass to gc_tbls
 system(sprintf("rm %s", paste0(c_dirs$misc, "farg_calls.csv")))
 
 source(paste0(c_dirs$code, "cfg.R"))
-## source(paste0(c_dirs$code, "pm_dimred.R")) 
+source(paste0(c_dirs$code, "pm_dimred.R")) 
 source(paste0(c_dirs$code, "regression.R"))
 source(paste0(c_dirs$code, "vrblcvrg.R"))
 
@@ -376,7 +376,11 @@ END_YEAR <- 2021
 ## l_pca_dimred_woclosed <- gl_pca_dimred(dt_pmdb[museum_status != "closed"])
 
 dt_pmx <- gd_pmx(dt_pmdb) # extract of main variables
-dt_pmtiv <- gd_pmtiv(dt_pmx) # time invariant variables
+
+## generate PC cores, only use open PMs for loading calculation
+l_pca_dimred_woclosed <- gl_pca_dimred_closed_imputed(dt_pmdb, dt_pmx)
+
+dt_pmtiv <- gd_pmtiv(dt_pmx, l_pca_dimred_woclosed) # time invariant variables
 
 
 dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv) # combine all data sources, as complete as possible

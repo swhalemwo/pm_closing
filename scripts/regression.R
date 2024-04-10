@@ -449,7 +449,7 @@ gd_pmcpct <- function(dt_pmyear) {
     return(dt_pmcpct)
 }
 
-gd_pmtiv <- function(dt_pmx) {
+gd_pmtiv <- function(dt_pmx, l_pca_dimred_woclosed) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     gw_fargs(match.call())
@@ -486,11 +486,11 @@ gd_pmtiv <- function(dt_pmx) {
         .[, mow := fifelse(is.na(mow), 0, mow)]
     ## dt_mow_info[dt_pmx, on = .(PMDB_ID =  ID)]
 
-    ## join PCA
-    ## dt_pmtiv_wpca <- join(dt_pmtiv, l_pca_dimred2$dt_scores[, .(ID, V1, V2)], on = "ID")
+    ## add PCA scores
+    dt_pmtiv_wpca <- join(dt_pmtiv, l_pca_dimred_woclosed$dt_scores[, .(ID, PC1, PC2)], on = "ID")
 
-    attr(dt_pmtiv, "gnrtdby") <- as.character(match.call()[[1]])
-    return(dt_pmtiv)
+    attr(dt_pmtiv_wpca, "gnrtdby") <- as.character(match.call()[[1]])
+    return(dt_pmtiv_wpca)
 
 
 }
