@@ -15,9 +15,6 @@ gc_clgrphattrs <- function() {
 
 gc_tbls <- function(c_tblargs) {
     list(
-        t_testtable = list(
-            input_data = quote(mtcars),
-            caption = "this is a great test table"),
         t_coxzph = list(
             rx = quote(l_mdls$r_pop4),
             caption = "Z-test of proportional hazards"),
