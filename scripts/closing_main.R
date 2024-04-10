@@ -76,25 +76,6 @@ library(khroma)      # plotting
 
 
 
-
-
-gt_testtable <- function(input_data) {
-    if (as.character(match.call()[[1]]) %in% fstd){browser()}
-    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
-    
-    ##
-
-    list(
-        dt_fmtd = adt(input_data, keep.rownames = "model")[1:12, 1:4],
-        align_cfg = rep("l",5),
-        hline_after = c(0,1,4, 6,9),
-        add_to_row = NULL,
-        number_cols = c(F, rep(T, 3)),
-        landscape = F)
-    
-    
-}
-
 gt_coxzph <- function(rx) {
     gw_fargs(match.call())
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
