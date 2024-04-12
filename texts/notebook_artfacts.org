@@ -1,0 +1,59 @@
+* artfacts notebook
+
+** compare with Arfacts data
+
+use PM-mean of AF variables (ignore longitudinal variation)
+
+#+name: p_cormat_size
+#+begin_src R :exports results :results output graphics file :file p_cormat_size.pdf :width 10 :height 10
+
+dt_pmx <- gd_pmx(dt_pmdb)
+
+dt_af_size <- gd_af_size(dt_pmx)
+
+dt_af_size_mean <- dt_af_size[, lapply(.SD, mean), .SDcols = patterns("quant|exhb|^N"), .(ID = PMDB_ID)] %>%
+  .[, c("exhbnNA", "N") := NULL]
+
+## generate all the comparisons
+cormat_cprn <- join(dt_af_size_mean, # need to flip woclosed scores.. FIXME
+                    copy(l_pca_dimred_woclosed$dt_scores)[, `:=`(PC1 = PC1*-1, PC2 = PC2*-1)], 
+                    on = "ID") %>%
+  join(copy(dt_pmdb_size_wide)[, museum_status := NULL], on = "ID") %>%
+  num_vars %>% .[, ID := NULL] %>% cor(use = "pairwise.complete.obs")
+  
+cormat_cprn %>% ggcorrplot(show.diag = F, type = "full", lab = T, lab_size = 3) +
+  theme(legend.position = "bottom")
+  
+
+#+end_src
+
+#+attr_latex: :width 7in
+#+RESULTS: p_cormat_size
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_cormat_size.pdf]]
+
+hmm the AF variables are pretty much the same, super high correlations among them
+
+but correlation with PCs and other size variables is only around 0.2
+
+tbf that is similar to the correlations between PCs and other original variables, but logged size variables can get to 0.3-0.6, many 0.4, which is kinda more impressive
+
+still, there are three main groups of variables:
+- PC based
+- AF based
+- PMDB numerics
+
+average cross-groups correlations are low, around 0.2;
+PMDB numerics and AF have high internal correlations  
+
+possible interpretations:
+- at least two groups are based on garbage data
+  - PMDB numerics: not longitudinal, could that matter? also SM-heavy, which is subject to trends
+    also large gaps, especially in better ones like staff size and collection size -> probably MNAR
+  - PCs: based on unstandardized, arbitrary collection
+  - AF: yuge longitudinal coverage variation, only 60% of PMs covered
+- there isn't a underlying, one-dimensional construct of size 
+
+garbage data: i'm trying to distill measurements out of *garbage data* -> GIGO
+
+lesson: don't work with GARBAGE DATA: even if you get something out in the end (which here I didn't), it will have taken forever
+e.g. if I want size, I need actual direct size indicators (floor size, visitors, staff), not a whole bunch of indirect indicators
