@@ -314,6 +314,12 @@ source(paste0(c_dirs$code, "regression.R"))
 source(paste0(c_dirs$code, "cfg.R"))
 
 
+
+dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%
+    .[museum_status %in% c("private museum", "no longer a private museum", "closed")] # yeet bad PMs
+dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
+
+
 ## variable coverage
 source(paste0(c_dirs$code, "vrblcvrg.R"))
 l_vrblcvrg <- gl_vrblcvrg(dt_pmdb)
@@ -325,10 +331,6 @@ if ("memoised" %!in% class(gd_mow_info)) {
 END_YEAR <- 2021
 
 
-
-dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%
-    .[museum_status %in% c("private museum", "no longer a private museum", "closed")] # yeet bad PMs
-dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
 
 ## actual pm data
 ## l_pca_dimred <- gl_pca_dimred(dt_pmdb)
