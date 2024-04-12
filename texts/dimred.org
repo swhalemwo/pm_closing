@@ -1,6 +1,7 @@
 #+PROPERTY: header-args:R :session *R:dimred*
 #+PROPERTY: header-args:R+ :output-dir /home/johannes/Dropbox/phd/papers/closing/notes/dimred/
 #+PROPERTY: header-args:R+ :tangle yes
+#+PROPERTY: header-args:R+ :cache yes
 
 #+latex_class: notes2
 # erases make title
@@ -27,7 +28,11 @@ library(ggrepel) # plotting
 library(collapse) # data processing
 library(ggbeeswarm) # for vrblcvrg plots
 library(countrycode) # for getting gd_af_size to work
-
+library(wpp2022) # import UN population data for taiwan
+data(pop1dt) # actually import Un pop data
+library(furrr) # parallel processing
+library(survival) # survival models
+library(Hmisc, include.only = "latexTranslate") # needed for reg table 
 
 c_dirs <- gc_dirs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## project dirs
 PMDATA_LOCS <- gc_pmdata_locs()
@@ -375,11 +380,98 @@ ggplot(dt_size_pca_corcoefs, aes(x=r, y=vrbl_size, color = tfm, shape = src, siz
 
 quite some substantial correlations, especially with PC1 -> good evidence that PC1 measures something like size/capabilities/outreach/diversification
 
+** regression model
+
+#+begin_src R :exports none :results none
+dt_pmx <- gd_pmx(dt_pmdb)
+l_pca_dimred_woclosed <- gl_pca_dimred_closed_imputed(dt_pmdb, dt_pmx)
+
+dt_pmtiv <- gd_pmtiv(dt_pmx, l_pca_dimred_woclosed) # time invariant variables
+
+
+dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv) # combine all data sources, as complete as possible
+dt_pmyear <- gd_pmyear(dt_pmyear_prep) # trim down dt to no NAs
+
+
+dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-year)
+
+l_mdls <- list(
+          r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                            proxcnt10*popm_circle10,
+                       dt_pmyear),
+        
+        r_wsize1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                            proxcnt10*popm_circle10 + PC1,
+                         dt_pmyear),
+        
+
+        r_wsize2 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                            proxcnt10*popm_circle10 + PC2,
+                         dt_pmyear),
+        
+        r_wsize3 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                            proxcnt10*popm_circle10 + PC1 + PC2,
+                         dt_pmyear))
+
+gt_reg_coxph_dimred <- gt_reg_coxph
+
+
+
+l_mdlnames_dimred <- c("r_pop4", paste0("r_wsize", 3:1))
+
+## overwrite the gc_tbls, c_tblargs
+gc_tbls <- function() {
+  list(t_reg_coxph_dimred = list(
+         l_mdls = quote(l_mdls),
+         l_mdlnames = quote(l_mdlnames_dimred),
+         caption = "reg results"))
+}
+c_tblargs <- list()
+l_tbls <- list()
+
+## gt_reg_coxph_dimred(l_mdls, l_mdlnames_coxph)
+gtbl("t_reg_coxph_dimred")
+wtbl("t_reg_coxph_dimred")
+## wtbl(
+
+
+#+end_src
+
+#+INCLUDE: /home/johannes/Dropbox/phd/papers/closing/tables/t_reg_coxph_dimred_wcpF.tex export latex
+
+Whether or not the principal components are included matters somewhat: the main variables that were significant before (self-identification as other), nbr PM within 10km, and its interaction with population, are not much changed.
+
+MOW is not significant anymore when both PCs are included, and the main effect of population.
+
+include the predicted probabilities: need to update gp_pred_popprxcnt to make it more modular
+
+#+name: p_pred_dimred
+#+begin_src R :exports :exports results :results output graphics file :file pred_dimred.pdf :width 6 :height 5.5
+gp_
+#+end_src
+
+
+
+#+latex: \FloatBarrier
+
 ** conclusion overall
 
-Even if PC1 measures size, this doesn't mean that the data for closed museums has been properly collected -> even if the logic is right, the variable coverage of closed museums is just bad -> PC1 scores are lower than they should be
+Even if PC1 measures size, this doesn't mean that the data for closed museums has been properly collected
 
-*hmm it's really only my intuition that this effect is too big to be real*
+even if the "logic" (factor loadings) is right, the variable coverage of closed museums is just pretty bad -> PC1 scores for closed museums are lower than they should be
+
+it very much boils down to intuition whether the concentration of the closed museums at the lower ends is too big to be real
+
+
+
+
+
+
+
 
 
 
