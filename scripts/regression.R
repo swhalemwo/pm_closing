@@ -1142,3 +1142,30 @@ gp_pred_popprxcnt <- function() {
 ##     ggplot(aes(x=proxcnt10, y=popm_circle10, color = factor(museum_status))) +
 ##     geom_jitter(size = 0.8, width = 0.2)
     
+
+gt_reg_coxph <- function(l_mdls, l_mdlnames) {
+    #' collect some models from l_mdls and format them into nice custom regression table
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    gw_fargs(match.call())
+
+
+    l_mdls_slct <- map(l_mdlnames, ~chuck(l_mdls, .x))
+
+    l_mdlres <- map2(l_mdls_slct, l_mdlnames, ~gd_reg_coxph(.x, .y))
+
+    dt_coef <- map(l_mdlres, ~chuck(.x, "dt_coef")) %>% rbindlist
+    dt_gof <- map(l_mdlres, ~chuck(.x, "dt_gof")) %>% rbindlist
+
+    c_vvs <- gc_vvs()
+
+    gt_reg(dt_coef,
+           dt_gof,
+           dt_vrblinfo = c_vvs$dt_vrblinfo,
+           dt_ctgterm_lbls = c_vvs$dt_ctgterm_lbls,
+           dt_gof_cfg = c_vvs$dt_gof_cfg,
+           mdl_lbls = setNames(l_mdlnames, l_mdlnames)) %>%
+        c(list(landscape = T))
+    
+    
+}
