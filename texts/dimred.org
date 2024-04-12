@@ -2,7 +2,7 @@
 #+PROPERTY: header-args:R+ :output-dir /home/johannes/Dropbox/phd/papers/closing/notes/dimred/
 #+PROPERTY: header-args:R+ :tangle yes
 
-#+latex_class: article_usual2
+#+latex_class: notes2
 # erases make title
 # #+BIND: org-export-latex-title-command ""
 
@@ -27,7 +27,7 @@ library(ggrepel) # plotting
 library(collapse) # data processing
 library(ggbeeswarm) # for vrblcvrg plots
 library(countrycode) # for getting gd_af_size to work
-library(ggcorrplot) # for correlation matrix
+
 
 c_dirs <- gc_dirs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## project dirs
 PMDATA_LOCS <- gc_pmdata_locs()
@@ -380,6 +380,7 @@ quite some substantial correlations, especially with PC1 -> good evidence that P
 Even if PC1 measures size, this doesn't mean that the data for closed museums has been properly collected -> even if the logic is right, the variable coverage of closed museums is just bad -> PC1 scores are lower than they should be
 
 *hmm it's really only my intuition that this effect is too big to be real*
+
 
 
 

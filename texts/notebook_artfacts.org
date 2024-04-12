@@ -1,11 +1,15 @@
 * artfacts notebook
 
+TODO: this stuff is copied from dimred, relies on those objects.. 
+
 ** compare with Arfacts data
 
 use PM-mean of AF variables (ignore longitudinal variation)
 
 #+name: p_cormat_size
 #+begin_src R :exports results :results output graphics file :file p_cormat_size.pdf :width 10 :height 10
+
+library(ggcorrplot) # for correlation matrix
 
 dt_pmx <- gd_pmx(dt_pmdb)
 
