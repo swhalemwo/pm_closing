@@ -1048,8 +1048,12 @@ gd_predprep_popprxcnt <- function(dt_pmyear) {
 }
 
 
-gd_pred <- function(mdlname, dt_pred) {
+gd_pred <- function(mdlname, l_mdls, dt_pred) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    #' generate average predicted hazard for first 20 years for all the specifications in dt_pred
+    #' @param rx a coxph-based regression model
+    #' @param dt_pred data frame with all variables and different values (one per row) for each specification
+
 
     ## xx <- survfit(l_mdls$r_pop4, newdata = dt_pred, se.fit = T)
 
@@ -1100,12 +1104,13 @@ gd_pred <- function(mdlname, dt_pred) {
 ##     .[, .N, .(proxcnt10, popm_circle10_cut = round(as.numeric(as.character(popm_circle10_cut)),5))]
 
 
-gp_pred_popprxcnt <- function() {
+gp_pred_popprxcnt <- function(l_mdlnames, l_mdls, dt_pmyear) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     
     #' generate plot of predicted avg hazard rate under different PM proximity counts and population numbers
 
-    dt_predres_mult <- map(l_mdlnames_coxph, ~gd_pred(.x, gd_predprep_popprxcnt(dt_pmyear))) %>% rbindlist
+    dt_predres_mult <- map(l_mdlnames,
+                           ~gd_pred(.x, l_mdls, gd_predprep_popprxcnt(dt_pmyear))) %>% rbindlist
     ## .[, popm_circle10_cut := round(popm_circle10, 5)]
 
 ## join(dt_predres_mult, dt_cutwidth, on = c("proxcnt10", "popm_circle10_cut")) %>% 
