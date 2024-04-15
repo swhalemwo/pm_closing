@@ -11,7 +11,9 @@ l_vrblcvrg__dt_vrblcvrg_fcs [label=dt_vrblcvrg_fcs];
 l_vrblcvrg [label = "", color=transparent, width=0, height=0]; 
 l_vrblcvrg__dt_pmdb_splong [label=dt_pmdb_splong] 
 } 
- gc_pmdb_tests; 
+ gc_plts_dimred; 
+gc_plts_vrblcvrg; 
+gc_pmdb_tests; 
 gc_pmdb_vrblgrps; 
 gc_vvs; 
 gd_af_size; 
@@ -60,7 +62,6 @@ gt_coxzph;
 gt_dimred; 
 gt_reg_coxph; 
 gt_sumstats; 
-gt_testtable; 
 Mode; 
 theme_closing; 
 dt_pmdb; 
@@ -73,6 +74,7 @@ dt_pmyear;
 dt_pmcpct; 
 2; 
 5; 
+rx; 
 l_mdls__r_pop4; 
 l_mdls; 
 l_mdlnames_coxph 
@@ -80,6 +82,7 @@ l_mdlnames_coxph
 5 -> gp_hazard; 
 Mode -> gd_predprep_popprxcnt; 
 dt_pmcpct -> gl_mdls; 
+dt_pmcpct -> gp_agedens; 
 dt_pmcpct -> gp_hazard; 
 dt_pmcpct -> gp_surv; 
 dt_pmcpct -> gt_sumstats; 
@@ -95,6 +98,7 @@ dt_pmx -> gd_pmyear_prep;
 dt_pmx -> gl_pca_dimred_closed_imputed; 
 dt_pmyear -> gd_pmcpct; 
 dt_pmyear -> gl_mdls; 
+dt_pmyear -> gp_yeardens; 
 dt_pmyear -> gt_sumstats; 
 dt_pmyear_prep -> gd_pmyear; 
 gc_pmdb_vrblgrps -> gd_vrblcvrg; 
@@ -141,4 +145,5 @@ l_pca_dimred_woclosed -> gd_pmtiv;
 l_vrblcvrg__dt_vrblcvrg_all -> gp_vrblcvrg; 
 l_vrblcvrg__dt_vrblcvrg_all -> gp_vrblcvrg_ugrpd; 
 l_vrblcvrg__dt_vrblcvrg_fcs -> gp_vrblcvrg_ratio; 
+rx -> gd_inflcases; 
 theme_closing -> gp_vrblcvrg_ratio }
