@@ -1,5 +1,32 @@
 ## * dimred code
 
+gc_plts_dimred <- function() {
+    #' generate plot configs for pca scores
+    list(
+        p_vrblcvrg_pca = list(
+            dt_pmdb = quote(dt_pmdb),
+            l_pca_dimred = quote(l_pca_dimred),
+            caption = "coverage of variables used in PCA",
+            width = 18, height = 16),
+        p_scree = list(
+            scree_vlus = quote(l_pca_dimred$eigenvalues),
+            caption = "Scree plot of PCA dimensionality reduction",
+            width = 14,
+            height = 8),
+        p_pca_loadings = list(
+            l_pca_dimred = quote(l_pca_dimred),
+            caption = "loadings of first 2 PCs",
+            width = 14, 
+            height = 12),
+        p_pca_scores = list(
+            l_pca_dimred = quote(l_pca_dimred),
+            caption = "scores on first PCs",
+            width = 16,
+            height = 9)
+    )
+}
+
+
 gd_dimred_loads <- function(loadmat) {
     gw_fargs(match.call())
     if (as.character(match.call()[[1]]) %in% fstd){browser()}

@@ -59,29 +59,9 @@ gc_plts <- function() {
 
     l_pltcfgs <- c(
         if (exists("gc_plts_vrblcvrg")) gc_plts_vrblcvrg(),
+        ## gc_plts_dimred()
         list(
-        
-        ## p_vrblcvrg_pca = list(
-        ##     dt_pmdb = quote(dt_pmdb),
-        ##     l_pca_dimred = quote(l_pca_dimred),
-        ##     caption = "coverage of variables used in PCA",
-        ##     width = 18, height = 16),
-        ## p_scree = list(
-        ##     scree_vlus = quote(l_pca_dimred$eigenvalues),
-        ##     caption = "Scree plot of PCA dimensionality reduction",
-        ##     width = 14,
-        ##     height = 8),
-        ## p_pca_loadings = list(
-        ##     l_pca_dimred = quote(l_pca_dimred),
-        ##     caption = "loadings of first 2 PCs",
-        ##     width = 14, 
-        ##     height = 12),
-        ## p_pca_scores = list(
-        ##     l_pca_dimred = quote(l_pca_dimred),
-        ##     caption = "scores on first PCs",
-        ##     width = 16,
-        ##     height = 9),
-        p_surv = list(
+            p_surv = list(
             dt_pmcpct = quote(dt_pmcpct),
             caption = "Private Museum Survival probability",
             width = 14,
