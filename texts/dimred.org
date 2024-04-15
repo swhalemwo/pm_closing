@@ -11,11 +11,14 @@
 #+OPTIONS: num:nil
 #+OPTIONS: toc:nil
 #+OPTIONS: h:5
+#+OPTIONS: ^:nil
 
 * dimensionality reduction notebook
 :PROPERTIES:
 :ID:       61593c59-cb66-48e6-b019-07bf29a2d980
 :END:
+
+overall goal: get some size indicator, or measure 
 
 ** PCA
 
