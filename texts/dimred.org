@@ -3,6 +3,8 @@
 #+PROPERTY: header-args:R+ :tangle yes
 #+PROPERTY: header-args:R+ :cache yes
 
+#+PROPERTY: header-args:dot+ :output-dir /home/johannes/Dropbox/phd/papers/closing/notes/dimred/
+
 #+latex_class: notes2
 # erases make title
 # #+BIND: org-export-latex-title-command ""
@@ -11,14 +13,53 @@
 #+OPTIONS: num:nil
 #+OPTIONS: toc:nil
 #+OPTIONS: h:5
-#+OPTIONS: ^:nil
+#+OPTIONS: ^:nil # don't use subscript for underscore
+#+options: \n:t # preserver linebreaks
 
 * dimensionality reduction notebook
 :PROPERTIES:
 :ID:       61593c59-cb66-48e6-b019-07bf29a2d980
 :END:
 
-overall goal: get some size indicator, or measure 
+*overall goal*: get some size indicator, or whatever else is measured by the museum characteristics we measure in the database
+
+*problem*: for closed museums, data collection (research assistants looking at websites) might have been more difficult because website is offline/was no longer maitained
+
+therefore, measurement of museum-level variables might be influenced by museum_status (open or closed), which constitutes "reverse causality" or "Missing at random" (missingness of a variable (museum characteristics) depending on the value of another variable (museum_status)).
+
+
+
+#+name: p_revcaus
+#+begin_src dot :exports results :results output graphics file :file p_revcaus.pdf :width 6 :height 5.5
+
+digraph D {
+  
+  node [shape="box"];
+  rankdir = "RL";
+  // ranksep = 0.2;
+  // ratio = "auto";
+  // ratio = 1;
+  S [label = "museum status\n(open/closed)"]
+  C [label = "completeness\nof website"]
+  D [label = "data\n coverage"]
+  V [label = "museum-level\nvariables"]
+  
+  V -> S [label="\n\neffect of\ninterest"]
+  S -> C -> D -> V [color = "red"]
+
+}
+#+end_src
+
+#+attr_latex: :width 6in
+#+RESULTS: p_revcaus
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_revcaus.pdf]]
+
+
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_revcaus.pdf]]
+
+
+
+
 
 ** PCA
 
@@ -35,7 +76,8 @@ library(wpp2022) # import UN population data for taiwan
 data(pop1dt) # actually import Un pop data
 library(furrr) # parallel processing
 library(survival) # survival models
-library(Hmisc, include.only = "latexTranslate") # needed for reg table 
+library(Hmisc, include.only = "latexTranslate") # needed for reg table
+library(khroma) # for tol color scheme
 
 c_dirs <- gc_dirs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## project dirs
 PMDATA_LOCS <- gc_pmdata_locs()
@@ -55,7 +97,7 @@ source(paste0(c_dirs$code, "pm_dimred.R"))
 
 #+end_src
 
-#+RESULTS:
+#+RESULTS[3d58328c03f697375ddad8f1f53c18f7a65ec967]:
 
 
 #+begin_src R :results none :exports none
@@ -86,10 +128,13 @@ gp_vrblcvrg_pca(dt_pmdb, l_pca_dimred)
 #+end_src
 
 #+attr_latex: :width 6in
-#+RESULTS: p_vrblcvrg_pca
+#+RESULTS[badad757365a60f680475022e66003ff96b297c4]: p_vrblcvrg_pca
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_vrblcvrg_pca.pdf]]
 
+additional (minor) problem: many interval variables are incomplete -> only use variables for which 0 can reasonably be inferred to mean absence (e.g. if e.g. wealth is missing, it's not plausible to assume 0 wealth, but if there is no data on e.g. cafe/restaurant, it's possible that there just is no cafe).
+
 coverage of variables used for PCA is worse for closed museum by factor of around exp(1) = 2.8.
+
 
 #+name: p_scree
 #+begin_src R :exports results :results output graphics file :file p_scree.pdf :width 5.5 :height 4
@@ -97,7 +142,7 @@ gp_scree(l_pca_dimred$eigenvalues)
 #+end_src
 
 #+attr_latex: :width 5.5in
-#+RESULTS: p_scree
+#+RESULTS[62de51220879dbfc11f1974c7ddf6a21820f142e]: p_scree
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_scree.pdf]]
 
 Scree plot: maybe just one PC worth extracting, but just use two because that's standard
@@ -108,7 +153,7 @@ gp_pca_loadings(l_pca_dimred)
 #+end_src
 
 #+attr_latex: :width 5.5in
-#+RESULTS: p_pca_loadings
+#+RESULTS[5a97cd7f6d0c35799df832e2ff5741f4efe932b2]: p_pca_loadings
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_pca_loadings.pdf]]
 
 
@@ -116,7 +161,9 @@ gp_pca_loadings(l_pca_dimred)
 
 ** look at stability if only open museums are used for principal component construction
 
-woclosed: PCA loadings are calculated only with open museums, then scores for closed museums are calculated from those loadings
+could be that inclusion of closed museums in PCA drives factor loadings to reflect museum_status, therefore sees if loadings change when closed museums are exlcuded
+
+woclosed (without closed): PCA loadings are calculated only with open museums, then scores for closed museums are calculated from those loadings
 
 
 #+name: p_cpr_loads_scatter
@@ -143,7 +190,7 @@ dt_pca_cpr_loads %>% melt(id.vars = "vrbl", measure.vars = measure(value.name, s
 #+end_src
 
 #+attr_latex: :width 16cm
-#+RESULTS: p_cpr_loads_scatter
+#+RESULTS[55d1ce72cab0453d2aee29ec3255965c860bce8d]: p_cpr_loads_scatter
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_cpr_loads_scatter.pdf]]
 
 #+name: p_cpr_loads_cols
@@ -156,7 +203,7 @@ dt_pca_cpr_loads %>% melt(id.vars = "vrbl", measure.vars = measure(PC, src, sep 
 #+end_src
 
 #+attr_latex: width 7in
-#+RESULTS: p_cpr_loads_cols
+#+RESULTS[dd768b34bc37cd138e1da6716d310b62b3096b90]: p_cpr_loads_cols
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_cpr_loads_cols.pdf]]
 
 -> not a big difference between factor loadings with all museums (all) and without closed (woclosed, i.e. only open museums)
@@ -173,12 +220,12 @@ dt_pca_cpr_loads[, .SD, .SDcols = patterns("^PC")] %>% cor %>%
   .[PC_org == PC_cpr & src_org != src_cpr, .(PC_cpr, src_cpr, src_org, cor = round(cor, 3))]
   #+end_src
 
-#+RESULTS:
-: # A data frame: 2 × 4
-:   PC_cpr src_cpr src_org     cor
-:   <chr>  <chr>   <chr>     <dbl>
-: 1 PC1    all     woclosed -0.998
-: 2 PC2    all     woclosed -0.986
+  #+RESULTS[5be7423ba45ebb25dbdf52f43fbd4f1eab2c8c94]:
+  : # A data frame: 2 × 4
+  :   PC_cpr src_cpr src_org     cor
+  :   <chr>  <chr>   <chr>     <dbl>
+  : 1 PC1    all     woclosed -0.998
+  : 2 PC2    all     woclosed -0.986
 
 -> correlations of loadings are super high: 0.99, 0.98
 
@@ -204,7 +251,7 @@ dt_pca_cpr_scores[, .SD, .SDcols = patterns("^PC")] %>% cor(use = "complete.obs"
 
 #+end_src
 
-#+RESULTS:
+#+RESULTS[eefa7ec7253b325e5e631eea590a2effdd8beae8]:
 : # A data frame: 2 × 4
 :   PC_cpr src_cpr src_org     cor
 :   <chr>  <chr>   <chr>     <dbl>
@@ -236,7 +283,7 @@ melt(dt_pca_cpr_scores, id.vars =  c("ID", "museum_status"),
 #+end_src
 
 #+attr_latex: :width 7in
-#+RESULTS: p_cpr_scores_scat
+#+RESULTS[351fa32b05670e51c4ca4214e2fd4121ac549531]: p_cpr_scores_scat
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_cpr_scores_scat.pdf]]
 
 
@@ -263,7 +310,7 @@ p_cpr_scores_diff + (p_cpr_scores_diff +
 #+end_src
 
 #+attr_latex: :width 7in
-#+RESULTS: p_cpr_scores_diff
+#+RESULTS[697fd41a78f0252de91eba7597c014a057bb9dc0]: p_cpr_scores_diff
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_cpr_scores_diff.pdf]]
 
 overall change for each PM isn't so large, most closed PMs still stay at bottom left corner
@@ -286,7 +333,7 @@ melt(dt_pca_cpr_scores, id.vars =  c("ID", "museum_status"),
 #+end_src
 
 #+attr_latex: :width 7in
-#+RESULTS: p_cpr_scores_means
+#+RESULTS[612b53e97b5c8aa145db25dcfec2ec5f1d415f5c]: p_cpr_scores_means
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_cpr_scores_means.pdf]]
 
 differences between groups by museum_status is much larger than differences between src
@@ -365,7 +412,7 @@ p_sizecor_orig + p_sizecor_log
 #+end_src
 
 #+attr_latex: :width 7in
-#+RESULTS: p_sizecor
+#+RESULTS[78b12bb1033a0f0989e15dc9c1aab79f5e74c781]: p_sizecor
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_sizecor.pdf]]
 
 #+name: p_sizecor_col
@@ -378,7 +425,7 @@ ggplot(dt_size_pca_corcoefs, aes(x=r, y=vrbl_size, color = tfm, shape = src, siz
 #+end_src
 
 #+attr_latex: :width 7in
-#+RESULTS: p_sizecor_col
+#+RESULTS[be3d44a7aebb2d85dfaeaa3c9044b13a1eff7fbc]: p_sizecor_col
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_sizecor_col.pdf]]
 
 quite some substantial correlations, especially with PC1 -> good evidence that PC1 measures something like size/capabilities/outreach/diversification
@@ -446,16 +493,22 @@ wtbl("t_reg_coxph_dimred")
 
 #+INCLUDE: /home/johannes/Dropbox/phd/papers/closing/tables/t_reg_coxph_dimred_wcpF.tex export latex
 
-Whether or not the principal components are included matters somewhat: the main variables that were significant before (self-identification as other), nbr PM within 10km, and its interaction with population, are not much changed.
+Whether or not the principal components are included matters somewhat:
+- the main variables that were significant before (self-identification as other), nbr PM within 10km, and its interaction with population, are not much changed.
+- MOW is not significant anymore when both PCs are included,
+- PC inclusion also make smain effect of population insignificant (but that doesn't matter much for proximity cound effect, see predicted probabilities of different models)
+- including both PCs makes "founder died" significant
 
-MOW is not significant anymore when both PCs are included, and the main effect of population.
 
-include the predicted probabilities: need to update gp_pred_popprxcnt to make it more modular
 
 #+name: p_pred_dimred
-#+begin_src R :exports :exports results :results output graphics file :file pred_dimred.pdf :width 6 :height 5.5
-gp_
+#+begin_src R :exports results :results output graphics file :file pred_dimred.pdf :width 7 :height 5.5
+gp_pred_popprxcnt(l_mdlnames_dimred, l_mdls, dt_pmyear) + theme(legend.position = "bottom")
 #+end_src
+
+#+attr_latex: :width 7in
+#+RESULTS[53264d1925b1abf790a14ecdf0cc3a0f6ebb1f10]: p_pred_dimred
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/pred_dimred.pdf]]
 
 
 
@@ -463,11 +516,9 @@ gp_
 
 ** conclusion overall
 
-Even if PC1 measures size, this doesn't mean that the data for closed museums has been properly collected
-
-even if the "logic" (factor loadings) is right, the variable coverage of closed museums is just pretty bad -> PC1 scores for closed museums are lower than they should be
-
-it very much boils down to intuition whether the concentration of the closed museums at the lower ends is too big to be real
+- Even if PC1 measures size, this doesn't mean that the data for closed museums has been properly collected
+- even if the "logic" (factor loadings) is right, the variable coverage of closed museums is just pretty bad -> PC1 scores for closed museums could be lower than they should be
+- it very much boils down to intuition whether the concentration of the closed museums at the lower ends is too big to be real
 
 
 
