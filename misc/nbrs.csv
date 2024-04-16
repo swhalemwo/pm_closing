@@ -1,4 +1,5 @@
 nbr_name,nbr_fmt,grp
+pmdb_n_nlpm,25,descs
 meanhaz_upto_20,0.88%,meanhaz
 meanhaz_upto_30,0.91%,meanhaz
 meanhaz_upto_40,0.78%,meanhaz

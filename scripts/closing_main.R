@@ -241,6 +241,11 @@ gd_nbrs <- function() {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     
+    dt_descs <-
+        list(nbr_name = "pmdb_n_nlpm",
+             nbr_fmt = dt_pmdb[museum_status == "no longer a private museum", .N],
+             grp = "descs") %>% adt
+
     ## calculate average hazard rate numbers, depending on maximum age
     dt_pehaz <- gd_pehaz(dt_pmcpct, cutwidth = 2)
     dt_meanhaz <- map(c(20, 30, 40, 100), ~list(upper_bound = .x, mean_haz = dt_pehaz[cuts <= .x, mean(haz)])) %>%
@@ -248,6 +253,8 @@ gd_nbrs <- function() {
         .[, .(nbr_name = sprintf("meanhaz_upto_%s", upper_bound),
               nbr_fmt = sprintf("%s%%", format(mean_haz*100, digits = 2, nsmall = 2)),
               grp = "meanhaz")]
+
+    
         
     ## plots: yanking (insertion) and in-text referencing
     dt_ynkplt <- gc_ynkplt()
@@ -256,7 +263,7 @@ gd_nbrs <- function() {
     ## dt_ynktbl <- gc_ynktbl()
     dt_reftbl <- gc_reftbl()
 
-    dt_nbrs_cbnd <- Reduce(rbind, list(dt_meanhaz, dt_ynkplt, dt_refplt, dt_reftbl))
+    dt_nbrs_cbnd <- Reduce(rbind, list(dt_descs, dt_meanhaz, dt_ynkplt, dt_refplt, dt_reftbl))
 
     
     return(dt_nbrs_cbnd)

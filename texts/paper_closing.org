@@ -18,6 +18,10 @@ wd_nbrs(dt_nbrs)
 
 #+RESULTS:
 :results:
+# descs
+#+MACRO: pmdb_n_nlpm 25
+
+
 # meanhaz
 #+MACRO: meanhaz_upto_20 0.88%
 #+MACRO: meanhaz_upto_30 0.91%
