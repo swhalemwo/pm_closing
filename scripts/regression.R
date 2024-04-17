@@ -68,6 +68,7 @@ gd_af_size <- function(dt_pmx) {
           .SDcols = paste0("rollsum_prep", 1:5)] %>%
         .[, paste0("rollsum_prep", 1:5) := NULL] %>% # yeet prep columns
         .[, exhbrollsum_avg := exhbrollsum5/(5-exhbnNA)] %>%
+        .[, exhbrollany := fifelse(exhbrollsum5 == 0, 0, 1)] %>% 
         .[, exhbqntl_roll := ecdf_fun(exhbrollsum_avg, exhbrollsum_avg), begin_year] %>%
         .[!is.na(PMDB_ID)]
     
@@ -80,6 +81,7 @@ gd_af_size <- function(dt_pmx) {
     ## calculate quantile using all orgs, filter down to PMs
     ## dt_af_qntl <- copy(dt_af_qntlprep)[, quantile := ecdf_fun(N, N), .(iso3c, begin_year)] %>%
     dt_af_qntl_simple <- copy(dt_af_qntlprep) %>%
+        .[, exhbany := fifelse(all(N == 0), 0, 1), InstitutionID] %>% 
         .[, exhbcnt := N] %>% # renaming
         .[, exhbqntl_cy := ecdf_fun(N, N), .(begin_year, iso3c)] %>% # quantile by country year
         .[, exhbqntl_year := ecdf_fun(N, N), .(begin_year)] %>% # quantile by year
@@ -89,9 +91,11 @@ gd_af_size <- function(dt_pmx) {
                 ## focus on PMs
         ## only include CYs where half of active PMs have at least one show
 
-    ## combine "simple quantiles" (dt_af_qntl) and rolled sums (dt_af_roll), yeet stuff
+    ## combine "simple quantiles" (dt_af_qntl) and rolled sums (dt_af_roll),
+    ## yeet CYs where more than half institutions have no exhibitions
     dt_af_qntl <- join(dt_af_qntl_simple,
-                       dt_af_roll[, .(PMDB_ID, begin_year, exhbrollsum5, exhbnNA, exhbrollsum_avg, exhbqntl_roll)],
+                       dt_af_roll[, .(PMDB_ID, begin_year, exhbrollsum5, exhbrollany,  exhbnNA,
+                                      exhbrollsum_avg, exhbqntl_roll)],
          on = c("PMDB_ID", "begin_year"), verbose = 0) %>%
         .[, .SD[!any(N == 0 & exhbqntl_cy > 0.5)], .(iso3c, begin_year)] 
 

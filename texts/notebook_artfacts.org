@@ -27,6 +27,7 @@ library(wpp2022) # import UN population data for taiwan
 data(pop1dt) # actually import Un pop data
 library(survival) # survival models
 library(Hmisc, include.only = "latexTranslate") # needed for reg table
+library(furrr) # parallel processing
 
 c_dirs <- gc_dirs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## project dirs
 PMDATA_LOCS <- gc_pmdata_locs()
