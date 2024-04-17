@@ -1,3 +1,4 @@
+## * config functions
 
 gc_clgrphattrs <- function() {
     #' generate configs of Rgraphviz rendering, required for gwd_clgrph
@@ -94,7 +95,12 @@ gc_plts <- function() {
             dt_pmyear = quote(dt_pmyear),
             caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population",
             width = 18,
-            height = 8)
+            height = 8),
+        p_lngtdvelp = list(
+            dt_pmyear = quote(dt_pmyear),
+            caption = "Composition of private museum population",
+            width = 18,
+            height = 14)
     ))
 
     ## check that there are no duplicate 

@@ -1,3 +1,4 @@
+## * descriptives
 
 gp_lngtdvelp <- function(dt_pmyear) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
@@ -42,8 +43,12 @@ gp_lngtdvelp <- function(dt_pmyear) {
     ggplot(dt_viz_colored, aes(x=year, y=value_y, group = value, color = factor(lnbr))) +
         geom_line(show.legend = F) +
         facet_wrap(~vrbl, scales = "free") +
-        geom_text_repel(dt_lbls, mapping = aes(label = value), hjust = 0, direction = "y", show.legend = F) +
-        coord_cartesian(xlim = c(1990, 2035))
+        geom_text_repel(dt_lbls, mapping = aes(label = value), hjust = 0, direction = "y", show.legend = F,
+                        size = 3) +
+        coord_cartesian(xlim = c(1990, 2035), expand = F) +
+        theme(axis.text = element_text(size = 6),
+              panel.spacing = unit(0.1, "lines"),
+              strip.text = element_text(size = 7, margin = margin(.05, 0, .05, 0, "cm")))
                                                          
     
 }
