@@ -787,54 +787,18 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ##                    proxcnt10,
         ##                dt_pmyear),
 
-        ## r_pop1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                            ## slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                       ##      pmdens_circle10 + I(pmdens_circle10^2),
-                       ## dt_pmyear),
-
-        ## r_pop2 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-        ##                     pmdens_circle10 + popm_circle10,
-        ##                dt_pmyear),
-
-        ## r_pop3 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-        ##                     pmdens_circle10 + I(pmdens_circle10^2) + popm_circle10,
-        ##                dt_pmyear),
-
+        
         r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
                             proxcnt10*popm_circle10,
-                       dt_pmyear)
+                       dt_pmyear),
 
-        ## r_pop4_wyr = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-        ##                     proxcnt10*popm_circle10 + year + reg6,
-        ##                    dt_pmyear)
+        r_pop4_wyr = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                            proxcnt10*popm_circle10 + year + reg6,
+                           copy(dt_pmyear)[, reg6 := factor(reg6, labels = c("OC", "NALUL","EU","AS", "LA", "AF"))])
                        
         
-
-        ## r_pop5 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-        ##                     proxcnt10 + I(proxcnt10^2) + popm_circle10,
-        ##                dt_pmyear),
-
-        
-        ## r_pop6 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-        ##                     proxcnt10 + I(proxcnt10^2) + popm_circle10 + proxcnt10:popm_circle10,
-        ##                dt_pmyear)
-
-
-        ## ## new convoluted model
-        ## r_pop7 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion + 
-        ##                     proxcnt10*popm_circle10 + I(proxcnt10^2) +
-        ##                     pmdens_circle10 + I(pmdens_circle10^2),
-        ##                dt_pmyear)
-
-        
-
         ## r_woaf = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
         ##                    slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
         ##                dt_pmyear[complete.cases(exhbqntl_cy)]),
