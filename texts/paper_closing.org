@@ -54,7 +54,6 @@ wd_nbrs(dt_nbrs)
 
 
 # reftbl
-#+MACRO: reftbl_t_testtable \ref{tbl:t_testtable}
 #+MACRO: reftbl_t_coxzph \ref{tbl:t_coxzph}
 #+MACRO: reftbl_t_reg_coxph \ref{tbl:t_reg_coxph}
 #+MACRO: reftbl_t_sumstats \ref{tbl:t_sumstats}
@@ -97,6 +96,10 @@ This exercise does not only provide insights into private museums in particular,
 # #+latex: \bigbreak
 # #+latex: \noindent
 # *keywords*: museum, closure, identity
+
+** Private museums
+
+
 
 ** Contributions :noexport:
 - Intransparent founder motivations
@@ -625,8 +628,13 @@ Investigating this process of transformation into a different organizational for
 
 
 
+environment can be measured more
+- geocoding of other institutiosn
+- tax incentives
+- government spending
+-> this might futher specify the niches in which PMs can endure
 
 
 
 
-
+ 
