@@ -116,11 +116,10 @@ c_tblargs <- list() # arguments to pass to gc_tbls
 system(sprintf("rm %s", paste0(c_dirs$misc, "farg_calls.csv")))
 
 
-source(paste0(c_dirs$code, "pm_dimred.R")) 
-source(paste0(c_dirs$code, "regression.R"))
-source(paste0(c_dirs$code, "cfg.R"))
-source(paste0(c_dirs$code, "descriptives.R"))
-
+source(paste0(c_dirs$code, "pm_dimred.R"))  # dimensionality reduction: generates PC
+source(paste0(c_dirs$code, "regression.R")) # all kind of data prep/regression
+source(paste0(c_dirs$code, "cfg.R")) # config functions
+source(paste0(c_dirs$code, "descriptives.R")) # descriptive tables/plots
 
 
 
