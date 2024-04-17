@@ -138,6 +138,8 @@ if ("memoised" %!in% class(gd_mow_info)) {
 
 END_YEAR <- 2021
 
+# data.tables to include: keep some comfy global object
+c_dtti <- c("af_size")
 
 
 ## actual pm data
@@ -152,8 +154,8 @@ l_pca_dimred_woclosed <- gl_pca_dimred_closed_imputed(dt_pmdb, dt_pmx)
 dt_pmtiv <- gd_pmtiv(dt_pmx, l_pca_dimred_woclosed) # time invariant variables
 
 
-dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv) # combine all data sources, as complete as possible
-dt_pmyear <- gd_pmyear(dt_pmyear_prep) # trim down dt to no NAs
+dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv, c_dtti) # combine all data sources, as complete as possible
+dt_pmyear <- gd_pmyear(dt_pmyear_prep, c_dtti) # trim down dt to no NAs
 
 
 dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-year)

@@ -295,10 +295,14 @@ gd_pop <- function() {
 
 
 
-gd_pmyear_prep <- function(dt_pmx, dt_pmtiv) {
+gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_dtti = c_dtti) {
     gw_fargs(match.call())
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    #' @param dt_pmx extract of PMDB with museums to use
+    #' @param dt_pmtiv dt with time invariant variables
+    #' @c_dtti flags/switches of which datasets to optionally/additionally include
+    
 
     #' generate dt in pm-year format
     dt_pmyear <- dt_pmx[, last_year := fifelse(museum_status == "closed", year_closed, END_YEAR)] %>%
@@ -373,16 +377,22 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv) {
         stop("some NAs in proxcnt")}
 
     ## ## integrate artfacts size indicators
-    ## dt_af_size <- gd_af_size(dt_pmx)[, .(ID = PMDB_ID, year = begin_year,
-    ##                                      exhbqntl_year, exhbqntl_cy, exhbcnt, # simple quantiles
-    ##                                      exhbprop_top10_log, exhbprop_top10_utf, # proportions of top10
-    ##                                      exhbrollsum5, exhbnNA, exhbrollsum_avg, exhbqntl_roll)]
-    
-    ## dt_pmyear_waf <- join(dt_pmyear_wproxcnt, dt_af_size, on = c("ID", "year"))
+    if ("af_size" %in% c_dtti) {
+        
+        dt_af_size <- gd_af_size(dt_pmx)[, .(ID = PMDB_ID, year = begin_year,
+                                             exhbany, exhbrollany, # any inclusions in last 1/5 years
+                                             exhbqntl_year, exhbqntl_cy, exhbcnt, # simple quantiles
+                                             exhbprop_top10_log, exhbprop_top10_utf, # proportions of top10
+                                             exhbrollsum5, exhbnNA, exhbrollsum_avg, exhbqntl_roll)]
+
+        dt_pmyear_waf <- join(dt_pmyear_wproxcnt, dt_af_size, on = c("ID", "year"))
+    } else {
+        dt_pmyear_waf <- dt_pmyear_wproxcnt
+    }
 
 
     ## combine with time-invariant variables
-    dt_pmyear_wtiv <- join(dt_pmyear_wproxcnt,
+    dt_pmyear_wtiv <- join(dt_pmyear_waf,
                         copy(dt_pmtiv)[, `:=`(iso3c=NULL, name = NULL)], ## yeet non-essential columns
                         on = "ID") 
 
@@ -399,7 +409,7 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv) {
 
 }
 
-gd_pmyear <- function(dt_pmyear_prep) {
+gd_pmyear <- function(dt_pmyear_prep, c_dtti) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     #' yeet observations with NAs on an_inclusion (starts 1990) and pop (starts 1975)
     gw_fargs(match.call())
@@ -414,15 +424,22 @@ gd_pmyear <- function(dt_pmyear_prep) {
     ## - founder_dead: nope, separate processes
     
     vrbls_tolag <- c("an_inclusion")
-    ## "exhbqntl_year", "exhbqntl_cy", "exhbprop_top10_log", "exhbprop_top10_utf",
-    ## "exhbrollsum5", "exhbrollsum_avg", "exhbqntl_roll")
+
+    ## if af_size variables are to be included, add them to variables to lag
+    if ("af_size" %in% c_dtti) {
+        vrbls_tolag <- c(vrbls_tolag,
+                         keep(names(dt_pmyear_prep), ~startsWith(.x, "exhb")))
+    }
 
     dt_pm_lagged <- dt_pmyear_prep[order(year), .SD, ID] %>% copy() %>% 
         .[, (vrbls_tolag) := shift(.SD), ID, .SDcols = vrbls_tolag]
 
     ## filter out missing values
     ## don't filter on exhbqntl yet.. still iffy -> FIXME
-    dt_pmyear <- dt_pm_lagged[!is.na(an_inclusion) & !is.na(popm_circle10)]
+    ## i guess i'm not doing this year to not yeet too much? but easier with switch.. 
+    ## dt_pmyear <- dt_pm_lagged[!is.na(an_inclusion) & !is.na(popm_circle10)]
+    
+    dt_pmyear <- na.omit(dt_pm_lagged, cols = vrbls_tolag)
 
     
     attr(dt_pmyear, "gnrtdby") <- as.character(match.call()[[1]])
