@@ -432,7 +432,7 @@ gp_lngtdvelp <- function(dt_pmyear) {
     ## categorical and binary variables: proportion
     dt_vrblinfo <- gc_vvs() %>% chuck("dt_vrblinfo")
     
-    dt_cat <- dt_pmyear[, .SD, .SDcols = c("ID", "year", dt_vrblinfo[vrbltype %in% c("cat","bin"),
+    dt_cat <- dt_pmyear[, .SD, .SDcols = c("ID", "year", dt_vrblinfo[vrbltype == "cat",
                                                                      achr(funique(vrbl))])] %>%
         melt(id.vars = c("ID", "year"), variable.name = "vrbl") %>%
         .[, .N, .(year, vrbl, value)] %>%
@@ -440,11 +440,13 @@ gp_lngtdvelp <- function(dt_pmyear) {
         .[, N := NULL]
 
     ## numeric variables: mean
-    dt_num <- dt_pmyear[, .SD, .SDcols = c("ID", "year", "closing",
-                                           dt_vrblinfo[vrbltype == "num" & !grepl("I\\(|:", vrbl),
+    dt_num <- dt_pmyear[, .SD, .SDcols = c("ID", "year", "closing", "age",
+                                           # # yeet squared/interactions
+                                           dt_vrblinfo[(vrbltype %in% c("bin", "num") & !grepl("I\\(|:", vrbl)),
                                                        achr(funique(vrbl))])] %>%
         .[, cnt := .N, year] %>% # set up count (gets meaned)
         .[, will_close := fifelse(any(closing == 1), 1, 0), ID] %>% # whether a museum will close
+        .[, first_year := fifelse(age == 1, 1, 0), ID] %>% 
         melt(id.vars = c("ID", "year"), variable.name = "vrbl") %>%
         .[, .(value_y = mean(value)), .(year, vrbl)] %>%
         .[, `:=`(value = vrbl)] %>%
@@ -460,7 +462,7 @@ gp_lngtdvelp <- function(dt_pmyear) {
     dt_viz_colored <- join(dt_viz, dt_color, on = c("vrbl", "value"))
     
     ## add labels for lines of categorical variables at end of line
-    dt_lbls <- dt_viz_colored[dt_vrblinfo[vrbltype %in% c("cat", "bin"), .(vrbl)], on = "vrbl"] %>%
+    dt_lbls <- dt_viz_colored[dt_vrblinfo[vrbltype == "cat", .(vrbl)], on = "vrbl"] %>%
         .[, .SD[which.max(year)], .(vrbl, value)]
     
     ## library(ggrepel)
