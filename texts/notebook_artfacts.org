@@ -1,6 +1,58 @@
+#+PROPERTY: header-args:R :session *R:artfacts*
+#+PROPERTY: header-args:R+ :output-dir /home/johannes/Dropbox/phd/papers/closing/notes/artfacts/
+#+PROPERTY: header-args:R+ :tangle yes
+#+PROPERTY: header-args:R+ :cache yes
+
+
+#+latex_class: notes2
+
+# fucks all the maketitlestuff just to be sure
+#+OPTIONS: num:nil
+#+OPTIONS: toc:nil
+#+OPTIONS: h:5
+#+OPTIONS: ^:nil # don't use subscript for underscore
+#+options: \n:t # preserver linebreaks
+
 * artfacts notebook
 
 TODO: this stuff is copied from dimred, relies on those objects.. 
+
+#+begin_src R :exports none :results none
+library(pmdata)
+library(jtls)
+library(purrr) # looping
+library(collapse) # data processing
+library(countrycode) # for getting gd_af_size to work
+library(wpp2022) # import UN population data for taiwan
+data(pop1dt) # actually import Un pop data
+library(survival) # survival models
+library(Hmisc, include.only = "latexTranslate") # needed for reg table
+
+c_dirs <- gc_dirs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## project dirs
+PMDATA_LOCS <- gc_pmdata_locs()
+
+dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%
+    .[museum_status %in% c("private museum", "closed")] # yeet bad PMs
+dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
+
+
+END_YEAR <- 2021
+
+source(paste0(c_dirs$code, "cfg.R"))
+source(paste0(c_dirs$code, "vrblcvrg.R"))
+source(paste0(c_dirs$code, "regression.R"))
+source(paste0(c_dirs$code, "pm_dimred.R")) 
+
+dt_pmx <- gd_pmx(dt_pmdb)
+
+l_pca_dimred_woclosed <- gl_pca_dimred_closed_imputed(dt_pmdb, dt_pmx)
+dt_pmtiv <- gd_pmtiv(dt_pmx, l_pca_dimred_woclosed) # time invariant variables
+
+
+dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv) # combine all data sources, as complete as possible
+
+#+end_src
+
 
 ** compare with Arfacts data
 
