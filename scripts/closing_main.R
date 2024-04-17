@@ -359,7 +359,7 @@ dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-yea
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
                                         # set model names for t_reg_coxph
-l_mdlnames_coxph <- c("r_pop4")
+l_mdlnames_coxph <- c("r_pop4", "r_pop4_wyr")
 ## l_mdlnames_coxph <- c("r_pop4", paste0("r_wsize", 3:1))
 ## c("r_more", paste0("r_pop", c(1, 3:6)))
 ## "r_woaf", "r_waf_year", "r_waf_roll", "r_waf_roll2")
@@ -423,6 +423,57 @@ gdtbl("t_reg_coxph")
 
 
 print("everything is DONE")
+
+## longitudinal development of variables
+
+gp_lngtdvelp <- function(dt_pmyear) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    
+    ## categorical and binary variables: proportion
+    dt_vrblinfo <- gc_vvs() %>% chuck("dt_vrblinfo")
+    
+    dt_cat <- dt_pmyear[, .SD, .SDcols = c("ID", "year", dt_vrblinfo[vrbltype %in% c("cat","bin"),
+                                                                     achr(funique(vrbl))])] %>%
+        melt(id.vars = c("ID", "year"), variable.name = "vrbl") %>%
+        .[, .N, .(year, vrbl, value)] %>%
+        .[, value_y := N/sum(N), .(year, vrbl)] %>%
+        .[, N := NULL]
+
+    ## numeric variables: mean
+    dt_num <- dt_pmyear[, .SD, .SDcols = c("ID", "year", "closing",
+                                           dt_vrblinfo[vrbltype == "num" & !grepl("I\\(|:", vrbl),
+                                                       achr(funique(vrbl))])] %>%
+        .[, cnt := .N, year] %>% # set up count (gets meaned)
+        .[, will_close := fifelse(any(closing == 1), 1, 0), ID] %>% # whether a museum will close
+        melt(id.vars = c("ID", "year"), variable.name = "vrbl") %>%
+        .[, .(value_y = mean(value)), .(year, vrbl)] %>%
+        .[, `:=`(value = vrbl)] %>%
+        .[vrbl != "year"] # don't need avg year, is just year
+
+    dt_viz <- rbind(dt_cat, dt_num)
+        
+    ## set colors based on variable value
+    dt_color <- dt_viz[, .(vrbl, value)] %>% funique %>%
+        .[, lnbr := 1:.N, vrbl]
+    
+
+    dt_viz_colored <- join(dt_viz, dt_color, on = c("vrbl", "value"))
+    
+    ## add labels for lines of categorical variables at end of line
+    dt_lbls <- dt_viz_colored[dt_vrblinfo[vrbltype %in% c("cat", "bin"), .(vrbl)], on = "vrbl"] %>%
+        .[, .SD[which.max(year)], .(vrbl, value)]
+    
+    ## library(ggrepel)
+    ggplot(dt_viz_colored, aes(x=year, y=value_y, group = value, color = factor(lnbr))) +
+        geom_line(show.legend = F) +
+        facet_wrap(~vrbl, scales = "free") +
+        geom_text_repel(dt_lbls, mapping = aes(label = value), hjust = 0, direction = "y", show.legend = F) +
+        coord_cartesian(xlim = c(1990, 2035))
+                                                         
+    
+}
+
+
 
 
 

@@ -806,6 +806,11 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
                             proxcnt10*popm_circle10,
                        dt_pmyear),
+
+        r_pop4_wyr = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                            proxcnt10*popm_circle10 + year + I(year^2),
+                       copy(dt_pmyear)[, year := year - 2010]),
         
         r_wsize1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
