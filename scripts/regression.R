@@ -805,28 +805,14 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
                             proxcnt10*popm_circle10,
-                       dt_pmyear),
+                       dt_pmyear)
 
-        r_pop4_wyr = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10 + year + I(year^2),
-                       copy(dt_pmyear)[, year := year - 2010]),
+        ## r_pop4_wyr = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+        ##                     proxcnt10*popm_circle10 + year + reg6,
+        ##                    dt_pmyear)
+                       
         
-        r_wsize1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10 + PC1,
-                         dt_pmyear),
-        
-
-        r_wsize2 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10 + PC2,
-                         dt_pmyear),
-        
-        r_wsize3 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10 + PC1 + PC2,
-                         dt_pmyear)
 
         ## r_pop5 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
         ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
@@ -1178,4 +1164,59 @@ gt_reg_coxph <- function(l_mdls, l_mdlnames) {
         c(list(landscape = T))
     
     
+}
+
+
+gt_coxzph <- function(rx) {
+    gw_fargs(match.call())
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    
+    #' generate a table of the cox.zph result (whether hazards are proportional) 
+
+    coxzph_trfms <- list(km = "Kaplan-Meier", identity = "Identity", rank = "Rank")
+
+    ## generate the actual data
+    dt_coxzph_prep <- map(names(coxzph_trfms), ~cox.zph(rx, terms = F, transform = .x) %>%
+                                                   chuck("table") %>% adt(keep.rownames = "term") %>%
+                                                   .[, src := .x]) %>% list_rbind %>%
+                      .[, .(term, src, p)]
+
+    
+    ## merge with variable labels, cast to wide
+    dt_coxzph <- gc_vvs() %>% chuck("dt_termlbls") %>% .[dt_coxzph_prep, on = "term"] %>%
+        .[, p_fmtd := fmt_cell(coef = p, pvalue = p,  type = "coef-stars"), .(term, src)] %>%
+        dcast(term_lbl + vrblgrp + vrblgrp_lbl ~ src, value.var = "p_fmtd") %>%
+        .[order(vrblgrp)]
+
+    
+    ## arrange table that in a way that it is to be written to file
+    dt_coxzph_viz <- dt_coxzph[, c("term_lbl", names(coxzph_trfms)), with = F] %>%
+        cbind(grp_filler = "", .) %>% # add column in beginning for faking group indentation
+        .[, term_lbl := latexTranslate(term_lbl)]
+            
+    ## generate the variable add.to.row components      
+
+    dt_grpstrs <- gc_grpstrs(dt_coxzph, "vrblgrp_lbl", 2) # get the group strings: go to add.to.row
+
+    signote <- gc_signote(se_mention = F, ncol = 3) # get the significance note
+
+    c_colnames <- gc_colnames(col_names = names(dt_coxzph_viz), # generate the column names
+                              col_lbls = c(coxzph_trfms, list(grp_filler = "", term_lbl = "Variable")))
+
+
+    ## add to row cfg
+    c_atr <- list(
+        pos = c(list(-1, nrow(dt_coxzph)), dt_grpstrs$pos), # pos needs to be a list
+        command = c(c_colnames, signote, dt_grpstrs$grpstr))
+    
+
+    list(
+        dt_fmtd = dt_coxzph_viz,
+        align_cfg = c("l", "p{0mm}", "l", rep("D{.}{.}{5}",3)),
+        ## hline_after = c(0, nrow(dt_coxzph)),
+        hline_after = -1,
+        add_to_row = c_atr,
+        number_cols = c(rep(F,2), rep(T,3)))
+
 }
