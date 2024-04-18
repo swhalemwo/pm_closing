@@ -56,7 +56,129 @@ dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv, c_dtti) # combine all data so
 dt_pmyear <- gd_pmyear(dt_pmyear_prep, c_dtti)
 #+end_src
 
+#+begin_src R :exports none :results none
+dt_af_size <- gd_af_size(dt_pmx)
 
+
+#+end_src
+
+
+
+#+name: p_af_velp
+#+begin_src R :exports results :results output graphics file :file p_af_velp.pdf :width 7 :height 5.5
+melt(dt_pmyear, id.vars = c("ID", "year"), measure.vars = keep(names(dt_pmyear), ~startsWith(.x, "exhb")),
+     variable.name = "vrbl") %>% 
+  .[, .(mean_vlu = mean(value)), .(vrbl, year)] %>%
+  ggplot(aes(x=year, y=mean_vlu)) +
+  geom_line() + 
+  facet_wrap(~vrbl, scales = "free", ncol = 3)
+#+end_src
+
+#+attr_latex: :width 7in
+#+RESULTS[c2b62a190f7183b597c1c06f6c426e78009518a4]: p_af_velp
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/artfacts/p_af_velp.pdf]]
+
+#+begin_src R :exports :exports results :results output
+suppressWarnings(melt(dt_pmyear, id.vars = c("ID", "year"), 
+                      measure.vars = keep(names(dt_pmyear), ~startsWith(.x, "exhb")),
+                      variable.name = "vrbl")) %>% 
+  .[, .(mean_vlu = mean(value), sd = sd(value), min = min(value), max= max(value)), vrbl]
+#+end_src
+
+#+RESULTS[f232782f21a262270d139284640daf07fc505c17]:
+#+begin_example
+# A data frame: 11 × 5
+   vrbl               mean_vlu    sd    min    max
+   <fct>                 <dbl> <dbl>  <dbl>  <dbl>
+ 1 exhbany               0.662 0.473 0       1    
+ 2 exhbrollany           0.483 0.500 0       1    
+ 3 exhbqntl_year         0.430 0.209 0.244   0.999
+ 4 exhbqntl_cy           0.449 0.217 0.0833  1    
+ 5 exhbcnt               0.825 1.63  0      14    
+ 6 exhbprop_top10_log    0.204 0.322 0       1.51 
+ 7 exhbprop_top10_utf    0.155 0.308 0       2.8  
+ 8 exhbrollsum5          3.62  6.66  0      65    
+ 9 exhbnNA               0.620 1.22  0       4    
+10 exhbrollsum_avg       0.805 1.41  0      13    
+11 exhbqntl_roll         0.271 0.262 0.0579  0.998
+#+end_example
+
+
+#+begin_example
+# A data frame: 11 × 5
+   vrbl               mean_vlu    sd    min    max
+   <fct>                 <dbl> <dbl>  <dbl>  <dbl>
+ 1 exhbany               0.443 0.497 0       1    
+ 2 exhbrollany           0.427 0.495 0       1    
+ 3 exhbqntl_year         0.429 0.209 0.243   0.999
+ 4 exhbqntl_cy           0.448 0.217 0.0833  1    
+ 5 exhbcnt               0.824 1.63  0      14    
+ 6 exhbprop_top10_log    0.204 0.322 0       1.51 
+ 7 exhbprop_top10_utf    0.155 0.308 0       2.8  
+ 8 exhbrollsum5          3.49  6.69  0      65    
+ 9 exhbnNA               0.837 1.38  0       4    
+10 exhbrollsum_avg       0.824 1.44  0      13    
+11 exhbqntl_roll         0.276 0.269 0.0579  0.998
+#+end_example
+
+
+#+begin_src R :exports :exports results :results output
+
+l_mdls <- list(
+  r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                   slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                   proxcnt10*popm_circle10 + year, 
+                 dt_pmyear),
+  r_afsize1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                      proxcnt10*popm_circle10 + year + exhbany,
+                    dt_pmyear),
+  r_afsize2 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                      proxcnt10*popm_circle10 + year + exhbrollany,
+                    dt_pmyear),
+  r_afsize3 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                      proxcnt10*popm_circle10 + year + exhbqntl_roll,
+                    dt_pmyear),
+  r_afsize4 = coxph(Surv(tstart, tstop, closing) ~  exhbany,
+                    dt_pmyear),
+  r_afsize5 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+                      muem_fndr_name + proxcnt10*popm_circle10 + year + exhbany,
+                    dt_pmyear),
+  r_afsize6 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+                      muem_fndr_name + proxcnt10*popm_circle10 + year + exhbqntl_roll,
+                    dt_pmyear)  
+)
+
+gt_reg_coxph_afsize <- gt_reg_coxph
+
+
+l_mdlnames_afsize <- l_mdlnames_coxph <- c("r_pop4", paste0("r_afsize", 1:6))
+
+## overwrite the gc_tbls, c_tblargs
+gc_tbls <- function() {
+  list(t_reg_coxph_afsize = list(
+         l_mdls = quote(l_mdls),
+         l_mdlnames = quote(l_mdlnames_afsize),
+         caption = "reg results"))
+}
+c_tblargs <- list()
+l_tbls <- list()
+
+## gt_reg_coxph_dimred(l_mdls, l_mdlnames_coxph)
+gtbl("t_reg_coxph_afsize")
+wtbl("t_reg_coxph_afsize")
+## wtbl(
+  
+  
+  
+
+#+end_src
+
+#+RESULTS[1f66e17cf7b3c5edcd2da7a462723fd775c88b1e]:
+: left join: dt_vrbl_lbls[vrbl] 31/31 (100%) <m:m> dt_vrblgrps[vrbl] 31/31 (100%)
+: left join: x[vrblgrp] 31/31 (100%) <m:m> dt_vrblgrp_lbls[vrblgrp] 4/4 (100%)
 
 ** compare with Arfacts data
 
@@ -89,8 +211,8 @@ cormat_cprn %>% ggcorrplot(show.diag = F, type = "full", lab = T, lab_size = 3) 
 #+end_src
 
 #+attr_latex: :width 7in
-#+RESULTS: p_cormat_size
-[[file:/home/johannes/Dropbox/phd/papers/closing/notes/dimred/p_cormat_size.pdf]]
+#+RESULTS[4c0aa651f25fc2e7f0c0d99954e630be8079b607]: p_cormat_size
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/artfacts/p_cormat_size.pdf]]
 
 hmm the AF variables are pretty much the same, super high correlations among them
 

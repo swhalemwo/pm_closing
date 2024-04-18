@@ -6,15 +6,61 @@
 
 ## ** data functions
 
+gd_cry <- function(dt_af_exhbs, dt_pmx, dt_matches_pmdb_af) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    
+    #' merge country information for AF and PMDB together
+    #' was split before to make grid construction easier
+
+    ## AF country: use as location the country which has most of the exhibitions
+
+    dt_af_cry <- gd_af_instns()[, .(AF_IID = ID, iso3c_af = countrycode(Country, "country.name", "iso3c"))] %>%
+        na.omit
+
+    ## dt_af_cry[AF_IID == 574]
+
+    ## dt_af_cry <- dt_af_exhbs[, .N, .(iso3c_af = iso3c, AF_IID = InstitutionID)] %>% #.[, .(max(N)), AF_IID]
+    ##     .[, maxx := max(N), AF_IID] %>% .[N == maxx, .(AF_IID, iso3c_af)] %>%
+    ##     .[, head(.SD,1), AF_IID] # just do first in case of tied, idc about the ~30 that get dropped
+    
+    ## get PM country info, combine with AF match data
+    dt_pm_cry <- join(dt_pmx[, .(PMDB_ID = ID, iso3c_pm = iso3c)], dt_matches_pmdb_af, on = "PMDB_ID")
+
+    ## combine AF country and pmdb country dts
+    dt_cry_prep <- join(dt_af_cry, dt_pm_cry, on = "AF_IID", how = "full")
+    
+    ## dt_cry_prep[!is.na(iso3c_af) & !is.na(iso3c_pm)][iso3c_af != iso3c_pm]
+
+    ## fill up country gaps: use PMDB is is.na(AF), vice versa; disagreement: use PMDB
+    dt_cry <- copy(dt_cry_prep) %>%
+        .[is.na(iso3c_pm) & !is.na(iso3c_af), iso3c := iso3c_af] %>%
+        .[!is.na(iso3c_pm) & is.na(iso3c_af), iso3c := iso3c_pm] %>%
+        .[!is.na(iso3c_pm) & !is.na(iso3c_af), iso3c := iso3c_pm] %>%
+        .[, .(AF_IID, PMDB_ID, iso3c)] %>%
+        .[, ORG_ID := sprintf("AF%sPM%s", AF_IID, PMDB_ID)]
+
+    if (dt_cry[complete.cases(AF_IID), .N, AF_IID][,max(N) > 1] |
+        dt_cry[complete.cases(PMDB_ID), .N, PMDB_ID][,max(N) > 1]) {
+        stop("country assignment doesn't work")}
+    
+    return(dt_cry)
+}
+
+
 gd_af_size <- function(dt_pmx) {
     gw_fargs(match.call())
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
 
-    ## get AF dts 
-    dt_matches_pmdb_af <- gd_af_pmdb_matches()
+    ## get match dt
+    dt_matches_pmdb_af <- gd_af_pmdb_matches() %>%
+        .[AF_IID != "nomatch"] %>% .[, AF_IID := as.integer(AF_IID)] %>%
+        .[!(PMDB_ID == 167 & AF_IID == 51974)] # awkward update to accomodate ID change FIXME
+    
+    ## get AF exhb dt
     dt_af_exhbs <- gd_af_exhbs()[, iso3c := countrycode(CountryName, "country.name", "iso3c")] %>%
-        .[, CountryName := NULL]
+        .[, CountryName := NULL] %>%
+        .[InstitutionID ==51974, InstitutionID :=36493] # awkward update to accomodate ID change FIXME
     
     ## doesn't seem a lot of issues
     ## dt_af_exhbs[CountryName == "Kosovo"]
@@ -25,51 +71,223 @@ gd_af_size <- function(dt_pmx) {
         .[, .(year = year_opened:last_year), .(ID, iso3c, year_opened, year_closed)]
                                                
 
-    ## add info for merging AF data to PDMB
-    dt_pmdb_af <- join(dt_pmx[, .(ID, name, iso3c, museum_status)], dt_matches_pmdb_af,
-                       on = c("ID" = "PMDB_ID"), how = "left", verbose = F) %>%
-        .[, InstitutionID := as.integer(AF_IID)]
+    ## ## add info for merging AF data to PDMB
+    ## dt_pmdb_af <- join(dt_pmx[, .(ID, name, iso3c, museum_status)], dt_matches_pmdb_af,
+    ##                    on = c("ID" = "PMDB_ID"), how = "left", verbose = F) %>%
+    ##     .[, InstitutionID := as.integer(AF_IID)]
 
-    ## merge AF exhibitions data to PMDB
-    dt_af_exhbs_pmdb <- join(dt_af_exhbs[, .(ID, InstitutionID, begin_year = year(BeginDate), iso3c)],
-                         dt_pmdb_af[, .(InstitutionID, PMDB_ID = ID, name)],
-                         on = "InstitutionID", how = 'left', verbose = 0)
+    ## ## merge AF exhibitions data to PMDB
+    ## dt_af_exhbs_pmdb <- join(dt_af_exhbs[, .(ID, InstitutionID, begin_year = year(BeginDate), iso3c)],
+    ##                      dt_pmdb_af[, .(InstitutionID, PMDB_ID = ID, name)],
+    ##                      on = "InstitutionID", how = 'left', verbose = 0)
 
+    ## merge country later: use that where most of exhibitions take place
+
+
+    ## new grid: expansion to org-year first
+    
+    ## AF grid
+    ## first generate size per year
+    dt_af_exhbcnt <- dt_af_exhbs %>% .[, begin_year := year(BeginDate)] %>%
+        .[, .N, .(year = begin_year, AF_IID = InstitutionID)]
+    
+    ## then make AF grid
+    dt_af_oy_prep <- dt_af_exhbs %>% .[, begin_year := year(BeginDate)] %>%
+        .[!is.na(begin_year), .(year  = min(begin_year):max(begin_year)), .(AF_IID = InstitutionID)]
+
+    ## then make join AF exhbcnt to AF grid
+    dt_af_oy <- join(dt_af_oy_prep, dt_af_exhbcnt, on = c("AF_IID", "year"))
+
+
+    ## PMDB grid with AF_IID
+    dt_pmdb_oy <- join(dt_pmyear_size[, .(PMDB_ID = ID, year)], dt_matches_pmdb_af, on = "PMDB_ID")
+
+    ## merge both grids with full join
+    dt_af_grid_prep1 <- join(dt_af_oy, dt_pmdb_oy, on = c("AF_IID", "year"), how = "full")
+         
+    
     ## first construct grid (expand institution-exhibition link to institution year (fill gaps)):
     ## all possible combinations with full join?
-    dt_af_grid <- join(dt_af_exhbs_pmdb[!is.na(begin_year), .(begin_year = min(begin_year):max(begin_year)),
-                          .(InstitutionID, PMDB_ID, iso3c)], # AF data
-                       dt_pmyear_size[, .(ID, year, iso3c)],
-                       on = c(PMDB_ID = "ID", begin_year = "year", "iso3c"), how = "full", overid = 2, verbose = 0)
+    ## dt_af_grid <- join(dt_af_exhbs_pmdb[!is.na(begin_year), .(begin_year = min(begin_year):max(begin_year)),
+    ##                       .(InstitutionID, PMDB_ID, iso3c)], # AF data
+    ##                    dt_pmyear_size[, .(ID, year, iso3c)],
+    ##                    on = c(PMDB_ID = "ID", begin_year = "year", "iso3c"), how = "full",
+    ##                    ## overid = 2, don't complain about overid (not all cols needed for matching)
+    ##                    verbose = 0)
+
+    
+
+    ## fix overlaps missing IDs with update join
+    dt_af_grid_prep2 <- copy(dt_af_grid_prep1)[dt_matches_pmdb_af, AF_IID := i.AF_IID, on = "PMDB_ID"]
+    
+    dt_af_grid_prep3 <- copy(dt_af_grid_prep2)[dt_matches_pmdb_af, PMDB_ID := i.PMDB_ID, on= "AF_IID"]
+
+    ## create general organization ID
+    dt_af_grid <- copy(dt_af_grid_prep3)[, ORG_ID := sprintf("AF%sPM%s", AF_IID, PMDB_ID)]
+
+    ## summary(dt_af_grid_prep1)
+    ## summary(dt_af_grid_prep2)
+    ## summary(dt_af_grid)
+
+    ## check ID uniqueness with new ID
+    dt_orgid <- dt_af_grid %>% .[, .(AF_IID, PMDB_ID, ORG_ID)] %>% funique 
+        
+    if (dt_orgid[!is.na(AF_IID), .N, AF_IID][, max(N) > 1] | dt_orgid[!is.na(PMDB_ID), .N, PMDB_ID][, max(N) > 1]){
+        stop("IDs not sufficiently unique")}
+
+
+    ## dt_af_grid2 %>% copy %>% .[!is.na(AF_IID)] %>% .[, nbr_unq := fnunique(PMDB_ID), AF_IID] %>%
+    ##     .[nbr_unq > 1]
+
+        
+    ## varying(dt_af_grid, ~AF_IID)
+    ## varying(dt_af_grid[!is.na(AF_IID)], ~AF_IID)
+    ## varying(dt_af_grid[!is.na(PMDB_ID)], ~AF_IID)
+
+    ## here you got all the AF_IIDs that are NA creating the idea of variation
+    ## all the PMDBs that don't have AF entry: one kind of AF entry (NA) corresponds to different PMDB_IDs
+    ## dt_af_grid[!is.na(PMDB_ID)] %>% copy %>% .[, N := fnunique(PMDB_ID), AF_IID] %>% .[N > 1]
+
+    ## varying(dt_af_grid, ~PMDB_ID)
+    ## varying(dt_af_grid[!is.na(AF_IID)], ~PMDB_ID)
+    ## varying(dt_af_grid[!is.na(PMDB_ID)], ~PMDB_ID)
+    
+
+    ## dt_af_grid3 <- copy(dt_af_grid2) %>% .[, InstitutionID := as.character(InstitutionID)] %>% 
+    ##     .[dt_matches_pmdb_af[AF_IID != "nomatch"], PMDB_ID := i.PMDB_ID, on = .(InstitutionID = AF_IID)] %>%
+    ##     .[, InstitutionID := as.integer(InstitutionID)]
+
+    ## dt_af_grid2 %>% summary
+    ## dt_af_grid3 %>% summary
+
+    ## dt_af_grid3[!dt_af_grid2, on = c("PMDB_ID", "begin_year")]
+
+    ## dtx <- data.table(grid2_na = is.na(dt_af_grid2$PMDB_ID), grid3_na = is.na(dt_af_grid3$PMDB_ID)) %>%
+    ##     .[, nbr := 1:.N]
+    
+    ## dtx[grid2_na != grid3_na]
+
+    ## dt_af_grid2[9888:9898]
+    ## dt_af_grid3[9888:9898]
+
+    ## dt_af_grid2[InstitutionID == 574] %>% print(n=30)
+    ## dt_matches_pmdb_af[AF_IID == 574]
+    
+
+
+    ## summary(dt_af_grid3)
+
+    ## varying(dt_af_grid2[!is.na(PMDB_ID)], ~InstitutionID)
+    ## varying(dt_af_grid2[!is.na(PMDB_ID)], ~PMDB_ID)
+
+
+    ## varying(dt_af_grid3[!is.na(PMDB_ID)], ~InstitutionID)
+    ## varying(replace_NA(dt_af_grid3[!is.na(PMDB_ID)]), ~InstitutionID)
+    ## varying(dt_af_grid3[!is.na(PMDB_ID)][!is.na(InstitutionID)], ~InstitutionID)
+    ## varying(dt_af_grid3[!is.na(PMDB_ID)], ~PMDB_ID)
+
+    ## dt_af_grid3[!is.na(PMDB_ID)] %>% summary
+
+    ## replace_NA(dt_af_grid3[!is.na(PMDB_ID)]) %>%
+    ##     .[, .(N = fnunique(PMDB_ID)), InstitutionID] %>% .[N > 1]
+
+    ## dt_af_grid3[!is.na(PMDB_ID)][is.na(InstitutionID)] %>% print(n=80)
+
+    ## dt_af_grid3[PMDB_ID == 115]
+
+    ## dt_af_grid3 %>% copy %>% .[!is.na(PMDB_ID)] %>% .[, nbr_unq := fnunique(InstitutionID), PMDB_ID] %>%
+    ##     .[, .N, nbr_unq]
+
+    ## dt_af_grid3 %>% copy %>% .[!is.na(InstitutionID)] %>% .[, nbr_unq := fnunique(PMDB_ID), InstitutionID] %>%
+    ##     .[, .N, 
+    ##     .[nbr_unq > 1]
+
+    ##     .[, .N, nbr_unq]
+
+
+    
+    ## fix with renaming: too messy filtering required
+    ## dt_af_grid2 <-
+
+    ## copy(dt_af_grid) %>%
+    ##     .[!is.na(PMDB_ID) & is.na(InstitutionID) & !all(is.na(InstitutionID)), .SD, PMDB_ID] %>%
+    ##     .[PMDB_ID == 115]
+        
+
+
+    
 
     ## debug: more rows with non-NA PMDB_ID than in dt_af_size
     ## dt_af_grid[!is.na(PMDB_ID), .N, .(PMDB_ID, begin_year)][N > 1]
     ## dt_af_grid[PMDB_ID == 620] %>% print(n=30)
     ## seems to be that CountryName can vary within Institution: institutions can organize stuff elsewhere,
     ## doesn't seem much tho, only handful cases
-              
+    
+    ## join iso3c from PMDB
+    dt_af_grid_wcry_prep1 <- join(copy(dt_af_grid),
+                             dt_pmx[, .(ID, iso3c_pm = iso3c)], on = c(PMDB_ID = "ID"))
+    
+    ## generate iso3c for AF
+    dt_af_instn_cry <- gd_af_instns() %>%
+        .[, .(AF_IID = ID, iso3c_af = countrycode(Country, "country.name", "iso3c"))] %>%
+        na.omit
+    
+    ## join iso3c for AF
+    dt_af_grid_wcry_prep2 <- join(copy(dt_af_grid_wcry_prep1), dt_af_instn_cry, on = "AF_IID")
+    
+    ## harmonize iso3c: use PM in case there is disagreement (also throw error)
+    dt_af_grid_wcry_prep3 <- dt_af_grid_wcry_prep2 %>% copy %>%
+        .[is.na(iso3c_pm) & !is.na(iso3c_af), iso3c := iso3c_af] %>%
+        .[!is.na(iso3c_pm) & is.na(iso3c_af), iso3c := iso3c_pm] %>%
+        .[!is.na(iso3c_pm) & !is.na(iso3c_af), iso3c := iso3c_pm]
+
+    if (dt_af_grid_wcry_prep3[!is.na(iso3c_pm) & !is.na(iso3c_af)][iso3c_pm != iso3c_af, .N > 0]) {
+        stop("not all iso3cs agree")}
+
+    ## yeet columns not needed anymore
+    dt_af_grid_wcry <- dt_af_grid_wcry_prep3 %>% copy %>% .[, `:=`(iso3c_pm = NULL, iso3c_af = NULL)]
+
+    ## dt_af_grid_wcry[AF_IID == 574]
+                         
+    ## dt_cry <- gd_cry(dt_af_exhbs, dt_pmx, dt_matches_pmdb_af)
+
+    ## dt_cry[AF_IID == 574]
+    ## dt_af_qntlprep[AF_IID == 574]
          
     ## join with institution counts
-    dt_af_qntlprep <- join(dt_af_grid,
-                           dt_af_exhbs_pmdb[, .N, .(InstitutionID, begin_year)],
-                           on = c("InstitutionID", "begin_year"), verbose = 0) %>%
-        replace_NA(cols = "N", value = 0) %>% # fill up no exhbs with 0
-        .[!is.na(iso3c)] # yeet ~300 institutions without countrycode
- 
+    ## dt_af_qntlprep <- join(dt_af_grid, dt_cry[, .(ORG_ID, iso3c)], on = "ORG_ID") %>%
+    ##     replace_NA(cols = "N", value = 0)
+
+    dt_af_qntlprep <- replace_NA(dt_af_grid_wcry, cols = "N", value = 0)
+
+    ## dt_af_qntlprep[is.na(iso3c)]
+    
+    ## check that NAs on iso3c are dealt with
+    dt_pmdb_na_check <- join(dt_af_qntlprep[is.na(iso3c), .N, .(ID = PMDB_ID)] %>% na.omit,
+                             gd_pmdb_excl(only_pms = F)[, .(name, museum_status, ID)],
+                             on = "ID")
+        
+    if (dt_pmdb_na_check[, any(museum_status %!in% c("no longer a private museum", "not open yet"))]) {
+        stop("at least one of the orgs that has no iso3c is not NLPM or not open yet")}
+    
+    ##      dt_af_exhbs_pmdb[, .N, .(InstitutionID, begin_year)],
+    ##      on = c("InstitutionID", "begin_year"), verbose = 0) %>%
+    
+     
     ecdf_fun <- function(x,perc) ecdf(x)(perc) # get quantile of value
 
     ## rolling sum of last 5 years
     dt_af_roll <- copy(dt_af_qntlprep) %>%
-        .[, org_id := sprintf("AF%s-PM%s", InstitutionID, PMDB_ID)] %>% # need to combine PMDB and AF IDs
-        .[order(org_id, begin_year)] %>% 
-        .[, paste0("rollsum_prep", 1:5) := shift(N, 0:4), org_id] %>% # set up shift columns
+        .[order(ORG_ID,year)] %>% 
+        .[, paste0("rollsum_prep", 1:5) := shift(N, 0:4), ORG_ID] %>% # set up shift columns
         .[, `:=`(exhbrollsum5 = rowSums(.SD, na.rm = T), # summing: include those with NAs
                  exhbnNA = Reduce(`+`, lapply(.SD, is.na))), # get nbr of NA indicator
           .SDcols = paste0("rollsum_prep", 1:5)] %>%
         .[, paste0("rollsum_prep", 1:5) := NULL] %>% # yeet prep columns
         .[, exhbrollsum_avg := exhbrollsum5/(5-exhbnNA)] %>%
-        .[, exhbrollany := fifelse(exhbrollsum5 == 0, 0, 1)] %>% 
-        .[, exhbqntl_roll := ecdf_fun(exhbrollsum_avg, exhbrollsum_avg), begin_year] %>%
+        .[, exhbany := fifelse(all(N == 0), 0, 1), ORG_ID] %>% 
+        .[, exhbrollany := fifelse(exhbrollsum5 == 0, 0, 1)] %>%        
+        .[, exhbqntl_roll := ecdf_fun(exhbrollsum_avg, exhbrollsum_avg), year] %>%
         .[!is.na(PMDB_ID)]
     
     ## dt_af_roll[iso3c == "DEU" & !is.na(PMDB_ID)] %>%
@@ -79,14 +297,13 @@ gd_af_size <- function(dt_pmx) {
     ## dt_af_roll[!is.na(PMDB_ID)]    
 
     ## calculate quantile using all orgs, filter down to PMs
-    ## dt_af_qntl <- copy(dt_af_qntlprep)[, quantile := ecdf_fun(N, N), .(iso3c, begin_year)] %>%
+    ## dt_af_qntl <- copy(dt_af_qntlprep)[, quantile := ecdf_fun(N, N), .(iso3c, year)] %>%
     dt_af_qntl_simple <- copy(dt_af_qntlprep) %>%
-        .[, exhbany := fifelse(all(N == 0), 0, 1), InstitutionID] %>% 
         .[, exhbcnt := N] %>% # renaming
-        .[, exhbqntl_cy := ecdf_fun(N, N), .(begin_year, iso3c)] %>% # quantile by country year
-        .[, exhbqntl_year := ecdf_fun(N, N), .(begin_year)] %>% # quantile by year
-        .[, exhbprop_top10_utf := N/quantile(N, probs = 0.90), begin_year] %>%  # prop by year
-        .[, exhbprop_top10_log := log(N+1)/quantile(log(N+1), probs = 0.90), begin_year] %>% # prop (log) by year
+        .[, exhbqntl_cy := ecdf_fun(N, N), .(year, iso3c)] %>% # quantile by country year
+        .[, exhbqntl_year := ecdf_fun(N, N), .(year)] %>% # quantile by year
+        .[, exhbprop_top10_utf := N/quantile(N, probs = 0.90), year] %>%  # prop by year
+        .[, exhbprop_top10_log := log(N+1)/quantile(log(N+1), probs = 0.90), year] %>% # prop (log) by year
         .[!is.na(PMDB_ID)]
                 ## focus on PMs
         ## only include CYs where half of active PMs have at least one show
@@ -94,10 +311,10 @@ gd_af_size <- function(dt_pmx) {
     ## combine "simple quantiles" (dt_af_qntl) and rolled sums (dt_af_roll),
     ## yeet CYs where more than half institutions have no exhibitions
     dt_af_qntl <- join(dt_af_qntl_simple,
-                       dt_af_roll[, .(PMDB_ID, begin_year, exhbrollsum5, exhbrollany,  exhbnNA,
+                       dt_af_roll[, .(PMDB_ID, year, exhbrollsum5, exhbany, exhbrollany,  exhbnNA,
                                       exhbrollsum_avg, exhbqntl_roll)],
-         on = c("PMDB_ID", "begin_year"), verbose = 0) %>%
-        .[, .SD[!any(N == 0 & exhbqntl_cy > 0.5)], .(iso3c, begin_year)] 
+         on = c("PMDB_ID", "year"), verbose = 0) %>%
+        .[, .SD[!any(N == 0 & exhbqntl_cy > 0.5)], .(iso3c, year)] 
 
     ## dt_af_qntl[, .SD[any(N == 0 & quantile > 0.5)], .(iso3c, begin_year)] %>%
     ##     .[, .N, iso3c] %>% print(n=300)
@@ -379,7 +596,7 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_dtti = c_dtti) {
     ## ## integrate artfacts size indicators
     if ("af_size" %in% c_dtti) {
         
-        dt_af_size <- gd_af_size(dt_pmx)[, .(ID = PMDB_ID, year = begin_year,
+        dt_af_size <- gd_af_size(dt_pmx)[, .(ID = PMDB_ID, year,
                                              exhbany, exhbrollany, # any inclusions in last 1/5 years
                                              exhbqntl_year, exhbqntl_cy, exhbcnt, # simple quantiles
                                              exhbprop_top10_log, exhbprop_top10_utf, # proportions of top10
