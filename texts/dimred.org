@@ -443,8 +443,6 @@ dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv) # combine all data sources, a
 dt_pmyear <- gd_pmyear(dt_pmyear_prep) # trim down dt to no NAs
 
 
-dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-year)
-
 l_mdls <- list(
           r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
