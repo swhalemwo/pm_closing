@@ -203,11 +203,10 @@ gc_vvs <- function() {
 
     ## specify variable type: binary, numeric, categorical
     l_vrbltypes <- list(        
-        bin = .c(founder_dead, muem_fndr_name, mow, west),
+        bin = .c(founder_dead, muem_fndr_name, mow, west, exhbany, exhbrollany),
         num = .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
                  pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10", PC1, PC2,
                  year, "I(year^2)",
-                 exhbany, exhbrollany, 
                  exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)",
                  exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"),
         cat = .c(gender, slfidfcn, reg6, an_inclusion))

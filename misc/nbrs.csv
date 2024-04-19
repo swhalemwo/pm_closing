@@ -1,9 +1,9 @@
 nbr_name,nbr_fmt,grp
 pmdb_n_nlpm,25,descs
-meanhaz_upto_20,0.88%,meanhaz
-meanhaz_upto_30,0.91%,meanhaz
-meanhaz_upto_40,0.78%,meanhaz
-meanhaz_upto_100,0.78%,meanhaz
+meanhaz_upto_20,0.86%,meanhaz
+meanhaz_upto_30,0.89%,meanhaz
+meanhaz_upto_40,0.76%,meanhaz
+meanhaz_upto_100,0.77%,meanhaz
 ynkplt_p_vrblcvrg_ugrpd,(eval (concat "#+label: fig:p_vrblcvrg_ugrpd\n" "#+caption: PMDB variable coverage by museum status\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_vrblcvrg_ugrpd.pdf]]")),pltcfgs
 ynkplt_p_vrblcvrg,(eval (concat "#+label: fig:p_vrblcvrg\n" "#+caption: PMDB variable coverage by museum status and variable group\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_vrblcvrg.pdf]]")),pltcfgs
 ynkplt_p_vrblcvrg_ratio,(eval (concat "#+label: fig:p_vrblcvrg_ratio\n" "#+caption: PMDB variable coverage (abs/rel prop) by museum status and variable group\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_vrblcvrg_ratio.pdf]]")),pltcfgs
@@ -13,6 +13,7 @@ ynkplt_p_agedens,(eval (concat "#+label: fig:p_agedens\n" "#+caption: Age distri
 ynkplt_p_yeardens,(eval (concat "#+label: fig:p_yeardens\n" "#+caption: Private Museum-year Distribution\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_yeardens.pdf]]")),pltcfgs
 ynkplt_p_coxphdiag_more,(eval (concat "#+label: fig:p_coxphdiag_more\n" "#+caption: Model Diagnostics\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_coxphdiag_more.pdf]]")),pltcfgs
 ynkplt_p_pred_popprxcnt,(eval (concat "#+label: fig:p_pred_popprxcnt\n" "#+caption: Predicted Avg. Hazard Rate on Regional PM Density and Population\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_pred_popprxcnt.pdf]]")),pltcfgs
+ynkplt_p_lngtdvelp,(eval (concat "#+label: fig:p_lngtdvelp\n" "#+caption: Composition of private museum population\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_lngtdvelp.pdf]]")),pltcfgs
 refplt_p_vrblcvrg_ugrpd,\ref{fig:p_vrblcvrg_ugrpd},figlbls
 refplt_p_vrblcvrg,\ref{fig:p_vrblcvrg},figlbls
 refplt_p_vrblcvrg_ratio,\ref{fig:p_vrblcvrg_ratio},figlbls
@@ -22,6 +23,7 @@ refplt_p_agedens,\ref{fig:p_agedens},figlbls
 refplt_p_yeardens,\ref{fig:p_yeardens},figlbls
 refplt_p_coxphdiag_more,\ref{fig:p_coxphdiag_more},figlbls
 refplt_p_pred_popprxcnt,\ref{fig:p_pred_popprxcnt},figlbls
+refplt_p_lngtdvelp,\ref{fig:p_lngtdvelp},figlbls
 reftbl_t_coxzph,\ref{tbl:t_coxzph},reftbl
 reftbl_t_reg_coxph,\ref{tbl:t_reg_coxph},reftbl
 reftbl_t_sumstats,\ref{tbl:t_sumstats},reftbl

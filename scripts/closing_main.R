@@ -28,6 +28,7 @@ library(Hmisc, include.only = "latexTranslate")  # latexTranslate
 library(wpp2022)     # population data for Taiwan
 data(pop1dt) # population data for taiwan
 library(khroma)      # plotting
+library(ggrepel)     # plotting
 
 
 ## LOCS <- list(PROJDIR = "/home/johannes/Dropbox/phd/papers/closing/")
@@ -136,11 +137,16 @@ if ("memoised" %!in% class(gd_mow_info)) {
     gd_mow_info <- memoise(gd_mow_info) # memoizing gd_mow_info: saves the fread of 55k file
 }
 
+START_YEAR <- 2000
 END_YEAR <- 2021
 
-# data.tables to include: keep some comfy global object
-c_dtti <- c("af_size")
 
+c_lvrs <- list(
+    dtti = c("af_size"),
+    ## dtti = c(""),
+    af_vrbls = c("exhbany", "exhbrollany")) # only import selected vrbls to not pollute dt_pmyear
+    
+    
 
 ## actual pm data
 ## l_pca_dimred <- gl_pca_dimred(dt_pmdb)
@@ -154,15 +160,16 @@ l_pca_dimred_woclosed <- gl_pca_dimred_closed_imputed(dt_pmdb, dt_pmx)
 dt_pmtiv <- gd_pmtiv(dt_pmx, l_pca_dimred_woclosed) # time invariant variables
 
 
-dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv, c_dtti) # combine all data sources, as complete as possible
-dt_pmyear <- gd_pmyear(dt_pmyear_prep, c_dtti) # trim down dt to no NAs
+dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv, c_lvrs) # combine all data sources, as complete as possible
+dt_pmyear <- gd_pmyear(dt_pmyear_prep, c_lvrs) # trim down dt to no NAs
+
 
 
 dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-year)
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
                                         # set model names for t_reg_coxph
-l_mdlnames_coxph <- c("r_pop4", "r_pop4_wyr")
+l_mdlnames_coxph <- c("r_pop4") #, "r_pop4_wyr")
 ## l_mdlnames_coxph <- c("r_pop4", paste0("r_wsize", 3:1))
 ## c("r_more", paste0("r_pop", c(1, 3:6)))
 ## "r_woaf", "r_waf_year", "r_waf_roll", "r_waf_roll2")

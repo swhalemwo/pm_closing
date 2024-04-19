@@ -14,10 +14,12 @@ gp_lngtdvelp <- function(dt_pmyear) {
         .[, N := NULL]
 
     ## numeric variables: mean
-    dt_num <- dt_pmyear[, .SD, .SDcols = c("ID", "year", "closing", "age",
-                                           # # yeet squared/interactions
-                                           dt_vrblinfo[(vrbltype %in% c("bin", "num") & !grepl("I\\(|:", vrbl)),
-                                                       achr(funique(vrbl))])] %>%
+    dt_num <- dt_pmyear %>%
+        .[, .SD, .SDcols = c("ID", "year", "closing", "age",
+                             ## yeet squared/interactions
+                             dt_vrblinfo[(vrbltype %in% c("bin", "num") & !grepl("I\\(|:", vrbl)) &
+                                        vrbl %in% names(dt_pmyear), # only use columns that are there
+                                         achr(funique(vrbl))])] %>%
         .[, cnt := .N, year] %>% # set up count (gets meaned)
         .[, will_close := fifelse(any(closing == 1), 1, 0), ID] %>% # whether a museum will close
         .[, first_year := fifelse(age == 1, 1, 0), ID] %>% 
@@ -45,7 +47,7 @@ gp_lngtdvelp <- function(dt_pmyear) {
         facet_wrap(~vrbl, scales = "free") +
         geom_text_repel(dt_lbls, mapping = aes(label = value), hjust = 0, direction = "y", show.legend = F,
                         size = 3) +
-        coord_cartesian(xlim = c(1990, 2035), expand = F) +
+        coord_cartesian(xlim = c(START_YEAR-1, 2035), expand = F) +
         theme(axis.text = element_text(size = 6),
               panel.spacing = unit(0.1, "lines"),
               strip.text = element_text(size = 7, margin = margin(.05, 0, .05, 0, "cm")))

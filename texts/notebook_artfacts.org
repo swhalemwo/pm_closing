@@ -38,6 +38,7 @@ dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%
 dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
 
 
+START_YEAR <- 2000
 END_YEAR <- 2021
 
 source(paste0(c_dirs$code, "cfg.R"))
@@ -50,12 +51,20 @@ dt_pmx <- gd_pmx(dt_pmdb)
 l_pca_dimred_woclosed <- gl_pca_dimred_closed_imputed(dt_pmdb, dt_pmx)
 dt_pmtiv <- gd_pmtiv(dt_pmx, l_pca_dimred_woclosed) # time invariant variables
 
-c_dtti <- c("af_size")
+c_lvrs <- list(
+  dtti = c("af_size"),
+  ## dtti = c(""),
+  af_vrbls = c("exhbany", "exhbrollany", "exhbcnt",
+               "exhbqntl_cy", "exhbqntl_year","exhbprop_top10_utf",
+               "exhbprop_top10_log", "exhbrollsum5", "exhbnNA",
+               "exhbrollsum_avg", "exhbqntl_roll"))
+
+                                        # only import selected vrbls to not pollute dt_pmyear
 
 
 dt_af_size <- gd_af_size(dt_pmx)
-dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv, c_dtti) # combine all data sources, as complete as possible
-dt_pmyear <- gd_pmyear(dt_pmyear_prep, c_dtti)
+dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv, c_lvrs) # combine all data sources, as complete as possible
+dt_pmyear <- gd_pmyear(dt_pmyear_prep, c_lvrs)
 #+end_src
 
 measures used:
@@ -72,6 +81,54 @@ measures used:
 - exhbprop_top10_log: log(N+1)/quantile(log(N+1)): attempt to scale the exhbprop_top10_utf.. but probably overly complicated
 
 
+
+** compare OY coverage by using different filters
+
+#+begin_src R :exports :exports results :results output
+c_lvrs_woaf <- list(
+  dtti = c(),
+  af_vrbls = c())
+
+# compare year coverage between including AF and not including AF
+dt_pmyear_waf <- gd_pmyear(dt_pmyear_prep, c_lvrs) # trim down dt to no NAs
+dt_pmyear_woaf <- gd_pmyear(dt_pmyear_prep, c_lvrs_woaf)
+
+rbind(dt_pmyear_waf[, .N, year][, src := "waf"], dt_pmyear_woaf[, .N, year][, src := "woaf"]) %>%
+    dcast(year ~ src, value.var = "N") %>%
+    .[, diff :=  waf - woaf] %>% print(n=30)
+
+#+end_src
+
+#+RESULTS[e80d0963545771f10da9cb389a4d3c8e910259e0]:
+#+begin_example
+# A data frame: 22 × 4
+    year   waf  woaf  diff
+   <int> <int> <int> <int>
+ 1  2000    57    93   -36
+ 2  2001    76   104   -28
+ 3  2002    95   120   -25
+ 4  2003   107   135   -28
+ 5  2004   114   143   -29
+ 6  2005   128   157   -29
+ 7  2006   144   175   -31
+ 8  2007   189   191    -2
+ 9  2008   212   212     0
+10  2009   234   234     0
+11  2010   252   252     0
+12  2011   275   276    -1
+13  2012   305   308    -3
+14  2013   323   323     0
+15  2014   334   342    -8
+16  2015   352   357    -5
+17  2016   368   369    -1
+18  2017   336   385   -49
+19  2018   359   406   -47
+20  2019   412   418    -6
+21  2020   429   432    -3
+22  2021   417   430   -13
+#+end_example
+
+
 examples for two museums, one without exhibitions (red) and one with quite some (blue)
 
 #+name: p_exhb_expl
@@ -82,12 +139,12 @@ dt_af_size[PMDB_ID %in% c(20, 137, 538)] %>%
   melt(id.vars = c("PMDB_ID", "year"), measure.vars = patterns("^exhb"), variable.name = "vrbl") %>%
   ggplot(aes(x=year, y=value, color = factor(PMDB_ID))) +
   geom_line(show.legend = F) +
-  facet_wrap(~vrbl, scales = "free")
+  facet_wrap(~vrbl, scales = "free") 
 
 #+end_src
 
 #+attr_latex: :width 7in
-#+RESULTS[2e784c188a27452706e4b406ae0ef2d47d645570]: p_exhb_expl
+#+RESULTS[b2dbec5660b437847dc6c8093bfb6f0a50943ff6]: p_exhb_expl
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/artfacts/p_exhb_expl.pdf]]
 
 even tho the red one doesn't have exhibition, its quantile values are not zero.
@@ -98,39 +155,39 @@ even tho the red one doesn't have exhibition, its quantile values are not zero.
 #+begin_src R :exports results :results output graphics file :file p_af_velp.pdf :width 7 :height 5.5
 melt(dt_pmyear, id.vars = c("ID", "year"), measure.vars = keep(names(dt_pmyear), ~startsWith(.x, "exhb")),
      variable.name = "vrbl") %>% 
-  .[, .(mean_vlu = mean(value)), .(vrbl, year)] %>%
+  .[, .(mean_vlu = mean(value)), .(vrbl, year)] %>% 
   ggplot(aes(x=year, y=mean_vlu)) +
   geom_line() + 
   facet_wrap(~vrbl, scales = "free", ncol = 3)
 #+end_src
 
 #+attr_latex: :width 7in
-#+RESULTS[c2b62a190f7183b597c1c06f6c426e78009518a4]: p_af_velp
+#+RESULTS[a2744163230a5ea1bd939c2f2c25fc9ee4df2ce6]: p_af_velp
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/artfacts/p_af_velp.pdf]]
 
 #+begin_src R :exports :exports results :results output
 suppressWarnings(melt(dt_pmyear, id.vars = c("ID", "year"), 
                       measure.vars = keep(names(dt_pmyear), ~startsWith(.x, "exhb")),
-                      variable.name = "vrbl")) %>% 
+                      variable.name = "vrbl")) %>%  
   .[, .(mean_vlu = mean(value), sd = sd(value), min = min(value), max= max(value)), vrbl]
 #+end_src
 
-#+RESULTS[f232782f21a262270d139284640daf07fc505c17]:
+#+RESULTS[e92c86d4a9f25288594db9a6756086c53348be25]:
 #+begin_example
 # A data frame: 11 × 5
    vrbl               mean_vlu    sd    min    max
    <fct>                 <dbl> <dbl>  <dbl>  <dbl>
- 1 exhbany               0.662 0.473 0       1    
- 2 exhbrollany           0.483 0.500 0       1    
- 3 exhbqntl_year         0.430 0.209 0.244   0.999
- 4 exhbqntl_cy           0.449 0.217 0.0833  1    
- 5 exhbcnt               0.825 1.63  0      14    
- 6 exhbprop_top10_log    0.204 0.322 0       1.51 
- 7 exhbprop_top10_utf    0.155 0.308 0       2.8  
- 8 exhbrollsum5          3.62  6.66  0      65    
- 9 exhbnNA               0.620 1.22  0       4    
-10 exhbrollsum_avg       0.805 1.41  0      13    
-11 exhbqntl_roll         0.271 0.262 0.0579  0.998
+ 1 exhbany               0.660 0.474 0       1    
+ 2 exhbrollany           0.489 0.500 0       1    
+ 3 exhbcnt               0.840 1.64  0      14    
+ 4 exhbqntl_cy           0.447 0.218 0.0833  1    
+ 5 exhbqntl_year         0.427 0.210 0.244   0.999
+ 6 exhbprop_top10_utf    0.158 0.310 0       2.8  
+ 7 exhbprop_top10_log    0.207 0.324 0       1.51 
+ 8 exhbrollsum5          3.70  6.72  0      65    
+ 9 exhbnNA               0.621 1.22  0       4    
+10 exhbrollsum_avg       0.822 1.43  0      13    
+11 exhbqntl_roll         0.271 0.264 0.0579  0.998
 #+end_example
 
 
@@ -140,7 +197,7 @@ suppressWarnings(melt(dt_pmyear, id.vars = c("ID", "year"),
 l_mdls1 <- list(
   r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
                    slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                   proxcnt10*popm_circle10 + year, 
+                   proxcnt10*popm_circle10 + year,  
                  dt_pmyear),
   r_afsize1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
                       slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
@@ -227,9 +284,7 @@ l_tbls <- list()
 
 #+end_src
 
-#+RESULTS[1f66e17cf7b3c5edcd2da7a462723fd775c88b1e]:
-: left join: dt_vrbl_lbls[vrbl] 31/31 (100%) <m:m> dt_vrblgrps[vrbl] 31/31 (100%)
-: left join: x[vrblgrp] 31/31 (100%) <m:m> dt_vrblgrp_lbls[vrblgrp] 4/4 (100%)
+#+RESULTS[9a554ee67aece929097eb6c2a3f4c659629a832a]:
 
 #+latex: \begin{landscape}
 
@@ -251,7 +306,7 @@ only using years > 2000 (weird values, figure 1) doesn't seem to matter
 #+begin_src R :exports results :results output graphics file :file p_cormat_size.pdf :width 10 :height 9
 
 library(ggcorrplot) # for correlation matrix
-
+ 
 
 dt_pmx <- gd_pmx(dt_pmdb)
 
@@ -294,7 +349,7 @@ dt_cormat_viz %>%
 #+end_src
 
 #+attr_latex: :width 9in
-#+RESULTS[fe771c0f5f1c41ae66e5a183de33895bd0d445d9]: p_cormat_size
+#+RESULTS[d840d653ac72289fc4d0f066b8197790435fe8a7]: p_cormat_size
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/artfacts/p_cormat_size.pdf]]
 
 #+latex: \end{landscape}
@@ -305,7 +360,7 @@ check whether there is country variation: *what would be the problem exactly?*
 #+begin_src R :exports results :results output graphics file :file p_crycheck.pdf :width 4.5 :height 6.5
 
 dt_crycheck <- dt_pmyear[, map(.SD, ~mean(.x)), iso3c, .SDcols = c("exhbany", "exhbrollany", "exhbqntl_roll")]
-
+ 
 dt_crycheck_order <- copy(dt_crycheck)[, crysum := Reduce(`+`, .SD), .SDcols = patterns("^exhb")] %>%
   .[order(crysum)]
   
@@ -323,7 +378,7 @@ dt_crycheck %>%
   
 #+end_src
 
-#+RESULTS[fcf19c92ccb9e1e549fde5b61ae68e13dc5857ba]: p_crycheck
+#+RESULTS[7b69220ba4c6798fa8081ac024bc9d8d15aab5aa]: p_crycheck
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/artfacts/p_crycheck.pdf]]
 
 hmm interesting that CHE, ITA, FRA are so low within Europe:

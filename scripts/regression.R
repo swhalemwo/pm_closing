@@ -174,13 +174,28 @@ gd_af_size <- function(dt_pmx) {
         .[!is.na(PMDB_ID)] # focus on PMs
     
     ## combine "simple quantiles" (dt_af_qntl) and rolled sums (dt_af_roll),
-    ## yeet CYs where more than half institutions have no exhibitions
-    dt_af_qntl <- join(dt_af_qntl_simple,
+        dt_af_qntl <- join(dt_af_qntl_simple,
                        dt_af_roll[, .(PMDB_ID, year, exhbrollsum5, exhbany, exhbrollany,  exhbnNA,
                                       exhbrollsum_avg, exhbqntl_roll)],
-         on = c("PMDB_ID", "year"), verbose = 0) %>%
-        .[, .SD[!any(N == 0 & exhbqntl_cy > 0.5)], .(iso3c, year)]
+         on = c("PMDB_ID", "year"), verbose = 0)
+
+    ## filter some variables: the more fine-grained variables have higher data requirements?
+    ## first set up sets
     
+    ## this set is fully included
+    set_always_include <- c("exhbany", "exhbrollany", "exhbcnt")
+
+    ## more complex variable set: 
+    ## yeet CYs where more than half institutions have no exhibitions
+    set_conditional_include <- c("exhbqntl_cy", "exhbqntl_year","exhbprop_top10_utf",
+                                 "exhbprop_top10_log", "exhbrollsum5", "exhbnNA",
+                                 "exhbrollsum_avg", "exhbqntl_roll")
+
+    dt_af_qntl_plausbl <- join(
+        dt_af_qntl[, .SD, .SDcols = c("PMDB_ID", "year", set_always_include)],
+        dt_af_qntl[, .SD[!any(N == 0 & exhbqntl_cy > 0.5)], .(iso3c, year),
+                   .SDcols = c("PMDB_ID", "year", set_conditional_include)],
+         on = c("PMDB_ID", "year"), verbose = 0)
 
 
     ## dt_af_qntl[, .SD[any(N == 0 & quantile > 0.5)], .(iso3c, begin_year)] %>%
@@ -191,8 +206,8 @@ gd_af_size <- function(dt_pmx) {
 
     ## ggplot(dt_af_qntl[exhbprop_top10_utf > 0], aes(x= exhbprop_top10_utf)) + geom_density()
 
-    attr(dt_af_qntl, "gnrtdby") <- as.character(match.call()[[1]])
-    return(dt_af_qntl)
+    attr(dt_af_qntl_plausbl, "gnrtdby") <- as.character(match.call()[[1]])
+    return(dt_af_qntl_plausbl)
     
 }
 
@@ -379,13 +394,13 @@ gd_pop <- function() {
 
 
 
-gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_dtti = c_dtti) {
+gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_lvrs = c_lvrs) {
     gw_fargs(match.call())
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     #' @param dt_pmx extract of PMDB with museums to use
     #' @param dt_pmtiv dt with time invariant variables
-    #' @c_dtti flags/switches of which datasets to optionally/additionally include
+    #' @c_lvrs flags/switches of which datasets to optionally/additionally include
     
 
     #' generate dt in pm-year format
@@ -461,13 +476,16 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_dtti = c_dtti) {
         stop("some NAs in proxcnt")}
 
     ## ## integrate artfacts size indicators
-    if ("af_size" %in% c_dtti) {
+    if ("af_size" %in% chuck(c_lvrs, "dtti")) {
         
-        dt_af_size <- gd_af_size(dt_pmx)[, .(ID = PMDB_ID, year,
-                                             exhbany, exhbrollany, # any inclusions in last 1/5 years
-                                             exhbqntl_year, exhbqntl_cy, exhbcnt, # simple quantiles
-                                             exhbprop_top10_log, exhbprop_top10_utf, # proportions of top10
-                                             exhbrollsum5, exhbnNA, exhbrollsum_avg, exhbqntl_roll)]
+        ## dt_af_size <- gd_af_size(dt_pmx)[, .(ID = PMDB_ID, year,
+        ##                                      exhbany, exhbrollany, # any inclusions in last 1/5 years
+        ##                                      exhbqntl_year, exhbqntl_cy, exhbcnt, # simple quantiles
+        ##                                      exhbprop_top10_log, exhbprop_top10_utf, # proportions of top10
+        ##                                      exhbrollsum5, exhbnNA, exhbrollsum_avg, exhbqntl_roll)]
+
+        dt_af_size <- gd_af_size(dt_pmx)[, .SD, .SDcols = c("PMDB_ID", "year", chuck(c_lvrs, "af_vrbls"))] %>%
+            setnames(old = "PMDB_ID", new = "ID")
 
         dt_pmyear_waf <- join(dt_pmyear_wproxcnt, dt_af_size, on = c("ID", "year"))
     } else {
@@ -493,7 +511,7 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_dtti = c_dtti) {
 
 }
 
-gd_pmyear <- function(dt_pmyear_prep, c_dtti) {
+gd_pmyear <- function(dt_pmyear_prep, c_lvrs) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     #' yeet observations with NAs on an_inclusion (starts 1990) and pop (starts 1975)
     gw_fargs(match.call())
@@ -510,7 +528,7 @@ gd_pmyear <- function(dt_pmyear_prep, c_dtti) {
     vrbls_tolag <- c("an_inclusion")
 
     ## if af_size variables are to be included, add them to variables to lag
-    if ("af_size" %in% c_dtti) {
+    if ("af_size" %in% chuck(c_lvrs, "dtti")) {
         vrbls_tolag <- c(vrbls_tolag,
                          keep(names(dt_pmyear_prep), ~startsWith(.x, "exhb")))
     }
@@ -523,11 +541,13 @@ gd_pmyear <- function(dt_pmyear_prep, c_dtti) {
     ## i guess i'm not doing this year to not yeet too much? but easier with switch.. 
     ## dt_pmyear <- dt_pm_lagged[!is.na(an_inclusion) & !is.na(popm_circle10)]
     
-    dt_pmyear <- na.omit(dt_pm_lagged, cols = vrbls_tolag)
+    dt_pmyear_lagfiltered <- na.omit(dt_pm_lagged, cols = vrbls_tolag)
+
+    dt_pmyear_trimmed <- dt_pmyear_lagfiltered[year >= START_YEAR]
 
     
-    attr(dt_pmyear, "gnrtdby") <- as.character(match.call()[[1]])
-    return(dt_pmyear)
+    attr(dt_pmyear_trimmed, "gnrtdby") <- as.character(match.call()[[1]])
+    return(dt_pmyear_trimmed)
 }
 
 
@@ -893,15 +913,15 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ##                dt_pmyear),
 
         
-        r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+        r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10,
-                       dt_pmyear),
+                            proxcnt10*popm_circle10 + exhbrollany,
+                       dt_pmyear)
 
-        r_pop4_wyr = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10 + year + reg6,
-                           copy(dt_pmyear)[, reg6 := factor(reg6, labels = c("OC", "NALUL","EU","AS", "LA", "AF"))])
+        ## r_pop4_wyr = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+        ##                     proxcnt10*popm_circle10 + year + reg6,
+        ##                    copy(dt_pmyear)[, reg6 := factor(reg6, labels = c("OC", "NALUL","EU","AS", "LA", "AF"))])
                        
         
         ## r_woaf = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
@@ -1093,7 +1113,7 @@ gd_predprep_popprxcnt <- function(dt_pmyear) {
     dt_pred_prep <- cbind(
         dt_pmyear[, lapply(.SD, Mode), # categorical/binary variables: use mode
                   .SDcols = gc_vvs()$dt_vrblinfo[vrbltype %in% c("bin", "cat"), achr(vrbl)]],
-        dt_pmyear[, lapply(.SD, median), .SDcols = c("pmdens_cry", "PC1", "PC2")]) # numeric: use median
+        dt_pmyear[, lapply(.SD, median), .SDcols = c("pmdens_cry", "PC1", "PC2", "year")]) # numeric: use median
 
     ## variables to vary              
     dt_pred_prep2 <- expand.grid(proxcnt10 = c(0:15),
@@ -1171,11 +1191,13 @@ gp_pred_popprxcnt <- function(l_mdlnames, l_mdls, dt_pmyear) {
 
     dt_predres_mult <- map(l_mdlnames,
                            ~gd_pred(.x, l_mdls, gd_predprep_popprxcnt(dt_pmyear))) %>% rbindlist
+
+    
     ## .[, popm_circle10_cut := round(popm_circle10, 5)]
 
-## join(dt_predres_mult, dt_cutwidth, on = c("proxcnt10", "popm_circle10_cut")) %>% 
-##     replace_NA %>% # fill up NAs in N with 0
-##     .[proxcnt10 < 8] %>%
+    ## join(dt_predres_mult, dt_cutwidth, on = c("proxcnt10", "popm_circle10_cut")) %>% 
+    ##     replace_NA %>% # fill up NAs in N with 0
+    ##     .[proxcnt10 < 8] %>%
 
     p_pred_popprxnct <- dt_predres_mult %>% 
         ggplot(aes(x=proxcnt10, y=avghaz, group = popm_circle10, color = factor(popm_circle10))) + 
@@ -1184,7 +1206,8 @@ gp_pred_popprxcnt <- function(l_mdlnames, l_mdls, dt_pmyear) {
         ## facet_wrap(~src, scales = "free") +
         scale_color_discrete(type = color("sunset")(5)) + 
         coord_cartesian(ylim = c(0, 0.013), xlim = c(0,12)) +
-        theme_bw()
+        theme_bw() +
+        theme(legend.position = "bottom")
 
     ## if multiple models, add facetting by model
     if (dt_predres_mult[, fnunique(src) > 1]) {
