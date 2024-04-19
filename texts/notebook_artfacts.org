@@ -2,6 +2,7 @@
 #+PROPERTY: header-args:R+ :output-dir /home/johannes/Dropbox/phd/papers/closing/notes/artfacts/
 #+PROPERTY: header-args:R+ :tangle yes
 #+PROPERTY: header-args:R+ :cache yes
+#+PROPERTY: header-args:R+ :eval no-export
 
 
 #+latex_class: notes2
@@ -17,7 +18,7 @@
 
 TODO: this stuff is copied from dimred, relies on those objects.. 
 
-#+begin_src R :exports none :results none
+#+begin_src R :exports none :results none :cache yes
 library(pmdata)
 library(jtls)
 library(purrr) # looping
@@ -52,15 +53,44 @@ dt_pmtiv <- gd_pmtiv(dt_pmx, l_pca_dimred_woclosed) # time invariant variables
 c_dtti <- c("af_size")
 
 
+dt_af_size <- gd_af_size(dt_pmx)
 dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv, c_dtti) # combine all data sources, as complete as possible
 dt_pmyear <- gd_pmyear(dt_pmyear_prep, c_dtti)
 #+end_src
 
-#+begin_src R :exports none :results none
-dt_af_size <- gd_af_size(dt_pmx)
+measures used:
+- exhbany: whether a PM has a match in AF (time-invariant; all others are time-varying)
+- exhbrollany: whether a PM has had an exhibition in the last 5 years
+- exhbcnt: number of exhibition in year
+- exhbrollsum5: number of exhibition in last 5 years
+- exhbrollsum_avg: exhbrollsum5 divided by number of years is is based on (NAs yeeted)
+- exhbnNA: number of (shifted) columns in last 5 years that are NA. this indicates amount of new museums since shifted columns are NA due to trying to lag what doesn't exist.
+- exhbqntl_year: empirical quantile (via ecdf) of exhibition count, comparision set is all exhibitions organizations in a year
+- exhbqntl_cy: empirical  quantile (via ecdf) of exhibition count, comparision set is all exhibitions organizations in a country-year
+- exhbqntl_roll: quantile of exhbrollsum_avg, comparison set is year
+- exhbprop_top10_utf: proportion of value of top 10 quantile, untransformed
+- exhbprop_top10_log: log(N+1)/quantile(log(N+1)): attempt to scale the exhbprop_top10_utf.. but probably overly complicated
 
+
+examples for two museums, one without exhibitions (red) and one with quite some (blue)
+
+#+name: p_exhb_expl
+#+begin_src R :exports results :results output graphics file :file p_exhb_expl.pdf :width 10 :height 5.5
+dt_af_size[, .N,  PMDB_ID][N > 20]
+
+dt_af_size[PMDB_ID %in% c(20, 137, 538)] %>%
+  melt(id.vars = c("PMDB_ID", "year"), measure.vars = patterns("^exhb"), variable.name = "vrbl") %>%
+  ggplot(aes(x=year, y=value, color = factor(PMDB_ID))) +
+  geom_line(show.legend = F) +
+  facet_wrap(~vrbl, scales = "free")
 
 #+end_src
+
+#+attr_latex: :width 7in
+#+RESULTS[2e784c188a27452706e4b406ae0ef2d47d645570]: p_exhb_expl
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/artfacts/p_exhb_expl.pdf]]
+
+even tho the red one doesn't have exhibition, its quantile values are not zero.
 
 
 
@@ -104,27 +134,10 @@ suppressWarnings(melt(dt_pmyear, id.vars = c("ID", "year"),
 #+end_example
 
 
-#+begin_example
-# A data frame: 11 × 5
-   vrbl               mean_vlu    sd    min    max
-   <fct>                 <dbl> <dbl>  <dbl>  <dbl>
- 1 exhbany               0.443 0.497 0       1    
- 2 exhbrollany           0.427 0.495 0       1    
- 3 exhbqntl_year         0.429 0.209 0.243   0.999
- 4 exhbqntl_cy           0.448 0.217 0.0833  1    
- 5 exhbcnt               0.824 1.63  0      14    
- 6 exhbprop_top10_log    0.204 0.322 0       1.51 
- 7 exhbprop_top10_utf    0.155 0.308 0       2.8  
- 8 exhbrollsum5          3.49  6.69  0      65    
- 9 exhbnNA               0.837 1.38  0       4    
-10 exhbrollsum_avg       0.824 1.44  0      13    
-11 exhbqntl_roll         0.276 0.269 0.0579  0.998
-#+end_example
-
 
 #+begin_src R :exports :exports results :results output
 
-l_mdls <- list(
+l_mdls1 <- list(
   r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
                    slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
                    proxcnt10*popm_circle10 + year, 
@@ -151,24 +164,62 @@ l_mdls <- list(
                     dt_pmyear)  
 )
 
+l_mdls2 <- list(
+  r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                   slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                   proxcnt10*popm_circle10 + year, 
+                 dt_pmyear),
+  r2_afsize1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                      proxcnt10*popm_circle10 + year + exhbany,
+                    dt_pmyear),
+  r2_afsize2 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                      proxcnt10*popm_circle10 + year + exhbrollany,
+                    dt_pmyear),
+  r2_afsize3 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                      proxcnt10*popm_circle10 + year + exhbqntl_roll,
+                    dt_pmyear),
+  r2_afsize2k1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                      proxcnt10*popm_circle10 + year + exhbany,
+                      dt_pmyear[year >= 2000]),
+  r2_afsize2k2 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                      proxcnt10*popm_circle10 + year + exhbrollany,
+                    dt_pmyear[year >= 2000]),
+  r2_afsize2k3 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                      proxcnt10*popm_circle10 + year + exhbqntl_roll,
+                    dt_pmyear[year >= 2000])
+)
+
 gt_reg_coxph_afsize <- gt_reg_coxph
+gt_reg_coxph_afsize2 <- gt_reg_coxph
 
 
-l_mdlnames_afsize <- l_mdlnames_coxph <- c("r_pop4", paste0("r_afsize", 1:6))
+l_mdlnames_afsize1 <- l_mdlnames_coxph <- c("r_pop4", paste0("r_afsize", 1:6))
+l_mdlnames_afsize2 <- l_mdlnames_coxph <- c("r_pop4", paste0("r2_afsize", 1:3), paste0("r2_afsize2k", 1:3))
 
 ## overwrite the gc_tbls, c_tblargs
 gc_tbls <- function() {
-  list(t_reg_coxph_afsize = list(
-         l_mdls = quote(l_mdls),
-         l_mdlnames = quote(l_mdlnames_afsize),
-         caption = "reg results"))
+  list(
+    t_reg_coxph_afsize = list(
+         l_mdls = quote(l_mdls1),
+         l_mdlnames = quote(l_mdlnames_afsize1),
+         caption = "reg results"),
+    t_reg_coxph_afsize2 = list(
+         l_mdls = quote(l_mdls2),
+         l_mdlnames = quote(l_mdlnames_afsize2),
+         caption = "reg results"))  
 }
 c_tblargs <- list()
 l_tbls <- list()
 
 ## gt_reg_coxph_dimred(l_mdls, l_mdlnames_coxph)
-gtbl("t_reg_coxph_afsize")
-wtbl("t_reg_coxph_afsize")
+## gtbl("t_reg_coxph_afsize")
+## wtbl("t_reg_coxph_afsize")
 ## wtbl(
   
   
@@ -180,39 +231,106 @@ wtbl("t_reg_coxph_afsize")
 : left join: dt_vrbl_lbls[vrbl] 31/31 (100%) <m:m> dt_vrblgrps[vrbl] 31/31 (100%)
 : left join: x[vrblgrp] 31/31 (100%) <m:m> dt_vrblgrp_lbls[vrblgrp] 4/4 (100%)
 
-** compare with Arfacts data
+#+latex: \begin{landscape}
 
-use PM-mean of AF variables (ignore longitudinal variation)
+
+#+INCLUDE: /home/johannes/Dropbox/phd/papers/closing/tables/t_reg_coxph_afsize_wcpF.tex export latex
+
+#+INCLUDE: /home/johannes/Dropbox/phd/papers/closing/tables/t_reg_coxph_afsize2_wcpF.tex export latex
+
+
+
+exhbqntl_roll is positive and significant, other exhibiiton activity indicators are positive and not significant
+
+only using years > 2000 (weird values, figure 1) doesn't seem to matter
+
+
+** check correlations of different AF measures
 
 #+name: p_cormat_size
-#+begin_src R :exports results :results output graphics file :file p_cormat_size.pdf :width 10 :height 10
+#+begin_src R :exports results :results output graphics file :file p_cormat_size.pdf :width 10 :height 9
 
 library(ggcorrplot) # for correlation matrix
 
 
 dt_pmx <- gd_pmx(dt_pmdb)
 
-dt_af_size <- gd_af_size(dt_pmx)
+cormat_all <- dt_af_size[, .SD, .SDcols = patterns("^exhb")] %>% cor
+
 
 dt_af_size_mean <- dt_af_size[, lapply(.SD, mean), .SDcols = patterns("quant|exhb|^N"), .(ID = PMDB_ID)] %>%
-  .[, c("exhbnNA", "N") := NULL]
+  .[, c("N") := NULL]
 
-## generate all the comparisons
-cormat_cprn <- join(dt_af_size_mean, # need to flip woclosed scores.. FIXME
-                    copy(l_pca_dimred_woclosed$dt_scores)[, `:=`(PC1 = PC1*-1, PC2 = PC2*-1)], 
-                    on = "ID") %>%
-  join(copy(dt_pmdb_size_wide)[, museum_status := NULL], on = "ID") %>%
-  num_vars %>% .[, ID := NULL] %>% cor(use = "pairwise.complete.obs")
+## generate between comparisons
+cormat_between <- dt_af_size_mean %>% num_vars %>% .[, ID := NULL] %>% cor(use = "pairwise.complete.obs")
   
-cormat_cprn %>% ggcorrplot(show.diag = F, type = "full", lab = T, lab_size = 3) +
-  theme(legend.position = "bottom")
-  
+
+## demean
+dt_size_within <- fwithin(dt_af_size[, .SD, .SDcols = keep(names(dt_af_size), ~grepl("^exhb", .x))], 
+      g = dt_af_size$PMDB_ID) %>% cbind(dt_af_size[, .(PMDB_ID, year)], .)
+
+cormat_within <- cor(dt_size_within[, `:=`(PMDB_ID = NULL, year = NULL)], use = "pairwise.complete.obs")
+
+## combine cormats into one dt
+dt_cormat_viz <- imap(list(all = cormat_all, between = cormat_between, within = cormat_within),
+                      ~adt(.x, keep.rownames = "vy") %>% melt(id.vars = "vy", variable.name = "vx") %>%
+                        .[, src := .y]) %>%
+  rbindlist %>%
+  .[, `:=`(vx = factor(vx, levels = keep(names(dt_af_size), ~grepl("^exhb", .x))),
+           vy = factor(vy, levels = keep(names(dt_af_size), ~grepl("^exhb", .x))))] %>%
+  .[!(vx == vy)] %>% 
+  na.omit
+
+
+
+dt_cormat_viz %>% 
+  ggplot(aes(x=vx, y=vy, fill = value)) +
+  geom_tile(show.legend = F) +
+  geom_text(mapping = aes(label = round(value,2)), size = 2.5) + 
+  scale_fill_gradient2(high = "red", low = "blue") +
+  facet_wrap(~src, ncol = 2, scales = "free") +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
 
 #+end_src
 
-#+attr_latex: :width 7in
-#+RESULTS[4c0aa651f25fc2e7f0c0d99954e630be8079b607]: p_cormat_size
+#+attr_latex: :width 9in
+#+RESULTS[fe771c0f5f1c41ae66e5a183de33895bd0d445d9]: p_cormat_size
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/artfacts/p_cormat_size.pdf]]
+
+#+latex: \end{landscape}
+
+check whether there is country variation: *what would be the problem exactly?* 
+
+#+name: p_crycheck
+#+begin_src R :exports results :results output graphics file :file p_crycheck.pdf :width 4.5 :height 6.5
+
+dt_crycheck <- dt_pmyear[, map(.SD, ~mean(.x)), iso3c, .SDcols = c("exhbany", "exhbrollany", "exhbqntl_roll")]
+
+dt_crycheck_order <- copy(dt_crycheck)[, crysum := Reduce(`+`, .SD), .SDcols = patterns("^exhb")] %>%
+  .[order(crysum)]
+  
+
+dt_crycheck %>%
+  melt(id.vars = "iso3c", variable.name = "vrbl") %>%
+  .[, iso3c := factor(iso3c, levels = dt_crycheck_order[, iso3c])] %>%
+  .[, reg6 := rcd_iso3c_reg6(iso3c)] %>% 
+  ggplot(aes(value, y=iso3c, color = vrbl)) +
+  geom_point(show.legend = F) +
+  facet_grid(reg6~vrbl, scales = "free_y", space = "free_y") +
+  theme(axis.text.y = element_text(size = 7))
+
+  
+  
+#+end_src
+
+#+RESULTS[fcf19c92ccb9e1e549fde5b61ae68e13dc5857ba]: p_crycheck
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/artfacts/p_crycheck.pdf]]
+
+hmm interesting that CHE, ITA, FRA are so low within Europe:
+maybe composition? many museums included, also already early, so quantiles are high and avg exhbqntl_roll low? 
+
+
+** compare correlations across different size indicators
 
 hmm the AF variables are pretty much the same, super high correlations among them
 
