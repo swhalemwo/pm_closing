@@ -160,6 +160,7 @@ l_pca_dimred_woclosed <- gl_pca_dimred_closed_imputed(dt_pmdb, dt_pmx)
 dt_pmtiv <- gd_pmtiv(dt_pmx, l_pca_dimred_woclosed) # time invariant variables
 
 
+
 dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv, c_lvrs) # combine all data sources, as complete as possible
 dt_pmyear <- gd_pmyear(dt_pmyear_prep, c_lvrs) # trim down dt to no NAs
 
@@ -169,7 +170,7 @@ dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-yea
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
                                         # set model names for t_reg_coxph
-l_mdlnames_coxph <- c("r_pop4") #, "r_pop4_wyr")
+l_mdlnames_coxph <- c("r_pop4")# , "r_pop4_wyr")
 ## l_mdlnames_coxph <- c("r_pop4", paste0("r_wsize", 3:1))
 ## c("r_more", paste0("r_pop", c(1, 3:6)))
 ## "r_woaf", "r_waf_year", "r_waf_roll", "r_waf_roll2")

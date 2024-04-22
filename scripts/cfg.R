@@ -175,6 +175,7 @@ gc_vvs <- function() {
         PC2                       = "PC2 (Support)",
         year                      = "year",
         "I(year^2)"               = "year^2",
+        time_period               = "Time Period (5 years)",
         GLOBAL                    = "Global") # from cox.zph
     
     l_vrblgrps <- list(# variable groups
@@ -187,7 +188,7 @@ gc_vvs <- function() {
         envir    = .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
                       west, reg6,
                       pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10",
-                      year, "I(year^2)"),
+                      year, "I(year^2)",  time_period),
         misc     = .c(GLOBAL)
     )
 
@@ -196,7 +197,7 @@ gc_vvs <- function() {
     vrbls_tv <- .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
                    founder_dead, 
                    an_inclusion, pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10",
-                   year, "I(year^2)",
+                   year, "I(year^2)", time_period,
                    exhbany, exhbrollany, 
                    exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)", exhbprop_top10_log, exhbprop_top10_utf,
                    exhbqntl_roll, "I(exhbqntl_roll^2)")
@@ -209,7 +210,7 @@ gc_vvs <- function() {
                  year, "I(year^2)",
                  exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)",
                  exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"),
-        cat = .c(gender, slfidfcn, reg6, an_inclusion))
+        cat = .c(gender, slfidfcn, reg6, an_inclusion, time_period))
 
 
     l_vrblgrp_lbls <- list(# variable group labels
@@ -266,8 +267,12 @@ gc_vvs <- function() {
         list(vrbl = "reg6", term = "reg6OC",    term_lbl = "Region - Oceania"),
         list(vrbl = "an_inclusion", term = "an_inclusionincluded",     term_lbl = "AN Ranking - Included"),
         list(vrbl = "an_inclusion", term = "an_inclusionnot_included", term_lbl = "AN Ranking - Not Included"),
-        list(vrbl = "an_inclusion", term = "an_inclusiondropped",      term_lbl = "AN Ranking - Dropped")
-        
+        list(vrbl = "an_inclusion", term = "an_inclusiondropped",      term_lbl = "AN Ranking - Dropped"),
+        list(vrbl = "time_period", term = "time_periodtp2000", term_lbl = "Time Period 2000-2004"),
+        list(vrbl = "time_period", term = "time_periodtp2005", term_lbl = "Time Period 2005-2009"),
+        list(vrbl = "time_period", term = "time_periodtp2010", term_lbl = "Time Period 2010-2014"),
+        list(vrbl = "time_period", term = "time_periodtp2015", term_lbl = "Time Period 2015-2019"),
+        list(vrbl = "time_period", term = "time_periodtp2020", term_lbl = "Time Period 2020-2024")        
         )
 
     dt_ctgterm_lbls <- rbindlist(l_ctgterm_lbls) %>%

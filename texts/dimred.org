@@ -225,7 +225,7 @@ dt_pca_cpr_loads[, .SD, .SDcols = patterns("^PC")] %>% cor %>%
   :   PC_cpr src_cpr src_org     cor
   :   <chr>  <chr>   <chr>     <dbl>
   : 1 PC1    all     woclosed -0.998
-  : 2 PC2    all     woclosed -0.986
+  : 2 PC2    all     woclosed -0.987
 
 -> correlations of loadings are super high: 0.99, 0.98
 

@@ -413,7 +413,8 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_lvrs = c_lvrs) {
         .[, age := year - year_opened] %>% # set age
         ## founder death: 1 if year > deathyear, else 0 (before death or not dead at all)
         .[, founder_dead := fifelse(!is.na(deathyear),fifelse(year > deathyear, 1, 0), 0)] %>% 
-        .[, `:=`(tstart = age, tstop = age+1)] # set survival time interval variables
+        .[, `:=`(tstart = age, tstop = age+1)] %>% # set survival time interval variables
+        .[, time_period := as.factor(paste0("tp", 5*(floor(year/5))))]
         
 
     ## get country population data
@@ -544,6 +545,11 @@ gd_pmyear <- function(dt_pmyear_prep, c_lvrs) {
     dt_pmyear_lagfiltered <- na.omit(dt_pm_lagged, cols = vrbls_tolag)
 
     dt_pmyear_trimmed <- dt_pmyear_lagfiltered[year >= START_YEAR]
+
+    ## yeet unused time period factors, if it exists
+    if ("time_period" %in% names(dt_pmyear_trimmed)) {
+        dt_pmyear_trimmed[, time_period := factor(time_period)]
+    }
 
     
     attr(dt_pmyear_trimmed, "gnrtdby") <- as.character(match.call()[[1]])
@@ -916,12 +922,15 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
                             proxcnt10*popm_circle10 + exhbrollany,
-                       dt_pmyear)
+                       dt_pmyear),
 
-        ## r_pop4_wyr = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-        ##                     proxcnt10*popm_circle10 + year + reg6,
-        ##                    copy(dt_pmyear)[, reg6 := factor(reg6, labels = c("OC", "NALUL","EU","AS", "LA", "AF"))])
+        
+
+        r_pop4_wyr = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                            proxcnt10*popm_circle10 + exhbrollany + time_period,
+                           dt_pmyear)
+         ## copy(dt_pmyear)[, reg6 := factor(reg6, labels = c("OC", "NALUL","EU","AS", "LA", "AF"))])
                        
         
         ## r_woaf = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
