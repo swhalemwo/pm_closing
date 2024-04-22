@@ -99,6 +99,68 @@ This exercise does not only provide insights into private museums in particular,
 
 ** Private museums
 
+Investigating the survival prospects of private museum furthermore illucidates the long-term development of the organizational form as a whole.
+#
+While the composition of private museums is not only influenced by closures, but also by foundings, analysing the former provides insights in the sustainability of
+
+Given the non-significant gender difference, it can be expected that (unless given a strong increase in founding by women) the population of private museums will continue to remain a dominated affair[fn::The point estimates, which are higher for women and couples, albeit not significantly so, even point towards a slight expansion of the proportion of museums established by men.]
+#
+
+The role of the founder is two sided.
+#
+Death and exclusion from a prestigious ranking are not associated with a higher risk of closure, which indicates that private museums have attained a substantial degree of institutionalization.
+#
+On the other hand, self-identifying as an institution which is not a museum, foundation or collection possibly reflects a kind of founder attitudes which substantially influences survival chances.
+#
+Founders who are less interested in establish institutions might be more inclined to choose a name which less reflects this ambition. 
+#
+One way of conceptualizing this distinction might then be that whereas involuntary, externally imposed events are less able to close museums of otherwise motivated founders, some founders might from the very beginning voluntarily decide to not establish a museum that is intended for perpetuity.
+
+
+However, this group is somewhat small.
+#
+Of the XXX museums included in the database, XXX do not carry the term museum, foundation or collection.
+#
+Thus given this low share, and the corresponding  higher closing rate, a possible future for the private museum population might be increased institutionalization and consolidation of relatively robust organizations.
+#
+
+
+The effects of location might be seen
+#
+On the one hand, museum location is chosen by the founder at the time of founding (or rather, several years in advance).
+#
+This gives founders substantial choice in the size and composition of the potential audience who will be able to easily assess the museum.
+#
+On the other hand, collectors are less able to influence what plans other collectors might have.
+#
+What may have been at one point been identified as a promising location without substantial competition may turn out to be a much less fertile ground as soon as other collectors start eyeing the same region for their own private museum projects.
+# 
+In particular private museum in rural locations with low population densities seem to be at risk when other museums open in the neighborhood. 
+#
+This is not to say that private museums cannot endure in areas with low population densities. 
+#
+In fact, at low numbers of private museums in the neighborhood their survival prospects are better than those located in larger cities.
+#
+These larger cities with low private museum counts are possibly also characterized by lower numbers of other cultural institutions as well as an audience less interested in postmaterial art consumption.
+
+
+The lack of a relation between temporary exhibitions and survival prospect is somewhat unexpected.
+#
+It was expected that as temporary exhibitions constitute one of the main tasks of a museums operations, organizing them would benefit a museum financially (via visitor fees) and symbolically (via prestige of other art field actors, which might be developed into further contacts), leading to higher survival chances[fn::Furthermore, the ability to organization exhibitions likely reflects museum resources, which should also enhance survival.]
+# not sure this follows
+However, organizing exhibitions does not seem to bestow benefits for the museums which organize them, nor do organizations seem to be organized only by established/sustainable/secure organizations.
+#
+One possibility for this discrepancy could be that exhibitions are expensive, and whatever benefits gained from them are offset by the associated costs.
+#
+One might see in this association again the importance of the founder:
+#
+Founders who are committed to their museums will keep them alive, regardless of whether or not they plan to organize temporary exhibitions.
+
+
+
+
+
+
 
 
 ** Contributions :noexport:

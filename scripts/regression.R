@@ -921,7 +921,7 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         
         r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10 + exhbrollany,
+                            proxcnt10*popm_circle10 + exhbany,
                        dt_pmyear),
 
         
@@ -930,6 +930,7 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
                             proxcnt10*popm_circle10 + exhbrollany + time_period,
                            dt_pmyear)
+                           # dt_pmyear[iso3c != "KOR"])
          ## copy(dt_pmyear)[, reg6 := factor(reg6, labels = c("OC", "NALUL","EU","AS", "LA", "AF"))])
                        
         
