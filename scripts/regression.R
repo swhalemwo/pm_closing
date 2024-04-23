@@ -904,7 +904,7 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ## some regional covariates
         r_reg6 = coxph(Surv(age, closing) ~ reg6, dt_pmcpct), # doesn't like to convert 
 
-        r_garbage = coxph(Surv(age, closing) ~ west + age, dt_pmcpct),
+        ## r_garbage = coxph(Surv(age, closing) ~ west + age, dt_pmcpct),
 
         ## compare cpct and long (year) data
         r_west_cpct = coxph(Surv(age, closing) ~ west, dt_pmcpct),
@@ -925,20 +925,30 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         
         r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10 + exhbany ,
+                            proxcnt10*popm_circle10 + exhbany + recession + covid,
                        dt_pmyear),
+
+        ## r_pop42 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+        ##                     proxcnt10*popm_circle10 + I(proxcnt10^2)*popm_circle10 + exhbany + recession + covid,
+        ##                dt_pmyear),
+
+        ## r_pop5 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+        ##                     pmdens_circle10 + I(pmdens_circle10^2) + exhbany + recession + covid,
+        ##                dt_pmyear)
 
         
 
-        r_pop4_wyr = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10 + exhbany + covid,
-                           dt_pmyear),
+        ## r_pop4_wyr = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+        ##                     proxcnt10*popm_circle10 + exhbany + covid,
+        ##                    dt_pmyear),
 
-        r_pop4_wcrises = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10 + exhbany + covid + recession,
-                            dt_pmyear)
+        ## r_pop4_wcrises = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+        ##                     proxcnt10*popm_circle10 + exhbany + covid + recession,
+        ##                     dt_pmyear)
 
         
                            # dt_pmyear[iso3c != "KOR"])
