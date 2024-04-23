@@ -27,3 +27,4 @@ refplt_p_lngtdvelp,\ref{fig:p_lngtdvelp},figlbls
 reftbl_t_coxzph,\ref{tbl:t_coxzph},reftbl
 reftbl_t_reg_coxph,\ref{tbl:t_reg_coxph},reftbl
 reftbl_t_sumstats,\ref{tbl:t_sumstats},reftbl
+reftbl_t_selfid,\ref{tbl:t_selfid},reftbl

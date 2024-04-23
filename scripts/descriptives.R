@@ -152,3 +152,80 @@ gt_sumstats <- function(dt_pmyear, dt_pmcpct) {
     
 
 }
+
+
+gt_selfid <- function(dt_pmx, dt_pmyear) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    gw_fargs(match.call())
+    #' @param dt_pmx for name
+    #' @param dt_pmyear for only using those that are used eventually
+
+    
+    ## manually set some examples
+    l_examples <- list(
+        "Museum" = c("Museum Kampa", "Museum Barberini", "Kunstmuseum Walter", "Rubin Museum Of Art"),
+        "None" = c("The Bunker", "The Broad", "Magasin III", "Tank Shanghai"), # can't have empty name
+        "Foundation" = c("Marciano Art Foundation", "Hill Art Foundation", "Luma Foundation", "Kunststiftung Poll"),
+        "Collection" = c("The Farjam Collection", "Sammlung Boros", "Collezione Gori", "de la Cruz Collection"),
+        ## "Castle" = c("Kasteel Wijlre Estate", "Castello Di Ama"),
+        "Center" = c("Dairy Art Centre", "Art Center Nabi", "Faena Art Center", "Storm King Art Center"),
+        "Kunsthalle" = c("Kunsthalle Würth", "G2 Kunsthalle", "Kunsthalle Hgn", "Kunsthalle Messmer"),
+        "Institute" = c("Instituto Inhotim", "Woods Art Institute", "Instituto Figueiredo Ferraz"),
+        "House / villa" = c("Villa La Fleur", "Casa Daros Rio", "Kunst(Zeug)Haus", "La Maison Rouge"),
+        "Art space" = c("El Espacio 23", "Qiao Space", "Space*C", "Yarat Art Space"),
+        "Gallery" = c("Saatchi Gallery", "Galerie C15", "Galeria EGO", "Scrap Metal Gallery"),
+        "Park / garden" = c("Schlosspark Eyebesfeld", "Il Giardino dei Lauri", "Skulpturenpark Waldfrieden")
+        ## "Wine estate" = c("Donum Estate",
+    )
+
+    nbr_examples <- 2
+
+    ## convert to 
+    dt_examples <- imap(l_examples,
+                        ~data.table(slfidfcn = .y,
+                                    example = paste0(.x[1:min(len(.x), nbr_examples)], collapse = ", "))) %>%
+        rbindlist
+
+    ## check they are all there
+    if (!all(unlist(l_examples) %in% dt_pmx[dt_pmyear[, .(ID = funique(ID))], on = "ID"][, funique(name)])) {
+        stop("not all examples are in dt_pmyear")}
+
+    ## some selfids just aren't real
+    slfids_to_yeet <- c("Castle", "Wine estate", "")
+        
+    ## dt_pmx[, .N, slfidfcn]
+
+    ## only use PMs that are used in dt_pmyear
+    dt_slfidfcn_rcd <- dt_pmx[dt_pmyear[, .(ID = funique(ID))], on = "ID"] %>% copy %>% # only use those in pmyear
+        .[, .(ID, slfidfcn)] %>% 
+        .[slfidfcn %in% slfids_to_yeet, slfidfcn := "None"] %>% # rename
+        .[, .N, slfidfcn] %>% # aggregate, then recode
+        .[, slfidfcn_rcd := fifelse(slfidfcn %in% c("Museum", "Foundation", "Collection"), slfidfcn, "Other")]
+
+    dt_slfidfcn <- merge(dt_slfidfcn_rcd, dt_examples, by = "slfidfcn") %>%
+        .[order(-N)]
+
+
+    c_colnames <- gc_colnames(col_names = names(dt_slfidfcn),
+                              col_lbls = c("grp_filler" = "", "slfidfcn" = "Self-identification",
+                                           "N" = "N", "slfidfcn_rcd" = "Self-ID (recoded)",
+                                           "example" = "examples"))
+    c_atr <- list(
+        pos = list(-1),
+        command = c_colnames)
+    
+    list(dt_fmtd = dt_slfidfcn,
+         align_cfg = c("l", "l", "r", "l", "l"),
+         hline_after = c(-1, nrow(dt_slfidfcn)),
+         number_cols = c(F, F, T, F, F),
+         add_to_row = c_atr)
+    
+    
+    ## .[slfidfcn == "Park / garden", name]
+    
+
+        ## .[, .(.N, example = paste0(head(name, 2), collapse = ", ")), slfidfcn] %>% .[order(-N)]
+
+    
+}

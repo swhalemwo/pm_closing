@@ -26,7 +26,12 @@ gc_tbls <- function(c_tblargs) {
         t_sumstats = list(
             dt_pmyear = quote(dt_pmyear),
             dt_pmcpct = quote(dt_pmcpct),
-            caption = "Summary Statistics")
+            caption = "Summary Statistics"),
+        t_selfid = list(
+            dt_pmx = quote(dt_pmx),
+            dt_pmyear = quote(dt_pmyear),
+            caption = "Selfidentification"
+        )
     )
 
     
