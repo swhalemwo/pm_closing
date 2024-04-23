@@ -23,10 +23,10 @@ wd_nbrs(dt_nbrs)
 
 
 # meanhaz
-#+MACRO: meanhaz_upto_20 0.88%
-#+MACRO: meanhaz_upto_30 0.91%
-#+MACRO: meanhaz_upto_40 0.78%
-#+MACRO: meanhaz_upto_100 0.78%
+#+MACRO: meanhaz_upto_20 0.86%
+#+MACRO: meanhaz_upto_30 0.89%
+#+MACRO: meanhaz_upto_40 0.76%
+#+MACRO: meanhaz_upto_100 0.77%
 
 
 # pltcfgs
@@ -39,6 +39,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: ynkplt_p_yeardens (eval (concat "#+label: fig:p_yeardens\n" "#+caption: Private Museum-year Distribution\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_yeardens.pdf]]"))
 #+MACRO: ynkplt_p_coxphdiag_more (eval (concat "#+label: fig:p_coxphdiag_more\n" "#+caption: Model Diagnostics\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_coxphdiag_more.pdf]]"))
 #+MACRO: ynkplt_p_pred_popprxcnt (eval (concat "#+label: fig:p_pred_popprxcnt\n" "#+caption: Predicted Avg. Hazard Rate on Regional PM Density and Population\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_pred_popprxcnt.pdf]]"))
+#+MACRO: ynkplt_p_lngtdvelp (eval (concat "#+label: fig:p_lngtdvelp\n" "#+caption: Composition of private museum population\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_lngtdvelp.pdf]]"))
 
 
 # figlbls
@@ -82,7 +83,21 @@ While the emergence of this organizational form has attracted attention (cf. [[c
 #
 In this paper, I address this gap by investigating the closure event of members of this new organizational form.
 #
-This exercise does not only provide insights into private museums in particular, but also more generally into processes of organizational identity, especially regarding legitimation and reputation. 
+Analysis which factors are associated with museum closures provides insight not only into the event of closing, but also into the ongoing processes of a private museums, such as dependency relationships.
+#
+Furthermore, analyzing which museums survive allows to make informed speculations on the future of this recently emerged organizational form.
+
+
+# too variable-based
+# A number of findings emerge from this.
+# #
+# Museums that close are characterized by a name that does not include the term museum, foundation, or collection; a museums chance to close is also higher if it is located in an area with low population density and meany other museums.
+# #
+# On the flipside, a number of variables show no association with closing:
+# #
+# Whether a founder dies or is excluded from a prestigious ranking does not significantly influence a museums survival prospects, nor does the founders gender or whether the founder's name is included in the museum name.
+# #
+# The death of the founder, their gender, whether
 
 
 # A number of findings highlight the role of identity in the process of private museum closure. 
@@ -98,6 +113,44 @@ This exercise does not only provide insights into private museums in particular,
 # #+latex: \bigbreak
 # #+latex: \noindent
 # *keywords*: museum, closure, identity
+
+
+** private museum 3 crisis
+Museums, including private museums, might be relatively resilient [[cite:&Geller_Salamon_2010_resilience]]: 
+#
+tightening belt, fundraising, entrepreneurial strategies, downsizing
+#
+The form of museums also implies commitment of resources, larger than that of other NPOs, which in turn provides capabilities, e.g. staff that is able to search for alternative revenue sources.
+#
+
+
+
+  
+
+** Private museums relationships
+A private museum is entangled in a number of dependencies.
+#
+A crucial one is the relationship to the founder, without whom the private museum would not exist.
+#
+Founders often control some aspects of management/operations.
+#
+While the exact power relationships within museums are hard to observe due to the lack of transparency, which makes it in particular to assess the role of third parties, it is plausible to assume that they cannot exist against the wishes of the founder.
+# 
+Next to exhibiting the founder's collection, they likely also to a large extent dependent on continued financial contributions of the founder, as museums are chronically unprofitable (which is evidenced by their high share of NPOs or publicly owned/run museums, rather than for-profit companies). 
+#
+While the lack of transparency again makes it hard to systematically assess the financial importance of founder contributions to the existence of museums, *anecdotal* evidence suggests it to be substantial [[parencite:&Velthuis_Gera_forthcoming_fragility]].
+
+Furthermore, private museums, as (non-profit) organizations, is deeply entangled with its environment.
+#
+Its ability to attract audiences, which may involve competition with other museums, secure cooperations with other museums, acquire sponsorships from cooperations and fundings from governments and other foundations are likely factors that contribute to its viability and hence longevity.
+# 
+While some of these aspects can be influenced by the founder (in particular the available audience, via being able to decide a location and the extent to which a museum should organize exhibitions), other are less so.
+#
+In particular when they rely on the decision-making of other art-field actors, such as competition with other museums and sponsorship/funding choices, the influence of the individual founder is severely limited.
+#
+The image that these parties have of the private museum might be substantial importance in guiding their decision-making.
+
+
 
 ** Private museums
 
@@ -225,9 +278,9 @@ However, other studies find limited impact of legitimacy on survival, both when 
 
 Legitimacy might be obtained by isomorphism, i.e. adopting features associated with blueprints [[parencite:&diMaggio_1983_iron]].
 #
-Understandability [[parencite:&Glynn_Abzug_2002_names]] might thus be limited if an organization is atypical [[parencite:&Rosch_1975_family]], i.e. displays an unusual combination of features.
-#
-In the case of private museums, such cases might be combinations of features from house museums (e.g. accessibility only by appointment) with full-service museums (e.g. extensive activities). 
+# Understandability [[parencite:&Glynn_Abzug_2002_names]] might thus be limited if an organization is atypical [[parencite:&Rosch_1975_family]], i.e. displays an unusual combination of features.
+# #
+# In the case of private museums, such cases might be combinations of features from house museums (e.g. accessibility only by appointment) with full-service museums (e.g. extensive activities). 
 #
 Next to "hard" organizational features, adherence to naming conventions has been found to enhance legitimacy [[parencite:&Glynn_Abzug_2002_names]]; organizations that adhere to field norms about name length, name ambiguity (usage of artificial names) and name domain specificity (mentioning industry) were judged more legitimate. 
 # 
