@@ -181,6 +181,8 @@ gc_vvs <- function() {
         year                      = "year",
         "I(year^2)"               = "year^2",
         time_period               = "Time Period (5 years)",
+        covid                     = "Covid Pandemic (2020/21)",
+        recession                 = "Great Recession (2008/09)",
         GLOBAL                    = "Global") # from cox.zph
     
     l_vrblgrps <- list(# variable groups
@@ -191,9 +193,9 @@ gc_vvs <- function() {
                       exhbqntl_year, "I(exhbqntl_year^2)",
                       exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"), 
         envir    = .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
-                      west, reg6,
+                      west, reg6, 
                       pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10",
-                      year, "I(year^2)",  time_period),
+                      year, "I(year^2)",  time_period, covid, recession),
         misc     = .c(GLOBAL)
     )
 
@@ -205,11 +207,12 @@ gc_vvs <- function() {
                    year, "I(year^2)", time_period,
                    exhbany, exhbrollany, 
                    exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)", exhbprop_top10_log, exhbprop_top10_utf,
-                   exhbqntl_roll, "I(exhbqntl_roll^2)")
+                   exhbqntl_roll, "I(exhbqntl_roll^2)",
+                   covid, recession)
 
     ## specify variable type: binary, numeric, categorical
     l_vrbltypes <- list(        
-        bin = .c(founder_dead, muem_fndr_name, mow, west, exhbany, exhbrollany),
+        bin = .c(founder_dead, muem_fndr_name, mow, west, exhbany, exhbrollany, covid, recession),
         num = .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
                  pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10", PC1, PC2,
                  year, "I(year^2)",

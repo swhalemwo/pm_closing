@@ -414,7 +414,9 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_lvrs = c_lvrs) {
         ## founder death: 1 if year > deathyear, else 0 (before death or not dead at all)
         .[, founder_dead := fifelse(!is.na(deathyear),fifelse(year > deathyear, 1, 0), 0)] %>% 
         .[, `:=`(tstart = age, tstop = age+1)] %>% # set survival time interval variables
-        .[, time_period := as.factor(paste0("tp", 5*(floor(year/5))))]
+        .[, time_period := as.factor(paste0("tp", 5*(floor(year/5))))] %>%
+        .[, covid := fifelse(year %in% c(2020, 2021), 1, 0)] %>%
+        .[, recession := fifelse(year %in% c(2008, 2009), 1, 0)]
         
 
     ## get country population data
@@ -902,6 +904,8 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ## some regional covariates
         r_reg6 = coxph(Surv(age, closing) ~ reg6, dt_pmcpct), # doesn't like to convert 
 
+        r_garbage = coxph(Surv(age, closing) ~ west + age, dt_pmcpct),
+
         ## compare cpct and long (year) data
         r_west_cpct = coxph(Surv(age, closing) ~ west, dt_pmcpct),
         r_west_year = coxph(Surv(age, closing) ~ west, dt_pmyear),
@@ -921,15 +925,22 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         
         r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10 + exhbany,
+                            proxcnt10*popm_circle10 + exhbany ,
                        dt_pmyear),
 
         
 
         r_pop4_wyr = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10 + exhbrollany + time_period,
-                           dt_pmyear)
+                            proxcnt10*popm_circle10 + exhbany + covid,
+                           dt_pmyear),
+
+        r_pop4_wcrises = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                            proxcnt10*popm_circle10 + exhbany + covid + recession,
+                            dt_pmyear)
+
+        
                            # dt_pmyear[iso3c != "KOR"])
          ## copy(dt_pmyear)[, reg6 := factor(reg6, labels = c("OC", "NALUL","EU","AS", "LA", "AF"))])
                        
