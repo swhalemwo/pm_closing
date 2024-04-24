@@ -1,0 +1,99 @@
+#+PROPERTY: header-args:R :session *R:nccs*
+#+PROPERTY: header-args:R+ :output-dir /home/johannes/Dropbox/phd/papers/closing/notes/nccs/
+#+PROPERTY: header-args:R+ :tangle yes
+#+PROPERTY: header-args:R+ :cache yes
+#+PROPERTY: header-args:R+ :eval no-export
+
+
+#+latex_class: notes2
+
+# fucks all the maketitlestuff just to be sure
+#+OPTIONS: num:nil
+#+OPTIONS: toc:nil
+#+OPTIONS: h:5
+#+OPTIONS: ^:nil # don't use subscript for underscore
+#+options: \n:t # preserver linebreaks
+
+
+* notebook NCCS
+
+play a bit with NCCS data
+https://urbaninstitute.github.io/nccs/datasets/core/
+
+data:
+- financial
+- program and activities
+- geographic information
+- time series
+
+three populations
+- 501c3 Charities: 9909 + 990EZ
+- 501c3 Private Foundations (990PF): all file 990PFo, regardless of size
+- all other 501c Nonproifts (990 + 990EZ)
+
+smaller NPOs file 990EZ
+- PZ: all 990 + 990EZ: many orgs (400k), fewer variables (150)
+- PC: all 990 filers: less orgs (200k), more variables (300)
+
+  
+five groups based on two variables:
+- organizational type scope (tscope): distinguishes bewteen 501c3 public charities, 501c3 PFs, all other 501c orgs
+- form filing scope (scope): which types of filers are included in dataset
+
+groups: 
+- private foundations: always use form 990-PF, regardless of size
+- other non-profits:
+  - 501(c)(3) public charities: all  donations tax deductible
+  - other tax exempt org types: 501(c)(1) to 501(c)(92), excluding 501(c)(3) -> labelled as 501CE-SCOPE-NONPROFIT
+    501cE: everything besides 501(c)(3)
+
+form scope
+- full 990 filers
+- broader 990 + 990EZ filers (PZ)
+
+NTEE:
+- group
+- code
+- orgtype
+
+https://nccs.urban.org/pubs/nccs-data-guide.pdf:
+NTEE-CC: hierarchical mixed notation (letters, numbers) of
+- 630 centile level codes (NTEECC?)
+- 26 major groups
+- 10 major categories
+
+  https://urbaninstitute.github.io/nccs-legacy/ntee/ntee-history.html
+
+https://urbaninstitute.github.io/nccs-legacy/ntee/ntee.html
+A50: museums
+A51: art museums
+
+nada: maybe not in core?
+
+
+
+
+#+begin_src R :exports none :results none
+install.packages("devtools")
+library(devtools)
+devtools::install_github("UrbanInstitute/nccsdata")
+library(nccsdata)
+
+dtx <- get_data(dsname = "core", time = "2010", ntee = "ART", geo.city = "san francisco")
+
+dtx <- fread("/home/johannes/nccs.csv")
+
+dtx[grepl("museum", NAME, ignore.case = T), .(NAME)]
+## oof not even sure if any US PM is in there? 
+#+end_src
+
+
+
+https://urbaninstitute.github.io/nccs/catalogs/catalog-core.html: 5 types here
+oof would have to download file per type and year,
+and that's just core, not BMF
+
+and then other steps will take a while too
+- processing into proper OY format,
+- assigning closing,
+- matching to PMDB
