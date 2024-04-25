@@ -140,6 +140,11 @@ Next to exhibiting the founder's collection, they likely also to a large extent 
 #
 While the lack of transparency again makes it hard to systematically assess the financial importance of founder contributions to the existence of museums, *anecdotal* evidence suggests it to be substantial [[parencite:&Velthuis_Gera_forthcoming_fragility]].
 
+
+
+
+
+
 Furthermore, private museums, as (non-profit) organizations, is deeply entangled with its environment.
 #
 Its ability to attract audiences, which may involve competition with other museums, secure cooperations with other museums, acquire sponsorships from cooperations and fundings from governments and other foundations are likely factors that contribute to its viability and hence longevity.
@@ -347,6 +352,14 @@ needs to write out:
   - p.43: For example, nonprofits operating in a more competitive environment with a higher degree of organizational density would experience a higher chance of dissolution.
 - [[cite:&Haugh_etal_2021_nascent]]:
   - p.1227: SEs are likely to compete with non-profit organizations for grants,donations, and programme-related investments. Second,both SEs and non-profit organizations serve the disadvantaged and socially excluded and thus may also compete for service users. Although collaboration between SEs and charities could increase the supply of services to those in need (Smiddy 2010), they compete with each other for resources and beneficiaries. The more similar the resource needs and markets served, the greater the competition between the organizational forms (Baum and Haveman 1997). Hence, the population density ofregistered non-profit organizations will thus have a detrimental effect on SE survival.    
+
+resource-based: lack of audience, or many other people competing for audience
+[[cite:&Velthuis_Gera_forthcoming_fragility]]:
+p.23: In other cases, the location of the museum is a factor in limited visitor interest. On the
+one hand, private museums located in metropolitan art centers tend to face competition over
+visitors  from  well-established  other  museums  in  the  vicinity.  On  the  other  hand,  private
+museums located outside of those centers can be confronted with a small local audience, and
+difficulties in attracting visitors from afar.
 
 *Hypothesis 3*: A private museum is more likely to close in a more competitive environment.
   
