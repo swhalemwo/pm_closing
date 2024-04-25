@@ -586,17 +586,18 @@ Overall the entire life span, the average hazard rate is {{{meanhaz_upto_100}}},
 # 
 While I did not find a systematic literature review or meta-analysis, a number of individual studies had investigated similar populations based on IRS data (see table \ref{tbl:litreview}) 
 
-#+caption: Hazard rates in studies of museums art Art NPOs
+#+caption: Hazard rates in studies of museums and art NPOs
 #+label: tbl:litreview
-|-----------------------------------+--------------+------------------+------------|
-| study                             | population   | avg. hazard rate | org years |
-|-----------------------------------+--------------+------------------+------------|
-| [[cite:&Hager_2001_vulnerability]]    | Art Museums  |             2.4% |            |
-| [[cite:&Gordon_etal_2013_insolvency]] | Museums      |             0.7% |            |
-|-----------------------------------+--------------+------------------+------------|
-| cite:&Hager_2001_vulnerability    | all Art NPOs |             2.8% |            |
-| cite:&Gordon_etal_2013_insolvency | all Art NPOs |            2.08% |            |
-|-----------------------------------+--------------+------------------+------------|
+|-----------------------------------+--------------+------------------+
+| study                             | population   | avg. hazard rate |
+|-----------------------------------+--------------+------------------+
+| [[cite:&Hager_2001_vulnerability]]    | Art Museums  |             2.4% |
+| [[cite:&Gordon_etal_2013_insolvency]] | Museums      |             0.7% |
+| [[cite:&Bowen_1994_charitable]]       | Museums      |             1.1% |
+|-----------------------------------+--------------+------------------+
+| cite:&Hager_2001_vulnerability    | all Art NPOs |             2.8% |
+| cite:&Gordon_etal_2013_insolvency | all Art NPOs |            2.08% |
+|-----------------------------------+--------------+------------------+
 
 # this is kinda the main comparison...
 [[textcite:&Hager_2001_vulnerability]] and [[textcite:&Gordon_etal_2013_insolvency]] both study NPOs more generally, but report survival estimates by organizational form.
