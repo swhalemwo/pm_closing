@@ -926,7 +926,7 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
                             proxcnt10*popm_circle10 + exhbany + recession + covid,
-                       dt_pmyear),
+                       dt_pmyear)
 
         ## r_pop42 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
         ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
@@ -1161,6 +1161,7 @@ gd_predprep_popprxcnt <- function(dt_pmyear) {
 
 gd_pred <- function(mdlname, l_mdls, dt_pred) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    
     #' generate average predicted hazard for first 20 years for all the specifications in dt_pred
     #' @param rx a coxph-based regression model
     #' @param dt_pred data frame with all variables and different values (one per row) for each specification
@@ -1217,7 +1218,8 @@ gd_pred <- function(mdlname, l_mdls, dt_pred) {
 
 gp_pred_popprxcnt <- function(l_mdlnames, l_mdls, dt_pmyear) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
-    
+    gw_fargs(match.call())
+
     #' generate plot of predicted avg hazard rate under different PM proximity counts and population numbers
 
     dt_predres_mult <- map(l_mdlnames,

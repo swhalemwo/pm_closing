@@ -2,6 +2,7 @@
 
 gp_lngtdvelp <- function(dt_pmyear) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    gw_fargs(match.call())
     
     ## categorical and binary variables: proportion
     dt_vrblinfo <- gc_vvs() %>% chuck("dt_vrblinfo")
