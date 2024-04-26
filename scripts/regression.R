@@ -343,13 +343,17 @@ gd_pmx <- function(dt_pmdb) {
     #' eXtract relevant PMDB data: do the case/variable selection here
     #' also do some variable recoding
 
+    ## manually keep track of some entries that are just too garbage to worry about  
+    garbage_ids <- c(39, 79)
+
     with(dt_pmdb, {
-        nbr_closing_year_missing <- dt_pmdb[museum_status == "closed" & is.na(year_closed), .N];
+        nbr_closing_year_missing <- dt_pmdb[museum_status == "closed" & is.na(year_closed) &
+                                          ID %!in% garbage_ids, .N];
         if (nbr_closing_year_missing > 0) {
             warning(sprintf("FIXME: %s closed PMs have no closing year", nbr_closing_year_missing))}})
     
     with(dt_pmdb, {
-        nbr_opng_year_missing <- dt_pmdb[is.na(year_opened), .N];
+        nbr_opng_year_missing <- dt_pmdb[is.na(year_opened) ID %!in% garbage_ids, .N];
         if (nbr_opng_year_missing > 0) {
             warning(sprintf("FIXME: %s PMs have no opening year", nbr_opng_year_missing))}})
     
