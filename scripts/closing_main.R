@@ -199,7 +199,7 @@ plan(sequential)
 jtls::gwd_clgrph()
 ## dpltF("callgraph2")
 
-## ** table testing 
+
 
 
 ## texreg(l_mdls$r_more, single.row = T, file = paste0(c_dirs$tbls, "r_more.tex"), label = "tbl:t_r_more")

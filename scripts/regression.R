@@ -353,7 +353,7 @@ gd_pmx <- function(dt_pmdb) {
             warning(sprintf("FIXME: %s closed PMs have no closing year", nbr_closing_year_missing))}})
     
     with(dt_pmdb, {
-        nbr_opng_year_missing <- dt_pmdb[is.na(year_opened) ID %!in% garbage_ids, .N];
+        nbr_opng_year_missing <- dt_pmdb[is.na(year_opened) & ID %!in% garbage_ids, .N];
         if (nbr_opng_year_missing > 0) {
             warning(sprintf("FIXME: %s PMs have no opening year", nbr_opng_year_missing))}})
     
