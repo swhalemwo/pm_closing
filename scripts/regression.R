@@ -416,7 +416,14 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_lvrs = c_lvrs) {
         .[, closing := fifelse(museum_status == "closed" & year_closed == year, 1, 0)] %>% 
         .[, age := year - year_opened] %>% # set age
         ## founder death: 1 if year > deathyear, else 0 (before death or not dead at all)
-        .[, founder_dead := fifelse(!is.na(deathyear),fifelse(year > deathyear, 1, 0), 0)] %>% 
+        ## .[, founder_dead := fifelse(!is.na(deathyear),fifelse(year > deathyear, 1, 0), 0)] %>%
+        ## .[, founder_dead := fifelse(!is.na(deathyear),
+        ##                             fifelse(year %between% list(deathyear, deathyear + 1), 1, 0), 0)] %>%
+        .[, founder_dead := fifelse(!is.na(deathyear),
+                                    fifelse(year %between% list(deathyear, deathyear + 2), "recently_dead", 
+                                            fifelse(year > deathyear + 2, "long_dead", "alive")),
+                                    "alive")] %>%
+        .[, founder_dead := factor(founder_dead, levels = c("long_dead", "alive", "recently_dead"))] %>% 
         .[, `:=`(tstart = age, tstop = age+1)] %>% # set survival time interval variables
         .[, time_period := as.factor(paste0("tp", 5*(floor(year/5))))] %>%
         .[, covid := fifelse(year %in% c(2020, 2021), 1, 0)] %>%
