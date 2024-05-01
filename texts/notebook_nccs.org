@@ -79,12 +79,19 @@ library(devtools)
 devtools::install_github("UrbanInstitute/nccsdata")
 library(nccsdata)
 
-dtx <- get_data(dsname = "core", time = "2010", ntee = "ART", geo.city = "san francisco")
+dtx <- get_data(dsname = "core", time = "2010", ntee = "A", geo.city = "san francisco")
+
+dt_a51 <- get_data(dsname = "bmf", time = "2010", ntee = "A51", geo.city = "san francisco")
 
 dtx <- fread("/home/johannes/nccs.csv")
 
 dtx[grepl("museum", NAME, ignore.case = T), .(NAME)]
 ## oof not even sure if any US PM is in there? 
+
+
+dtx[, .SD, .SDcols = patterns("^ntee|Ntee|NTEE|NAME")]
+
+dtx[NTEECC == "A51"]
 #+end_src
 
 
