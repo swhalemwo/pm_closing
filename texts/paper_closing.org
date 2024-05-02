@@ -628,7 +628,7 @@ In fact, lower dissolution rates are only reported for historical societies (0.5
 | cite:&Gordon_etal_2013_insolvency              | NPOs             |            1.58% | IRS                    |
 | [[cite:&Hager_Galaskiewicz_Larson_2007_liability]] | NPOs             |            1.25% | own data               |
 | [[cite:&Clifford_2018_reinforcing]]                | Charities        |            2%-5% | Reg. of Charities (UK) |
-| [[cite:&Mayer_2022_slimmer]]                       | public charities |            0.17% | IRS                    |
+| [[cite:&Mayer_2022_simmer]]                        | public charities |            0.17% | IRS                    |
 |------------------------------------------------+------------------+------------------+------------------------|
 
 
