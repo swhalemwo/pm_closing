@@ -939,6 +939,13 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
                             proxcnt10*popm_circle10 + exhbany + recession + covid,
                        dt_pmyear)
 
+        ## try coxme.. looks pretty similar -> yeet for now
+        ## library(coxme)
+        ## r_coxme = coxme(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+        ##                     proxcnt10*popm_circle10 + exhbany + recession + covid + (1 | iso3c),
+        ##                dt_pmyear)
+
         ## r_pop42 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
         ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
         ##                     proxcnt10*popm_circle10 + I(proxcnt10^2)*popm_circle10 + exhbany + recession + covid,
