@@ -645,11 +645,16 @@ gd_pmtiv <- function(dt_pmx, l_pca_dimred_woclosed) {
 ## ** plots
 gp_surv <- function(dt_pmcpct) {
     gw_fargs(match.call())
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     #' just plot survival curve
 
     ## risk and cumhaz don't seem useful -> use default survival here
     ## maybe make more pretty later,
     ## for now this is just basic diagnostics to automatically update when data is updated
+    
+
+ 
 
     survfit2(Surv(age, closing) ~ 1, dt_pmcpct) %>% 
         ggsurvfit() + add_confidence_interval()
@@ -662,9 +667,38 @@ gd_pehaz <- function(dt_pmcpct, cutwidth) {
     #' get dt of "baseline" hazard (just don't account for anything, just age and closing)
     #' pehaz: Piecewise-Exponential Hazard
     #' cutwidth: allows different aggregations
-    
+
+
+    r_cpct <- survfit(Surv(age, closing) ~ 1,
+                       ## Reduce(rbind, lapply(1:1, \(x) dt_pmcpct))) %>% # having more dts reduces CI/SE
+                       dt_pmcpct, conf.type = "plain")
+    r_cpct %>% ggsurvfit() + add_confidence_interval()    
+
+    X11()
+
+    dt_cumhaz <- r_cpct %$% data.table(time=time, lower = lower, upper = upper, main = surv)
+        
+    ggplot(dt_cumhaz, aes(x=time, y=main, ymin = lower, ymax = upper)) +
+        geom_step () +
+        geom_ribbon(alpha = 0.3, stat = "stepribbon")
     
 
+    
+    dt_cumhaz %>% copy %>%
+        .[, c("est", "hi", "lo") := (shift(.SD)/.SD)-1, .SDcols = c("main", "lower", "upper")] %>%
+        ggplot(aes(x=time, y = est)) +
+        geom_step() + 
+        geom_ribbon(aes(ymin = lo, ymax = hi), alpha = 0.3, stat = "stepribbon") +
+        coord_cartesian(ylim = c(0, 0.1))
+    
+
+    data.table(time = r_cpct$time, lower = r_cpct$lower, upper = r_cpct$upper, cumhaz = 1- r_cpct$cumhaz) %>%
+        
+        .[, `:=`(shift_lower = shift(lower)/lower, shift_upper = shift(upper)/upper)] %>%
+        ggplot(aes(x=time)) +
+        geom_ribbon(aes(ymin = shift_upper, ymax = shift_lower), alpha = 0.3)
+    
+    
     
 
     ## details of pehaz/muhaz functions can be figured out later
@@ -716,7 +750,9 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
 
     ##     se_hazard <- sqrt(cumsum(survival_fit$std.err^2))
 
+    
 
+    gd_pehaz(dt_pmcpct, 1)
 
     dt_pehaz <- gd_pehaz(dt_pmcpct, cutwidth)
 
