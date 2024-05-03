@@ -423,7 +423,7 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_lvrs = c_lvrs) {
                                     fifelse(year %between% list(deathyear, deathyear + 2), "recently_dead", 
                                             fifelse(year > deathyear + 2, "long_dead", "alive")),
                                     "alive")] %>%
-        .[, founder_dead := factor(founder_dead, levels = c("long_dead", "alive", "recently_dead"))] %>% 
+        .[, founder_dead := factor(founder_dead, levels = c("alive", "recently_dead", "long_dead"))] %>% 
         .[, `:=`(tstart = age, tstop = age+1)] %>% # set survival time interval variables
         .[, time_period := as.factor(paste0("tp", 5*(floor(year/5))))] %>%
         .[, covid := fifelse(year %in% c(2020, 2021), 1, 0)] %>%

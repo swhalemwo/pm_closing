@@ -213,13 +213,13 @@ gc_vvs <- function() {
 
     ## specify variable type: binary, numeric, categorical
     l_vrbltypes <- list(        
-        bin = .c(founder_dead, muem_fndr_name, mow, west, exhbany, exhbrollany, covid, recession),
+        bin = .c(muem_fndr_name, mow, west, exhbany, exhbrollany, covid, recession),
         num = .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
                  pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10", PC1, PC2,
                  year, "I(year^2)", "popm_circle10:I(proxcnt10^2)",
                  exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)",
                  exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"),
-        cat = .c(gender, slfidfcn, reg6, an_inclusion, time_period))
+        cat = .c(gender, founder_dead, slfidfcn, reg6, an_inclusion, time_period))
 
 
     l_vrblgrp_lbls <- list(# variable group labels
@@ -263,7 +263,10 @@ gc_vvs <- function() {
     l_ctgterm_lbls <- list(# labels of terms of categorical variables
         list(vrbl = "gender", term = "genderF",      term_lbl = "Gender - Female"),
         list(vrbl = "gender", term = "gendercouple", term_lbl = "Gender - Couple"),
-        list(vrbl = "gender", term = "genderM",      term_lbl = "Gender - Male"),        
+        list(vrbl = "gender", term = "genderM",      term_lbl = "Gender - Male"),
+        list(vrbl = "founder_dead", term = "founder_deadalive", term_lbl = "Founder - alive"),
+        list(vrbl = "founder_dead", term = "founder_deadrecently_dead", term_lbl = "Founder - died recently"),
+        list(vrbl = "founder_dead", term = "founder_deadlong_dead", term_lbl = "Founder - died 2+ years ago"),
         list(vrbl = "slfidfcn", term = "slfidfcnmuseum",     term_lbl = "Self-Identification - Museum"),
         list(vrbl = "slfidfcn", term = "slfidfcnfoundation", term_lbl = "Self-Identification - Foundation"),
         list(vrbl = "slfidfcn", term = "slfidfcncollection", term_lbl = "Self-Identification - Collection"),
