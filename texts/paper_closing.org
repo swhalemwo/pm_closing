@@ -159,12 +159,18 @@ The image that these parties have of the private museum might be substantial imp
 
 ** Private museums
 
-Investigating the survival prospects of private museum furthermore illucidates the long-term development of the organizational form as a whole.
+Investigating the survival prospects of private museum furthermore illucidates the long-term development of the organizational form as a whole, as it provides insights into factors related to variation of sustainability and thereby into trends in composition. 
 #
-While the composition of private museums is not only influenced by closures, but also by foundings, analysing the former provides insights in the sustainability of
+# While the composition of private museums is not only influenced by closures, but also by foundings,
+# 
+Given the non-significant gender difference, it can be expected that (unless given a strong increase in founding by women) the population of private museums will continue to remain a man-dominated affair.
+# [fn::The point estimates, which are higher for women and couples, albeit not significantly so, even point towards a slight expansion of the proportion of museums established by men.] # add this if gender - female is substantially positive
+#
+This finding also provides no evidence that female founders face gender-specific challenges that decrease the survival prospects of their private museums. 
 
-Given the non-significant gender difference, it can be expected that (unless given a strong increase in founding by women) the population of private museums will continue to remain a dominated affair[fn::The point estimates, which are higher for women and couples, albeit not significantly so, even point towards a slight expansion of the proportion of museums established by men.]
-#
+
+
+
 
 The role of the founder is two sided.
 #
