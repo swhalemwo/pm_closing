@@ -23,10 +23,10 @@ wd_nbrs(dt_nbrs)
 
 
 # meanhaz
-#+MACRO: meanhaz_upto_20 0.86%
-#+MACRO: meanhaz_upto_30 0.89%
-#+MACRO: meanhaz_upto_40 0.76%
-#+MACRO: meanhaz_upto_100 0.77%
+#+MACRO: meanhaz_upto_20 1.08%
+#+MACRO: meanhaz_upto_30 1.09%
+#+MACRO: meanhaz_upto_40 0.92%
+#+MACRO: meanhaz_upto_100 0.87%
 
 
 # pltcfgs

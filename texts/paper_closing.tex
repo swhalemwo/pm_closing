@@ -1,4 +1,4 @@
-% Created 2024-04-23 di 20:31
+% Created 2024-05-03 vr 10:56
 % Intended LaTeX compiler: pdflatex
 \documentclass[12pt]{article}
 
@@ -187,6 +187,11 @@ While the exact power relationships within museums are hard to observe due to th
 Next to exhibiting the founder's collection, they likely also to a large extent dependent on continued financial contributions of the founder, as museums are chronically unprofitable (which is evidenced by their high share of NPOs or publicly owned/run museums, rather than for-profit companies). 
 While the lack of transparency again makes it hard to systematically assess the financial importance of founder contributions to the existence of museums, \textbf{anecdotal} evidence suggests it to be substantial \parencite{Velthuis_Gera_forthcoming_fragility}.
 
+
+
+
+
+
 Furthermore, private museums, as (non-profit) organizations, is deeply entangled with its environment.
 Its ability to attract audiences, which may involve competition with other museums, secure cooperations with other museums, acquire sponsorships from cooperations and fundings from governments and other foundations are likely factors that contribute to its viability and hence longevity.
 While some of these aspects can be influenced by the founder (in particular the available audience, via being able to decide a location and the extent to which a museum should organize exhibitions), other are less so.
@@ -321,6 +326,14 @@ needs to write out:
 \end{itemize}
 \end{itemize}
 
+resource-based: lack of audience, or many other people competing for audience
+\cite{Velthuis_Gera_forthcoming_fragility}:
+p.23: In other cases, the location of the museum is a factor in limited visitor interest. On the
+one hand, private museums located in metropolitan art centers tend to face competition over
+visitors  from  well-established  other  museums  in  the  vicinity.  On  the  other  hand,  private
+museums located outside of those centers can be confronted with a small local audience, and
+difficulties in attracting visitors from afar.
+
 \textbf{Hypothesis 3}: A private museum is more likely to close in a more competitive environment.
 
 
@@ -365,24 +378,24 @@ Typically for survival data, museums that do not close during the observation pe
 
 
 % latex table generated in R 4.3.3 by xtable 1.8-4 package
-% Tue Apr 23 17:09:15 2024
+% Fri May  3 10:55:27 2024
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrll}
   \hline 
  \multicolumn{1}{l}{Self-identification} & \multicolumn{1}{l}{N} & \multicolumn{1}{l}{Self-ID (recoded)} & \multicolumn{1}{l}{examples}\\ 
  \hline
- Museum & 177 & Museum & Museum Kampa, Museum Barberini \\ 
-  Foundation & 101 & Foundation & Marciano Art Foundation, Hill Art Foundation \\ 
-  Collection &  74 & Collection & The Farjam Collection, Sammlung Boros \\ 
-  None &  56 & Other & The Bunker, The Broad \\ 
+ Museum & 190 & Museum & Museum Kampa, Museum Barberini \\ 
+  Foundation & 104 & Foundation & Marciano Art Foundation, Hill Art Foundation \\ 
+  Collection &  69 & Collection & The Farjam Collection, Sammlung Boros \\ 
+  None &  64 & Other & The Bunker, The Broad \\ 
   Center &  17 & Other & Dairy Art Centre, Art Center Nabi \\ 
-  Art space &  12 & Other & El Espacio 23, Qiao Space \\ 
-  Gallery &  11 & Other & Saatchi Gallery, Galerie C15 \\ 
-  House / villa &  10 & Other & Villa La Fleur, Casa Daros Rio \\ 
-  Institute &   9 & Other & Instituto Inhotim, Woods Art Institute \\ 
-  Kunsthalle &   7 & Other & Kunsthalle Würth, G2 Kunsthalle \\ 
-  Park / garden &   4 & Other & Schlosspark Eyebesfeld, Il Giardino dei Lauri \\ 
+  Gallery &  14 & Other & Saatchi Gallery, Galerie C15 \\ 
+  Art space &  13 & Other & El Espacio 23, Qiao Space \\ 
+  House / villa &  11 & Other & Villa La Fleur, Casa Daros Rio \\ 
+  Institute &  10 & Other & Instituto Inhotim, Woods Art Institute \\ 
+  Kunsthalle &   8 & Other & Kunsthalle Würth, G2 Kunsthalle \\ 
+  Park / garden &   3 & Other & Schlosspark Eyebesfeld, Il Giardino dei Lauri \\ 
    \hline
 \end{tabular}
 \caption{Selfidentification} 
@@ -459,7 +472,7 @@ Coefficients are interpeted as log hazard ratios, i.e. as multipliers of the bas
 
 
 % latex table generated in R 4.3.3 by xtable 1.8-4 package
-% Tue Apr 23 17:09:14 2024
+% Fri May  3 10:55:26 2024
 \begin{table}[ht]
 \centering
 \begin{tabular}{llrrrrrr}
@@ -468,43 +481,47 @@ Coefficients are interpeted as log hazard ratios, i.e. as multipliers of the bas
 \cmidrule(r){3-4}\cmidrule(r){5-8} \multicolumn{1}{l}{} & \multicolumn{1}{l}{Variable} & \multicolumn{1}{l}{Count} & \multicolumn{1}{l}{Mean} & \multicolumn{1}{l}{Mean} & \multicolumn{1}{l}{SD} & \multicolumn{1}{l}{Min.} & \multicolumn{1}{l}{Max.}\\ 
  \hline
   \multicolumn{8}{l}{\textbf{Founder}} \\ 
- & Gender - Male & 274 & 0.573 & 5.9e-01 &   0.49 & 0 & 1 \\ 
-   & Gender - Female & 76 & 0.159 & 1.7e-01 &   0.38 & 0 & 1 \\ 
-   & Gender - Couple & 128 & 0.268 & 2.4e-01 &   0.43 & 0 & 1 \\ 
-   & Founder died & 57 & 0.119 & 9.3e-02 &   0.29 & 0 & 1 \\ 
+ & Gender - Male & 294 & 0.584 & 6.0e-01 &   0.49 & 0 & 1 \\ 
+   & Gender - Female & 79 & 0.157 & 1.7e-01 &   0.37 & 0 & 1 \\ 
+   & Gender - Couple & 130 & 0.258 & 2.3e-01 &   0.42 & 0 & 1 \\ 
+   & Founder - alive & 440 & 0.875 & 9.0e-01 &   0.30 & 0 & 1 \\ 
+   & Founder - died recently & 17 & 0.034 & 1.9e-02 &   0.13 & 0 & 1 \\ 
+   & Founder - died 2+ years ago & 46 & 0.091 & 7.9e-02 &   0.27 & 0 & 1 \\ 
    \multicolumn{8}{l}{\textbf{Museum}} \\ 
- & Self-Identification - Museum & 177 & 0.370 & 4.0e-01 &   0.49 & 0 & 1 \\ 
-   & Self-Identification - Foundation & 101 & 0.211 & 1.9e-01 &   0.39 & 0 & 1 \\ 
-   & Self-Identification - Collection & 74 & 0.155 & 1.4e-01 &   0.35 & 0 & 1 \\ 
-   & Self-Identification - Other & 126 & 0.264 & 2.6e-01 &   0.44 & 0 & 1 \\ 
-   & Founder name in Museum name & 228 & 0.477 & 4.8e-01 &   0.50 & 0 & 1 \\ 
-   & MOW inclusion & 91 & 0.190 & 2.8e-01 &   0.45 & 0 & 1 \\ 
+ & Self-Identification - Museum & 190 & 0.378 & 4.1e-01 &   0.49 & 0 & 1 \\ 
+   & Self-Identification - Foundation & 104 & 0.207 & 1.9e-01 &   0.39 & 0 & 1 \\ 
+   & Self-Identification - Collection & 69 & 0.137 & 1.3e-01 &   0.34 & 0 & 1 \\ 
+   & Self-Identification - Other & 140 & 0.278 & 2.7e-01 &   0.45 & 0 & 1 \\ 
+   & Founder name in Museum name & 240 & 0.477 & 4.8e-01 &   0.50 & 0 & 1 \\ 
+   & MOW inclusion & 92 & 0.183 & 2.7e-01 &   0.45 & 0 & 1 \\ 
    & AN Ranking - Not Included &  &  & 8.0e-01 &   0.40 & 0 & 1 \\ 
-   & AN Ranking - Included &  &  & 1.5e-01 &   0.36 & 0 & 1 \\ 
-   & AN Ranking - Dropped &  &  & 5.6e-02 &   0.23 & 0 & 1 \\ 
-   & Exhibition any &  &  & 6.5e-01 &   0.48 & 0 & 1 \\ 
-   & Exhibition any last 5 years &  &  & 4.7e-01 &   0.50 & 0 & 1 \\ 
-   & PC1 (Size) & 74.6913323980041 & 0.156 & 1.3e-01 &   1.88 & -6.4 & 2.62 \\ 
-   & PC2 (Support) & 58.6876842646085 & 0.123 & 1.6e-01 &   1.50 & -5 & 2.74 \\ 
+   & AN Ranking - Included &  &  & 1.4e-01 &   0.35 & 0 & 1 \\ 
+   & AN Ranking - Dropped &  &  & 5.3e-02 &   0.23 & 0 & 1 \\ 
+   & Exhibition any &  &  & 6.3e-01 &   0.48 & 0 & 1 \\ 
+   & Exhibition any last 5 years &  &  & 4.6e-01 &   0.50 & 0 & 1 \\ 
+   & PC1 (Size) & 112.930441195886 & 0.225 & 1.8e-01 &   1.90 & -6.5 & 2.61 \\ 
+   & PC2 (Support) & 90.555299883145 & 0.180 & 2.0e-01 &   1.52 & -5.1 & 2.71 \\ 
    \multicolumn{8}{l}{\textbf{Environment}} \\ 
- & PM density (country) &  &  & 4.3e-01 &   1.28 & 0.00077 & 27.26 \\ 
-   & Pop. (millions) within 10km &  &  & 1.3e+00 &   1.70 & 0.000087 & 10.81 \\ 
-   & Pop. (millions) country &  &  & 1.6e+02 & 297.59 & 0.037 & 1412.36 \\ 
-   & Nbr PM within 10km &  &  & 1.7e+00 &   3.07 & 0 & 15 \\ 
-   & PM density (10km) &  &  & 1.5e+00 &   4.15 & 0 & 41.85 \\ 
-   & Europe and North America & 311 & 0.651 & 6.5e-01 &   0.48 & 0 & 1 \\ 
-   & Region - Africa & 7 & 0.015 & 1.2e-02 &   0.11 & 0 & 1 \\ 
-   & Region - Asia & 128 & 0.268 & 2.8e-01 &   0.45 & 0 & 1 \\ 
-   & Region - Europe & 241 & 0.504 & 5.1e-01 &   0.50 & 0 & 1 \\ 
-   & Region - Latin America & 22 & 0.046 & 4.4e-02 &   0.20 & 0 & 1 \\ 
-   & Region - North America & 70 & 0.146 & 1.4e-01 &   0.35 & 0 & 1 \\ 
-   & Region - Oceania & 10 & 0.021 & 1.9e-02 &   0.14 & 0 & 1 \\ 
-   & year &  &  & 2.0e+03 &   5.75 & 2000 & 2021 \\ 
+ & PM density (country) &  &  & 4.5e-01 &   1.26 & 0.00077 & 27.26 \\ 
+   & Pop. (millions) within 10km &  &  & 1.3e+00 &   1.68 & 0.000087 & 10.81 \\ 
+   & Pop. (millions) country &  &  & 1.6e+02 & 292.68 & 0.037 & 1412.36 \\ 
+   & Nbr PM within 10km &  &  & 1.8e+00 &   3.14 & 0 & 16 \\ 
+   & PM density (10km) &  &  & 1.7e+00 &   4.93 & 0 & 76.37 \\ 
+   & Europe and North America & 320 & 0.636 & 6.4e-01 &   0.48 & 0 & 1 \\ 
+   & Region - Africa & 8 & 0.016 & 1.2e-02 &   0.11 & 0 & 1 \\ 
+   & Region - Asia & 142 & 0.282 & 2.9e-01 &   0.45 & 0 & 1 \\ 
+   & Region - Europe & 248 & 0.493 & 5.0e-01 &   0.50 & 0 & 1 \\ 
+   & Region - Latin America & 23 & 0.046 & 4.2e-02 &   0.20 & 0 & 1 \\ 
+   & Region - North America & 72 & 0.143 & 1.4e-01 &   0.34 & 0 & 1 \\ 
+   & Region - Oceania & 10 & 0.020 & 1.9e-02 &   0.13 & 0 & 1 \\ 
+   & year &  &  & 2.0e+03 &   5.72 & 2000 & 2021 \\ 
    & Time Period 2000-2004 &  &  & 1.0e-01 &   0.30 & 0 & 1 \\ 
    & Time Period 2005-2009 &  &  & 1.7e-01 &   0.37 & 0 & 1 \\ 
    & Time Period 2010-2014 &  &  & 2.6e-01 &   0.44 & 0 & 1 \\ 
    & Time Period 2015-2019 &  &  & 3.3e-01 &   0.47 & 0 & 1 \\ 
-   & Time Period 2020-2024 &  &  & 1.5e-01 &   0.35 & 0 & 1 \\ 
+   & Time Period 2020-2024 &  &  & 1.4e-01 &   0.35 & 0 & 1 \\ 
+   & Great Recession (2008/09) &  &  & 7.6e-02 &   0.27 & 0 & 1 \\ 
+   & Covid Pandemic (2020/21) &  &  & 1.4e-01 &   0.35 & 0 & 1 \\ 
    \hline
 \end{tabular}
 \caption{Summary Statistics} 
@@ -543,21 +560,22 @@ Furthermore, while "liability of obsolescence" and "liability of senescence" (ib
 Furthermore, the applicability of obsolescence and senescence might be limited for non-profit organizations.
 
 
-Overall the entire life span, the average hazard rate is 0.77\%, which allows comparison to other studies of NPO closure.
+Overall the entire life span, the average hazard rate is 0.87\%, which allows comparison to other studies of NPO closure.
 While I did not find a systematic literature review or meta-analysis, a number of individual studies had investigated similar populations based on IRS data (see table \ref{tbl:litreview}) 
 
 \begin{table}[htbp]
-\caption{\label{tbl:litreview}Hazard rates in studies of museums art Art NPOs}
+\caption{\label{tbl:litreview}Hazard rates in studies of museums and art NPOs}
 \centering
-\begin{tabular}{llll}
+\begin{tabular}{lll}
 \hline
-study & population & avg. hazard rate & org years\\
+study & population & avg. hazard rate\\
 \hline
-\cite{Hager_2001_vulnerability} & Art Museums & 2.4\% & \\
-\cite{Gordon_etal_2013_insolvency} & Museums & 0.7\% & \\
+\cite{Hager_2001_vulnerability} & Art Museums & 2.4\%\\
+\cite{Gordon_etal_2013_insolvency} & Museums & 0.7\%\\
+\cite{Bowen_1994_charitable} & Museums & 1.1\%\\
 \hline
-\cite{Hager_2001_vulnerability} & all Art NPOs & 2.8\% & \\
-\cite{Gordon_etal_2013_insolvency} & all Art NPOs & 2.08\% & \\
+\cite{Hager_2001_vulnerability} & all Art NPOs & 2.8\%\\
+\cite{Gordon_etal_2013_insolvency} & all Art NPOs & 2.08\%\\
 \hline
 \end{tabular}
 \end{table}
@@ -569,7 +587,7 @@ While these comparisons indicate that private museums have dissolution rates low
 
 Comparison to other forms of nonprofit organizations reported by \parencite{Gordon_etal_2013_insolvency}
 places private museum at a risk similar to that of animal shelters and zoos (0.7\%), botanical \& environmental centers (0.8\%), colleges and universities (0.8\%), food and agricultural-oriented human service organizations (0.8\%) and  student and educational services (0.8\%).
-While the diversity of non-profit organizations makes comparisons to its entirety difficult, it is still worthwhile to consider that the average hazard of private museums 0.77\% is around half that of that NPOs generally (1.58\%, see table \ref{tbl:litreview2} for studies on wider nonprofit populations).
+While the diversity of non-profit organizations makes comparisons to its entirety difficult, it is still worthwhile to consider that the average hazard of private museums 0.87\% is around half that of that NPOs generally (1.58\%, see table \ref{tbl:litreview2} for studies on wider nonprofit populations).
 It is furthermore substantially lower than that of youth centers (1.4\%), children-focused human services (2.4\%), K12 schools (1.8\%), mental health organizations (2.4\%) or performing arts organizations (3.7\%).
 In fact, lower dissolution rates are only reported for historical societies (0.5\%) and libraries (0.2\%).
 
@@ -585,7 +603,7 @@ study & population & avg. hazard rate & data source\\
 \cite{Gordon_etal_2013_insolvency} & NPOs & 1.58\% & IRS\\
 \cite{Hager_Galaskiewicz_Larson_2007_liability} & NPOs & 1.25\% & own data\\
 \cite{Clifford_2018_reinforcing} & Charities & 2\%-5\% & Reg. of Charities (UK)\\
-\cite{Mayer_2022_slimmer} & public charities & 0.17\% & IRS\\
+\cite{Mayer_2022_simmer} & public charities & 0.17\% & IRS\\
 \hline
 \end{tabular}
 \end{table}
@@ -598,7 +616,7 @@ study & population & avg. hazard rate & data source\\
 
 
 % latex table generated in R 4.3.3 by xtable 1.8-4 package
-% Tue Apr 23 20:19:31 2024
+% Fri May  3 10:55:34 2024
 \begin{table}[ht]
 \centering
 \begin{tabular}{p{0mm}lD{)}{)}{8)3}}
@@ -606,31 +624,32 @@ study & population & avg. hazard rate & data source\\
  \multicolumn{1}{l}{} & \multicolumn{1}{l}{Variable} & \multicolumn{1}{l}{r\_pop4}\\ 
  \hline
   \multicolumn{3}{l}{\textbf{Founder}} \\ 
- & Gender - Female & .16 \; (0.37) \\ 
-   & Gender - Couple & .17 \; (0.36) \\ 
-   & Founder died & -.06 \; (0.57) \\ 
+ & Gender - Female & .02 \; (0.34) \\ 
+   & Gender - Couple & -.10 \; (0.32) \\ 
+   & Founder - died recently & 1.09 \; (0.61) \\ 
+   & Founder - died 2+ years ago & -.06 \; (0.55) \\ 
    \multicolumn{3}{l}{\textbf{Museum}} \\ 
- & Self-Identification - Foundation & .91 \; (0.49) \\ 
-   & Self-Identification - Collection & .33 \; (0.59) \\ 
-   & Self-Identification - Other & 1.44 \; (0.39)^{***} \\ 
-   & AN Ranking - Included & .27 \; (0.38) \\ 
-   & AN Ranking - Dropped & .76 \; (0.52) \\ 
-   & Founder name in Museum name & -.41 \; (0.33) \\ 
-   & Exhibition any & .13 \; (0.33) \\ 
+ & Self-Identification - Foundation & .25 \; (0.42) \\ 
+   & Self-Identification - Collection & -.46 \; (0.54) \\ 
+   & Self-Identification - Other & 1.12 \; (0.31)^{***} \\ 
+   & AN Ranking - Included & .25 \; (0.35) \\ 
+   & AN Ranking - Dropped & .51 \; (0.50) \\ 
+   & Founder name in Museum name & .09 \; (0.28) \\ 
+   & Exhibition any & -.22 \; (0.27) \\ 
    \multicolumn{3}{l}{\textbf{Environment}} \\ 
- & PM density (country) & .59 \; (0.46) \\ 
-   & PM density$^{2}$ (country) & -.02 \; (0.02) \\ 
-   & Pop. (millions) within 10km & .31 \; (0.11)^{**} \\ 
-   & Nbr PM within 10km & .28 \; (0.09)^{**} \\ 
-   & Nbr PM (10km) * Pop (10km) & -.10 \; (0.04)^{**} \\ 
-   & Great Recession (2008/09) & -1.21 \; (1.02) \\ 
-   & Covid Pandemic (2020/21) & .27 \; (0.34) \\ 
+ & PM density (country) & .63 \; (0.35) \\ 
+   & PM density$^{2}$ (country) & -.03 \; (0.02) \\ 
+   & Pop. (millions) within 10km & .27 \; (0.09)^{**} \\ 
+   & Nbr PM within 10km & .26 \; (0.08)^{***} \\ 
+   & Nbr PM (10km) * Pop (10km) & -.09 \; (0.03)^{**} \\ 
+   & Great Recession (2008/09) & -1.61 \; (1.01) \\ 
+   & Covid Pandemic (2020/21) & .39 \; (0.29) \\ 
    \hline
- & Museum-years & 5862 \\ 
-   & Closures & 51 \\ 
-   & log. Likelihood & -244.54 \\ 
-   & AIC & 523.08 \\ 
-   & BIC & 555.92 \\ 
+ & Museum-years & 6096 \\ 
+   & Closures & 68 \\ 
+   & log. Likelihood & -338.36 \\ 
+   & AIC & 712.73 \\ 
+   & BIC & 752.68 \\ 
    \hline 
  \multicolumn{3}{l}{\footnotesize{standard errors in parantheses.\textsuperscript{***}p $<$ 0.001;\textsuperscript{**}p $<$ 0.01;\textsuperscript{*}p $<$ 0.05.}}
 \end{tabular}
