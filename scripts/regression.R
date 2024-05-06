@@ -703,30 +703,6 @@ gd_pehaz <- function(dt_pmcpct, cutwidth) {
     ## ceiling or flooring? inst.haz can't work with t=0 -> ceiling? 
     
 
-    ## ## --------------
-    ## ## manual from KM 
-    ## ## first get cumhaz
-    ## dt_cumhaz <- r_cpct %$% data.table(time=time, lower = lower, upper = upper, main = surv) %>%
-    ##     rbind(data.table(time = 0, lower = 1, upper = 1, main = 1)) %>% # ggsurvfit plot has S(0) = 1,
-    ##     .[order(time)]
-    ##     ## my own data just doesn't have S(0)
-        
-    ## ggplot(dt_cumhaz, aes(x=time, y=main, ymin = lower, ymax = upper)) +
-    ##     geom_step () +
-    ##     geom_ribbon(alpha = 0.3, stat = "stepribbon")
-    
-
-    ## dt_haz <- dt_cumhaz %>% copy %>% 
-    ##     .[, c("est", "hi", "lo") := (shift(.SD)/.SD)-1, .SDcols = c("main", "lower", "upper")]
-
-    ## dt_haz %>% 
-    ##     ggplot(aes(x=time, y = est)) +
-    ##     geom_step() + 
-    ##     geom_ribbon(aes(ymin = lo, ymax = hi), alpha = 0.3, stat = "stepribbon") +
-    ##     coord_cartesian(ylim = c(0, 0.1))
-    ## CI looks super low
-    ## --------------
-
     ## compare epi.insthaz to pehaz
     left_join(
         dt_pmcpct %$% pehaz(age, closing, width = 1) %$% data.table(time = head(Cuts,-1), pehaz = Hazard),
