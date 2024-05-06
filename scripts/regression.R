@@ -751,13 +751,13 @@ gd_pehaz <- function(dt_pmcpct, cutwidth) {
 
 
 
-gd_insthaz_smooth <- function(dt_pmcpct) {
+gd_muhaz_bootse <- function(dt_pmcpct) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     
     
-    r_cpct <- survfit(Surv(age, closing) ~ 1, dt_pmcpct)
+    ## r_cpct <- survfit(Surv(age, closing) ~ 1, dt_pmcpct)
 
-    dt_insthaz <- epi.insthaz(r_cpct) %>% adt %>% .[, .(time, hest, hlow, hupp)]
+    ## dt_insthaz <- epi.insthaz(r_cpct) %>% adt %>% .[, .(time, hest, hlow, hupp)]
 
     ## dt_insthaz %>% copy %>%
     ##     .[, map(.SD, ~density(.x, kernel = "epa", bw = 5), .SDcols = patterns("^h"))]
@@ -771,54 +771,86 @@ gd_insthaz_smooth <- function(dt_pmcpct) {
     
 
     
-    ## generate models
-    l_mdls <- map(c("hlow", "hest", "hupp"), ~loess(get(.x) ~ time, dt_insthaz, span = 0.35, degree = 1))
+    ## ## generate models
+    ## l_mdls <- map(c("hlow", "hest", "hupp"), ~loess(get(.x) ~ time, dt_insthaz, span = 0.35, degree = 1))
 
-    ## predict time dt
-    dt_insthaz_smooth <- data.table(time = seq(0, max(dt_insthaz$time), 0.25)) %>%
-        .[, c("hlow", "hest", "hupp") := map(l_mdls, ~predict(.x, .SD), .SDcols = time)]
+    ## ## predict time dt
+    ## dt_insthaz_smooth <- data.table(time = seq(0, max(dt_insthaz$time), 0.25)) %>%
+    ##     .[, c("hlow", "hest", "hupp") := map(l_mdls, ~predict(.x, .SD), .SDcols = time)]
 
-    dt_insthaz_smooth %>% .[time < 20] %>% 
-        ggplot(aes(x=time, y=hest, ymin = hlow, ymax = hupp)) +
-        geom_line() + geom_ribbon(alpha = 0.3)
+    ## dt_insthaz_smooth %>% .[time < 20] %>% 
+    ##     ggplot(aes(x=time, y=hest, ymin = hlow, ymax = hupp)) +
+    ##     geom_line() + geom_ribbon(alpha = 0.3)
         
 
-    ggplot() +
-        geom_line(dt_insthaz_smooth, mapping = aes(x=time, y=hest)) +
-        geom_line(dt_muhaz, mapping = aes(x=grid, y=haz), color = "red")
+    ## ggplot() +
+    ##     geom_line(dt_insthaz_smooth, mapping = aes(x=time, y=hest)) +
+    ##     geom_line(dt_muhaz, mapping = aes(x=grid, y=haz), color = "red")
 
 
         ## xlim(c(0,20)) 
         ## scale_y_log10()
         
-    library(polspline)
-    library(bshazard)
+    ## library(polspline)
+    ## library(bshazard)
 
-    r_heft <- heft(dt_pmcpct$age,  dt_pmcpct$closing, penalty = 0)
+    ## r_heft <- heft(dt_pmcpct$age,  dt_pmcpct$closing, penalty = 0)
     
 
-    plot(r_heft, what = "h")
-    r_heft$logse
+    ## plot(r_heft, what = "h")
+    ## r_heft$logse
 
-    
     ## coord_cartesian(xlim = c(0, 20), ylim)
 
     
-    dt_muhaz <- muhaz(dt_pmcpct$age, dt_pmcpct$closing, bw.smooth = 5, b.cor = "none", max.time = 60,
-          bw.method = "local") %$% 
-        data.table(grid = est.grid, haz = haz.est)
+    ## library(boot)
+    ## rsq_function <- function(formula, data, indices) {
+    ##     d <- data[indices,] #allows boot to select sample
+    ##     fit <- lm(formula, data=d)
+    ##     return(summary(fit)$r.square)
+    ## }
+
+    ## reps <- boot(data=mtcars, statistic=rsq_function, R=3000, formula=mpg~disp)
+    ## bootstrapping example
+
+
+    run_muhaz <- function(data, indices) {
+        ## print(len(age))
+        ## print(len(closing))
+        dtx <- data[indices]
+        r_muhaz <- muhaz(dtx$age, dtx$closing, bw.smooth = 5, b.cor = "none", max.time = dtx[, max(age)], 
+                         bw.method = "local", n.est.grid = dtx[, max(age)]*2+1)
+        dt_muhaz <- r_muhaz %$% data.table(grid = est.grid, haz = haz.est)
+        age_cutoff <- 50
+        if (max(dtx$age) < age_cutoff) {
+            setNames(rep(-1, age_cutoff*2), seq(0, age_cutoff - 0.5, 0.5))
+        } else {        
+            dt_muhaz[grid < age_cutoff, setNames(haz, grid)]
+        }
+        ## setNames(r_muhaz$haz.est, r_muhaz$est.grid)
+    }
+
+    run_muhaz(dt_pmcpct, indices = sample(1:nrow(dt_pmcpct), replace = T))
+
+    reps <- boot(dt_pmcpct[, .(age, closing)], statistic = run_muhaz, R=1000,
+                 parallel = "multicore", ncpus = 5)
+
+    dt_bootres <- reps$t %>% adt %>% .[V1 != -1]
+
+    ## sd(dt_bootres$V80)
+
+    dt_bootres2 <- dt_bootres[, lapply(.SD, sd)] %>%
+        melt(measure.vars = names(.), variable.name = "tp", value.name = "se") %>%
+        .[, age := seq(0, .N/2-0.5, 0.5)] %>% .[, .(age, se)]
+
+    dt_muhaz <- muhaz(dt_pmcpct$age, dt_pmcpct$closing, bw.smooth = 5, b.cor = "none", max.time = 50,
+                      bw.method = "local", n.est.grid = 101) %$%
+        data.table(est = haz.est, age = est.grid) %>% .[age < 50]
         
-
-    muhaz(dt_pmcpct$age, dt_pmcpct$closing)
-
-
-    boostrap_muhaz <- function(
+    dt_muhaz_bootse <- left_join(dt_muhaz, dt_bootres2, by = "age")
 
 
-    
-
-    
-    
+    return(dt_muhaz_bootse)
 
 }
 
@@ -878,6 +910,14 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
 
     dt_muhaz <- data.table(grid = res_muhaz$est.grid,
                            haz = res_muhaz$haz.est)
+
+    dt_muhaz_bootse <- gd_muhaz_bootse(dt_pmcpct)
+
+    ## dt_muhaz_bootse %>%
+    ##     ggplot(aes(x=age, y=est, ymax = est + 1.96*se, ymin = est - 1.96*se)) +
+    ##     geom_line() +
+    ##     geom_ribbon(alpha = 0.3)
+
 
     
     ## try to get SE out of muhaz, but doesn't seem like there is any reported
