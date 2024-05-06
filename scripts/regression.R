@@ -671,35 +671,73 @@ gd_pehaz <- function(dt_pmcpct, cutwidth) {
 
     r_cpct <- survfit(Surv(age, closing) ~ 1,
                        ## Reduce(rbind, lapply(1:1, \(x) dt_pmcpct))) %>% # having more dts reduces CI/SE
-                       dt_pmcpct, conf.type = "plain")
-    r_cpct %>% ggsurvfit() + add_confidence_interval()    
+                      dt_pmcpct, conf.type = "plain")
+    
+    ## look at ggsurvfit plot for comparison plot
+    r_cpct %>% ggsurvfit() + add_confidence_interval()
 
-    X11()
+    r_epi %>% ggsurvfit() + add_confidence_interval()
+    
+    ## use epiR 
+    library(epiR)
+    
+    epi.insthaz(r_epi) %>% adt %>% .[, .(time, hest, hlow, hupp)] %>%
+        rbind(data.table(time = 0, hest = 0, hlow= 0, hupp= 0)) %>% 
+        ggplot(aes(x=time, y=hest, ymin = hlow, ymax = hupp)) +
+        geom_step() + geom_ribbon(alpha = 0.3, stat = "stepribbon") +
+        coord_cartesian(xlim = c(0, 20), ylim = c(0, 0.1))
 
-    dt_cumhaz <- r_cpct %$% data.table(time=time, lower = lower, upper = upper, main = surv)
+    ## shift times to get the year = 0 estimate
+    r_epi <- survfit(Surv(age, closing) ~ 1,
+                     ## dt_pmcpct,
+                     copy(dt_pmcpct)[, age := ceiling(age/cutwidth)*cutwidth], # or floor? 
+                                          ## copy(dt_pmcpct)[, age := age + 1],
+                     ## rbind(copy(dt_pmcpct)[, .(age, closing)], data.table(age = 0, closing = 1)),
+                     conf.type = "plain")
+
+    epi.insthaz(r_epi) %>% ggplot(aes(x=time, y=hest, ymin=hlow, ymax = hupp)) +
+        geom_step() +
+        geom_ribbon(stat = "stepribbon", alpha = 0.3) +
+        coord_cartesian(xlim = c(0, 20), ylim = c(0, 0.05))
+    
+    ## ceiling or flooring? inst.haz can't work with t=0 -> ceiling? 
+    
+
+    ## ## --------------
+    ## ## manual from KM 
+    ## ## first get cumhaz
+    ## dt_cumhaz <- r_cpct %$% data.table(time=time, lower = lower, upper = upper, main = surv) %>%
+    ##     rbind(data.table(time = 0, lower = 1, upper = 1, main = 1)) %>% # ggsurvfit plot has S(0) = 1,
+    ##     .[order(time)]
+    ##     ## my own data just doesn't have S(0)
         
-    ggplot(dt_cumhaz, aes(x=time, y=main, ymin = lower, ymax = upper)) +
-        geom_step () +
-        geom_ribbon(alpha = 0.3, stat = "stepribbon")
+    ## ggplot(dt_cumhaz, aes(x=time, y=main, ymin = lower, ymax = upper)) +
+    ##     geom_step () +
+    ##     geom_ribbon(alpha = 0.3, stat = "stepribbon")
+    
+
+    ## dt_haz <- dt_cumhaz %>% copy %>% 
+    ##     .[, c("est", "hi", "lo") := (shift(.SD)/.SD)-1, .SDcols = c("main", "lower", "upper")]
+
+    ## dt_haz %>% 
+    ##     ggplot(aes(x=time, y = est)) +
+    ##     geom_step() + 
+    ##     geom_ribbon(aes(ymin = lo, ymax = hi), alpha = 0.3, stat = "stepribbon") +
+    ##     coord_cartesian(ylim = c(0, 0.1))
+    ## CI looks super low
+    ## --------------
+
+    ## compare epi.insthaz to pehaz
+    left_join(
+        dt_pmcpct %$% pehaz(age, closing, width = 1) %$% data.table(time = head(Cuts,-1), pehaz = Hazard),
+        epi.insthaz(r_epi) %>% adt %>% .[, .(time, hest)], by = "time") %>%
+        .[pehaz > 0.075 &  hest < 0.04]
+        ## ggplot(aes(x=pehaz, y=hest)) + geom_point()
+    
     
 
     
-    dt_cumhaz %>% copy %>%
-        .[, c("est", "hi", "lo") := (shift(.SD)/.SD)-1, .SDcols = c("main", "lower", "upper")] %>%
-        ggplot(aes(x=time, y = est)) +
-        geom_step() + 
-        geom_ribbon(aes(ymin = lo, ymax = hi), alpha = 0.3, stat = "stepribbon") +
-        coord_cartesian(ylim = c(0, 0.1))
-    
 
-    data.table(time = r_cpct$time, lower = r_cpct$lower, upper = r_cpct$upper, cumhaz = 1- r_cpct$cumhaz) %>%
-        
-        .[, `:=`(shift_lower = shift(lower)/lower, shift_upper = shift(upper)/upper)] %>%
-        ggplot(aes(x=time)) +
-        geom_ribbon(aes(ymin = shift_upper, ymax = shift_lower), alpha = 0.3)
-    
-    
-    
 
     ## details of pehaz/muhaz functions can be figured out later
     res_pehaz <- pehaz(dt_pmcpct$age, dt_pmcpct$closing, width = cutwidth)
@@ -710,6 +748,79 @@ gd_pehaz <- function(dt_pmcpct, cutwidth) {
 
 }
 
+
+
+
+gd_insthaz_smooth <- function(dt_pmcpct) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    
+    
+    r_cpct <- survfit(Surv(age, closing) ~ 1, dt_pmcpct)
+
+    dt_insthaz <- epi.insthaz(r_cpct) %>% adt %>% .[, .(time, hest, hlow, hupp)]
+
+    ## dt_insthaz %>% copy %>%
+    ##     .[, map(.SD, ~density(.x, kernel = "epa", bw = 5), .SDcols = patterns("^h"))]
+
+
+    ## use kernel myself %>% this is more of a histogram, distribution of the density in total
+    ## is not smoother over time
+    ## dx <- density(dt_insthaz$hest, kernel = "epa")
+    ## plot(dx)
+    ## -> use loess seems to be the way
+    
+
+    
+    ## generate models
+    l_mdls <- map(c("hlow", "hest", "hupp"), ~loess(get(.x) ~ time, dt_insthaz, span = 0.35, degree = 1))
+
+    ## predict time dt
+    dt_insthaz_smooth <- data.table(time = seq(0, max(dt_insthaz$time), 0.25)) %>%
+        .[, c("hlow", "hest", "hupp") := map(l_mdls, ~predict(.x, .SD), .SDcols = time)]
+
+    dt_insthaz_smooth %>% .[time < 20] %>% 
+        ggplot(aes(x=time, y=hest, ymin = hlow, ymax = hupp)) +
+        geom_line() + geom_ribbon(alpha = 0.3)
+        
+
+    ggplot() +
+        geom_line(dt_insthaz_smooth, mapping = aes(x=time, y=hest)) +
+        geom_line(dt_muhaz, mapping = aes(x=grid, y=haz), color = "red")
+
+
+        ## xlim(c(0,20)) 
+        ## scale_y_log10()
+        
+    library(polspline)
+    library(bshazard)
+
+    r_heft <- heft(dt_pmcpct$age,  dt_pmcpct$closing, penalty = 0)
+    
+
+    plot(r_heft, what = "h")
+    r_heft$logse
+
+    
+    ## coord_cartesian(xlim = c(0, 20), ylim)
+
+    
+    dt_muhaz <- muhaz(dt_pmcpct$age, dt_pmcpct$closing, bw.smooth = 5, b.cor = "none", max.time = 60,
+          bw.method = "local") %$% 
+        data.table(grid = est.grid, haz = haz.est)
+        
+
+    muhaz(dt_pmcpct$age, dt_pmcpct$closing)
+
+
+    boostrap_muhaz <- function(
+
+
+    
+
+    
+    
+
+}
 
 
 gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
@@ -752,7 +863,7 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
 
     
 
-    gd_pehaz(dt_pmcpct, 1)
+    ## gd_pehaz(dt_pmcpct, 1)
 
     dt_pehaz <- gd_pehaz(dt_pmcpct, cutwidth)
 
@@ -762,6 +873,9 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
 
     res_muhaz <- muhaz(dt_pmcpct$age, dt_pmcpct$closing, bw.smooth = 5, b.cor = "none", max.time = 60,
                        bw.method = "local")
+
+    gd_insthaz_kernel(dt_pmcpct)
+
     dt_muhaz <- data.table(grid = res_muhaz$est.grid,
                            haz = res_muhaz$haz.est)
 
