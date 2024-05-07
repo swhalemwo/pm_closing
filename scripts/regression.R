@@ -669,72 +669,176 @@ gd_pehaz <- function(dt_pmcpct, cutwidth) {
     #' cutwidth: allows different aggregations
 
 
-    r_cpct <- survfit(Surv(age, closing) ~ 1,
-                       ## Reduce(rbind, lapply(1:1, \(x) dt_pmcpct))) %>% # having more dts reduces CI/SE
-                      dt_pmcpct, conf.type = "plain")
+    ## r_cpct <- survfit(Surv(age, closing) ~ 1,
+    ##                    ## Reduce(rbind, lapply(1:1, \(x) dt_pmcpct))) %>% # having more dts reduces CI/SE
+    ##                   dt_pmcpct, conf.type = "plain")
     
-    ## look at ggsurvfit plot for comparison plot
-    r_cpct %>% ggsurvfit() + add_confidence_interval()
+    ## ## look at ggsurvfit plot for comparison plot
+    ## r_cpct %>% ggsurvfit() + add_confidence_interval()
 
-    r_epi %>% ggsurvfit() + add_confidence_interval()
+    ## r_epi %>% ggsurvfit() + add_confidence_interval()
     
-    ## use epiR 
-    library(epiR)
+    ## ## use epiR 
+    ## library(epiR)
     
-    epi.insthaz(r_epi) %>% adt %>% .[, .(time, hest, hlow, hupp)] %>%
-        rbind(data.table(time = 0, hest = 0, hlow= 0, hupp= 0)) %>% 
-        ggplot(aes(x=time, y=hest, ymin = hlow, ymax = hupp)) +
-        geom_step() + geom_ribbon(alpha = 0.3, stat = "stepribbon") +
-        coord_cartesian(xlim = c(0, 20), ylim = c(0, 0.1))
+    ## epi.insthaz(r_epi) %>% adt %>% .[, .(time, hest, hlow, hupp)] %>%
+    ##     rbind(data.table(time = 0, hest = 0, hlow= 0, hupp= 0)) %>% 
+    ##     ggplot(aes(x=time, y=hest, ymin = hlow, ymax = hupp)) +
+    ##     geom_step() + geom_ribbon(alpha = 0.3, stat = "stepribbon") +
+    ##     coord_cartesian(xlim = c(0, 20), ylim = c(0, 0.1))
 
-    ## shift times to get the year = 0 estimate
+    
     r_epi <- survfit(Surv(age, closing) ~ 1,
                      ## dt_pmcpct,
-                     copy(dt_pmcpct)[, age := ceiling(age/cutwidth)*cutwidth], # or floor? 
-                                          ## copy(dt_pmcpct)[, age := age + 1],
+                     copy(dt_pmcpct)[, age := floor(age/cutwidth)*cutwidth]) # or floor? 
+                     ## copy(dt_pmcpct)[, age := age + 1], # shift times to get the year = 0 estimate, no work
                      ## rbind(copy(dt_pmcpct)[, .(age, closing)], data.table(age = 0, closing = 1)),
-                     conf.type = "plain")
+                     
 
-    epi.insthaz(r_epi) %>% ggplot(aes(x=time, y=hest, ymin=hlow, ymax = hupp)) +
-        geom_step() +
-        geom_ribbon(stat = "stepribbon", alpha = 0.3) +
-        coord_cartesian(xlim = c(0, 20), ylim = c(0, 0.05))
-    
-    ## ceiling or flooring? inst.haz can't work with t=0 -> ceiling? 
-    
+    dt_pehaz_epi <- epi.insthaz(r_epi) %>% adt %>%
+        .[, .(age = time, est = hest, upper = hupp, lower = hlow, src = "epi")]
 
-    ## compare epi.insthaz to pehaz
-    left_join(
-        dt_pmcpct %$% pehaz(age, closing, width = 1) %$% data.table(time = head(Cuts,-1), pehaz = Hazard),
-        epi.insthaz(r_epi) %>% adt %>% .[, .(time, hest)], by = "time") %>%
-        .[pehaz > 0.075 &  hest < 0.04]
-        ## ggplot(aes(x=pehaz, y=hest)) + geom_point()
+    ## epi.insthaz(r_epi) %>% ggplot(aes(x=time, y=hest, ymin=hlow, ymax = hupp)) +
+    ##     geom_step() +
+    ##     geom_ribbon(stat = "stepribbon", alpha = 0.3) +
+    ##     coord_cartesian(xlim = c(0, 20), ylim = c(0, 0.04))
     
+    ## ## ceiling or flooring? inst.haz can't work with t=0 -> ceiling? 
     
 
+    ## ## compare epi.insthaz to pehaz
+    ## left_join(
+    ##     dt_pmcpct %$% pehaz(age, closing, width = 1) %$% data.table(time = head(Cuts,-1), pehaz = Hazard),
+    ##     epi.insthaz(r_epi) %>% adt %>% .[, .(time, hest)], by = "time") %>%
+    ##     .[pehaz > 0.075 &  hest < 0.04]
+    ##     ## ggplot(aes(x=pehaz, y=hest)) + geom_point()
     
+    
+
+    
+
+
+
+    quiet <- function(x) { 
+        sink(tempfile()) 
+        on.exit(sink()) 
+        invisible(force(x)) 
+    } 
+    
+    ## function to run as bootstrap
+    run_pehaz <- function(data, indices) {
+        dtx <- data[indices]
+        r_pehaz <- quiet(pehaz(dtx$age, dtx$closing, width = cutwidth))
+        dt_pehaz <- data.table(cuts = head(r_pehaz$Cuts, -1), hazard = r_pehaz$Hazard)
+        age_cutoff <- 50
+        if (max(dtx$age) < age_cutoff) {
+            setNames(rep(-1, age_cutoff/2), seq(0, age_cutoff-2, 2))
+        } else {
+            dt_pehaz[cuts < age_cutoff, setNames(hazard, cuts)]
+        }
+    }
+
+    ## ## test that it works
+    ## run_pehaz(dt_pmcpct, indices = sample(1:nrow(dt_pmcpct), replace = T))
+
+    ## actdually do the bootstrapping
+    reps <- boot(dt_pmcpct[, .(age, closing)], statistic = run_pehaz, R=1000,
+                 parallel = "multicore", ncpus = 5)
+    
+    ## filter out invalid results
+    dt_bootres <- reps$t %>% adt %>% .[V1 != -1]
+
+    ## reshaping to long
+    dt_bootres_melt <- melt(dt_bootres, measure.vars = names(dt_bootres), variable.factor = F) %>%
+         .[, age := (as.integer(gsub("V", "", variable))-1)*2]
+
+    
+
+    ## gamma as in muhaz SO post
+    dt_pehaz_gamma_prep <- dt_bootres_melt %>%
+        .[, .(shape = (mean(value)/sd(value))^2,
+              scale = var(value)/mean(value)), age] %>%
+        .[, `:=`(lower = qgamma(0.025, shape = shape + 1, scale = scale),
+                 upper = qgamma(0.975, shape = shape, scale = scale))]
+
+    
+    ## ## 
+    ## dt_bootres2 <- melt(dt_bootres, measure.vars = names(dt_bootres), variable.factor = F) %>%
+    ##     .[, quantile(value, probs = c(0.025, 0.975)) %>% as.list, variable] %>%
+    ##     .[, age := (as.integer(gsub("V", "", variable))-1)*2] %>% .[, variable := NULL] %>%
+    ##     setnames(old = c("2.5%", "97.5%"), new = c("low", "hi"))
+        
+
+    ## dt_bootres2 <- dt_bootres[, lapply(.SD, sd)] %>%
+    ##     melt(measure.vars = names(.), variable.name = "tp", value.name = "se") %>%
+    ##     .[, age := seq(0, .N*2-1, 2)] %>% .[, .(age, se)]
 
 
     ## details of pehaz/muhaz functions can be figured out later
-    res_pehaz <- pehaz(dt_pmcpct$age, dt_pmcpct$closing, width = cutwidth)
-    dt_pehaz <- data.table(cuts = res_pehaz$Cuts,
-                           haz = c(res_pehaz$Hazard, tail(res_pehaz$Hazard, 1)))
+    res_pehaz <- quiet(pehaz(dt_pmcpct$age, dt_pmcpct$closing, width = cutwidth))
+    dt_pehaz <- data.table(age = res_pehaz$Cuts,
+                           est = c(res_pehaz$Hazard, tail(res_pehaz$Hazard, 1)))
 
-    return(dt_pehaz)
+    dt_pehaz_gamma <- join(dt_pehaz, dt_pehaz_gamma_prep, on = "age") %>%
+        .[, .(age, est, lower, upper, src = "gamma")]
+
+    dt_pehaz_ci <- rbindlist(list(dt_pehaz_gamma, dt_pehaz_epi), use.names = T)
+
+    ## dt_pehaz_ci %>% 
+    ##     ggplot(aes(x=age, y=est, ymax = upper, ymin = lower)) + geom_step() +
+    ##     geom_ribbon(stat = "stepribbon", alpha = 0.3) +
+    ##     facet_wrap(~src)
+
+
+    ## dt_pehaz_bootse <- left_join(dt_pehaz, dt_bootres2, by = "age")
+
+    ## X11()
+    ## dt_pehaz_bootse[age <=22] %>% 
+    ##     ggplot(aes(x=age, y=haz, ymin = low, ymax = hi)) +
+    ##     geom_step() + geom_ribbon(alpha = 0.3, stat = "stepribbon") +
+    ##     coord_cartesian(xlim = c(0, 20), ylim = c(0, 0.04))
+        
+
+    return(dt_pehaz_ci)
 
 }
 
 
 
+gd_smooth_haz <- function(l_vrbls, dt_haz, span) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    #' smooth hazard rates with loess
+    #' @param l_vrbls vector of variables to smooth (usually est, upper, lower)
+    #' @param dt_haz data.table with age and hazard variables
+    #' @param span span for loess smoothing
+    
+    ## generate the loess models 
+    ## l_mdls <- map(l_vrbls, ~loess(get(.x) ~ time,
+    ##                               dt_haz, span = span, degree = 1))
+    
+    ## l_fs <- map(l_vrbls, ~ sprintf("%s ~ age", .x))
 
-gd_muhaz_bootse <- function(dt_pmcpct) {
+    l_mdls <- map(l_vrbls, ~loess(sprintf("%s ~ age", .x), dt_haz, span = span, degree = 1))
+
+    ## l_mdls <- map(l_fs, ~loess(, dt_haz, span = span, degree = 1))
+    
+    ## set up dt
+    dt_insthaz_smooth <- data.table(age = seq(0, max(dt_haz$age), 0.25))
+
+    ## combine
+    dt_mres <- sapply(l_mdls, \(x) predict(x, dt_insthaz_smooth)) %>% adt %>% setnames(new = l_vrbls)
+    dt_smooth_haz <- cbind(dt_insthaz_smooth, dt_mres)
+    
+    return(dt_smooth_haz)
+}
+
+gd_muhaz_boot <- function(dt_pmcpct) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     
     
-    ## r_cpct <- survfit(Surv(age, closing) ~ 1, dt_pmcpct)
+    r_cpct <- survfit(Surv(age, closing) ~ 1, dt_pmcpct)
 
-    ## dt_insthaz <- epi.insthaz(r_cpct) %>% adt %>% .[, .(time, hest, hlow, hupp)]
-
+    
     ## dt_insthaz %>% copy %>%
     ##     .[, map(.SD, ~density(.x, kernel = "epa", bw = 5), .SDcols = patterns("^h"))]
 
@@ -745,19 +849,34 @@ gd_muhaz_bootse <- function(dt_pmcpct) {
     ## plot(dx)
     ## -> use loess seems to be the way
     
-
     
-    ## ## generate models
-    ## l_mdls <- map(c("hlow", "hest", "hupp"), ~loess(get(.x) ~ time, dt_insthaz, span = 0.35, degree = 1))
-
-    ## ## predict time dt
-    ## dt_insthaz_smooth <- data.table(time = seq(0, max(dt_insthaz$time), 0.25)) %>%
-    ##     .[, c("hlow", "hest", "hupp") := map(l_mdls, ~predict(.x, .SD), .SDcols = time)]
-
-    ## dt_insthaz_smooth %>% .[time < 20] %>% 
-    ##     ggplot(aes(x=time, y=hest, ymin = hlow, ymax = hupp)) +
+    dt_insthaz <- epi.insthaz(r_cpct, conf.level = 0.95) %>% adt %>%
+        .[, .(age = time, est = hest, lower = hlow, upper = hupp)] %>%
+        gd_smooth_haz(l_vrbls = c("est", "lower", "upper"), dt_haz = ., span = 0.20) %>%
+        .[, src := "insthaz"]
+    
+    ## dt_insthaz_smooth %>% .[age < 20] %>% 
+    ##     ggplot(aes(x=age, y=est, ymin = lower, ymax = upper)) +
     ##     geom_line() + geom_ribbon(alpha = 0.3)
         
+    dt_weirdwebsite <- epi.insthaz(r_cpct, conf.level = 0.95) %>% adt %>%
+        .[, .(time, n.risk, n.event, hest, hlow, hupp)] %>%
+        .[, se := (hest*sqrt(1-(hest/2)^2))/sqrt(n.event)] %>%
+        .[, `:=`(lower = hest - 1.96*se, upper = hest + 1.96*se)] %>%
+        .[, .(age = time, est = hest, upper, lower)] %>%
+        gd_smooth_haz(l_vrbls = c("est", "upper", "lower"), dt_haz = ., span = 0.20) %>%
+        .[, src := "website"]
+
+
+    dt_prop <- epi.insthaz(r_cpct, conf.level = 0.95) %>% adt %>%
+        .[, se := sqrt((hest*(1-hest))/n.risk)] %>%
+        .[, `:=`(lower = hest - 1.96*se, upper = hest + 1.96*se)] %>%
+        .[, .(age = time, est = hest, upper, lower)] %>% 
+        gd_smooth_haz(l_vrbls = c("est", "upper", "lower"), dt_haz = ., span = 0.20) %>%
+        .[, src := "prop"]
+                      
+        
+    
 
     ## ggplot() +
     ##     geom_line(dt_insthaz_smooth, mapping = aes(x=time, y=hest)) +
@@ -788,7 +907,8 @@ gd_muhaz_bootse <- function(dt_pmcpct) {
 
     ## reps <- boot(data=mtcars, statistic=rsq_function, R=3000, formula=mpg~disp)
     ## bootstrapping example
-
+    
+    
 
     run_muhaz <- function(data, indices) {
         ## print(len(age))
@@ -797,36 +917,113 @@ gd_muhaz_bootse <- function(dt_pmcpct) {
         r_muhaz <- muhaz(dtx$age, dtx$closing, bw.smooth = 5, b.cor = "none", max.time = dtx[, max(age)], 
                          bw.method = "local", n.est.grid = dtx[, max(age)]*2+1)
         dt_muhaz <- r_muhaz %$% data.table(grid = est.grid, haz = haz.est)
-        age_cutoff <- 50
+        age_cutoff <- 60
         if (max(dtx$age) < age_cutoff) {
-            setNames(rep(-1, age_cutoff*2), seq(0, age_cutoff - 0.5, 0.5))
+            c(dt_muhaz[grid < age_cutoff, setNames(haz, grid)],
+              setNames(rep(-1, 120-dt_muhaz[, .N]), seq(dt_muhaz[, max(grid)]+0.5, age_cutoff - 0.5, 0.5)))
+            ## setNames(rep(-1, age_cutoff*2), seq(0, age_cutoff - 0.5, 0.5))
         } else {        
             dt_muhaz[grid < age_cutoff, setNames(haz, grid)]
         }
         ## setNames(r_muhaz$haz.est, r_muhaz$est.grid)
     }
 
-    run_muhaz(dt_pmcpct, indices = sample(1:nrow(dt_pmcpct), replace = T))
+    ## test run
+    ## run_muhaz(dt_pmcpct, indices = sample(1:nrow(dt_pmcpct), replace = T))
 
+    ## actually run bootstrapping
+    set.seed(42)
     reps <- boot(dt_pmcpct[, .(age, closing)], statistic = run_muhaz, R=1000,
-                 parallel = "multicore", ncpus = 5)
+                 parallel = "multicore", ncpus = 10)
 
-    dt_bootres <- reps$t %>% adt %>% .[V1 != -1]
+    ## filter out garbage runs
+    ## dt_bootres <- reps$t %>% adt %>% .[V1 != -1]
 
-    ## sd(dt_bootres$V80)
+    ## melt into long for further processing
+    dt_bootres_melt <- adt(reps$t) %>% 
+        melt(measure.vars = names(.)) %>%
+        .[, age := (as.integer(gsub("V", "", variable))-1)/2] %>%
+        .[value != -1]
 
-    dt_bootres2 <- dt_bootres[, lapply(.SD, sd)] %>%
-        melt(measure.vars = names(.), variable.name = "tp", value.name = "se") %>%
-        .[, age := seq(0, .N/2-0.5, 0.5)] %>% .[, .(age, se)]
 
-    dt_muhaz <- muhaz(dt_pmcpct$age, dt_pmcpct$closing, bw.smooth = 5, b.cor = "none", max.time = 50,
-                      bw.method = "local", n.est.grid = 101) %$%
-        data.table(est = haz.est, age = est.grid) %>% .[age < 50]
+    ## get SE
+    dt_bootres2 <- dt_bootres_melt[, .(se = sd(value)), age]
+    
+    ## run the muhaz for the estimate line
+    dt_muhaz <- muhaz(dt_pmcpct$age, dt_pmcpct$closing, bw.smooth = 5, b.cor = "none", max.time = 60,
+                      bw.method = "local", n.est.grid = 121) %$%
+        data.table(est = haz.est, age = est.grid) %>% .[age < 60]
+    
+    ## create CI with est + se
+    dt_muhaz_se <- join(dt_muhaz, dt_bootres2, on = "age") %>% copy %>% 
+        .[, `:=`(upper = est + 1.96*se, lower = est - 1.96*se, src = "se")] %>%
+        .[, .(age, est, upper, lower, src)]
+
+    
+    
+
+    ## taken from SO: combine it with my results
+    dt_muhaz_gamma <- dt_bootres_melt %>% 
+        .[, .(est = mean(value), shape = (mean(value)/sd(value))^2,
+              scale = var(value)/mean(value)), age] %>%
+        .[, `:=`(lower = qgamma(0.025, shape = shape + 1, scale = scale),
+                 upper = qgamma(0.975, shape = shape, scale = scale))] %>%
+        .[, .(age, est, upper, lower, src = "gamma")]
+                 
+    
+    dt_muhaz_quantile <- dt_bootres_melt %>%
+        .[, setNames(quantile(value, probs = c(0.025, 0.975)) %>% as.list, c("lower", "upper")), age] %>%
+        .[dt_muhaz, on = "age"] %>% .[, src := "quantile"]
         
-    dt_muhaz_bootse <- left_join(dt_muhaz, dt_bootres2, by = "age")
 
+    dt_muhaz_boot <- rbindlist(list(dt_muhaz_se, dt_muhaz_gamma, dt_muhaz_quantile,
+                                    dt_insthaz_smooth, dt_weirdwebsite, dt_prop), use.names = T)
+    dt_muhaz_boot %>%
+        ## .[src != "se"] %>%
+        .[ age < 40] %>% 
+        ggplot(aes(x=age, y=est, ymax = upper, ymin = lower)) + geom_line() + geom_ribbon(alpha = 0.3) +
+        facet_wrap(~src)
+        
 
-    return(dt_muhaz_bootse)
+    
+    return(dt_muhaz_boot)
+
+    ## https://stackoverflow.com/questions/29728795/how-do-i-extract-hazards-from-survfit-in-r
+    ## bootstrap fun
+    ## t0 <- 0
+    ## t1 <- 61
+    
+    ## boot_fun <- function(dt_pmcpct) {
+    ##     n <- dim(dt_pmcpct)[1]
+    ##     x <- dt_pmcpct[sample.int(n, n, replace=TRUE), ]
+    ##     muhaz::muhaz(x$age, x$closing, min.time=t0, max.time=t1, bw.smooth = 5, b.cor = "none", bw.method = "local")
+    ## }
+
+    ## ## bootstrap
+    ## set.seed(42)
+    ## R <- 100
+    ## B <- replicate(R, boot_fun(dt_pmcpct))
+
+    ## ## extract matrix from bootstrap
+    ## r <- `colnames<-`(t(array(unlist(B[3, ]), dim=c(101, R))), B[2, ][[1]])
+
+    ## ## calculate result
+    ## library(matrixStats)  ## for fast matrix calculations
+    ## r2 <- cbind(x=as.numeric(colnames(r)), 
+    ##            y=colMeans2(r),
+    ##            shape=(colMeans2(r)/colSds(r))^2, 
+    ##            scale=colVars(r)/colMeans2(r))
+    
+    ## dt_r <- cbind(r2[, 1:2], 
+    ##               lower=qgamma(0.025, shape=r2[, 'shape'] + 1, scale=r2[, 'scale']),
+    ##               upper=qgamma(0.975, shape=r2[, 'shape'], scale=r2[, 'scale'])) %>% adt
+
+    ## ggplot(dt_r, aes(x=x, y=y, ymax = upper, ymin = lower)) +
+    ##     geom_line() + geom_ribbon(alpha = 0.3)
+
+    
+        
+    
 
 }
 
@@ -839,36 +1036,36 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
 
     ## survfit2(Surv(age, closing) ~ 1, dt_pmcpct, stype= 1) %>% plot
 
-    ##     library(pch)
-    ##     rx <- pchreg(Surv(age, closing) ~ 1, data = dt_pmcpct)
+    ## library(pch)
+    ## rx <- pchreg(Surv(age, closing) ~ 1, data = dt_pmcpct)
 
-    ## some way to try to get SEs for hazard function
-    ##     summary(rx)
-    ##     dt_new <- data.table(age = unique(dt_pmcpct$age))[order(age)]
+    ## ## some way to try to get SEs for hazard function
+    ## ## summary(rx)
+    ## dt_new <- data.table(age = unique(dt_pmcpct$age))[order(age)]
     
-    ##     dt_new_pred <- cbind(dt_new, predict(rx, newdata = dt_new))
+    ## dt_new_pred <- cbind(dt_new, predict(rx, newdata = dt_new))
 
-    ##     ggplot(dt_new_pred, aes(x=age, y=f)) + geom_line()
+    ## ggplot(dt_new_pred, aes(x=age, y=f)) + geom_line()
 
-    ##     r_mdl <- coxph(Surv(age, closing) ~ 1, dt_pmcpct)
-    ##     survival_fit <- survfit(r_mdl)
+    ## r_mdl <- coxph(Surv(age, closing) ~ 1, dt_pmcpct)
+    ## survival_fit <- survfit(r_mdl)
 
-    ##     ## time_points <- survival_fit$time
-    ##     ## survival_prob <- survival_fit$surv
+    ## time_points <- survival_fit$time
+    ## survival_prob <- survival_fit$surv
 
-    ##     ## hazard_func <- -diff(log(survival_prob)) / diff(time_points)
+    ## hazard_func <- -diff(log(survival_prob)) / diff(time_points)
 
-    ##     ## cov_matrix <- vcov(r_mdl)
+    ## ## cov_matrix <- vcov(r_mdl)
 
-    ##     # Extract the cumulative hazard estimates and time points
-    ##     cum_hazard <- -log(survival_fit$surv)
-    ##     time_points <- survival_fit$time
+    ## ## Extract the cumulative hazard estimates and time points
+    ## cum_hazard <- -log(survival_fit$surv)
+    ## time_points <- survival_fit$time
 
-    ##     ## Calculate the hazard function
-    ##     hazard_func <- c(diff(cum_hazard) / diff(time_points), NA)
+    ## ## Calculate the hazard function
+    ## hazard_func <- c(diff(cum_hazard) / diff(time_points), NA)
 
-    ##     se_hazard <- sqrt(cumsum(survival_fit$std.err^2))
-
+    ## se_hazard <- sqrt(cumsum(survival_fit$std.err^2))
+    ## these SEs are absolutely yuuuuuuuuuuuuge
     
 
     ## gd_pehaz(dt_pmcpct, 1)
@@ -879,15 +1076,15 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
 
     ## Muhaz: probably "mu" because Mueller (guy who wrote some of the kernel algorithms)
 
-    res_muhaz <- muhaz(dt_pmcpct$age, dt_pmcpct$closing, bw.smooth = 5, b.cor = "none", max.time = 60,
-                       bw.method = "local")
+    ## res_muhaz <- muhaz(dt_pmcpct$age, dt_pmcpct$closing, bw.smooth = 5, b.cor = "none", max.time = 60,
+    ##                    bw.method = "local")
 
-    gd_insthaz_kernel(dt_pmcpct)
+    ## gd_insthaz_kernel(dt_pmcpct)
 
-    dt_muhaz <- data.table(grid = res_muhaz$est.grid,
-                           haz = res_muhaz$haz.est)
+    ## dt_muhaz <- data.table(grid = res_muhaz$est.grid,
+    ##                        haz = res_muhaz$haz.est)
 
-    dt_muhaz_bootse <- gd_muhaz_bootse(dt_pmcpct)
+    dt_muhaz_boot <- gd_muhaz_boot(dt_pmcpct)
 
     ## dt_muhaz_bootse %>%
     ##     ggplot(aes(x=age, y=est, ymax = est + 1.96*se, ymin = est - 1.96*se)) +
@@ -904,14 +1101,30 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
     ##     melt(id.vars = "x") %>%
     ##     ggplot(aes(x=x, y=value, color = variable)) + geom_line() + facet_grid(variable~., scales = "free")
 
-    y_upper_border <- 0.02 # FIXME: put as function argument
+    y_upper_border <- 0.025 # FIXME: put as function argument
 
     ggplot() +
-        geom_step(dt_pehaz, mapping = aes(x=cuts, y=haz, linetype = 'pehaz')) +
+        geom_step(dt_pehaz[src=="epi"], mapping = aes(x=age, y=est, linetype = 'pehaz')) +
+        geom_ribbon(dt_pehaz[src=="epi"], mapping = aes(x = age, ymin = lower, ymax = upper),
+                    alpha = 0.3, stat = "stepribbon") +
+        geom_line(dt_muhaz_boot[src == "gamma"], mapping = aes(x=age, y=est, linetype = "muhaz")) +
+        geom_ribbon(dt_muhaz_boot[src == "gamma"], mapping = aes(x = age, ymin = lower, ymax = upper),
+                    alpha = 0.3) +     
+        labs(x="age", y="hazard") +
+        ## coord_cartesian(ylim = c(0,y_upper_border)) + 
+        facet_wrap(~src, ncol = 1, scales = "free_y")
+
+
+    ggplot() +
+        geom_step(dt_pehaz, mapping = aes(x=age, y=haz, linetype = 'pehaz')) +
         ## geom_step(dt_pehaz5, mapping = aes(x=cuts, y=haz, linetype = 'pehaz5')) +
-        geom_line(dt_muhaz, mapping = aes(x=grid, y=haz, linetype = "muhaz")) +
+        geom_line(dt_muhaz_boot[src == "gamma"], mapping = aes(x=age, y=est, linetype = "muhaz")) +
+        geom_ribbon(dt_muhaz_boot[src == "gamma"], mapping = aes(x = age, ymin = lower, ymax = upper),
+                    alpha = 0.3) +     
         labs(x="year", y="hazard") +
-        coord_cartesian(ylim = c(0,y_upper_border)) +
+        coord_cartesian(ylim = c(0,y_upper_border))
+
+ 
         geom_label(dt_pehaz[haz > y_upper_border],
                    mapping = aes(x=cuts, y=y_upper_border, label = format(haz, digits = 2,nsmall = 2))) +
         scale_linetype_manual(name = element_blank(), 
