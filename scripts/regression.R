@@ -661,6 +661,12 @@ gp_surv <- function(dt_pmcpct) {
 
 }
 
+quiet <- function(x) { 
+        sink(tempfile()) 
+        on.exit(sink()) 
+        invisible(force(x)) 
+}
+
 gd_pehaz <- function(dt_pmcpct, cutwidth) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
@@ -714,16 +720,6 @@ gd_pehaz <- function(dt_pmcpct, cutwidth) {
     ##     ## ggplot(aes(x=pehaz, y=hest)) + geom_point()
     
     
-
-    
-
-
-
-    quiet <- function(x) { 
-        sink(tempfile()) 
-        on.exit(sink()) 
-        invisible(force(x)) 
-    } 
     
     ## function to run as bootstrap
     run_pehaz <- function(data, indices) {
@@ -782,13 +778,27 @@ gd_pehaz <- function(dt_pmcpct, cutwidth) {
     dt_pehaz_gamma <- join(dt_pehaz, dt_pehaz_gamma_prep, on = "age") %>%
         .[, .(age, est, lower, upper, src = "gamma")]
 
-    dt_pehaz_ci <- rbindlist(list(dt_pehaz_gamma, dt_pehaz_epi), use.names = T)
+    ## do pehaz per year, then aggregate
+    res_pehaz_w1 <- quiet(pehaz(dt_pmcpct$age,dt_pmcpct$closing, width = 1))
+
+    dt_grpd <- data.table(age = head(res_pehaz_w1$Cuts,-1),
+               est = res_pehaz_w1$Hazard) %>%
+        .[, age_grpd := floor(age/2)*2] %>%
+        .[, .(est = mean(est), upper = NA, lower = NA, src = "w1"), .(age = age_grpd)]
+
+
+    
+    dt_pehaz_ci <- rbindlist(list(dt_pehaz_gamma, dt_pehaz_epi, dt_grpd), use.names = T)
 
     ## dt_pehaz_ci %>% 
     ##     ggplot(aes(x=age, y=est, ymax = upper, ymin = lower)) + geom_step() +
     ##     geom_ribbon(stat = "stepribbon", alpha = 0.3) +
     ##     facet_wrap(~src)
 
+    ## dt_pehaz_ci %>%
+    ##     ggplot(aes(x=age, y=est, color = src)) +geom_step()
+
+    
 
     ## dt_pehaz_bootse <- left_join(dt_pehaz, dt_bootres2, by = "age")
 
@@ -849,7 +859,7 @@ gd_muhaz_boot <- function(dt_pmcpct) {
     ## plot(dx)
     ## -> use loess seems to be the way
     
-    
+    ## insthaz SE
     dt_insthaz <- epi.insthaz(r_cpct, conf.level = 0.95) %>% adt %>%
         .[, .(age = time, est = hest, lower = hlow, upper = hupp)] %>%
         gd_smooth_haz(l_vrbls = c("est", "lower", "upper"), dt_haz = ., span = 0.20) %>%
@@ -859,6 +869,7 @@ gd_muhaz_boot <- function(dt_pmcpct) {
     ##     ggplot(aes(x=age, y=est, ymin = lower, ymax = upper)) +
     ##     geom_line() + geom_ribbon(alpha = 0.3)
         
+    ## weirdwebsite SE: https://www.unistat.com/guide/survival-life-table/
     dt_weirdwebsite <- epi.insthaz(r_cpct, conf.level = 0.95) %>% adt %>%
         .[, .(time, n.risk, n.event, hest, hlow, hupp)] %>%
         .[, se := (hest*sqrt(1-(hest/2)^2))/sqrt(n.event)] %>%
@@ -867,7 +878,7 @@ gd_muhaz_boot <- function(dt_pmcpct) {
         gd_smooth_haz(l_vrbls = c("est", "upper", "lower"), dt_haz = ., span = 0.20) %>%
         .[, src := "website"]
 
-
+    ## assume SE of proportion: Singer_Willet_20023_applied
     dt_prop <- epi.insthaz(r_cpct, conf.level = 0.95) %>% adt %>%
         .[, se := sqrt((hest*(1-hest))/n.risk)] %>%
         .[, `:=`(lower = hest - 1.96*se, upper = hest + 1.96*se)] %>%
@@ -886,9 +897,6 @@ gd_muhaz_boot <- function(dt_pmcpct) {
         ## xlim(c(0,20)) 
         ## scale_y_log10()
         
-    ## library(polspline)
-    ## library(bshazard)
-
     ## r_heft <- heft(dt_pmcpct$age,  dt_pmcpct$closing, penalty = 0)
     
 
@@ -907,9 +915,8 @@ gd_muhaz_boot <- function(dt_pmcpct) {
 
     ## reps <- boot(data=mtcars, statistic=rsq_function, R=3000, formula=mpg~disp)
     ## bootstrapping example
-    
-    
-
+        
+    ## boostrapping function
     run_muhaz <- function(data, indices) {
         ## print(len(age))
         ## print(len(closing))
@@ -977,14 +984,14 @@ gd_muhaz_boot <- function(dt_pmcpct) {
         
 
     dt_muhaz_boot <- rbindlist(list(dt_muhaz_se, dt_muhaz_gamma, dt_muhaz_quantile,
-                                    dt_insthaz_smooth, dt_weirdwebsite, dt_prop), use.names = T)
+                                    dt_insthaz, dt_weirdwebsite, dt_prop), use.names = T)
+    
     dt_muhaz_boot %>%
         ## .[src != "se"] %>%
         .[ age < 40] %>% 
         ggplot(aes(x=age, y=est, ymax = upper, ymin = lower)) + geom_line() + geom_ribbon(alpha = 0.3) +
-        facet_wrap(~src)
-        
-
+                facet_wrap(~src)
+    
     
     return(dt_muhaz_boot)
 
@@ -1072,7 +1079,7 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
 
     dt_pehaz <- gd_pehaz(dt_pmcpct, cutwidth)
 
-    dt_pehaz5 <- gd_pehaz(dt_pmcpct, 5)
+    ## dt_pehaz5 <- gd_pehaz(dt_pmcpct, 5)
 
     ## Muhaz: probably "mu" because Mueller (guy who wrote some of the kernel algorithms)
 
@@ -1085,59 +1092,49 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
     ##                        haz = res_muhaz$haz.est)
 
     dt_muhaz_boot <- gd_muhaz_boot(dt_pmcpct)
-
-    ## dt_muhaz_bootse %>%
-    ##     ggplot(aes(x=age, y=est, ymax = est + 1.96*se, ymin = est - 1.96*se)) +
-    ##     geom_line() +
-    ##     geom_ribbon(alpha = 0.3)
-
-
     
-    ## try to get SE out of muhaz, but doesn't seem like there is any reported
-    ## leave if for now.. 
-    ## data.table(msemin = res_muhaz$msemin,
-    ##            bias.min = res_muhaz$bias.min,
-    ##            var.min = res_muhaz$var.min)[, x := 1:.N] %>%
-    ##     melt(id.vars = "x") %>%
-    ##     ggplot(aes(x=x, y=value, color = variable)) + geom_line() + facet_grid(variable~., scales = "free")
 
-    y_upper_border <- 0.025 # FIXME: put as function argument
+    y_upper_border <- 0.02 # FIXME: put as function argument
+
+    ## p_natrisk <- ggplot(dt_pmyear[, .N, age], aes(x=age, y=N)) + geom_line() +
+    ##     coord_cartesian(xlim = c(0, 30))
+                        
+
+    leg_labels <- c("gamma" = "Epanechnikov-Kernel (5 years bandwidth)",
+                    "epi" = sprintf("Piecewise-Constant (%s years)", cutwidth))
+
 
     ggplot() +
-        geom_step(dt_pehaz[src=="epi"], mapping = aes(x=age, y=est, linetype = 'pehaz')) +
-        geom_ribbon(dt_pehaz[src=="epi"], mapping = aes(x = age, ymin = lower, ymax = upper),
-                    alpha = 0.3, stat = "stepribbon") +
-        geom_line(dt_muhaz_boot[src == "gamma"], mapping = aes(x=age, y=est, linetype = "muhaz")) +
-        geom_ribbon(dt_muhaz_boot[src == "gamma"], mapping = aes(x = age, ymin = lower, ymax = upper),
-                    alpha = 0.3) +     
+        geom_step(copy(dt_pehaz)[src=="w1"][, src := "epi"], # awkward renaming 
+                  mapping = aes(x=age, y=est, linetype = src, color = src,
+                                                      linewidth = src)) +
+        geom_line(dt_muhaz_boot[src == "gamma"],
+                  mapping = aes(x=age, y=est, linetype = src, color = src, linewidth = src)) +
+        geom_ribbon(dt_muhaz_boot[src == "gamma"],
+                    mapping = aes(x = age, ymin = lower, ymax = upper),
+                    alpha = 0.2, show.legend = F) +     
         labs(x="age", y="hazard") +
-        ## coord_cartesian(ylim = c(0,y_upper_border)) + 
-        facet_wrap(~src, ncol = 1, scales = "free_y")
-
-
-    ggplot() +
-        geom_step(dt_pehaz, mapping = aes(x=age, y=haz, linetype = 'pehaz')) +
-        ## geom_step(dt_pehaz5, mapping = aes(x=cuts, y=haz, linetype = 'pehaz5')) +
-        geom_line(dt_muhaz_boot[src == "gamma"], mapping = aes(x=age, y=est, linetype = "muhaz")) +
-        geom_ribbon(dt_muhaz_boot[src == "gamma"], mapping = aes(x = age, ymin = lower, ymax = upper),
-                    alpha = 0.3) +     
-        labs(x="year", y="hazard") +
-        coord_cartesian(ylim = c(0,y_upper_border))
-
+        coord_cartesian( xlim = c(0, 30), ylim = c(0,y_upper_border)) +
+        scale_linewidth_manual(values = c("epi" = 2, "gamma" = 1), labels = leg_labels,
+                               name = element_blank()) +
+        scale_linetype_manual(values = c("epi" = "31", "gamma" = "91"), labels = leg_labels,
+                              name = element_blank()) +
+        scale_color_manual(values = c("epi" = "grey80", "gamma" = "black"), labels = leg_labels,
+                           name = element_blank()) +
+        theme(legend.position = "bottom",
+              axis.title.x = element_text(size = 11, margin = margin(-7,0,0,0)),
+              legend.spacing = unit(0, "pt"),
+              legend.key.height = unit(0, "pt"),
+              legend.box.spacing = unit(3, "pt"),
+              legend.margin = margin(0,0,0,0)) + 
+        geom_label(dt_pehaz[est > y_upper_border & src == "w1"],
+                   mapping = aes(x=age +1, y=y_upper_border, label = format(est, digits = 2,nsmall = 2))) + 
+        labs(caption = sprintf("95%% boostrapped CI, Piecewise constant hazards above %s demarcated by text boxes.",
+                               y_upper_border)) 
+        
+        
  
-        geom_label(dt_pehaz[haz > y_upper_border],
-                   mapping = aes(x=cuts, y=y_upper_border, label = format(haz, digits = 2,nsmall = 2))) +
-        scale_linetype_manual(name = element_blank(), 
-            values = c('muhaz'=1, 'pehaz'=2, 'pehaz5' = 3),
-                              labels = c("Epanechnikov-Kernel (5 years bandwidth)",
-                                         sprintf("Piecewise-Constant (%s years)", cutwidth)),
-                              guide = "legend") +
-        scale_x_continuous(breaks = seq(0,60,10)) + # FIXME : generalize upper limit
-        theme(legend.position = "bottom") + 
-        labs(caption = sprintf("Piecewise constant hazard rates above %s demarcated by text boxes", y_upper_border))
-     
-    ## the peak after t=40: in the end: 16 are over 40 years old, 2 out of them die
-
+    
 }
 
 gp_agedens <- function(dt_pmcpct) {

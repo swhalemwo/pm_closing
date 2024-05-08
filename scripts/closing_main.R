@@ -29,6 +29,8 @@ library(wpp2022)     # population data for Taiwan
 data(pop1dt) # population data for taiwan
 library(khroma)      # plotting
 library(ggrepel)     # plotting
+library(epiR)        # testing instantaneous hazard SE calculations
+library(boot)        # bootstrapping for instantaneous hazard SE calculations
 
 
 ## LOCS <- list(PROJDIR = "/home/johannes/Dropbox/phd/papers/closing/")
@@ -48,8 +50,12 @@ gd_nbrs <- function() {
              grp = "descs") %>% adt
 
     ## calculate average hazard rate numbers, depending on maximum age
-    dt_pehaz <- gd_pehaz(dt_pmcpct, cutwidth = 2)
-    dt_meanhaz <- map(c(20, 30, 40, 100), ~list(upper_bound = .x, mean_haz = dt_pehaz[cuts <= .x, mean(haz)])) %>%
+
+        
+    dt_pehaz <- gd_pehaz(dt_pmcpct, cutwidth = 2)[src == "w1"]
+
+    dt_meanhaz <- map(c(2, 4, 5, 10, 20, 30, 40, 100),
+                      ~list(upper_bound = .x, mean_haz = dt_pehaz[age < .x, mean(est)])) %>%
         rbindlist %>%
         .[, .(nbr_name = sprintf("meanhaz_upto_%s", upper_bound),
               nbr_fmt = sprintf("%s%%", format(mean_haz*100, digits = 2, nsmall = 2)),
@@ -102,8 +108,6 @@ gd_nbrs <- function() {
 
 ## * main
 if (interactive()) {stop("it's interactive time")}
-
-
 
 
 
@@ -178,7 +182,7 @@ l_mdlnames_coxph <- c("r_pop4")#, "r_pop5", "r_pop42")#  , ",r_pop4_wyr", "r_pop
 
 
 
-screenreg2(list(l_mdls$r_pop4)) # just smoe display
+## screenreg2(list(l_mdls$r_pop4)) # just smoe display
 
 ## screenreg2(list(l_mdls$r_west_cpct, l_mdls$r_west_year, l_mdls$r_west_year2), digits = 4)
 
