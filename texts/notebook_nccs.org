@@ -16,6 +16,9 @@
 
 
 * notebook NCCS
+:PROPERTIES:
+:ID:       6833a270-f8e2-466c-99d8-8dcab82d458d
+:END:
 
 play a bit with NCCS data
 https://urbaninstitute.github.io/nccs/datasets/core/
