@@ -1548,7 +1548,7 @@ gd_predprep_popprxcnt <- function(dt_pmyear) {
 
     ## variables to vary              
     dt_pred_prep2 <- expand.grid(proxcnt10 = c(0:15),
-                                 popm_circle10 = c(0.01, 0.3, 1, 3, 5))
+                                 popm_circle10 = c(0.01, 1.5, 3, 5))
     ## quantile(dt_pmyear$popm_circle10, seq(0.05, 0.95, 0.1)))
                                                               
     dt_pred <- cbind(dt_pred_prep2, dt_pred_prep) %>% adt %>%
@@ -1559,13 +1559,15 @@ gd_predprep_popprxcnt <- function(dt_pmyear) {
 }
 
 
-gd_pred <- function(mdlname, l_mdls, dt_pred) {
+gd_pred <- function(mdlname, l_mdls, dt_pred, measure, year_range) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     
     #' generate average predicted hazard for first 20 years for all the specifications in dt_pred
     #' @param rx a coxph-based regression model
     #' @param dt_pred data frame with all variables and different values (one per row) for each specification
-
+    #' @measure which measure to calculate predictions for. one of "cumhaz" (cumulative hazard),
+    #' "surv" (survival curve), "hazard" (average hazard, no CI)
+    #' @year_range range of years to calculate predictions for (cutoff)
 
     ## xx <- survfit(l_mdls$r_pop4, newdata = dt_pred, se.fit = T)
 
@@ -1588,6 +1590,32 @@ gd_pred <- function(mdlname, l_mdls, dt_pred) {
                     
     ## extract CI info from std.er
     
+    r_survfit <- survfit(chuck(l_mdls, mdlname), newdata = dt_pred[],
+                                                            se.fit = T, conf.type = "plain", conf.int = 0.95)
+    if (measure == "cumhaz") {
+        ## cumhaz
+        data.table(est = r_survfit$cumhaz[year_range,], se = r_survfit$std.err[year_range,]) %>%
+            .[, `:=`(lower = est - 1.96*se, upper = est + 1.96*se)] %>% 
+            cbind(dt_pred[, .(proxcnt10, popm_circle10)])
+        ## ggplot(aes(x=proxcnt10, y=cumhaz, color = factor(popm_circle10), fill = factor(popm_circle10),
+        ##            ymax = cumhaz + 1.96*se, ymin = cumhaz - 1.96*se)) + geom_line() +
+        ## geom_ribbon(alpha = 0.3)
+
+    } else if (measure == "surv") {
+        ## using survival curve
+        data.table(est = r_survfit$surv[year_range,], upper = r_survfit$upper[year_range,],
+                   lower = r_survfit$lower[year_range,]) %>%
+            cbind(dt_pred[, .(proxcnt10, popm_circle10)]) %>%
+            .[, src := mdlname]
+        } else if (measure == "hazard") {
+          
+        ## ggplot(aes(x=proxcnt10, y=surv, color = factor(popm_circle10), fill = factor(popm_circle10),
+        ##            ymax = upper, ymin = lower)) + geom_line() + geom_ribbon(alpha = 0.3) 
+        ## ## facet_wrap(~popm_circle10, scales = "free")
+        
+            ## xx$cumhaz[20,]
+
+
     basehaz(chuck(l_mdls, mdlname), dt_pred) %>% adt %>%
         ## transform each settings cumhaz into hazard and take mean
         .[time < 20, lapply(.SD, \(x) mean(x - shift(x),  na.rm = T)), .SDcols = patterns("^hazard")] %>%
@@ -1595,13 +1623,15 @@ gd_pred <- function(mdlname, l_mdls, dt_pred) {
              value.name = "avghaz") %>%
         join(dt_pred[, .(condition = sprintf("hazard.%s", seq(1:fnrow(dt_pred))),
                          proxcnt10, popm_circle10)], on = "condition") %>%
-        .[, src := mdlname]
+        .[, src := mdlname] %>%
+        .[, .(est = avghaz, upper = avghaz, lower = avghaz, src, proxcnt10, popm_circle10)]
     ## ggplot(aes(x=time, y=cumhaz, group = condition)) + geom_line()
     ## join(dt_pred[, .(condition = sprintf("hazard.%s", seq(1:fnrow(dt_pred))),
     ##                  proxcnt10, popm_circle10)], on = "condition") %>%
     ## ggplot(aes(x=factor(proxcnt10), y=factor(popm_circle10), fill = mult)) + geom_tile()
     ## ggplot(aes(y=avghaz, x=proxcnt10, color = factor(popm_circle10))) + geom_line()
 
+        }
 }
 
 ## adjust line width
@@ -1622,10 +1652,13 @@ gp_pred_popprxcnt <- function(l_mdlnames, l_mdls, dt_pmyear) {
 
     #' generate plot of predicted avg hazard rate under different PM proximity counts and population numbers
 
-    dt_predres_mult <- map(l_mdlnames,
-                           ~gd_pred(.x, l_mdls, gd_predprep_popprxcnt(dt_pmyear))) %>% rbindlist
+    dt_predres_mult <- map(
+        l_mdlnames,
+        ~gd_pred(.x, l_mdls, gd_predprep_popprxcnt(dt_pmyear), measure = "surv", year_range = 30)) %>%
+        rbindlist
 
-    
+    ## gd_pred("r_pop4", l_mdls, gd_predprep_popprxcnt(dt_pmyear), measure = "surv", year_range = 20)
+
     ## .[, popm_circle10_cut := round(popm_circle10, 5)]
 
     ## join(dt_predres_mult, dt_cutwidth, on = c("proxcnt10", "popm_circle10_cut")) %>% 
@@ -1633,12 +1666,16 @@ gp_pred_popprxcnt <- function(l_mdlnames, l_mdls, dt_pmyear) {
     ##     .[proxcnt10 < 8] %>%
 
     p_pred_popprxnct <- dt_predres_mult %>% 
-        ggplot(aes(x=proxcnt10, y=avghaz, group = popm_circle10, color = factor(popm_circle10))) + 
+        ggplot(aes(x=proxcnt10, y=1-est, ymax = 1-upper, ymin = 1-lower,
+                   group = popm_circle10, color = factor(popm_circle10),
+                   fill = factor(popm_circle10))) + 
         ## linewidth = N, alpha = N)) +
         geom_line(linewidth = 2) +
+        geom_ribbon(alpha = 0.3) + 
         ## facet_wrap(~src, scales = "free") +
-        scale_color_discrete(type = color("sunset")(5)) + 
-        coord_cartesian(ylim = c(0, 0.013), xlim = c(0,12)) +
+        scale_color_discrete(type = color("sunset")(4)) +
+        scale_fill_discrete(type = color("sunset")(4)) + 
+        ## coord_cartesian(ylim = c(0, 0.016), xlim = c(0,12)) +
         theme_bw() +
         theme(legend.position = "bottom")
 
@@ -1649,6 +1686,17 @@ gp_pred_popprxcnt <- function(l_mdlnames, l_mdls, dt_pmyear) {
             facet_wrap(~src, scales = "free")
         
     }
+
+    dt_predres_mult %>%
+        .[proxcnt10 %in% c(0, 2, 5, 10)] %>%
+        ggplot(aes(x=popm_circle10, y=est, ymax = upper, ymin = lower,
+                   group = proxcnt10, color = factor(proxcnt10),
+                   fill = factor(proxcnt10))) + 
+        ## linewidth = N, alpha = N)) +
+        geom_line(linewidth = 2) +
+        geom_ribbon(alpha = 0.3) 
+
+
 
     return(p_pred_popprxnct)
         
