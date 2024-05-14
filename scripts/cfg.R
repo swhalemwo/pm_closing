@@ -95,7 +95,7 @@ gc_plts <- function() {
             width = 19,
             height = 25),
         p_pred_popprxcnt = list(
-            l_mdlnames = l_mdlnames_coxph,
+            l_mdlnames = quote(l_mdlnames_coxph),
             l_mdls = quote(l_mdls),
             dt_pmyear = quote(dt_pmyear),
             caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population",

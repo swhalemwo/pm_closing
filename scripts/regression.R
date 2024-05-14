@@ -1548,7 +1548,9 @@ gd_predprep_popprxcnt <- function(dt_pmyear) {
 
     ## variables to vary              
     dt_pred_prep2 <- expand.grid(proxcnt10 = c(0:15),
-                                 popm_circle10 = c(0.01, 1.5, 3, 5))
+                                 ## popm_circle10 = c(0.01, 1.5, 3, 5),
+                                 popm_circle10 = seq(0.01, 5, 0.01))
+    
     ## quantile(dt_pmyear$popm_circle10, seq(0.05, 0.95, 0.1)))
                                                               
     dt_pred <- cbind(dt_pred_prep2, dt_pred_prep) %>% adt %>%
@@ -1665,38 +1667,66 @@ gp_pred_popprxcnt <- function(l_mdlnames, l_mdls, dt_pmyear) {
     ##     replace_NA %>% # fill up NAs in N with 0
     ##     .[proxcnt10 < 8] %>%
 
-    p_pred_popprxnct <- dt_predres_mult %>% 
+    l_quantile_probs <- c(0.1, 0.5, 0.75, 0.9)
+
+    ## get quantiles via pmyear:
+    l_popm_circle10_qntls <- dt_pmyear[, quantile(popm_circle10, probs = l_quantile_probs)] %>%
+        round(digits = 2) %>% as.character
+
+    ## construct filter dt (int-filtering not working correctly somehow)
+    dt_popm_circle10_fltr <- data.table(popm_circle10_mult = l_popm_circle10_qntls)
+
+    ## library(margins)
+    ## margins(l_mdls$r_pop4, arg = "expected")
+    ## library(marginaleffects)
+    ## plot_comparisons(l_mdls$r_pop4, variables = list(popm_circle10 = c(1,5)),
+    ## condition = "proxcnt10", type  = "lp")
+    
+    l_lbls <- sprintf("%sm pop. (%sth perc.)", l_popm_circle10_qntls, l_quantile_probs*100) %>%
+        setNames(l_popm_circle10_qntls)
+
+    
+
+    p_pred_popprxnct <- dt_predres_mult %>% copy %>% .[, popm_circle10_mult := as.character(popm_circle10)] %>%
+        ## .[popm_circle10_mult == 209] %>% print(n=40)
+        .[dt_popm_circle10_fltr, on = "popm_circle10_mult"] %>%
+        .[proxcnt10 < 12] %>% 
+        ## .[popm_circle10_mult %in% l_popm_circle10_qntls] %>% 
+    ## p_pred_popprxnct <- dt_predres_mult[popm_circle10*10 %in% c(1, 15, 30, 50)] %>% 
         ggplot(aes(x=proxcnt10, y=1-est, ymax = 1-upper, ymin = 1-lower,
-                   group = popm_circle10, color = factor(popm_circle10),
-                   fill = factor(popm_circle10))) + 
+                   group = factor(popm_circle10))) + 
+                   ## fill = factor(popm_circle10))) + 
         ## linewidth = N, alpha = N)) +
-        geom_line(linewidth = 2) +
+        geom_line(linewidth = 1) +
         geom_ribbon(alpha = 0.3) + 
         ## facet_wrap(~src, scales = "free") +
-        scale_color_discrete(type = color("sunset")(4)) +
-        scale_fill_discrete(type = color("sunset")(4)) + 
+        ## scale_color_discrete(type = color("sunset")(4)) +
+        ## scale_fill_discrete(type = color("sunset")(4)) + 
         ## coord_cartesian(ylim = c(0, 0.016), xlim = c(0,12)) +
         theme_bw() +
-        theme(legend.position = "bottom")
+        theme(legend.position = "bottom") +
+        labs(x=gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "proxcnt10", vrbl_lbl],
+             y = "Predicted closing chance within 20 years,\n 95% CI")
+             
+             
+        ## facet_grid(rows = vars(popm_circle10_mult))
+        
 
     ## if multiple models, add facetting by model
-    if (dt_predres_mult[, fnunique(src) > 1]) {
+    if (len(l_mdlnames) > 1) {
         
         p_pred_popprxnct <- p_pred_popprxnct +
-            facet_wrap(~src, scales = "free")
+            facet_grid(src~popm_circle10_mult, scales = "free", labeller = as_labeller(l_lbls))
         
+    } else if (len(l_mdlnames) == 1) {
+
+        p_pred_popprxnct <- p_pred_popprxnct +
+            facet_grid(~popm_circle10_mult, labeller = as_labeller(l_lbls))    
+              
     }
 
-    dt_predres_mult %>%
-        .[proxcnt10 %in% c(0, 2, 5, 10)] %>%
-        ggplot(aes(x=popm_circle10, y=est, ymax = upper, ymin = lower,
-                   group = proxcnt10, color = factor(proxcnt10),
-                   fill = factor(proxcnt10))) + 
-        ## linewidth = N, alpha = N)) +
-        geom_line(linewidth = 2) +
-        geom_ribbon(alpha = 0.3) 
-
-
+    
+    
 
     return(p_pred_popprxnct)
         
