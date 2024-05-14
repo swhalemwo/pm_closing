@@ -1648,15 +1648,158 @@ gd_pred <- function(mdlname, l_mdls, dt_pred, measure, year_range) {
 ##     .[, .N, .(proxcnt10, popm_circle10_cut = round(as.numeric(as.character(popm_circle10_cut)),5))]
 
 
+gp_pred_heatmap <- function(l_mdlnames, l_mdls, dt_pmyear) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    gw_fargs(match.call())
+    #' @param l_mdlnames list of modelnames
+    #' @param l_mdls list of models
+    #' @param dt_pmyear data.table with PM-year data
+    #' the function generates a heatmap plot of the predicted 20-year hazard
+    #' for a grid of present proxcnt and popm_circle10 values 
+
+
+    ## get the overall prediction data 
+    ## dt_pred_full <- gd_predprep_popprxcnt(dt_pmyear) %>%
+    ##     gd_pred("r_pop4", l_mdls, dt_pred = ., measure = "surv", year_range = 20) %>%
+    ##     .[, popm_circle10 := round(popm_circle10)] %>% funique
+
+    ## generate pred (median/mode data)
+    dt_pred_prep <- cbind(
+        dt_pmyear[, lapply(.SD, Mode), # categorical/binary variables: use mode
+                  .SDcols = gc_vvs()$dt_vrblinfo[vrbltype %in% c("bin", "cat"), achr(vrbl)]],
+        dt_pmyear[, lapply(.SD, median), .SDcols = c("pmdens_cry", "PC1", "PC2", "year")]) # numeric: use median
+
+
+    ## get the cells where data actually exists
+    dt_topred_cell <- dt_pmyear[, .(N = fnunique(ID)), .(proxcnt10, popm_circle10 = round(popm_circle10))]
+
+    ## combine cells and pred
+    dt_topred_cplt <- cbind(dt_topred_cell, dt_pred_prep)
+
+    ## ## observed closings
+    ## dt_pred_obs <- dt_pmyear[, .(N = fnunique(ID), closing = sum(closing), OY = .N),
+    ##                          .(proxcnt10, popm_circle10 = round(popm_circle10))] %>%
+    ##     .[, `:=`(mort1 = closing/OY, mort2 = closing/N)]
+
+    ## ## hmm this doesn't control for other variables.. also this mortality calculation is a complete mess
+    ## ggplot(dt_pred_obs, aes(x=proxcnt10, y=popm_circle10, fill = mort2)) +
+    ##     geom_tile(alpha = 0.7) 
+
+    if ("r_pop4" %!in% l_mdlnames) {stop("r_pop4 not in l_mdlnames")}
+
+
+    ## predicted for cells
+    dt_pred_cell <- gd_pred("r_pop4", l_mdls, dt_pred = dt_topred_cplt, measure = "surv", year_range = 20) %>%
+        join(dt_topred_cell, on = c("proxcnt10", "popm_circle10")) %>% # join frequency data
+        .[, mort := 1-est] %>% # mortality categories
+        .[, mort_cat := fifelse(mort > 0.25, "0.25+", fifelse(mort < 0.15, "0-0.15", "0.15-0.25"))]
+        
+    ## coverage plot of where data exists
+    dt_pred_cell %>%
+        ggplot(aes(x=proxcnt10, y= popm_circle10, fill = log(N), label = N)) +
+        geom_tile() + 
+        geom_text() +
+        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) 
+
+    ## library(ggpattern)
+
+    ## get neighbors: each cell can have 4 neighbors
+    dt_neib_prep <- dt_pred_cell[, .(proxcnt10, popm_circle10, mort_cat)]
+
+    ## look where you have a border to the left
+    dt_border_left <- dt_neib_prep %>% copy %>%
+        .[, proxcnt10_left := proxcnt10 - 1] %>% # join with left
+        join(copy(dt_neib_prep)[, .(proxcnt10_left = proxcnt10, popm_circle10, mort_cat_left = mort_cat)],
+             on = c("proxcnt10_left", "popm_circle10")) %>%
+        .[mort_cat != mort_cat_left] # identify mort_cat transitions
+        
+    ## look where the border is on the top
+    dt_border_up <- dt_neib_prep %>% copy %>%
+        .[, popm_circle10_up := popm_circle10 + 1] %>% # 
+        join(copy(dt_neib_prep)[, .(popm_circle10_up = popm_circle10, proxcnt10, mort_cat_up = mort_cat)],
+             on = c("popm_circle10_up", "proxcnt10")) %>%
+        .[mort_cat != mort_cat_up] # identify mort_cat transitions
+
+    ## construct manual scale
+    scale_ylorbr <- scale_color_YlOrBr(limits = dt_pred_cell[, c(min(mort), max(mort))],
+                                       reverse = T, range = c(0, 0.88), guide = "none") %>%
+        chuck("palette")
+
+    ## still necessary to scale input values, doesn't work when passing to limits apparently
+    dt_pred_cell[, .(mean_mort = mean(mort)), mort_cat] %>%
+        .[order(mean_mort)] %>% 
+        .[, color := scale_ylorbr(mean_mort/dt_pred_cell[, max(mort)])] %>%
+        .[, color] %>% pal
+    
+    dt_viz_bar <- dt_pred_cell %>% copy %>%
+        .[, .(sumN = sum(N), mean_mort = mean(mort)), floor(mort*20)/20] %>%
+        .[, color := scale_ylorbr(mean_mort/dt_pred_cell[, max(mort)])] 
+        ## .[order(floor)] %>% .[, floor := as.factor(floor)]
+
+    dt_bar <- dt_pred_cell[, .(pos = seq(0.0, 0.5, 0.005))] %>%
+        .[, x := 0]
+            
+
+    dt_bar %>% ggplot(aes(x=x, y=pos, fill = pos)) + geom_tile() +
+        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88))
+
+
+    ggplot() +
+        geom_tile(dt_bar, mapping = aes(y=x, x=pos, fill = pos), height = 30) + 
+        geom_col(dt_viz_bar, mapping = aes(y=sumN, x=floor, fill = floor),
+                     position = position_nudge(y=30, x=0.025)) +
+            coord_flip() +
+        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) + 
+        ## scale_fill_manual(values = setNames(dt_viz_bar$color, dt_viz_bar$floor)) 
+        ## geom_hline(yintercept = "0.15")
+
+
+
+
+    ggplot() +
+        geom_tile(dt_pred_cell, mapping = aes(x=proxcnt10, y= popm_circle10, fill = 1-est)) +
+        ## geom_tile(dt_pred_cell[mort_cat == "0-0.15", .(mean_mort_cat = mean(mort))],
+        ##           mapping = aes(x=10,y=0, fill = mean_mort_cat))         
+        ## geom_tile_pattern(dt_pred_cell,
+        ##                   mapping = aes(
+        ##                       fill = 1-est,
+        ##                       x = proxcnt10, y = popm_circle10,
+        ##                       pattern_spacing = mort_cat, pattern_angle = mort_cat,
+        ##                       pattern_size = mort_cat),                          
+        ##                   pattern_fill = "black", pattern_color = "grey30",
+        ##                   pattern_density = 0.02) + 
+        ## scale_pattern_manual(values = c("0-0.15" = "stripe", "0.15-0.25" = "crosshatch", "0.25+" = "circle")) +
+        ## scale_pattern_spacing_manual(values = c("0-0.15" = 0.02, "0.15-0.25" = 0.02, "0.25+" = 0.01)) +
+        ## scale_pattern_angle_manual(values = c("0-0.15" = 10, "0.15-0.25" = 45, "0.25+" = 80)) +
+        ## scale_pattern_size_manual(values = c("0-0.15" = 0.3, "0.15-0.25" = 0.3, "0.25+" = 0.5)) +
+        geom_segment(dt_border_left, mapping = aes(x=proxcnt10-0.5, y=popm_circle10-0.5,
+                                                   xend = proxcnt10_left + 0.5, yend = popm_circle10 + 0.5),
+                     color = "black") +
+        geom_segment(dt_border_up, mapping = aes(x=proxcnt10-0.5, y=popm_circle10 + 0.5,
+                                                 xend = proxcnt10 + 0.5, yend = popm_circle10_up - 0.5),
+                     color = "black") + 
+        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) +
+        guides(fill = guide_colorbar(title = "Pred. closing chance\n  within 20 years")) +
+        theme(legend.position = "right",
+              plot.tag.position = c(0.8, 0.3)) +
+        labs(x=gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "proxcnt10", vrbl_lbl],
+             y = gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "popm_circle10", vrbl_lbl])
+             ## tag = "lines demarcate \ndifferent closing\n chance categories") 
+    ## scale_fill_nightfall(midpoint = fmean(dt_pred_cell$est, w = dt_topred_cell$N), reverse = T)
+
+    
+    
+}
+
 gp_pred_popprxcnt <- function(l_mdlnames, l_mdls, dt_pmyear) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     gw_fargs(match.call())
 
     #' generate plot of predicted avg hazard rate under different PM proximity counts and population numbers
-
+    
     dt_predres_mult <- map(
         l_mdlnames,
-        ~gd_pred(.x, l_mdls, gd_predprep_popprxcnt(dt_pmyear), measure = "surv", year_range = 30)) %>%
+        ~gd_pred(.x, l_mdls, gd_predprep_popprxcnt(dt_pmyear), measure = "surv", year_range = 20)) %>%
         rbindlist
 
     ## gd_pred("r_pop4", l_mdls, gd_predprep_popprxcnt(dt_pmyear), measure = "surv", year_range = 20)

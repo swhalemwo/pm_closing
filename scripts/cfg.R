@@ -101,6 +101,13 @@ gc_plts <- function() {
             caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population",
             width = 18,
             height = 8),
+        p_pred_heatmap = list(
+            l_mdlnames = quote(l_mdlnames_coxph),
+            l_mdls = quote(l_mdls),
+            dt_pmyear = quote(dt_pmyear),
+            caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population",
+            width = 18,
+            height = 10),
         p_lngtdvelp = list(
             dt_pmyear = quote(dt_pmyear),
             caption = "Composition of private museum population",
