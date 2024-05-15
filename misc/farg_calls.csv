@@ -35,6 +35,8 @@ gp_yeardens,dt_pmyear,dt_pmyear
 gd_inflcases,rx,rx
 gp_pred_popprxcnt,l_mdlnames,l_mdlnames_coxph
 gp_pred_popprxcnt,l_mdls,l_mdls
+gp_pred_proxcntpop,l_mdlnames,l_mdlnames_coxph
+gp_pred_proxcntpop,l_mdls,l_mdls
 gp_pred_heatmap,mdlname,"""r_pop4"""
 gp_pred_heatmap,l_mdls,l_mdls
 gp_pred_heatmap,dt_pmyear,dt_pmyear
