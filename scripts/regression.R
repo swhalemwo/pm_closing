@@ -1909,6 +1909,43 @@ gp_pred_popprxcnt <- function(l_mdlnames, l_mdls, dt_pmyear) {
     
 }
 
+gp_pred_proxcntpop <- function(l_mdlnames, l_mdls, dt_pmyear) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    gw_fargs(match.call())
+
+    #' generate plot of predicted avg hazard rate under different PM proximity counts and population numbers
+    
+    dt_predres_mult <- map(
+        l_mdlnames,
+        ~gd_pred(.x, l_mdls, gd_predprep_popprxcnt(dt_pmyear), measure = "surv", year_range = 20)) %>%
+        rbindlist
+
+    l_quantile_probs <- c(0.5, 0.7, 0.825, 0.9)
+
+    l_quantiles_proxcnt <- quantile(dt_pmyear$proxcnt10, probs = l_quantile_probs) %>% round(digits = 2) %>%
+        as.character
+
+    l_lbls <- sprintf("%s PMs 10km (%sth perc.)", l_quantiles_proxcnt, l_quantile_probs*100) %>%
+        setNames(l_quantiles_proxcnt)
+
+    
+    dt_predres_mult[proxcnt10 %in% l_quantiles_proxcnt] %>%
+        ggplot(aes(x=popm_circle10, y=1-est, ymax = 1-upper, ymin = 1-lower,
+                   group = factor(proxcnt10))) + 
+        geom_line(linewidth = 1) +
+        geom_ribbon(alpha = 0.3) + 
+        theme_bw() +
+        theme(legend.position = "bottom") +
+        labs(x=gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "popm_circle10", vrbl_lbl],
+             y = "Predicted closing chance within 20 years,\n 95% CI") +
+        facet_grid(~proxcnt10, scales = "free", labeller = as_labeller(l_lbls))
+
+    
+    ## .[, popm_circle10_cut := round
+
+}
+
+
 ## ## look at distribution of PMs
 ## dt_pmyear %>%
 ##     .[, c(lapply(.SD, \(x) log(mean(x+1))), museum_status = max(closing)), ID,
