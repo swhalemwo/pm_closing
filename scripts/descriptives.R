@@ -91,7 +91,7 @@ gt_sumstats <- function(dt_pmyear, dt_pmcpct) {
 
     ## get variables that I want on PM-level
     ## have to make as character to remove factors
-    vrbls_pm <- c(c_vvs$dt_vrblinfo[vrbl_tv == 0, as.character(vrbl)], "founder_dead")
+    vrbls_pm <- c_vvs$dt_vrblinfo[vrbl_tv == 0 & vrbltype != "num", as.character(vrbl)]
     
     
     ## expand each variable separately, otherwise model.matrix drops reference categories
@@ -109,8 +109,13 @@ gt_sumstats <- function(dt_pmyear, dt_pmcpct) {
     sumstats_cols <- c("grp_filler" = "", "term_lbl" = "Variable", "pm_sum" = "Count", "pm_mean" = "Mean",
                        "mean" = "Mean", "sd" = "SD", min = "Min.", max = "Max.")
     
+    ## variables to yeet from table
+    vrbls_toyeet <- c("mow", "year", "exhbrollany", "PC1", "PC2", "popm_country", "west", "year",
+                       "pmdens_circle10")
+
     ## format the columns
     dt_cbn_viz <- copy(dt_cbn2) %>%
+        .[vrbl %!in% vrbls_toyeet] %>% 
         .[, min_fmtd := format(min, digits = 2, scientific = F, trim = F), .I] %>% # row-wise min for small mins
         .[, max_fmtd := format(max, digits = 2, scientific = F, trim = F,
                                nsmall = fifelse(max %% 1 == 0, 0, 2)), .I] %>% # non-Ints: two decimal places
@@ -130,7 +135,7 @@ gt_sumstats <- function(dt_pmyear, dt_pmcpct) {
                           "\\cmidrule(r){3-4}\\cmidrule(r){5-8}")
 
     ## generate the other table elements: groupstrings and column names
-    dt_grpstrs <- gc_grpstrs(dt_cbn2, grp ="vrblgrp_lbl", nbr_cols = ncol(dt_cbn_viz))
+    dt_grpstrs <- gc_grpstrs(dt_cbn2[vrbl %!in% vrbls_toyeet], grp ="vrblgrp_lbl", nbr_cols = ncol(dt_cbn_viz))
     c_colnames <- gc_colnames(col_names = names(sumstats_cols),
                               col_lbls = sumstats_cols, hline_above = F)
     c_atr <- list(
