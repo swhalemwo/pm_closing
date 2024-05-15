@@ -102,9 +102,11 @@ gc_plts <- function() {
             width = 18,
             height = 8),
         p_pred_heatmap = list(
-            l_mdlnames = quote(l_mdlnames_coxph),
+            mdlname = 'r_pop4',
             l_mdls = quote(l_mdls),
             dt_pmyear = quote(dt_pmyear),
+            mortbound_lo = 0.125,
+            mortbound_hi = 0.25,
             caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population",
             width = 18,
             height = 10),

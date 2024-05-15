@@ -1648,7 +1648,7 @@ gd_pred <- function(mdlname, l_mdls, dt_pred, measure, year_range) {
 ##     .[, .N, .(proxcnt10, popm_circle10_cut = round(as.numeric(as.character(popm_circle10_cut)),5))]
 
 
-gp_pred_heatmap <- function(l_mdlnames, l_mdls, dt_pmyear) {
+gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_hi) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     gw_fargs(match.call())
     #' @param l_mdlnames list of modelnames
@@ -1668,13 +1668,14 @@ gp_pred_heatmap <- function(l_mdlnames, l_mdls, dt_pmyear) {
         dt_pmyear[, lapply(.SD, Mode), # categorical/binary variables: use mode
                   .SDcols = gc_vvs()$dt_vrblinfo[vrbltype %in% c("bin", "cat"), achr(vrbl)]],
         dt_pmyear[, lapply(.SD, median), .SDcols = c("pmdens_cry", "PC1", "PC2", "year")]) # numeric: use median
-
+        
 
     ## get the cells where data actually exists
     dt_topred_cell <- dt_pmyear[, .(N = fnunique(ID)), .(proxcnt10, popm_circle10 = round(popm_circle10))]
 
     ## combine cells and pred
-    dt_topred_cplt <- cbind(dt_topred_cell, dt_pred_prep)
+    dt_topred_cplt <- cbind(dt_topred_cell, dt_pred_prep) %>%
+        .[, pmdens_circle10 := proxcnt10/popm_circle10]
 
     ## ## observed closings
     ## dt_pred_obs <- dt_pmyear[, .(N = fnunique(ID), closing = sum(closing), OY = .N),
@@ -1685,14 +1686,19 @@ gp_pred_heatmap <- function(l_mdlnames, l_mdls, dt_pmyear) {
     ## ggplot(dt_pred_obs, aes(x=proxcnt10, y=popm_circle10, fill = mort2)) +
     ##     geom_tile(alpha = 0.7) 
 
-    if ("r_pop4" %!in% l_mdlnames) {stop("r_pop4 not in l_mdlnames")}
+    ## if (mdlname != ) {stop("r_pop4 not in l_mdlnames")}
 
-
-    ## predicted for cells
-    dt_pred_cell <- gd_pred("r_pop4", l_mdls, dt_pred = dt_topred_cplt, measure = "surv", year_range = 20) %>%
+    ## mortbound_hi <- 0.25
+    ## mortbound_lo <- 0.125
+    
+    ## predicted for cells, and categorize
+    dt_pred_cell <- gd_pred(mdlname, l_mdls, dt_pred = dt_topred_cplt, measure = "surv", year_range = 20) %>%
         join(dt_topred_cell, on = c("proxcnt10", "popm_circle10")) %>% # join frequency data
         .[, mort := 1-est] %>% # mortality categories
-        .[, mort_cat := fifelse(mort > 0.25, "0.25+", fifelse(mort < 0.15, "0-0.15", "0.15-0.25"))]
+        .[, mort_cat := fifelse(mort > mortbound_hi, paste0(mortbound_hi, "+"),
+                                fifelse(mort < mortbound_lo, sprintf("0-%s", mortbound_lo),
+                                        sprintf("%s-%s", mortbound_lo, mortbound_hi)))] 
+                                        
         
     ## coverage plot of where data exists
     dt_pred_cell %>%
@@ -1725,39 +1731,57 @@ gp_pred_heatmap <- function(l_mdlnames, l_mdls, dt_pmyear) {
                                        reverse = T, range = c(0, 0.88), guide = "none") %>%
         chuck("palette")
 
-    ## still necessary to scale input values, doesn't work when passing to limits apparently
-    dt_pred_cell[, .(mean_mort = mean(mort)), mort_cat] %>%
-        .[order(mean_mort)] %>% 
-        .[, color := scale_ylorbr(mean_mort/dt_pred_cell[, max(mort)])] %>%
-        .[, color] %>% pal
+    ## ## still necessary to scale input values, doesn't work when passing to limits apparently
+    ## dt_pred_cell[, .(mean_mort = mean(mort)), mort_cat] %>%
+    ##     .[order(mean_mort)] %>% 
+    ##     .[, color := scale_ylorbr(mean_mort/dt_pred_cell[, max(mort)])] %>%
+    ##     .[, color] %>% pal
     
+    ## the horizontal bar plot
     dt_viz_bar <- dt_pred_cell %>% copy %>%
-        .[, .(sumN = sum(N), mean_mort = mean(mort)), floor(mort*20)/20] %>%
+        .[, .(sumN = sum(N), mean_mort = mean(mort)), floor(mort*40)/40] %>%
         .[, color := scale_ylorbr(mean_mort/dt_pred_cell[, max(mort)])] 
         ## .[order(floor)] %>% .[, floor := as.factor(floor)]
 
-    dt_bar <- dt_pred_cell[, .(pos = seq(0.0, 0.5, 0.005))] %>%
+    ## the vertical color bar
+    dt_bar <- dt_pred_cell[, .(pos = seq(0.0+0.005, 0.5-0.005, 0.005))] %>%
         .[, x := 0]
             
 
     dt_bar %>% ggplot(aes(x=x, y=pos, fill = pos)) + geom_tile() +
         scale_fill_YlOrBr(reverse = T, range = c(0, 0.88))
 
+    ## horizontal lines on vertical color bar
+    dt_hlines <- data.table(y=c(mortbound_lo, mortbound_hi))
 
-    ggplot() +
-        geom_tile(dt_bar, mapping = aes(y=x, x=pos, fill = pos), height = 30) + 
+
+    p_legend <- ggplot() +
+        geom_tile(dt_bar, mapping = aes(y=x, x=pos, fill = pos, color = pos), height = 50, show.legend = F,
+                  position = position_nudge(y=-50)) + 
         geom_col(dt_viz_bar, mapping = aes(y=sumN, x=floor, fill = floor),
-                     position = position_nudge(y=30, x=0.025)) +
-            coord_flip() +
-        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) + 
+                 position = position_nudge(x=0.0125),
+                 show.legend = F) +
+        geom_segment(dt_hlines, mapping = aes(x = y, xend = y, y = -75, yend = -25), color = "black") +
+        coord_flip(expand = F) +        
+        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) +
+        scale_color_YlOrBr(reverse = T, range = c(0, 0.88)) +
+        labs(y= "Nbr. unique PMs", x = element_blank(), title = "Pred. closing chance\nwithin 20 years") +
+        theme(plot.margin = margin(0, 0, 0, 0),
+              panel.background = element_blank(),
+              panel.grid = element_blank(),
+              title = element_text(size = 9),
+              plot.title.position = "plot"
+              )
+    ## p_legend
         ## scale_fill_manual(values = setNames(dt_viz_bar$color, dt_viz_bar$floor)) 
         ## geom_hline(yintercept = "0.15")
 
 
 
 
-    ggplot() +
-        geom_tile(dt_pred_cell, mapping = aes(x=proxcnt10, y= popm_circle10, fill = 1-est)) +
+    p_heatmap <- ggplot() +
+        geom_tile(dt_pred_cell, mapping = aes(x=proxcnt10, y= popm_circle10, fill = mort, color = mort),
+                  show.legend = F) +
         ## geom_tile(dt_pred_cell[mort_cat == "0-0.15", .(mean_mort_cat = mean(mort))],
         ##           mapping = aes(x=10,y=0, fill = mean_mort_cat))         
         ## geom_tile_pattern(dt_pred_cell,
@@ -1779,15 +1803,23 @@ gp_pred_heatmap <- function(l_mdlnames, l_mdls, dt_pmyear) {
                                                  xend = proxcnt10 + 0.5, yend = popm_circle10_up - 0.5),
                      color = "black") + 
         scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) +
-        guides(fill = guide_colorbar(title = "Pred. closing chance\n  within 20 years")) +
+        scale_color_YlOrBr(reverse = T, range = c(0, 0.88)) +
+        theme_bw() +
+        coord_cartesian(expand = F) + 
         theme(legend.position = "right",
               plot.tag.position = c(0.8, 0.3)) +
-        labs(x=gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "proxcnt10", vrbl_lbl],
+                labs(x=gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "proxcnt10", vrbl_lbl],
              y = gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "popm_circle10", vrbl_lbl])
              ## tag = "lines demarcate \ndifferent closing\n chance categories") 
     ## scale_fill_nightfall(midpoint = fmean(dt_pred_cell$est, w = dt_topred_cell$N), reverse = T)
 
     
+
+    p_heatmap + p_legend +
+        ## plot_layout(widths = c(0.8, 0.2))
+        plot_layout(design = "1111#\n11112\n11112\n11112\n11112\n1111#")
+
+
     
 }
 
