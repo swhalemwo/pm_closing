@@ -1689,7 +1689,7 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
     ## if (mdlname != ) {stop("r_pop4 not in l_mdlnames")}
 
     ## mortbound_hi <- 0.25
-    ## mortbound_lo <- 0.125
+    ## mortbound_lo <- 0.25
     
     ## predicted for cells, and categorize
     dt_pred_cell <- gd_pred(mdlname, l_mdls, dt_pred = dt_topred_cplt, measure = "surv", year_range = 20) %>%
@@ -1702,7 +1702,7 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
         
     ## coverage plot of where data exists
     dt_pred_cell %>%
-        ggplot(aes(x=proxcnt10, y= popm_circle10, fill = log(N), label = N)) +
+        ggplot(aes(x=proxcnt10, y= popm_circle10, fill = N, label = N)) +
         geom_tile() + 
         geom_text() +
         scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) 
