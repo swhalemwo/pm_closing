@@ -1647,6 +1647,59 @@ gd_pred <- function(mdlname, l_mdls, dt_pred, measure, year_range) {
 ##     ## .[, .(ID, year, popm_circle10, popm_circle10_cut, popm_circle10_cut2)] %>%
 ##     .[, .N, .(proxcnt10, popm_circle10_cut = round(as.numeric(as.character(popm_circle10_cut)),5))]
 
+gp_heatmap_info <- function(dt_pmyear) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    gw_fargs(match.call())
+    #' plot distribution of PM-years across proxcnt-popm_circle10 space
+    #' rounded to integers
+
+            
+    ## get the cells where data actually exists
+    dt_cell_info <- dt_pmyear[, .(N = fnunique(ID)), .(proxcnt10, popm_circle10 = round(popm_circle10))]
+
+    ## combine cells and pred
+    ## dt_topred_cplt <- cbind(dt_topred_cell, dt_pred_prep) %>%
+    ##     .[, pmdens_circle10 := proxcnt10/popm_circle10]
+
+    
+    ## coverage plot of where data exists
+    p1 <- dt_cell_info %>%
+        ggplot(aes(x=proxcnt10, y= popm_circle10, fill = log(N), label = N)) +
+        geom_tile() + 
+        geom_text() +
+        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88))
+
+    ## coverage plot of where data exists
+    p2 <- dt_cell_info %>%
+        ggplot(aes(x=proxcnt10, y= popm_circle10, fill = N, label = N)) +
+        geom_tile() + 
+        geom_text() +
+        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88))
+
+        ## observed closings
+    dt_pred_obs <- dt_pmyear[, .(N = fnunique(ID), closing = sum(closing), OY = .N),
+                             .(proxcnt10, popm_circle10 = round(popm_circle10))] %>%
+        .[, `:=`(mort1 = closing/OY, mort2 = closing/N)]
+
+    ## ## hmm this doesn't control for other variables.. also this mortality calculation is a complete mess
+
+    p3 <- ggplot(dt_pred_obs, aes(x=proxcnt10, y=popm_circle10, fill = mort2,
+                            label = round(mort2, 2))) +
+        geom_tile() + scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) +
+        geom_text() +
+        labs(caption = "mort2: closing/N(unique_ID)")
+
+    p4 <- ggplot(dt_pred_obs, aes(x=proxcnt10, y=popm_circle10, fill = mort1,
+                            label = round(mort1, 2))) +
+        geom_tile() + scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) +
+        geom_text() +
+        labs(caption = "mort1: closing/OY")
+
+
+    (p1 + p2) / (p3 + p4)
+
+}
+
 
 gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_hi) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
@@ -1677,14 +1730,6 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
     dt_topred_cplt <- cbind(dt_topred_cell, dt_pred_prep) %>%
         .[, pmdens_circle10 := proxcnt10/popm_circle10]
 
-    ## ## observed closings
-    ## dt_pred_obs <- dt_pmyear[, .(N = fnunique(ID), closing = sum(closing), OY = .N),
-    ##                          .(proxcnt10, popm_circle10 = round(popm_circle10))] %>%
-    ##     .[, `:=`(mort1 = closing/OY, mort2 = closing/N)]
-
-    ## ## hmm this doesn't control for other variables.. also this mortality calculation is a complete mess
-    ## ggplot(dt_pred_obs, aes(x=proxcnt10, y=popm_circle10, fill = mort2)) +
-    ##     geom_tile(alpha = 0.7) 
 
     ## if (mdlname != ) {stop("r_pop4 not in l_mdlnames")}
 
@@ -1700,12 +1745,7 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
                                         sprintf("%s-%s", mortbound_lo, mortbound_hi)))] 
                                         
         
-    ## coverage plot of where data exists
-    dt_pred_cell %>%
-        ggplot(aes(x=proxcnt10, y= popm_circle10, fill = N, label = N)) +
-        geom_tile() + 
-        geom_text() +
-        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) 
+    
 
     ## library(ggpattern)
 

@@ -125,6 +125,11 @@ gc_plts <- function() {
             caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population",
             width = 18,
             height = 10),
+        p_heatmap_info = list(
+            dt_pmyear = quote(dt_pmyear),
+            caption = "heatmap info plots",
+            width = 35,
+            height = 22),
         p_lngtdvelp = list(
             dt_pmyear = quote(dt_pmyear),
             caption = "Composition of private museum population",
