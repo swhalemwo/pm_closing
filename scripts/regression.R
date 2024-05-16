@@ -1946,6 +1946,62 @@ gp_pred_proxcntpop <- function(l_mdlnames, l_mdls, dt_pmyear) {
 }
 
 
+gp_condmef <- function(mdlname, l_mdls, dt_pmyear) {
+    #' conditional effect plot
+    #' @param dt_pmyear PM-year data
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    gw_fargs(match.call())
+
+    ## get the AME data, supress warnings LUL
+    dt_condmef_popm_circle10 <- suppressWarnings(
+        slopes(chuck(l_mdls, mdlname), 
+               variables = "proxcnt10",
+               ## condition = "popm_circle10",
+               type = "lp")) %>% adt
+
+    ## make the con
+    p_condmef_popm_circle10 <- dt_condmef_popm_circle10 %>%
+        ## .[, .(estimate = mean(estimate)), popm_circle10] %>%
+        ggplot(aes(x=popm_circle10, y=exp(estimate), ymax = exp(conf.high), ymin = exp(conf.low))) +
+        ## geom_point() +  # + geom_smooth(method = "lm")
+        geom_line() +
+        geom_hline(yintercept = 1, linetype = "dashed") +
+        geom_rug(alpha = 0.05, sides = "b", linewidth = 0.02) + 
+        geom_ribbon(alpha = 0.2) +
+        labs(x = gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "popm_circle10", vrbl_lbl],
+             y = sprintf("Hazard ratio of %s",
+                         gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "proxcnt10", vrbl_lbl])) 
+
+    ## generate data for condmef of proxcnt10
+    dt_condmef_proxcnt10 <- suppressWarnings(
+        slopes(chuck(l_mdls, mdlname), 
+               variables = "popm_circle10",
+               ## condition = "proxcnt10",
+               type = "lp")) %>% adt
+
+    p_condmef_proxcnt10 <- dt_condmef_proxcnt10 %>%
+        ggplot(aes(x=proxcnt10, y = exp(estimate), ymax = exp(conf.high), ymin = exp(conf.low))) +
+        geom_line() +
+        geom_ribbon(alpha = 0.2) +
+        geom_hline(yintercept = 1, linetype = "dashed") +
+        geom_rug(alpha = 0.05, sides = "b", linewidth = 0.02, position = position_jitter(width = 0.3)) +
+        labs(x = gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "proxcnt10", vrbl_lbl],
+             y = sprintf("Hazard ratio of %s",
+                         gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "popm_circle10", vrbl_lbl])) + 
+             ## caption = "Rugs on X-axis spread out to illustrate value distribution") +
+        theme(plot.caption = element_text(margin = margin(t=-3)))
+        
+    ## dt_condmef_proxcnt10[proxcnt10 == 0, head(.SD,1)][, estimate]
+    ## l_mdls$r_pop4 %>% coef %>% chuck("popm_circle10")
+
+    ## l_mdls$r_pop4 %>% coef %>% chuck("proxcnt10")
+    ## dt_condmef_popm_circle10[, .SD[which.min(popm_circle10)]][, estimate]
+
+    p_condmef_popm_circle10 + p_condmef_proxcnt10
+
+
+}
+
 ## ## look at distribution of PMs
 ## dt_pmyear %>%
 ##     .[, c(lapply(.SD, \(x) log(mean(x+1))), museum_status = max(closing)), ID,
