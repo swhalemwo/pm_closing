@@ -268,8 +268,8 @@ gc_vvs <- function() {
 
     ## combine variable labels, variable groups, time-varying indicators, and variable types
 
-    dt_vrblinfo <- join(dt_vrbl_lbls, dt_vrblgrps, on = "vrbl") %>%
-        join(dt_vrblgrp_lbls, on = "vrblgrp") %>%
+    dt_vrblinfo <- join(dt_vrbl_lbls, dt_vrblgrps, on = "vrbl", verbose = 0) %>%
+        join(dt_vrblgrp_lbls, on = "vrblgrp", verbose = 0) %>%
         .[(vrbl %in% vrbls_tiv), vrbl_tv := 0] %>%
         .[(vrbl %in% vrbls_tv), vrbl_tv := 1] %>%
         .[dt_vrbltypes, vrbltype := i.vrbltype, on = "vrbl"]        
