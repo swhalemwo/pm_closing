@@ -193,7 +193,7 @@ gc_vvs <- function() {
         pmdens_circle10           = "PM density (10km)",
         "I(pmdens_circle10^2)"    = "PM density^2 (10km)",
         "proxcnt10:popm_circle10" = "Nbr PM (10km) * Pop (10km)",
-        "popm_circle10:I(proxcnt10^2)" = "Nbr PM (10km) * Pop^2 (10km)",
+        "popm_circle10:I(proxcnt10^2)" = "Nbr PM^2 (10km) * Pop (10km)",
         west                      = "Europe and North America",
         reg6                      = "Region",
         an_inclusion              = "ArtNews Ranking inclusion",
