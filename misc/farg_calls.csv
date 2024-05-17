@@ -37,9 +37,15 @@ gp_pred_popprxcnt,l_mdlnames,l_mdlnames_coxph
 gp_pred_popprxcnt,l_mdls,l_mdls
 gp_pred_proxcntpop,l_mdlnames,l_mdlnames_coxph
 gp_pred_proxcntpop,l_mdls,l_mdls
+gp_condmef,mdlname,"""r_pop4"""
+gp_condmef,l_mdls,l_mdls
+gp_condmef,dt_pmyear,dt_pmyear
 gp_pred_heatmap,mdlname,"""r_pop4"""
 gp_pred_heatmap,l_mdls,l_mdls
 gp_pred_heatmap,dt_pmyear,dt_pmyear
+gp_heatmap_info,dt_pmyear,dt_pmyear
+gp_pred_heatmap_wocryside,mdlname,"""r_wocryside"""
+gp_pred_heatmap_wocryside,l_mdls,l_mdls
 gp_lngtdvelp,dt_pmyear,dt_pmyear
 gt_coxzph,rx,l_mdls$r_pop4
 gt_reg_coxph,l_mdls,l_mdls
@@ -48,6 +54,8 @@ gt_sumstats,dt_pmyear,dt_pmyear
 gt_sumstats,dt_pmcpct,dt_pmcpct
 gt_selfid,dt_pmx,dt_pmx
 gt_selfid,dt_pmyear,dt_pmyear
+gt_reg_coxph_density,l_mdls,l_mdls
+gt_reg_coxph_density,l_mdlnames,l_mdlnames_coxph_density
 gd_inflcases,rx,rx
 gt_reg_coxph,l_mdls,l_mdls
 gt_reg_coxph,l_mdlnames,l_mdlnames_coxph

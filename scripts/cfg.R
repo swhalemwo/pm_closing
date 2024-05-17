@@ -30,8 +30,11 @@ gc_tbls <- function(c_tblargs) {
         t_selfid = list(
             dt_pmx = quote(dt_pmx),
             dt_pmyear = quote(dt_pmyear),
-            caption = "Selfidentification"
-        )
+            caption = "Selfidentification"),
+        t_reg_coxph_density = list(
+            l_mdls = quote(l_mdls),
+            l_mdlnames = quote(l_mdlnames_coxph_density),
+            caption = "Cox PH models of different local density specifications")        
     )
 
     
@@ -115,7 +118,6 @@ gc_plts <- function() {
             caption = "Conditional effects of Regional PM Density and Population",
             width = 18,
             height = 10),            
-
         p_pred_heatmap = list(
             mdlname = 'r_pop4',
             l_mdls = quote(l_mdls),
@@ -130,6 +132,16 @@ gc_plts <- function() {
             caption = "heatmap info plots",
             width = 35,
             height = 22),
+        p_pred_heatmap_wocryside = list(
+            mdlname = "r_wocryside",
+            l_mdls = quote(l_mdls),
+            dt_pmyear = quote(dt_pmyear),
+            mortbound_lo = 0.165,
+            mortbound_hi = 0.165,
+            caption = paste0("Predicted Avg. Hazard Rate from Regional PM Density and Population",
+                              " (without proxcnt < 2 & popm_circle10 <2)"),
+            width = 18,
+            height = 10),        
         p_lngtdvelp = list(
             dt_pmyear = quote(dt_pmyear),
             caption = "Composition of private museum population",

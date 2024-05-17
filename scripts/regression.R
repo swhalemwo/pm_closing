@@ -1285,6 +1285,7 @@ gc_pmdb_tests <- function(dt_pmx, dt_pmyear, dt_pmcpct) {
 gl_mdls <- function(dt_pmyear, dt_pmcpct) {
     gw_fargs(match.call())
 
+
     l_mdls <- list(
         r_null = coxph(Surv(tstart, tstop, closing) ~ 1, dt_pmyear),
 
@@ -1314,11 +1315,24 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
                             proxcnt10*popm_circle10 + exhbany + recession + covid,
                        dt_pmyear),
+        
+        ## only focus on museums that are not in countryside (wo = without), i.e. other PMs around and some people
+        r_onlycryside = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                            proxcnt10*popm_circle10 + exhbany + recession + covid,
+                            dt_pmyear[proxcnt10 <= 1 & popm_circle10 <= 1]),
+
+        
+        ## only focus on museums that are not in countryside (wo = without), i.e. other PMs around and some people
+        r_wocryside = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                            proxcnt10*popm_circle10 + exhbany + recession + covid,
+                       dt_pmyear[!(proxcnt10 < 2 & popm_circle10 <= 2)]),
 
         r_smol = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
                             proxcnt10*popm_circle10 + exhbany + recession + covid,
-                       dt_pmyear[age <= 30])
+                       dt_pmyear[age <= 30]),
 
 
         ## try coxme.. looks pretty similar -> yeet for now
@@ -1328,10 +1342,10 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ##                     proxcnt10*popm_circle10 + exhbany + recession + covid + (1 | iso3c),
         ##                dt_pmyear)
 
-        ## r_pop42 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-        ##                     proxcnt10*popm_circle10 + I(proxcnt10^2)*popm_circle10 + exhbany + recession + covid,
-        ##                dt_pmyear),
+        r_pop42 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                            proxcnt10*popm_circle10 + I(proxcnt10^2)*popm_circle10 + exhbany + recession + covid,
+                       dt_pmyear)
 
         ## r_pop5 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
         ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
@@ -1743,9 +1757,15 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
         .[, mort_cat := fifelse(mort > mortbound_hi, paste0(mortbound_hi, "+"),
                                 fifelse(mort < mortbound_lo, sprintf("0-%s", mortbound_lo),
                                         sprintf("%s-%s", mortbound_lo, mortbound_hi)))] 
-                                        
-        
-    
+                
+                        
+    ## construct cross vertical
+    ## find the column where the overall slope is the smallest
+    dt_cross <- data.table(
+        cross_vert = dt_pred_cell[, .(var_mort = var(mort)), proxcnt10][, .SD[which.min(var_mort), proxcnt10]],
+        cross_horiz = dt_pred_cell[, .(var_mort = var(mort)), popm_circle10] %>%
+            .[, .SD[which.min(var_mort), popm_circle10]])
+
 
     ## library(ggpattern)
 
@@ -1784,25 +1804,27 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
         ## .[order(floor)] %>% .[, floor := as.factor(floor)]
 
     ## the vertical color bar
-    dt_bar <- dt_pred_cell[, .(pos = seq(0.0+0.005, 0.5-0.005, 0.005))] %>%
+    dt_bar <- dt_pred_cell[, .(pos = seq(0.0+0.005, (ceiling(max(mort)*40)/40), 0.005))] %>%
         .[, x := 0]
             
-
+    
+    ## check that bar is working
     dt_bar %>% ggplot(aes(x=x, y=pos, fill = pos)) + geom_tile() +
         scale_fill_YlOrBr(reverse = T, range = c(0, 0.88))
 
     ## horizontal lines on vertical color bar
     dt_hlines <- data.table(y=c(mortbound_lo, mortbound_hi))
 
-
+    ## generate plot to use as colorbar legend: allows to have lines (segments on legend)
     p_legend <- ggplot() +
         geom_tile(dt_bar, mapping = aes(y=x, x=pos, fill = pos, color = pos), height = 50, show.legend = F,
-                  position = position_nudge(y=-50)) + 
+                  position = position_nudge(y=-50)) + # the actual colorbar
         geom_col(dt_viz_bar, mapping = aes(y=sumN, x=floor, fill = floor),
-                 position = position_nudge(x=0.0125),
+                 position = position_nudge(x=0.0125), # an info histogram 
                  show.legend = F) +
-        geom_segment(dt_hlines, mapping = aes(x = y, xend = y, y = -75, yend = -25), color = "black") +
-        coord_flip(expand = F) +        
+        ## geom_segment(dt_hlines, mapping = aes(x = y, xend = y, y = -75, yend = -25), color = "black") +
+        ## the horizontal lines
+        coord_flip(expand = F) + # need to use coord_flip: can't have decimal-point y-axis with horizontal bars
         scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) +
         scale_color_YlOrBr(reverse = T, range = c(0, 0.88)) +
         labs(y= "Nbr. unique PMs", x = element_blank(), title = "Pred. closing chance\nwithin 20 years") +
@@ -1836,16 +1858,18 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
         ## scale_pattern_spacing_manual(values = c("0-0.15" = 0.02, "0.15-0.25" = 0.02, "0.25+" = 0.01)) +
         ## scale_pattern_angle_manual(values = c("0-0.15" = 10, "0.15-0.25" = 45, "0.25+" = 80)) +
         ## scale_pattern_size_manual(values = c("0-0.15" = 0.3, "0.15-0.25" = 0.3, "0.25+" = 0.5)) +
-        geom_segment(dt_border_left, mapping = aes(x=proxcnt10-0.5, y=popm_circle10-0.5,
-                                                   xend = proxcnt10_left + 0.5, yend = popm_circle10 + 0.5),
-                     color = "black") +
-        geom_segment(dt_border_up, mapping = aes(x=proxcnt10-0.5, y=popm_circle10 + 0.5,
-                                                 xend = proxcnt10 + 0.5, yend = popm_circle10_up - 0.5),
-                     color = "black") + 
+        ## geom_segment(dt_border_left, mapping = aes(x=proxcnt10-0.5, y=popm_circle10-0.5,
+        ##                                            xend = proxcnt10_left + 0.5, yend = popm_circle10 + 0.5),
+        ##              color = "black") +
+        ## geom_segment(dt_border_up, mapping = aes(x=proxcnt10-0.5, y=popm_circle10 + 0.5,
+        ##                                          xend = proxcnt10 + 0.5, yend = popm_circle10_up - 0.5),
+        ##              color = "black") + 
         scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) +
         scale_color_YlOrBr(reverse = T, range = c(0, 0.88)) +
         theme_bw() +
-        coord_cartesian(expand = F) + 
+        coord_cartesian(expand = F) +
+        geom_vline(xintercept = dt_cross$cross_vert, linetype = "dashed") +
+        geom_hline(yintercept = dt_cross$cross_horiz, linetype = "dashed") + 
         theme(legend.position = "right",
               plot.tag.position = c(0.8, 0.3)) +
                 labs(x=gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "proxcnt10", vrbl_lbl],
@@ -1857,11 +1881,17 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
 
     p_heatmap + p_legend +
         ## plot_layout(widths = c(0.8, 0.2))
-        plot_layout(design = "1111#\n11112\n11112\n11112\n11112\n1111#")
+        # need to use awkward patchwork design to properly size legend
+        plot_layout(design = "1111#\n11112\n11112\n11112\n11112\n1111#") 
 
 
     
 }
+
+## add a function for model without countryside
+gp_pred_heatmap_wocryside <- gp_pred_heatmap
+
+
 
 gp_pred_popprxcnt <- function(l_mdlnames, l_mdls, dt_pmyear) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
@@ -1993,11 +2023,11 @@ gp_condmef <- function(mdlname, l_mdls, dt_pmyear) {
     gw_fargs(match.call())
 
     ## get the AME data, supress warnings LUL
-    dt_condmef_popm_circle10 <- suppressWarnings(
+    dt_condmef_popm_circle10 <- # suppressWarnings(
         slopes(chuck(l_mdls, mdlname), 
                variables = "proxcnt10",
                ## condition = "popm_circle10",
-               type = "lp")) %>% adt
+               type = "lp") %>% adt
 
     ## make the con
     p_condmef_popm_circle10 <- dt_condmef_popm_circle10 %>%
@@ -2076,6 +2106,8 @@ gt_reg_coxph <- function(l_mdls, l_mdlnames) {
     
     
 }
+
+gt_reg_coxph_density <- gt_reg_coxph
 
 
 gt_coxzph <- function(rx) {

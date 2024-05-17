@@ -31,7 +31,7 @@ library(khroma)      # plotting
 library(ggrepel)     # plotting
 library(epiR)        # testing instantaneous hazard SE calculations
 library(boot)        # bootstrapping for instantaneous hazard SE calculations
-
+library(marginaleffects) # for condmef plots (conditional marginal effects)
 
 ## LOCS <- list(PROJDIR = "/home/johannes/Dropbox/phd/papers/closing/")
 ## LOCS$FIGDIR <- paste0(FIG
@@ -172,6 +172,7 @@ dt_pmyear <- gd_pmyear(dt_pmyear_prep, c_lvrs) # trim down dt to no NAs
 
 dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-year)
 
+
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
                                         # set model names for t_reg_coxph
 l_mdlnames_coxph <- list("r_pop4")
@@ -181,6 +182,10 @@ l_mdlnames_coxph <- list("r_pop4")
 ## "r_woaf", "r_waf_year", "r_waf_roll", "r_waf_roll2")
 ## "r_waf_cy", "r_waf_proplog", "r_waf_prop", "r_waf_year_sqrd") 
 
+
+
+## compare whether proxcnt/popm_circle10 patterns are stable across data ranges
+l_mdlnames_coxph_density <- list("r_pop4", "r_wocryside", "r_onlycryside", "r_pop42") 
 
 
 ## screenreg2(list(l_mdls$r_pop4)) # just smoe display
@@ -244,5 +249,10 @@ print("everything is DONE")
 
 
 
+## ** additions for later
 
-
+## add these if people complain about local density specification
+## gp_pred_heatmap("r_pop42", l_mdls, dt_pmyear, mortbound_lo = 0.15, mortbound_hi = 0.25)
+## ## gp_condmef("r_pop42", l_mdls, dt_pmyear)
+## gp_pred_heatmap("r_onlycryside", l_mdls, dt_pmyear, mortbound_lo = 0.15, mortbound_hi = 0.25)
+## ## gp_condmef("r_pop42", l_mdls, dt_pmyear)
