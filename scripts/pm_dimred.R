@@ -1,3 +1,4 @@
+
 ## * dimred code
 
 gc_plts_dimred <- function() {
@@ -39,14 +40,14 @@ gd_dimred_loads <- function(loadmat) {
     dt_dimred_loads <- matrix(data = as.numeric(loadmat),
                               nrow = nrow(loadmat),
                               dimnames = list(rownames(loadmat), paste0("dim", 1:ncol(loadmat)))) %>% 
-                              ## dimnames = attributes(loadmat)$dimnames) %>% 
-                              ## dimnames = as.list(paste0("dim", 1:ncol(loadmat)))) %>%
+        ## dimnames = attributes(loadmat)$dimnames) %>% 
+        ## dimnames = as.list(paste0("dim", 1:ncol(loadmat)))) %>%
         adt(keep.rownames = "vrbl") %>%
         melt(id.vars = "vrbl", variable.name = "dim") %>%
         .[, dim := factor(dim, levels = sort(unique(dim)))]
 
-        ## .[dim %in% paste0("dim", 1:10) ] %>%
-        ## .[, dim := factor(dim, levels = paste0("RC", 1:10))]
+    ## .[dim %in% paste0("dim", 1:10) ] %>%
+    ## .[, dim := factor(dim, levels = paste0("RC", 1:10))]
 
     attr(dt_dimred_loads, "gnrtdby") <- as.character(match.call()[[1]])
     return(dt_dimred_loads)
@@ -205,7 +206,7 @@ gp_cormat <- function(dt_pmdb, vrbls, nclust) {
         .[vrblx  == vrbly, cor := NA] %>% # make diag NA
         .[, `:=`(vrblx = factor(vrblx, levels = vrbl_order),
                  vrbly = factor(vrbly, levels = vrbl_order))] 
-        
+    
     
     ggplot(dt_corlong, aes(x=vrblx, y=vrbly, fill = cor)) + geom_tile() +
         theme(axis.text.x = element_text(angle = 25, hjust = 1)) +
@@ -272,7 +273,7 @@ gp_pca_scores <- function(l_pca_dimred) {
         geom_jitter(width = 1, height = 1, size = 0.5)
 }
 
-    
+
 
 gl_pca_dimred <- function(dt_pmdb) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
@@ -284,14 +285,14 @@ gl_pca_dimred <- function(dt_pmdb) {
                       keep(names(dt_pmdb), ~grepl("^avbl_", .x)),
                       .c(gvtsupport, donorprogram, endowment, sponsorship,  cooperation),
                       .c(temp_exhibs, cafe_restrnt, reducedtickets, museumshop,
-                          rentalpossblt, webshop))
+                         rentalpossblt, webshop))
 
     ## debug: visualize coverage 
     ## dt_pmdb_dimred_splong <- dt_pmdb[, .SD, .SDcols = c("ID", "museum_status", vrbls_dimred2)] %>%
     ##     melt(id.vars = c("ID", "museum_status"), variable.name = "vrbl")
 
     ## gd_vrblcvrg(dt_pmdb_dimred_splong, all_statuses = F) %>% gp_vrblcvrg_ratio
-        
+    
 
     ## run analysis
     l_pca_dimred <- gl_pca(dt_pmdb, vrbls_dimred, ncomp = 2)
@@ -327,7 +328,7 @@ gd_pca_score <- function(dt_toscore, prcomp_obj, rotatedLoadings) {
 
     dt_pca_scored <- replace_NA(
         dt_toscore[, .SD, # prep data: replace NAs with 0s
-                .SDcols = rownames(rotatedLoadings)]) %>% as.matrix %>%
+                   .SDcols = rownames(rotatedLoadings)]) %>% as.matrix %>%
         subtract(matrix(prcomp_obj$center, # undo centering
                         nrow = dt_toscore[, .N], byrow = T,
                         ncol = len(prcomp_obj$center))) %>%
@@ -367,7 +368,7 @@ gl_pca_dimred_closed_imputed <- function(dt_pmdb, dt_pmx) {
     return(l_pca_dimred_woclosed)
 
 }
-    
+
 
 ## * main
 
@@ -407,7 +408,7 @@ gl_pca_dimred_closed_imputed <- function(dt_pmdb, dt_pmx) {
 
 
 
-    
+
 ## scores <- scale(l_pcares$x) %*% varimax(rawLoadings)$rotmat %>% adt
 
 ## library(psych)

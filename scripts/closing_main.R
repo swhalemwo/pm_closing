@@ -52,7 +52,7 @@ gd_nbrs <- function() {
 
     ## calculate average hazard rate numbers, depending on maximum age
 
-        
+    
     dt_pehaz <- gd_pehaz(dt_pmcpct, cutwidth = 2)[src == "w1"]
 
     dt_meanhaz <- map(c(2, 4, 5, 10, 20, 30, 40, 100),
@@ -63,7 +63,7 @@ gd_nbrs <- function() {
               grp = "meanhaz")]
 
     
-        
+    
     ## plots: yanking (insertion) and in-text referencing
     dt_ynkplt <- gc_ynkplt()
     dt_refplt <- gc_refplt()
@@ -82,9 +82,9 @@ gd_nbrs <- function() {
 
 ## gl_dts <- function(dt_pmdb) {
 ##     #' absolutely cursed idea to just collect all the dts in one block
-       #' the callgraph tec isn't there yet sadly
+#' the callgraph tec isn't there yet sadly
 ##     gw_fargs(match.call())
-    
+
 ##     dt_pmx <- gd_pmx(dt_pmdb)
 ##     dt_pmtiv <- gd_pmtiv(dt_pmx)
 
@@ -145,13 +145,13 @@ if ("memoised" %!in% class(gd_mow_info)) {
 START_YEAR <- 2000
 END_YEAR <- 2021
 
-# levers: configuration options
+## levers: configuration options
 c_lvrs <- list(
     dtti = c("af_size"),
     ## dtti = c(""),
     af_vrbls = c("exhbany", "exhbrollany")) # only import selected vrbls to not pollute dt_pmyear
-    
-    
+
+
 
 ## actual pm data
 ## l_pca_dimred <- gl_pca_dimred(dt_pmdb)
@@ -233,7 +233,7 @@ screenreg(l_mdls$r_pop4)
 
 ## gt_reg_coxph(l_mdls, )
 
-    
+
 gtbl("t_reg_coxph")
 wtbl("t_reg_coxph")
 dtblF("t_reg_coxph_wcpF")

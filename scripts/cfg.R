@@ -1,3 +1,4 @@
+
 ## * config functions
 
 gc_clgrphattrs <- function() {
@@ -59,7 +60,7 @@ theme_closing <- function(extra_space_top=0) {
         ## axis.text = element_blank(),
         ## plot.margin = unit(c(extra_space_top,0,0,0), "points"),
         axis.title = element_text(size = base_size)
-        )
+    )
 
 }
 
@@ -71,83 +72,83 @@ gc_plts <- function() {
         ## gc_plts_dimred()
         list(
             p_surv = list(
-            dt_pmcpct = quote(dt_pmcpct),
-            caption = "Private Museum Survival probability",
-            width = 14,
-            height = 8),
-        p_hazard = list(
-            dt_pmcpct = quote(dt_pmcpct),
-            caption = "Private Museum hazard function",
-            cutwidth = 2,
-            bw.smooth = 5,
-            width = 16,
-            height = 9),
-        p_agedens = list(
-            dt_pmcpct = quote(dt_pmcpct),
-            caption = "Age distribution of private museums",
-            width = 17,
-            height = 16),
-        p_yeardens = list(
-            dt_pmyear = quote(dt_pmyear),
-            caption = "Private Museum-year Distribution",
-            width = 19,
-            height = 12),
-        p_coxphdiag_more = list(
-            rx = quote(l_mdls$r_pop4),
-            caption = "Model Diagnostics",
-            width = 19,
-            height = 25),
-        p_pred_popprxcnt = list(
-            l_mdlnames = quote(l_mdlnames_coxph),
-            l_mdls = quote(l_mdls),
-            dt_pmyear = quote(dt_pmyear),
-            caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population",
-            width = 18,
-            height = 8),
-        p_pred_proxcntpop = list(
-            l_mdlnames = quote(l_mdlnames_coxph),
-            l_mdls = quote(l_mdls),
-            dt_pmyear = quote(dt_pmyear),
-            caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population",
-            width = 18,
-            height = 8),
-        p_condmef = list(
-            mdlname = "r_pop4",
-            l_mdls = quote(l_mdls),
-            dt_pmyear = quote(dt_pmyear),
-            caption = "Conditional effects of Regional PM Density and Population",
-            width = 18,
-            height = 10),            
-        p_pred_heatmap = list(
-            mdlname = 'r_pop4',
-            l_mdls = quote(l_mdls),
-            dt_pmyear = quote(dt_pmyear),
-            mortbound_lo = 0.165,
-            mortbound_hi = 0.165,
-            caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population",
-            width = 18,
-            height = 10),
-        p_heatmap_info = list(
-            dt_pmyear = quote(dt_pmyear),
-            caption = "heatmap info plots",
-            width = 35,
-            height = 22),
-        p_pred_heatmap_wocryside = list(
-            mdlname = "r_wocryside",
-            l_mdls = quote(l_mdls),
-            dt_pmyear = quote(dt_pmyear),
-            mortbound_lo = 0.165,
-            mortbound_hi = 0.165,
-            caption = paste0("Predicted Avg. Hazard Rate from Regional PM Density and Population",
-                              " (without proxcnt < 2 & popm_circle10 <2)"),
-            width = 18,
-            height = 10),        
-        p_lngtdvelp = list(
-            dt_pmyear = quote(dt_pmyear),
-            caption = "Composition of private museum population",
-            width = 18,
-            height = 14)
-    ))
+                dt_pmcpct = quote(dt_pmcpct),
+                caption = "Private Museum Survival probability",
+                width = 14,
+                height = 8),
+            p_hazard = list(
+                dt_pmcpct = quote(dt_pmcpct),
+                caption = "Private Museum hazard function",
+                cutwidth = 2,
+                bw.smooth = 5,
+                width = 16,
+                height = 9),
+            p_agedens = list(
+                dt_pmcpct = quote(dt_pmcpct),
+                caption = "Age distribution of private museums",
+                width = 17,
+                height = 16),
+            p_yeardens = list(
+                dt_pmyear = quote(dt_pmyear),
+                caption = "Private Museum-year Distribution",
+                width = 19,
+                height = 12),
+            p_coxphdiag_more = list(
+                rx = quote(l_mdls$r_pop4),
+                caption = "Model Diagnostics",
+                width = 19,
+                height = 25),
+            p_pred_popprxcnt = list(
+                l_mdlnames = quote(l_mdlnames_coxph),
+                l_mdls = quote(l_mdls),
+                dt_pmyear = quote(dt_pmyear),
+                caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population",
+                width = 18,
+                height = 8),
+            p_pred_proxcntpop = list(
+                l_mdlnames = quote(l_mdlnames_coxph),
+                l_mdls = quote(l_mdls),
+                dt_pmyear = quote(dt_pmyear),
+                caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population",
+                width = 18,
+                height = 8),
+            p_condmef = list(
+                mdlname = "r_pop4",
+                l_mdls = quote(l_mdls),
+                dt_pmyear = quote(dt_pmyear),
+                caption = "Conditional effects of Regional PM Density and Population",
+                width = 18,
+                height = 10),            
+            p_pred_heatmap = list(
+                mdlname = 'r_pop4',
+                l_mdls = quote(l_mdls),
+                dt_pmyear = quote(dt_pmyear),
+                mortbound_lo = 0.165,
+                mortbound_hi = 0.165,
+                caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population",
+                width = 18,
+                height = 10),
+            p_heatmap_info = list(
+                dt_pmyear = quote(dt_pmyear),
+                caption = "heatmap info plots",
+                width = 35,
+                height = 22),
+            p_pred_heatmap_wocryside = list(
+                mdlname = "r_wocryside",
+                l_mdls = quote(l_mdls),
+                dt_pmyear = quote(dt_pmyear),
+                mortbound_lo = 0.165,
+                mortbound_hi = 0.165,
+                caption = paste0("Predicted Avg. Hazard Rate from Regional PM Density and Population",
+                                 " (without proxcnt < 2 & popm_circle10 <2)"),
+                width = 18,
+                height = 10),        
+            p_lngtdvelp = list(
+                dt_pmyear = quote(dt_pmyear),
+                caption = "Composition of private museum population",
+                width = 18,
+                height = 14)
+        ))
 
     ## check that there are no duplicate 
     if (any_duplicated(names(l_pltcfgs))) stop("duplicated names")
@@ -158,7 +159,7 @@ gc_plts <- function() {
 
     
     return(l_pltcfgs)
-        
+    
 }
 
 
@@ -326,7 +327,7 @@ gc_vvs <- function() {
         list(vrbl = "time_period", term = "time_periodtp2010", term_lbl = "Time Period 2010-2014"),
         list(vrbl = "time_period", term = "time_periodtp2015", term_lbl = "Time Period 2015-2019"),
         list(vrbl = "time_period", term = "time_periodtp2020", term_lbl = "Time Period 2020-2024")        
-        )
+    )
 
     dt_ctgterm_lbls <- rbindlist(l_ctgterm_lbls) %>%
         .[, term := factor(term, levels = term)]
@@ -346,7 +347,7 @@ gc_vvs <- function() {
         .[, gof_name := factor(gof_name, levels = gof_name)]
 
     ## l_mdl_lbls <- list()
-        
+    
 
     
 
@@ -367,10 +368,10 @@ gc_vvs <- function() {
         dt_ctgterm_lbls = dt_ctgterm_lbls,
         dt_gof_cfg = dt_gof_cfg,
         dt_termlbls = dt_termlbls)
-        
+    
 
     
 }
 
 
-        
+

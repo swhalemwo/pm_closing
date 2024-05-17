@@ -1,3 +1,4 @@
+
 ## * regression (survival analysis)
 
 
@@ -30,7 +31,7 @@ gd_af_grid <- function(dt_af_exhbs, dt_pmyear_size, dt_matches_pmdb_af) {
 
     ## merge both grids with full join
     dt_af_grid_prep1 <- join(dt_af_oy, dt_pmdb_oy, on = c("AF_IID", "year"), how = "full")
-         
+    
     
     ## fix overlaps missing IDs with update join (e.g. when AF and PM differ in years covered)
     dt_af_grid_prep2 <- copy(dt_af_grid_prep1)[dt_matches_pmdb_af, AF_IID := i.AF_IID, on = "PMDB_ID"]
@@ -45,7 +46,7 @@ gd_af_grid <- function(dt_af_exhbs, dt_pmyear_size, dt_matches_pmdb_af) {
 
     ## check ID uniqueness with new ID
     dt_orgid <- dt_af_grid %>% .[, .(AF_IID, PMDB_ID, ORG_ID)] %>% funique 
-        
+    
     if (dt_orgid[!is.na(AF_IID), .N, AF_IID][, max(N) > 1] | dt_orgid[!is.na(PMDB_ID), .N, PMDB_ID][, max(N) > 1]){
         stop("IDs not sufficiently unique")}
 
@@ -116,12 +117,12 @@ gd_af_size <- function(dt_pmx) {
     ## expand to pm_year UoA
     dt_pmyear_size <- copy(dt_pmx)[, last_year := fifelse(museum_status == "closed", year_closed, END_YEAR)] %>%
         .[, .(year = year_opened:last_year), .(ID, iso3c, year_opened, year_closed)]
-                                               
+    
     ## construct organization-year (OY) grid
     dt_af_grid <- gd_af_grid(dt_af_exhbs, dt_pmyear_size, dt_matches_pmdb_af)
 
     ## dt_af_grid_wcry[AF_IID == 574]
-                         
+    
     dt_af_grid_wcry <- gd_af_grid_wcry(dt_af_grid, dt_pmx)
     
 
@@ -133,14 +134,14 @@ gd_af_size <- function(dt_pmx) {
     dt_pmdb_na_check <- join(dt_af_qntlprep[is.na(iso3c), .N, .(ID = PMDB_ID)] %>% na.omit,
                              gd_pmdb_excl(only_pms = F)[, .(name, museum_status, ID)],
                              on = "ID")
-        
+    
     if (dt_pmdb_na_check[, any(museum_status %!in% c("no longer a private museum", "not open yet"))]) {
         stop("at least one of the orgs that has no iso3c is not NLPM or not open yet")}
     
     ##      dt_af_exhbs_pmdb[, .N, .(InstitutionID, begin_year)],
     ##      on = c("InstitutionID", "begin_year"), verbose = 0) %>%
     
-     
+    
     ecdf_fun <- function(x,perc) ecdf(x)(perc) # get quantile of value
 
     ## rolling sum of last 5 years
@@ -160,7 +161,7 @@ gd_af_size <- function(dt_pmx) {
     ## dt_af_roll[iso3c == "DEU" & !is.na(PMDB_ID)] %>%
     ##     melt(id.vars = c("PMDB_ID", "begin_year"), measure.vars = c("quantile_roll")) %>%
     ##     ggplot(aes(x=begin_year, y=value, color = variable)) + facet_wrap(~PMDB_ID) + geom_line()
-        
+    
     ## dt_af_roll[!is.na(PMDB_ID)]    
 
     ## calculate quantile using all orgs, filter down to PMs
@@ -174,10 +175,10 @@ gd_af_size <- function(dt_pmx) {
         .[!is.na(PMDB_ID)] # focus on PMs
     
     ## combine "simple quantiles" (dt_af_qntl) and rolled sums (dt_af_roll),
-        dt_af_qntl <- join(dt_af_qntl_simple,
+    dt_af_qntl <- join(dt_af_qntl_simple,
                        dt_af_roll[, .(PMDB_ID, year, exhbrollsum5, exhbany, exhbrollany,  exhbnNA,
                                       exhbrollsum_avg, exhbqntl_roll)],
-         on = c("PMDB_ID", "year"), verbose = 0)
+                       on = c("PMDB_ID", "year"), verbose = 0)
 
     ## filter some variables: the more fine-grained variables have higher data requirements?
     ## first set up sets
@@ -195,14 +196,14 @@ gd_af_size <- function(dt_pmx) {
         dt_af_qntl[, .SD, .SDcols = c("PMDB_ID", "year", set_always_include)],
         dt_af_qntl[, .SD[!any(N == 0 & exhbqntl_cy > 0.5)], .(iso3c, year),
                    .SDcols = c("PMDB_ID", "year", set_conditional_include)],
-         on = c("PMDB_ID", "year"), verbose = 0)
+        on = c("PMDB_ID", "year"), verbose = 0)
 
 
     ## dt_af_qntl[, .SD[any(N == 0 & quantile > 0.5)], .(iso3c, begin_year)] %>%
     ##     .[, .N, iso3c] %>% print(n=300)
 
     ## ggplot(dt_af_qntl[iso3c == "USA"], aes(x=begin_year, y=quantile, group = PMDB_ID)) +
-        ## geom_line(alpha = 0.1, position = position_jitter(width = 0.2,  height = 0.02))
+    ## geom_line(alpha = 0.1, position = position_jitter(width = 0.2,  height = 0.02))
 
     ## ggplot(dt_af_qntl[exhbprop_top10_utf > 0], aes(x= exhbprop_top10_utf)) + geom_density()
 
@@ -237,7 +238,7 @@ gd_pmdb_popcircle <- function(dt_pmx, radius_km) {
 
     ## ## some testing code
     ## gd_popcircle(dt_pmdb_year5[year5  == 2010, .SD[1:10]], # [, ID2 := as.character(ID)],
-             ## id_vrbl = "ID", year = 2010, radius_km = 10) %>% .[, pop]
+    ## id_vrbl = "ID", year = 2010, radius_km = 10) %>% .[, pop]
 
     ## 3409326.47   13646.44 1495132.81 2738349.75 3549412.25  447843.49 1551780.82 2189097.23   71458.25  223607.55
     ## 3455098.75   13710.06 1507754.35 2760191.15 3574606.98  454468.42 1580232.92 2205837.25   73393.40  228170.74
@@ -348,7 +349,7 @@ gd_pmx <- function(dt_pmdb) {
 
     with(dt_pmdb, {
         nbr_closing_year_missing <- dt_pmdb[museum_status == "closed" & is.na(year_closed) &
-                                          ID %!in% garbage_ids, .N];
+                                            ID %!in% garbage_ids, .N];
         if (nbr_closing_year_missing > 0) {
             warning(sprintf("FIXME: %s closed PMs have no closing year", nbr_closing_year_missing))}})
     
@@ -382,7 +383,7 @@ gd_pmx <- function(dt_pmdb) {
     
 }
 
-    
+
 gd_pop <- function() {
     #' generate population data from WB and UN
     dt_pop_wb <- gd_WB(c("SP.POP.TOTL"), DIR_WBproc = c_dirs$data) %>%
@@ -428,7 +429,7 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_lvrs = c_lvrs) {
         .[, time_period := as.factor(paste0("tp", 5*(floor(year/5))))] %>%
         .[, covid := fifelse(year %in% c(2020, 2021), 1, 0)] %>%
         .[, recession := fifelse(year %in% c(2008, 2009), 1, 0)]
-        
+    
 
     ## get country population data
     dt_pop_country <- gd_pop()
@@ -437,7 +438,7 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_lvrs = c_lvrs) {
     dt_pmyear_wpop_country <- join(dt_pmyear, dt_pop_country, on = c("iso3c", "year"),
                                    how = "left", verbose = 1) %>%
         .[, pmdens_cry := .N/popm_country, .(iso3c, year)]
-        
+    
     ## dt_pmyear_wpop_country[, .SD[ID < 10]] %>% ggplot(aes(x=year, y=pmdens_cry, group = ID, color = iso3c)) +
     ## geom_line()
     
@@ -509,8 +510,8 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_lvrs = c_lvrs) {
 
     ## combine with time-invariant variables
     dt_pmyear_wtiv <- join(dt_pmyear_waf,
-                        copy(dt_pmtiv)[, `:=`(iso3c=NULL, name = NULL)], ## yeet non-essential columns
-                        on = "ID") 
+                           copy(dt_pmtiv)[, `:=`(iso3c=NULL, name = NULL)], ## yeet non-essential columns
+                           on = "ID") 
 
     if (any(is.na(dt_pmyear_wtiv$mow))) {stop("some MOW is NA")}
 
@@ -654,7 +655,7 @@ gp_surv <- function(dt_pmcpct) {
     ## for now this is just basic diagnostics to automatically update when data is updated
     
 
- 
+    
 
     survfit2(Surv(age, closing) ~ 1, dt_pmcpct) %>% 
         ggsurvfit() + add_confidence_interval()
@@ -662,9 +663,9 @@ gp_surv <- function(dt_pmcpct) {
 }
 
 quiet <- function(x) { 
-        sink(tempfile()) 
-        on.exit(sink()) 
-        invisible(force(x)) 
+    sink(tempfile()) 
+    on.exit(sink()) 
+    invisible(force(x)) 
 }
 
 gd_pehaz <- function(dt_pmcpct, cutwidth) {
@@ -697,9 +698,9 @@ gd_pehaz <- function(dt_pmcpct, cutwidth) {
     r_epi <- survfit(Surv(age, closing) ~ 1,
                      ## dt_pmcpct,
                      copy(dt_pmcpct)[, age := floor(age/cutwidth)*cutwidth]) # or floor? 
-                     ## copy(dt_pmcpct)[, age := age + 1], # shift times to get the year = 0 estimate, no work
-                     ## rbind(copy(dt_pmcpct)[, .(age, closing)], data.table(age = 0, closing = 1)),
-                     
+    ## copy(dt_pmcpct)[, age := age + 1], # shift times to get the year = 0 estimate, no work
+    ## rbind(copy(dt_pmcpct)[, .(age, closing)], data.table(age = 0, closing = 1)),
+    
 
     dt_pehaz_epi <- epi.insthaz(r_epi) %>% adt %>%
         .[, .(age = time, est = hest, upper = hupp, lower = hlow, src = "epi")]
@@ -746,7 +747,7 @@ gd_pehaz <- function(dt_pmcpct, cutwidth) {
 
     ## reshaping to long
     dt_bootres_melt <- melt(dt_bootres, measure.vars = names(dt_bootres), variable.factor = F) %>%
-         .[, age := (as.integer(gsub("V", "", variable))-1)*2]
+        .[, age := (as.integer(gsub("V", "", variable))-1)*2]
 
     
 
@@ -763,7 +764,7 @@ gd_pehaz <- function(dt_pmcpct, cutwidth) {
     ##     .[, quantile(value, probs = c(0.025, 0.975)) %>% as.list, variable] %>%
     ##     .[, age := (as.integer(gsub("V", "", variable))-1)*2] %>% .[, variable := NULL] %>%
     ##     setnames(old = c("2.5%", "97.5%"), new = c("low", "hi"))
-        
+    
 
     ## dt_bootres2 <- dt_bootres[, lapply(.SD, sd)] %>%
     ##     melt(measure.vars = names(.), variable.name = "tp", value.name = "se") %>%
@@ -782,7 +783,7 @@ gd_pehaz <- function(dt_pmcpct, cutwidth) {
     res_pehaz_w1 <- quiet(pehaz(dt_pmcpct$age,dt_pmcpct$closing, width = 1))
 
     dt_grpd <- data.table(age = head(res_pehaz_w1$Cuts,-1),
-               est = res_pehaz_w1$Hazard) %>%
+                          est = res_pehaz_w1$Hazard) %>%
         .[, age_grpd := floor(age/2)*2] %>%
         .[, .(est = mean(est), upper = NA, lower = NA, src = "w1"), .(age = age_grpd)]
 
@@ -807,7 +808,7 @@ gd_pehaz <- function(dt_pmcpct, cutwidth) {
     ##     ggplot(aes(x=age, y=haz, ymin = low, ymax = hi)) +
     ##     geom_step() + geom_ribbon(alpha = 0.3, stat = "stepribbon") +
     ##     coord_cartesian(xlim = c(0, 20), ylim = c(0, 0.04))
-        
+    
 
     return(dt_pehaz_ci)
 
@@ -868,7 +869,7 @@ gd_muhaz_boot <- function(dt_pmcpct) {
     ## dt_insthaz_smooth %>% .[age < 20] %>% 
     ##     ggplot(aes(x=age, y=est, ymin = lower, ymax = upper)) +
     ##     geom_line() + geom_ribbon(alpha = 0.3)
-        
+    
     ## weirdwebsite SE: https://www.unistat.com/guide/survival-life-table/
     dt_weirdwebsite <- epi.insthaz(r_cpct, conf.level = 0.95) %>% adt %>%
         .[, .(time, n.risk, n.event, hest, hlow, hupp)] %>%
@@ -885,8 +886,8 @@ gd_muhaz_boot <- function(dt_pmcpct) {
         .[, .(age = time, est = hest, upper, lower)] %>% 
         gd_smooth_haz(l_vrbls = c("est", "upper", "lower"), dt_haz = ., span = 0.20) %>%
         .[, src := "prop"]
-                      
-        
+    
+    
     
 
     ## ggplot() +
@@ -894,9 +895,9 @@ gd_muhaz_boot <- function(dt_pmcpct) {
     ##     geom_line(dt_muhaz, mapping = aes(x=grid, y=haz), color = "red")
 
 
-        ## xlim(c(0,20)) 
-        ## scale_y_log10()
-        
+    ## xlim(c(0,20)) 
+    ## scale_y_log10()
+    
     ## r_heft <- heft(dt_pmcpct$age,  dt_pmcpct$closing, penalty = 0)
     
 
@@ -915,7 +916,7 @@ gd_muhaz_boot <- function(dt_pmcpct) {
 
     ## reps <- boot(data=mtcars, statistic=rsq_function, R=3000, formula=mpg~disp)
     ## bootstrapping example
-        
+    
     ## boostrapping function
     run_muhaz <- function(data, indices) {
         ## print(len(age))
@@ -976,12 +977,12 @@ gd_muhaz_boot <- function(dt_pmcpct) {
         .[, `:=`(lower = qgamma(0.025, shape = shape + 1, scale = scale),
                  upper = qgamma(0.975, shape = shape, scale = scale))] %>%
         .[, .(age, est, upper, lower, src = "gamma")]
-                 
+    
     
     dt_muhaz_quantile <- dt_bootres_melt %>%
         .[, setNames(quantile(value, probs = c(0.025, 0.975)) %>% as.list, c("lower", "upper")), age] %>%
         .[dt_muhaz, on = "age"] %>% .[, src := "quantile"]
-        
+    
 
     dt_muhaz_boot <- rbindlist(list(dt_muhaz_se, dt_muhaz_gamma, dt_muhaz_quantile,
                                     dt_insthaz, dt_weirdwebsite, dt_prop), use.names = T)
@@ -990,7 +991,7 @@ gd_muhaz_boot <- function(dt_pmcpct) {
         ## .[src != "se"] %>%
         .[ age < 40] %>% 
         ggplot(aes(x=age, y=est, ymax = upper, ymin = lower)) + geom_line() + geom_ribbon(alpha = 0.3) +
-                facet_wrap(~src)
+        facet_wrap(~src)
     
     
     return(dt_muhaz_boot)
@@ -1029,7 +1030,7 @@ gd_muhaz_boot <- function(dt_pmcpct) {
     ##     geom_line() + geom_ribbon(alpha = 0.3)
 
     
-        
+    
     
 
 }
@@ -1098,7 +1099,7 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
 
     ## p_natrisk <- ggplot(dt_pmyear[, .N, age], aes(x=age, y=N)) + geom_line() +
     ##     coord_cartesian(xlim = c(0, 30))
-                        
+    
 
     leg_labels <- c("gamma" = "Epanechnikov-Kernel (5 years bandwidth)",
                     "epi" = sprintf("Piecewise-Constant (%s years)", cutwidth))
@@ -1107,7 +1108,7 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
     ggplot() +
         geom_step(copy(dt_pehaz)[src=="w1"][, src := "epi"], # awkward renaming 
                   mapping = aes(x=age, y=est, linetype = src, color = src,
-                                                      linewidth = src)) +
+                                linewidth = src)) +
         geom_line(dt_muhaz_boot[src == "gamma"],
                   mapping = aes(x=age, y=est, linetype = src, color = src, linewidth = src)) +
         geom_ribbon(dt_muhaz_boot[src == "gamma"],
@@ -1131,9 +1132,9 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
                    mapping = aes(x=age +1, y=y_upper_border, label = format(est, digits = 2,nsmall = 2))) + 
         labs(caption = sprintf("95%% boostrapped CI, Piecewise constant hazards above %s demarcated by text boxes.",
                                y_upper_border)) 
-        
-        
- 
+    
+    
+    
     
 }
 
@@ -1157,8 +1158,8 @@ gp_agedens <- function(dt_pmcpct) {
         ## geom_tile() + 
         geom_point() +
         theme(legend.position = c(0.8,0.7)) 
-        
-        
+    
+    
 
     p_agedens1 / p_agedens2
 }
@@ -1176,23 +1177,23 @@ gp_yeardens <- function(dt_pmyear) {
     
     p_yeardens1 <- ggplot(dt_year_agg[, .(N = sum(N)), year], aes(x=year, y=N)) + geom_line()
     ## ggplot(dt_pmyear, aes(x=year, color = reg6)) + geom_density()
-        
+    
     ## N by region 
     p_yeardens2 <- ggplot(dt_year_agg, aes(x=year, y=N, color = reg6)) + geom_line()
-        
+    
     ## within-prop by region
     p_yeardens3 <- ggplot(dt_year_agg, aes(x=year, y=prop, color = reg6)) + geom_line()
-        
+    
     p_yeardens4 <- ggplot(dt_year_agg, aes(x=year, y=cumprop, color = reg6)) + geom_line()
 
     p_yeardens <- (p_yeardens1 + p_yeardens2) /  (p_yeardens4 + p_yeardens3) +
         plot_layout(guides = "collect") & theme(legend.position = "bottom") & guides(color = guide_legend(nrow = 1))
-   
+    
     return(p_yeardens)
 
 
 }
-    
+
 ## gp_yeardens(dt_pmyear)
 
 ## gwdplt("p_agedens")
@@ -1209,7 +1210,7 @@ gd_inflcases <- function(rx) {
     ## get the full coefs: might want to pass that as argument tho.. 
     dt_coefs <- data.table(vrbl = names(rx$coef), coef = rx$coef,
                            se = coef(summary(rx))[, "se(coef)"])
-        
+    
     ## retrieve ID from data.frame from which model was fitted (mdldt: model data.table)
     ## hope that works for subsets should I use them...
     mdldt <- rx$call %>% as.list %>% chuck("data")
@@ -1312,26 +1313,26 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
 
         
         r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10 + exhbany + recession + covid,
+                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                           proxcnt10*popm_circle10 + exhbany + recession + covid,
                        dt_pmyear),
         
         ## only focus on museums that are not in countryside (wo = without), i.e. other PMs around and some people
         r_onlycryside = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10 + exhbany + recession + covid,
-                            dt_pmyear[proxcnt10 <= 1 & popm_circle10 <= 1]),
+                                  slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                                  proxcnt10*popm_circle10 + exhbany + recession + covid,
+                              dt_pmyear[proxcnt10 <= 1 & popm_circle10 <= 1]),
 
         
         ## only focus on museums that are not in countryside (wo = without), i.e. other PMs around and some people
         r_wocryside = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10 + exhbany + recession + covid,
-                       dt_pmyear[!(proxcnt10 < 2 & popm_circle10 <= 2)]),
+                                slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                                proxcnt10*popm_circle10 + exhbany + recession + covid,
+                            dt_pmyear[!(proxcnt10 < 2 & popm_circle10 <= 2)]),
 
         r_smol = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10 + exhbany + recession + covid,
+                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                           proxcnt10*popm_circle10 + exhbany + recession + covid,
                        dt_pmyear[age <= 30]),
 
 
@@ -1345,7 +1346,7 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         r_pop42 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
                             proxcnt10*popm_circle10 + I(proxcnt10^2)*popm_circle10 + exhbany + recession + covid,
-                       dt_pmyear)
+                        dt_pmyear)
 
         ## r_pop5 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
         ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
@@ -1365,9 +1366,9 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ##                     dt_pmyear)
 
         
-                           # dt_pmyear[iso3c != "KOR"])
-         ## copy(dt_pmyear)[, reg6 := factor(reg6, labels = c("OC", "NALUL","EU","AS", "LA", "AF"))])
-                       
+                                        # dt_pmyear[iso3c != "KOR"])
+        ## copy(dt_pmyear)[, reg6 := factor(reg6, labels = c("OC", "NALUL","EU","AS", "LA", "AF"))])
+        
         
         ## r_woaf = coxph(Surv(tstart, tstop, closing) ~ gender + pm_dens + I(pm_dens^2) + mow +
         ##                    slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
@@ -1421,7 +1422,7 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
 ## gd_inflcases(l_mdls$r_more) %>% gp_inflcases
 
 
-    
+
 
 
 
@@ -1447,7 +1448,7 @@ gp_schoenfeld <- function(rx) {
     cox_zph_res <- cox.zph(rx, transform = "identity", terms = F)
     ## https://stats.stackexchange.com/questions/616468/schoenfeld-residuals-for-factors-with-cox-zph
     ## terms = F to get one for each dummy variable
-        
+    
     ## plot(cox_zph_res, var = "mow")    
     
 
@@ -1455,7 +1456,7 @@ gp_schoenfeld <- function(rx) {
     dt_schoen_coxzph <- data.table(x = cox_zph_res$x) %>% # x is transformed time axis
         cbind(adt(cox_zph_res$y)) %>%
         melt(id.vars = "x", variable.name = "vrbl")
-        
+    
     ## ## residuals() based approach
     ## dt_schoen_residuals <- data.table(x=cox_zph_res$x) %>%
     ##     cbind(adt(residuals(rx, type = "schoenfeld"))) %>%
@@ -1465,7 +1466,7 @@ gp_schoenfeld <- function(rx) {
     ## m_schoenfeld_resids <- residuals(rx, type = "schoenfeld")
     
     ## m_vcov <- vcov(rx)
-        
+    
     ## ## manual approach with scaling raw schoenfeld resids by vcov
     ## dt_schoen_mnl <- data.table(x=cox_zph_res$x) %>%
     ##     cbind(m_schoenfeld_resids %*% m_vcov) %>%
@@ -1480,7 +1481,7 @@ gp_schoenfeld <- function(rx) {
 
     
     dt_coef <- adt(coef(rx), keep.rownames = T) %>% setnames(c("vrbl", "coef"))
-        
+    
     ggplot(dt_schoen_coxzph, aes(x=x, y=value)) +
         geom_point(mapping = aes(color = "schoenfeld"), size = 0.7) +
         geom_smooth(mapping = aes(linetype = "spline"), method = lm, formula = y ~ bs(x, df = 3), size = 0.7) + 
@@ -1496,14 +1497,14 @@ gp_schoenfeld <- function(rx) {
                            values = c("schoenfeld" = "black"),
                            labels = c("schoenfeld" = "Schoenfeld residual")) + 
         theme(legend.position = "bottom") 
-                              ## guide = "legend")
-        ## scale_color_manual(name = element_blank(),
-        ##                    values = c("schoenfeld" = "black", "spline" = "blue", "coef" = "grey"),
-        ##                    labels = c("Schoenfeld Residuals", "Spline", "Cox-PH coefficient"),
-        ##                    guide = "legend") +
-        
-     
-     
+    ## guide = "legend")
+    ## scale_color_manual(name = element_blank(),
+    ##                    values = c("schoenfeld" = "black", "spline" = "blue", "coef" = "grey"),
+    ##                    labels = c("Schoenfeld Residuals", "Spline", "Cox-PH coefficient"),
+    ##                    guide = "legend") +
+    
+    
+    
     
 
 
@@ -1540,12 +1541,12 @@ gp_coxphdiag_more <- gp_coxphdiag
 
 ## mode function https://stackoverflow.com/questions/2547402/how-to-find-the-statistical-mode
 Mode <- function(x, na.rm = FALSE) {
-  if(na.rm){
-    x = x[!is.na(x)]
-  }
+    if(na.rm){
+        x = x[!is.na(x)]
+    }
 
-  ux <- unique(x)
-  return(ux[which.max(tabulate(match(x, ux)))])
+    ux <- unique(x)
+    return(ux[which.max(tabulate(match(x, ux)))])
 }
 
 
@@ -1566,7 +1567,7 @@ gd_predprep_popprxcnt <- function(dt_pmyear) {
                                  popm_circle10 = seq(0.01, 5, 0.01))
     
     ## quantile(dt_pmyear$popm_circle10, seq(0.05, 0.95, 0.1)))
-                                                              
+    
     dt_pred <- cbind(dt_pred_prep2, dt_pred_prep) %>% adt %>%
         .[, pmdens_circle10 := proxcnt10/popm_circle10]
 
@@ -1602,12 +1603,12 @@ gd_pred <- function(mdlname, l_mdls, dt_pred, measure, year_range) {
     ##     .[, `:=`(haz_hi2 = haz + 1.96*se_shift, haz_lo2 = haz - 1.96*se_shift)] %>% 
     ##     melt(id.vars = "time", measure.vars = patterns("^haz")) %>%
     ##     ggplot(aes(x=time, y = value, color = variable)) + geom_line()
-        
-                    
+    
+    
     ## extract CI info from std.er
     
     r_survfit <- survfit(chuck(l_mdls, mdlname), newdata = dt_pred[],
-                                                            se.fit = T, conf.type = "plain", conf.int = 0.95)
+                         se.fit = T, conf.type = "plain", conf.int = 0.95)
     if (measure == "cumhaz") {
         ## cumhaz
         data.table(est = r_survfit$cumhaz[year_range,], se = r_survfit$std.err[year_range,]) %>%
@@ -1623,31 +1624,31 @@ gd_pred <- function(mdlname, l_mdls, dt_pred, measure, year_range) {
                    lower = r_survfit$lower[year_range,]) %>%
             cbind(dt_pred[, .(proxcnt10, popm_circle10)]) %>%
             .[, src := mdlname]
-        } else if (measure == "hazard") {
-          
+    } else if (measure == "hazard") {
+        
         ## ggplot(aes(x=proxcnt10, y=surv, color = factor(popm_circle10), fill = factor(popm_circle10),
         ##            ymax = upper, ymin = lower)) + geom_line() + geom_ribbon(alpha = 0.3) 
         ## ## facet_wrap(~popm_circle10, scales = "free")
         
-            ## xx$cumhaz[20,]
+        ## xx$cumhaz[20,]
 
 
-    basehaz(chuck(l_mdls, mdlname), dt_pred) %>% adt %>%
-        ## transform each settings cumhaz into hazard and take mean
-        .[time < 20, lapply(.SD, \(x) mean(x - shift(x),  na.rm = T)), .SDcols = patterns("^hazard")] %>%
-        melt(measure.vars = patterns("^hazard"), variable.name = "condition",
-             value.name = "avghaz") %>%
-        join(dt_pred[, .(condition = sprintf("hazard.%s", seq(1:fnrow(dt_pred))),
-                         proxcnt10, popm_circle10)], on = "condition") %>%
-        .[, src := mdlname] %>%
-        .[, .(est = avghaz, upper = avghaz, lower = avghaz, src, proxcnt10, popm_circle10)]
-    ## ggplot(aes(x=time, y=cumhaz, group = condition)) + geom_line()
-    ## join(dt_pred[, .(condition = sprintf("hazard.%s", seq(1:fnrow(dt_pred))),
-    ##                  proxcnt10, popm_circle10)], on = "condition") %>%
-    ## ggplot(aes(x=factor(proxcnt10), y=factor(popm_circle10), fill = mult)) + geom_tile()
-    ## ggplot(aes(y=avghaz, x=proxcnt10, color = factor(popm_circle10))) + geom_line()
+        basehaz(chuck(l_mdls, mdlname), dt_pred) %>% adt %>%
+            ## transform each settings cumhaz into hazard and take mean
+            .[time < 20, lapply(.SD, \(x) mean(x - shift(x),  na.rm = T)), .SDcols = patterns("^hazard")] %>%
+            melt(measure.vars = patterns("^hazard"), variable.name = "condition",
+                 value.name = "avghaz") %>%
+            join(dt_pred[, .(condition = sprintf("hazard.%s", seq(1:fnrow(dt_pred))),
+                             proxcnt10, popm_circle10)], on = "condition") %>%
+            .[, src := mdlname] %>%
+            .[, .(est = avghaz, upper = avghaz, lower = avghaz, src, proxcnt10, popm_circle10)]
+        ## ggplot(aes(x=time, y=cumhaz, group = condition)) + geom_line()
+        ## join(dt_pred[, .(condition = sprintf("hazard.%s", seq(1:fnrow(dt_pred))),
+        ##                  proxcnt10, popm_circle10)], on = "condition") %>%
+        ## ggplot(aes(x=factor(proxcnt10), y=factor(popm_circle10), fill = mult)) + geom_tile()
+        ## ggplot(aes(y=avghaz, x=proxcnt10, color = factor(popm_circle10))) + geom_line()
 
-        }
+    }
 }
 
 ## adjust line width
@@ -1667,7 +1668,7 @@ gp_heatmap_info <- function(dt_pmyear) {
     #' plot distribution of PM-years across proxcnt-popm_circle10 space
     #' rounded to integers
 
-            
+    
     ## get the cells where data actually exists
     dt_cell_info <- dt_pmyear[, .(N = fnunique(ID)), .(proxcnt10, popm_circle10 = round(popm_circle10))]
 
@@ -1690,7 +1691,7 @@ gp_heatmap_info <- function(dt_pmyear) {
         geom_text() +
         scale_fill_YlOrBr(reverse = T, range = c(0, 0.88))
 
-        ## observed closings
+    ## observed closings
     dt_pred_obs <- dt_pmyear[, .(N = fnunique(ID), closing = sum(closing), OY = .N),
                              .(proxcnt10, popm_circle10 = round(popm_circle10))] %>%
         .[, `:=`(mort1 = closing/OY, mort2 = closing/N)]
@@ -1698,13 +1699,13 @@ gp_heatmap_info <- function(dt_pmyear) {
     ## ## hmm this doesn't control for other variables.. also this mortality calculation is a complete mess
 
     p3 <- ggplot(dt_pred_obs, aes(x=proxcnt10, y=popm_circle10, fill = mort2,
-                            label = round(mort2, 2))) +
+                                  label = round(mort2, 2))) +
         geom_tile() + scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) +
         geom_text() +
         labs(caption = "mort2: closing/N(unique_ID)")
 
     p4 <- ggplot(dt_pred_obs, aes(x=proxcnt10, y=popm_circle10, fill = mort1,
-                            label = round(mort1, 2))) +
+                                  label = round(mort1, 2))) +
         geom_tile() + scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) +
         geom_text() +
         labs(caption = "mort1: closing/OY")
@@ -1735,7 +1736,7 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
         dt_pmyear[, lapply(.SD, Mode), # categorical/binary variables: use mode
                   .SDcols = gc_vvs()$dt_vrblinfo[vrbltype %in% c("bin", "cat"), achr(vrbl)]],
         dt_pmyear[, lapply(.SD, median), .SDcols = c("pmdens_cry", "PC1", "PC2", "year")]) # numeric: use median
-        
+    
 
     ## get the cells where data actually exists
     dt_topred_cell <- dt_pmyear[, .(N = fnunique(ID)), .(proxcnt10, popm_circle10 = round(popm_circle10))]
@@ -1757,8 +1758,8 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
         .[, mort_cat := fifelse(mort > mortbound_hi, paste0(mortbound_hi, "+"),
                                 fifelse(mort < mortbound_lo, sprintf("0-%s", mortbound_lo),
                                         sprintf("%s-%s", mortbound_lo, mortbound_hi)))] 
-                
-                        
+    
+    
     ## construct cross vertical
     ## find the column where the overall slope is the smallest
     dt_cross <- data.table(
@@ -1778,7 +1779,7 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
         join(copy(dt_neib_prep)[, .(proxcnt10_left = proxcnt10, popm_circle10, mort_cat_left = mort_cat)],
              on = c("proxcnt10_left", "popm_circle10")) %>%
         .[mort_cat != mort_cat_left] # identify mort_cat transitions
-        
+    
     ## look where the border is on the top
     dt_border_up <- dt_neib_prep %>% copy %>%
         .[, popm_circle10_up := popm_circle10 + 1] %>% # 
@@ -1801,12 +1802,12 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
     dt_viz_bar <- dt_pred_cell %>% copy %>%
         .[, .(sumN = sum(N), mean_mort = mean(mort)), floor(mort*40)/40] %>%
         .[, color := scale_ylorbr(mean_mort/dt_pred_cell[, max(mort)])] 
-        ## .[order(floor)] %>% .[, floor := as.factor(floor)]
+    ## .[order(floor)] %>% .[, floor := as.factor(floor)]
 
     ## the vertical color bar
     dt_bar <- dt_pred_cell[, .(pos = seq(0.0+0.005, (ceiling(max(mort)*40)/40), 0.005))] %>%
         .[, x := 0]
-            
+    
     
     ## check that bar is working
     dt_bar %>% ggplot(aes(x=x, y=pos, fill = pos)) + geom_tile() +
@@ -1835,8 +1836,8 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
               plot.title.position = "plot"
               )
     ## p_legend
-        ## scale_fill_manual(values = setNames(dt_viz_bar$color, dt_viz_bar$floor)) 
-        ## geom_hline(yintercept = "0.15")
+    ## scale_fill_manual(values = setNames(dt_viz_bar$color, dt_viz_bar$floor)) 
+    ## geom_hline(yintercept = "0.15")
 
 
 
@@ -1872,16 +1873,16 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
         geom_hline(yintercept = dt_cross$cross_horiz, linetype = "dashed") + 
         theme(legend.position = "right",
               plot.tag.position = c(0.8, 0.3)) +
-                labs(x=gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "proxcnt10", vrbl_lbl],
+        labs(x=gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "proxcnt10", vrbl_lbl],
              y = gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "popm_circle10", vrbl_lbl])
-             ## tag = "lines demarcate \ndifferent closing\n chance categories") 
+    ## tag = "lines demarcate \ndifferent closing\n chance categories") 
     ## scale_fill_nightfall(midpoint = fmean(dt_pred_cell$est, w = dt_topred_cell$N), reverse = T)
 
     
 
     p_heatmap + p_legend +
         ## plot_layout(widths = c(0.8, 0.2))
-        # need to use awkward patchwork design to properly size legend
+                                        # need to use awkward patchwork design to properly size legend
         plot_layout(design = "1111#\n11112\n11112\n11112\n11112\n1111#") 
 
 
@@ -1937,10 +1938,10 @@ gp_pred_popprxcnt <- function(l_mdlnames, l_mdls, dt_pmyear) {
         .[dt_popm_circle10_fltr, on = "popm_circle10_mult"] %>%
         .[proxcnt10 < 12] %>% 
         ## .[popm_circle10_mult %in% l_popm_circle10_qntls] %>% 
-    ## p_pred_popprxnct <- dt_predres_mult[popm_circle10*10 %in% c(1, 15, 30, 50)] %>% 
+        ## p_pred_popprxnct <- dt_predres_mult[popm_circle10*10 %in% c(1, 15, 30, 50)] %>% 
         ggplot(aes(x=proxcnt10, y=1-est, ymax = 1-upper, ymin = 1-lower,
                    group = factor(popm_circle10))) + 
-                   ## fill = factor(popm_circle10))) + 
+        ## fill = factor(popm_circle10))) + 
         ## linewidth = N, alpha = N)) +
         geom_line(linewidth = 1) +
         geom_ribbon(alpha = 0.3) + 
@@ -1952,10 +1953,10 @@ gp_pred_popprxcnt <- function(l_mdlnames, l_mdls, dt_pmyear) {
         theme(legend.position = "bottom") +
         labs(x=gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "proxcnt10", vrbl_lbl],
              y = "Predicted closing chance within 20 years,\n 95% CI")
-             
-             
-        ## facet_grid(rows = vars(popm_circle10_mult))
-        
+    
+    
+    ## facet_grid(rows = vars(popm_circle10_mult))
+    
 
     ## if multiple models, add facetting by model
     if (len(l_mdlnames) > 1) {
@@ -1967,14 +1968,14 @@ gp_pred_popprxcnt <- function(l_mdlnames, l_mdls, dt_pmyear) {
 
         p_pred_popprxnct <- p_pred_popprxnct +
             facet_grid(~popm_circle10_mult, labeller = as_labeller(l_lbls))    
-              
+        
     }
 
     
     
 
     return(p_pred_popprxnct)
-        
+    
 
     
 }
@@ -2058,9 +2059,9 @@ gp_condmef <- function(mdlname, l_mdls, dt_pmyear) {
         labs(x = gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "proxcnt10", vrbl_lbl],
              y = sprintf("Hazard ratio of %s",
                          gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "popm_circle10", vrbl_lbl])) + 
-             ## caption = "Rugs on X-axis spread out to illustrate value distribution") +
+        ## caption = "Rugs on X-axis spread out to illustrate value distribution") +
         theme(plot.caption = element_text(margin = margin(t=-3)))
-        
+    
     ## dt_condmef_proxcnt10[proxcnt10 == 0, head(.SD,1)][, estimate]
     ## l_mdls$r_pop4 %>% coef %>% chuck("popm_circle10")
 
@@ -2078,7 +2079,7 @@ gp_condmef <- function(mdlname, l_mdls, dt_pmyear) {
 ##       .SDcols =c("proxcnt10", "popm_circle10")] %>% 
 ##     ggplot(aes(x=proxcnt10, y=popm_circle10, color = factor(museum_status))) +
 ##     geom_jitter(size = 0.8, width = 0.2)
-    
+
 
 gt_reg_coxph <- function(l_mdls, l_mdlnames) {
     #' collect some models from l_mdls and format them into nice custom regression table
@@ -2137,7 +2138,7 @@ gt_coxzph <- function(rx) {
     dt_coxzph_viz <- dt_coxzph[, c("term_lbl", names(coxzph_trfms)), with = F] %>%
         cbind(grp_filler = "", .) %>% # add column in beginning for faking group indentation
         .[, term_lbl := latexTranslate(term_lbl)]
-            
+    
     ## generate the variable add.to.row components      
 
     dt_grpstrs <- gc_grpstrs(dt_coxzph, "vrblgrp_lbl", 2) # get the group strings: go to add.to.row

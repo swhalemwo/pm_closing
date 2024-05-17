@@ -1,3 +1,4 @@
+
 ## * descriptives
 
 gp_lngtdvelp <- function(dt_pmyear) {
@@ -19,7 +20,7 @@ gp_lngtdvelp <- function(dt_pmyear) {
         .[, .SD, .SDcols = c("ID", "year", "closing", "age",
                              ## yeet squared/interactions
                              dt_vrblinfo[(vrbltype %in% c("bin", "num") & !grepl("I\\(|:", vrbl)) &
-                                        vrbl %in% names(dt_pmyear), # only use columns that are there
+                                         vrbl %in% names(dt_pmyear), # only use columns that are there
                                          achr(funique(vrbl))])] %>%
         .[, cnt := .N, year] %>% # set up count (gets meaned)
         .[, will_close := fifelse(any(closing == 1), 1, 0), ID] %>% # whether a museum will close
@@ -30,7 +31,7 @@ gp_lngtdvelp <- function(dt_pmyear) {
         .[vrbl != "year"] # don't need avg year, is just year
 
     dt_viz <- rbind(dt_cat, dt_num)
-        
+    
     ## set colors based on variable value
     dt_color <- dt_viz[, .(vrbl, value)] %>% funique %>%
         .[, lnbr := 1:.N, vrbl]
@@ -52,7 +53,7 @@ gp_lngtdvelp <- function(dt_pmyear) {
         theme(axis.text = element_text(size = 6),
               panel.spacing = unit(0.1, "lines"),
               strip.text = element_text(size = 7, margin = margin(.05, 0, .05, 0, "cm")))
-                                                         
+    
     
 }
 
@@ -84,7 +85,7 @@ gt_sumstats <- function(dt_pmyear, dt_pmcpct) {
         .[, map(funcs_sumry, ~get(.x)(value, na.rm = T)), term] %>%
         setnames(old = paste0("V", 1:len(funcs_sumry)), new = funcs_sumry) %>%
         c_vvs$dt_termlbls[., on = "term"]
-        
+    
     ## FIXME: sum needs to be generalized when I have non-varying numerical variables (e.g. size)
     ## there sum does'nt make sense but mean does
 
@@ -99,7 +100,7 @@ gt_sumstats <- function(dt_pmyear, dt_pmcpct) {
         Reduce(cbind, .) %>% adt %>%
         melt(measure.vars = names(.), variable.name = "term") %>%
         .[, .(pm_mean = mean(value), pm_sum = sum(value)), term]
-                     
+    
     ## combine pm-year-level and pm-level data, reorder
     dt_cbn2 <- copy(dt_cbn)[dt_sumry_pm, `:=`("pm_mean" = i.pm_mean, "pm_sum" =  i.pm_sum), on = "term"] %>%
         .[, vrbl := factor(vrbl, levels = levels(c_vvs$dt_vrblinfo$vrbl))] %>% # somehow necessary to relevel? 
@@ -111,7 +112,7 @@ gt_sumstats <- function(dt_pmyear, dt_pmcpct) {
     
     ## variables to yeet from table
     vrbls_toyeet <- c("mow", "year", "exhbrollany", "PC1", "PC2", "popm_country", "west", "year",
-                       "pmdens_circle10")
+                      "pmdens_circle10")
 
     ## format the columns
     dt_cbn_viz <- copy(dt_cbn2) %>%
@@ -141,7 +142,7 @@ gt_sumstats <- function(dt_pmyear, dt_pmcpct) {
     c_atr <- list(
         pos = c(list(-1, -1), dt_grpstrs$pos),
         command = c(top_spanner, c_colnames, dt_grpstrs$grpstr))
-                
+    
     list(dt_fmtd = dt_cbn_viz,
          align_cfg = c(rep("l",3), rep("r", 6)),
          hline_after = c(-1, nrow(dt_cbn_viz)),
@@ -199,7 +200,7 @@ gt_selfid <- function(dt_pmx, dt_pmyear) {
 
     ## some selfids just aren't real
     slfids_to_yeet <- c("Castle", "Wine estate", "")
-        
+    
     ## dt_pmx[, .N, slfidfcn]
 
     ## only use PMs that are used in dt_pmyear
@@ -231,7 +232,7 @@ gt_selfid <- function(dt_pmx, dt_pmyear) {
     ## .[slfidfcn == "Park / garden", name]
     
 
-        ## .[, .(.N, example = paste0(head(name, 2), collapse = ", ")), slfidfcn] %>% .[order(-N)]
+    ## .[, .(.N, example = paste0(head(name, 2), collapse = ", ")), slfidfcn] %>% .[order(-N)]
 
     
 }

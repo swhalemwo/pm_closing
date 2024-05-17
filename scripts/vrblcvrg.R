@@ -1,3 +1,4 @@
+
 ## * variable coverage functions
 
 gd_pmdb_splong <- function(dt_pmdb) {
@@ -148,7 +149,7 @@ gp_vrblcvrg_ugrpd <- function(dt_vrblcvrg, yeet_acts) {
     ##     geom_beeswarm()
 
     ## vignette("usageExamples")
-        
+    
     
     dt_vrblcvrg %>% # .[value > 0.95] %>% 
         .[if(yeet_acts) !grepl("^act_", vrbl) else T] %>% # filtering out activities if requested
