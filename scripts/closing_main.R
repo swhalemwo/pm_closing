@@ -176,7 +176,7 @@ dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-yea
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
                                         # set model names for t_reg_coxph
-l_mdlnames_coxph <- list("r_pop4")
+l_mdlnames_coxph <- list("r_pop4", "r_pop4_woenv")
 ## "r_smol")#, "r_pop5", "r_pop42")#  , ",r_pop4_wyr", "r_pop4_wcrises")
 ## l_mdlnames_coxph <- c("r_pop4", paste0("r_wsize", 3:1))
 ## c("r_more", paste0("r_pop", c(1, 3:6)))

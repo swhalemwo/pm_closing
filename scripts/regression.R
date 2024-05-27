@@ -1280,9 +1280,6 @@ gc_pmdb_tests <- function(dt_pmx, dt_pmyear, dt_pmcpct) {
 
 }
 
-## library(glmmTMB)
-## glmmTMB(closing ~ age + I(age^2), dt_pmyear, family = poisson) %>% summary
-
 gl_mdls <- function(dt_pmyear, dt_pmcpct) {
     gw_fargs(match.call())
 
@@ -1335,7 +1332,7 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
                            proxcnt10*popm_circle10 + exhbany + recession + covid,
                        dt_pmyear[age <= 30]),
 
-
+        
         ## try coxme.. looks pretty similar -> yeet for now
         ## library(coxme)
         ## r_coxme = coxme(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
@@ -1346,7 +1343,14 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         r_pop42 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
                             slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
                             proxcnt10*popm_circle10 + I(proxcnt10^2)*popm_circle10 + exhbany + recession + covid,
-                        dt_pmyear)
+                        dt_pmyear),
+
+        ## get rid of environment variables: assume that they affect economic capital directly
+        ## including them might overshadow identity effects?
+        r_pop4_woenv = coxph(Surv(tstart, tstop, closing) ~ gender + 
+                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+                           exhbany,
+                       dt_pmyear)
 
         ## r_pop5 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
         ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
