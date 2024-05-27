@@ -257,3 +257,22 @@ print("everything is DONE")
 ## ## gp_condmef("r_pop42", l_mdls, dt_pmyear)
 ## gp_pred_heatmap("r_onlycryside", l_mdls, dt_pmyear, mortbound_lo = 0.15, mortbound_hi = 0.25)
 ## ## gp_condmef("r_pop42", l_mdls, dt_pmyear)
+
+library(stringr)
+
+dt_selfid_mission <- dt_pmdb[dt_pmtiv[, .(ID, slfidfcn_rcd = slfidfcn)], on = "ID"] %>%
+    .[, .(ID, name, mission, slfidfcn_rcd)] %>% # filter down 
+    .[, c("str_muem", "str_clcn", "str_fndn") := # string matching
+            map(c("muse", "collec|sammlung", "foundation|stiftung|funda"), ~str_count(mission, .x))]
+    
+
+dt_selfid_mission %>%
+    .[mission != ""] %>% # yeet empty missions
+    .[, map(.SD, ~mean(.x != 0)), slfidfcn_rcd, .SDcols = patterns("^str_")] %>% # aggregate to match
+    melt(id.vars = "slfidfcn_rcd", variable.name = "str_match", value.name = "prop") %>%
+    ggplot(aes(x=str_match, y=prop, fill = slfidfcn_rcd)) +
+    geom_col(position = position_dodge())
+    
+
+## library(stringr)
+## str_count
