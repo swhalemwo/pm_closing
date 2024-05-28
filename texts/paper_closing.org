@@ -141,6 +141,23 @@ The form of museums also implies commitment of resources, larger than that of ot
 
 
   
+** lack of regulation -> museums are relatively free as long as they have money
+Museums are subject to relatively little regulation (the term "museum" is not a legally protected term and can be generally used without certification [[parencite:&Museumsbund_ICOMDE_2006_standards;&Moore_2022_best;&Lister_2023_marketing]].
+#
+Museum associations on the national (e.g. American Alliance of Museums (AAM) for the United States, Museumsbund for Germany) or international (International council of museums, ICOM) level exist, which aim to standardize e.g. museum setup and operations, such as in relations to ethics [[parencite:&ICOM_2016_ethics]] or sustainability [[parencite:&Bickersteth_2016_environment]]. 
+# 
+Membership for institutions is voluntary, and in practice limited:
+#
+ICOM has around 3,000 institutional members [[parencite:&ICOM_2020_report19]], a relatively small fraction of the over 104,000 museums estimated to exist globally [[parencite:&UNESCO_2021_covid]]. [fn::The absence of clear criteria what constitutes a museum prevents standardized data collection which would be necessary to generate exact numbers.]
+#
+National associations fare somewhat better, with e.g. the AAM representing over 4,000 of the country's 35,000 museums [[parencite:&LOC_2019_AAM]], and the German Museumsbund representing over 1,300 [[parencite:&Museumsbund_2024_mitgliedmuseen]] of Germany's 7,120 museums [[parencite:&IMF_2024_museumsstatistik]].
+#
+Even among its members promoting standards appears difficult, as shown in the establishment of the museum definition:
+#
+After an ICOM proposal was rejected in 2019 after heated debates, an 18-month, four-round deliberation process involving 126 national committees was required to agree on a new definition by 2022 [[parencite:&Robinson_2021_debating;&Seymour_2022_definition]].
+
+
+
 
 ** Private museums relationships
 A private museum is entangled in a number of dependencies.
