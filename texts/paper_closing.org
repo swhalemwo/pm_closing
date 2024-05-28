@@ -141,6 +141,7 @@ The form of museums also implies commitment of resources, larger than that of ot
 
 
   
+
 ** lack of regulation -> museums are relatively free as long as they have money
 Museums are subject to relatively little regulation (the term "museum" is not a legally protected term and can be generally used without certification [[parencite:&Museumsbund_ICOMDE_2006_standards;&Moore_2022_best;&Lister_2023_marketing]].
 #
@@ -755,6 +756,9 @@ Furthermore, these "rural" museums see an increase in the risk of closing for ea
 
 # #
 # While the density-dependence paradigm predicts a negative effect of numbers of organizations on closing rate at low numbers (due to legitimacy, i.e. growing familiarity with a new organizational form), and a positive effect at high numbers (due to competition over resources), neither relationship is significant in the case of private museums.
+
+
+** Discussion
 
 
 ** Conclusion
