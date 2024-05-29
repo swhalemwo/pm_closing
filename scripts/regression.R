@@ -1849,6 +1849,10 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
     p_heatmap <- ggplot() +
         geom_tile(dt_pred_cell, mapping = aes(x=proxcnt10, y= popm_circle10, fill = mort, color = mort),
                   show.legend = F) +
+        geom_rug(dt_pmyear, mapping = aes(x=proxcnt10, y= popm_circle10),
+                 position = position_jitter(width = 0.4), alpha = 0.1, linewidth = 0.1,
+                 length = unit(8, "pt"),
+                 sides = "tr") +  
         ## geom_tile(dt_pred_cell[mort_cat == "0-0.15", .(mean_mort_cat = mean(mort))],
         ##           mapping = aes(x=10,y=0, fill = mean_mort_cat))         
         ## geom_tile_pattern(dt_pred_cell,
@@ -1872,13 +1876,16 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
         scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) +
         scale_color_YlOrBr(reverse = T, range = c(0, 0.88)) +
         theme_bw() +
-        coord_cartesian(expand = F) +
+        scale_y_continuous(expand = expansion(add = c(0, 0.5))) +
+        scale_x_continuous(expand = expansion(add = c(0, 0.5))) + 
+        ## coord_cartesian(expand = F) +
         geom_vline(xintercept = dt_cross$cross_vert, linetype = "dashed") +
         geom_hline(yintercept = dt_cross$cross_horiz, linetype = "dashed") + 
         theme(legend.position = "right",
               plot.tag.position = c(0.8, 0.3)) +
         labs(x=gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "proxcnt10", vrbl_lbl],
              y = gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "popm_circle10", vrbl_lbl])
+    ## p_heatmap
     ## tag = "lines demarcate \ndifferent closing\n chance categories") 
     ## scale_fill_nightfall(midpoint = fmean(dt_pred_cell$est, w = dt_topred_cell$N), reverse = T)
 
