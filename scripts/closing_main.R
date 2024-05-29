@@ -62,6 +62,9 @@ gd_nbrs <- function() {
               nbr_fmt = sprintf("%s%%", format(mean_haz*100, digits = 2, nsmall = 2)),
               grp = "meanhaz")]
 
+
+    
+    dt_mow_prop_museum <- gn_mow_prop_museum()
     
     
     ## plots: yanking (insertion) and in-text referencing
@@ -71,7 +74,8 @@ gd_nbrs <- function() {
     ## dt_ynktbl <- gc_ynktbl()
     dt_reftbl <- gc_reftbl()
 
-    dt_nbrs_cbnd <- Reduce(rbind, list(dt_descs, dt_meanhaz, dt_ynkplt, dt_refplt, dt_reftbl))
+    dt_nbrs_cbnd <- Reduce(rbind, list(dt_descs, dt_meanhaz, dt_ynkplt, dt_refplt, dt_reftbl,
+                                       dt_mow_prop_museum))
 
     
     return(dt_nbrs_cbnd)
@@ -257,6 +261,8 @@ print("everything is DONE")
 ## ## gp_condmef("r_pop42", l_mdls, dt_pmyear)
 ## gp_pred_heatmap("r_onlycryside", l_mdls, dt_pmyear, mortbound_lo = 0.15, mortbound_hi = 0.25)
 ## ## gp_condmef("r_pop42", l_mdls, dt_pmyear)
+
+## *** self identification in mission statements 
 
 library(stringr)
 

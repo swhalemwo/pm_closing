@@ -236,3 +236,34 @@ gt_selfid <- function(dt_pmx, dt_pmyear) {
 
     
 }
+
+
+## ** numbers
+
+gn_mow_prop_museum <- function() {
+    #' generates info on how many MOWs museums have "museum" in their name
+    
+    l_form_strs <- list(
+        museum = c("museum", "museo", "museu", "musee", "muzej", "musée", "muuseum", "muzeum", "musei",
+                   "muséum", "muzium", "muséyé", "museale", "muzeu", "muzeul", "múzeum", "muzeal", "musèe", "museè",
+                   "muziejus", "musem", "muzeyi", "muzei", "muséo", "muziejos", "muzieus", "muzeý", "muze ",
+                   "museística", "müzesi"), # found by going through the list
+        collection = c("collection", "sammlung", "coleccion", "colección", "colecção"),
+        foundation = c("foundation", "stiftung", "funda", "fundação", "fondation"))
+    
+    dt_mow_name <- gd_mow_info() %>% .[, .(MOW_ID, name = str_to_lower(name))] %>% 
+        .[, c("str_muem", "str_clcn", "str_fndn") := # string matching
+                map(l_form_strs, ~str_count(name, paste0(.x, collapse = "|")))]
+    ## dt_mow_name[str_muem == 0][sample(1:.N, 30)] %>% print(n=30)
+
+    ## dt_mow_name %>% copy %>% .[, nbr_match := rowSums(.SD), .SDcols = patterns("^str_")] %>%
+    ##     .[nbr_match == 0] %>% .[sample(1:.N, 30)] %>% print(n=30)
+
+    ## dt_mow_name[, map(.SD, ~mean(.x)), .SDcols = patterns("^str_")] %>% print()
+    ## ~70% of MOWs have museum in their name
+
+    return(list(nbr_name = "mow_prop_name_museum",
+         nbr_fmt = format(mean(dt_mow_name$str_muem)*100,  digits= 2),
+         grp = "descs") %>% adt)
+
+}
