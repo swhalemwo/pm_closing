@@ -130,13 +130,6 @@ Furthermore, analyzing which museums survive allows to make informed speculation
 # *keywords*: museum, closure, identity
 
 
-** private museum 3 crisis
-Museums, including private museums, might be relatively resilient [[cite:&Geller_Salamon_2010_resilience]]: 
-#
-tightening belt, fundraising, entrepreneurial strategies, downsizing
-#
-The form of museums also implies commitment of resources, larger than that of other NPOs, which in turn provides capabilities, e.g. staff that is able to search for alternative revenue sources.
-#
 
 
 
@@ -187,77 +180,6 @@ While some of these aspects can be influenced by the founder (in particular the 
 In particular when they rely on the decision-making of other art-field actors, such as competition with other museums and sponsorship/funding choices, the influence of the individual founder is severely limited.
 #
 The image that these parties have of the private museum might be substantial importance in guiding their decision-making.
-
-
-
-** Private museums
-
-Investigating the survival prospects of private museum furthermore illucidates the long-term development of the organizational form as a whole, as it provides insights into factors related to variation of sustainability and thereby into trends in composition. 
-#
-# While the composition of private museums is not only influenced by closures, but also by foundings,
-# 
-Given the non-significant gender difference, it can be expected that (unless given a strong increase in founding by women) the population of private museums will continue to remain a man-dominated affair.
-# [fn::The point estimates, which are higher for women and couples, albeit not significantly so, even point towards a slight expansion of the proportion of museums established by men.] # add this if gender - female is substantially positive
-#
-This finding also provides no evidence that female founders face gender-specific challenges that decrease the survival prospects of their private museums. 
-
-
-
-
-
-The role of the founder is two sided.
-#
-Death and exclusion from a prestigious ranking are not associated with a higher risk of closure, which indicates that private museums have attained a substantial degree of institutionalization.
-#
-On the other hand, self-identifying as an institution which is not a museum, foundation or collection possibly reflects a kind of founder attitudes which substantially influences survival chances.
-#
-Founders who are less interested in establish institutions might be more inclined to choose a name which less reflects this ambition. 
-#
-One way of conceptualizing this distinction might then be that whereas involuntary, externally imposed events are less able to close museums of otherwise motivated founders, some founders might from the very beginning voluntarily decide to not establish a museum that is intended for perpetuity.
-
-
-However, this group is somewhat small.
-#
-Of the XXX museums included in the database, XXX do not carry the term museum, foundation or collection.
-#
-Thus given this low share, and the corresponding  higher closing rate, a possible future for the private museum population might be increased institutionalization and consolidation of relatively robust organizations.
-#
-
-
-The effects of location might be seen
-#
-On the one hand, museum location is chosen by the founder at the time of founding (or rather, several years in advance).
-#
-This gives founders substantial choice in the size and composition of the potential audience who will be able to easily assess the museum.
-#
-On the other hand, collectors are less able to influence what plans other collectors might have.
-#
-What may have been at one point been identified as a promising location without substantial competition may turn out to be a much less fertile ground as soon as other collectors start eyeing the same region for their own private museum projects.
-# 
-In particular private museum in rural locations with low population densities seem to be at risk when other museums open in the neighborhood. 
-#
-This is not to say that private museums cannot endure in areas with low population densities. 
-#
-In fact, at low numbers of private museums in the neighborhood their survival prospects are better than those located in larger cities.
-#
-These larger cities with low private museum counts are possibly also characterized by lower numbers of other cultural institutions as well as an audience less interested in postmaterial art consumption.
-
-
-The lack of a relation between temporary exhibitions and survival prospect is somewhat unexpected.
-#
-It was expected that as temporary exhibitions constitute one of the main tasks of a museums operations, organizing them would benefit a museum financially (via visitor fees) and symbolically (via prestige of other art field actors, which might be developed into further contacts), leading to higher survival chances[fn::Furthermore, the ability to organization exhibitions likely reflects museum resources, which should also enhance survival.]
-# not sure this follows
-However, organizing exhibitions does not seem to bestow benefits for the museums which organize them, nor do organizations seem to be organized only by established/sustainable/secure organizations.
-#
-One possibility for this discrepancy could be that exhibitions are expensive, and whatever benefits gained from them are offset by the associated costs.
-#
-One might see in this association again the importance of the founder:
-#
-Founders who are committed to their museums will keep them alive, regardless of whether or not they plan to organize temporary exhibitions.
-
-
-
-
 
 
 
@@ -404,6 +326,58 @@ difficulties in attracting visitors from afar.
   
   
 
+*** Shocks
+External shocks can 
+
+
+Museums, including private museums, might be relatively resilient [[cite:&Geller_Salamon_2010_resilience]]: 
+#
+tightening belt, fundraising, entrepreneurial strategies, downsizing
+#
+The form of museums also implies commitment of resources, larger than that of other NPOs, which in turn provides capabilities, e.g. staff that is able to search for alternative revenue sources.
+#
+
+*** Size
+
+Where
+
+
+
+
+# # Organizational size has been found to be increase survival as larger organizations
+# # # 
+# # : liability of middle -> huh
+# # #
+# In the research of non-profit organizations, larger size has been usually found to increased survival chances [[parencite:&Harrison_Laincz_2008_nonprofit;&Helmig_Ingerfurth_Pinz_2013_nonprofit]]
+
+# Larger NPOs are generally found to have lower mortality rates [[parencite:&Hager_1999_demise;&Duckles_Hager_Galaskiewicz_2005_close]], with size being measured through indicators such as assets [[parencite:&Lu_Shon_Zhang_2019_dissolution]], number of employees parencite:&Bielefeld_1994_survival and volunteers [[parencite:&Fernandez_2007_dissolution]], or revenues parencite:&Searing_2020_zombies.
+# # #
+# Smaller organiations are argued to face greater difficulty in collecting resources and recruiting staff as well as relatively higher costs for administration and regulation [[parencite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]], while being less able to diversify or benefit from economies of scale [[parencite:&Hager_1999_demise]][fn:: This pattern that does not necessarily hold for organizations generally, which led to the term of liability of the middle [[parencite:&Carroll_Khessina_2019_demography]], who argue that medium-sized organizations compete with both small (specialist) as well as large (generalist) organizations and therefore face the highest competition and lowest survival prospects.]
+# # #
+# Larger organizations are also argued to be able to waste some resources during normal times which can be utilized effectively during situations of crisis without having to scale back services (which generate revenue) [[parencite:&Hager_2001_vulnerability]] and hence avoid downsizing, which can lead to dissolution [[parencite:&Duckles_Hager_Galaskiewicz_2005_close;&Bielefeld_1994_survival]].
+
+
+
+
+# Measuring size constitutes a number of challenges:
+# #
+# Private museums are relatively intransparent, and therefor do not always publish financial statements.
+# #
+# Furthermore, as their locations are spread across the globe, even those institutions that do publish them do so according to different regulatory frameworks, sometimes in different languages, and often only make available those of the last couple of years. 
+# #
+# Instead, I use exhibition data to estimate size, assuming larger private museums will organize more exhibitions than smaller ones.
+# # FIXME: order: artists first
+# I use a subset of the Artfacts database of 37,224 organizations, 544,982 exhibitions by 43,593 artists with complete demographics and born from 1945 onwards.
+# #
+# As the coverage of the Artfacts database varies over time, a exhibition count is not feasible as it would 
+# #
+# I therefore instead assign to each museum a quantile score based on its number of exhibitions; the score corresponds to the fraction of organizations with less or equal the number of exhibitions in each given year.
+# #
+
+
+
+
+
 *** Other predictors of organizational survival
 **** Age 
 
@@ -523,36 +497,7 @@ Centrality of the founder's vision is measured via the proxy of whether the name
 # On the level of the environment, therefore the density (number) of private museum per country is included both in linear and squared form.
 
 
-# *** Size
-# Organizational size has been found to be increase survival as larger organizations
-# # 
-# : liability of middle -> huh
-# #
-# In the research of non-profit organizations, larger size has been usually found to increased survival chances [[parencite:&Harrison_Laincz_2008_nonprofit;&Helmig_Ingerfurth_Pinz_2013_nonprofit]]
 
-# Larger NPOs are generally found to have lower mortality rates [[parencite:&Hager_1999_demise;&Duckles_Hager_Galaskiewicz_2005_close]], with size being measured through indicators such as assets [[parencite:&Lu_Shon_Zhang_2019_dissolution]], number of employees parencite:&Bielefeld_1994_survival and volunteers [[parencite:&Fernandez_2007_dissolution]], or revenues parencite:&Searing_2020_zombies.
-# #
-# Smaller organiations are argued to face greater difficulty in collecting resources and recruiting staff as well as relatively higher costs for administration and regulation [[parencite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]], while being less able to diversify or benefit from economies of scale [[parencite:&Hager_1999_demise]][fn:: This pattern that does not necessarily hold for organizations generally, which led to the term of liability of the middle [[parencite:&Carroll_Khessina_2019_demography]], who argue that medium-sized organizations compete with both small (specialist) as well as large (generalist) organizations and therefore face the highest competition and lowest survival prospects.]
-# #
-# # Larger organizations are also argued to be able to waste some resources during normal times which can be utilized effectively during situations of crisis without having to scale back services (which generate revenue) [[parencite:&Hager_2001_vulnerability]] and hence avoid downsizing, which can lead to dissolution [[parencite:&Duckles_Hager_Galaskiewicz_2005_close;&Bielefeld_1994_survival]].
-
-
-
-
-# Measuring size constitutes a number of challenges:
-# #
-# Private museums are relatively intransparent, and therefor do not always publish financial statements.
-# #
-# Furthermore, as their locations are spread across the globe, even those institutions that do publish them do so according to different regulatory frameworks, sometimes in different languages, and often only make available those of the last couple of years. 
-# #
-# Instead, I use exhibition data to estimate size, assuming larger private museums will organize more exhibitions than smaller ones.
-# # FIXME: order: artists first
-# I use a subset of the Artfacts database of 37,224 organizations, 544,982 exhibitions by 43,593 artists with complete demographics and born from 1945 onwards.
-# #
-# As the coverage of the Artfacts database varies over time, a exhibition count is not feasible as it would 
-# #
-# I therefore instead assign to each museum a quantile score based on its number of exhibitions; the score corresponds to the fraction of organizations with less or equal the number of exhibitions in each given year.
-# #
 
 
 # limitations:
@@ -759,6 +704,89 @@ Furthermore, these "rural" museums see an increase in the risk of closing for ea
 
 
 ** Discussion
+
+
+Investigating the survival prospects of private museum furthermore illucidates the long-term development of the organizational form as a whole, as it provides insights into factors related to variation of sustainability and thereby into trends in composition. 
+
+*** gender :ignhead:
+#
+# While the composition of private museums is not only influenced by closures, but also by foundings,
+# 
+Given the non-significant gender difference, it can be expected that (unless given a strong increase in founding by women) the population of private museums will continue to remain a man-dominated affair.
+# [fn::The point estimates, which are higher for women and couples, albeit not significantly so, even point towards a slight expansion of the proportion of museums established by men.] # add this if gender - female is substantially positive
+#
+This finding also provides no evidence that female founders face gender-specific challenges that decrease the survival prospects of their private museums. 
+
+
+*** audience/competition :ignhead:
+
+
+
+# FIXME: rewrite with focus on audience/competition
+# The effects of location might be seen
+# #
+# On the one hand, museum location is chosen by the founder at the time of founding (or rather, several years in advance).
+# #
+# This gives founders substantial choice in the size and composition of the potential audience who will be able to easily assess the museum.
+# #
+# On the other hand, collectors are less able to influence what plans other collectors might have.
+# #
+# What may have been at one point been identified as a promising location without substantial competition may turn out to be a much less fertile ground as soon as other collectors start eyeing the same region for their own private museum projects.
+# # 
+# In particular private museum in rural locations with low population densities seem to be at risk when other museums open in the neighborhood. 
+# #
+# This is not to say that private museums cannot endure in areas with low population densities. 
+# #
+# In fact, at low numbers of private museums in the neighborhood their survival prospects are better than those located in larger cities.
+# #
+# These larger cities with low private museum counts are possibly also characterized by lower numbers of other cultural institutions as well as an audience less interested in postmaterial art consumption.
+
+*** facilities/size :ignhead:
+# FIXME: rewrite with 
+
+
+The lack of a relation between temporary exhibitions and survival prospect is somewhat unexpected.
+#
+It was expected that as temporary exhibitions constitute one of the main tasks of a museums operations, organizing them would benefit a museum financially (via visitor fees) and symbolically (via prestige of other art field actors, which might be developed into further contacts), leading to higher survival chances[fn::Furthermore, the ability to organization exhibitions likely reflects museum resources, which should also enhance survival.]
+# not sure this follows
+However, organizing exhibitions does not seem to bestow benefits for the museums which organize them, nor do organizations seem to be organized only by established/sustainable/secure organizations.
+#
+One possibility for this discrepancy could be that exhibitions are expensive, and whatever benefits gained from them are offset by the associated costs.
+#
+One might see in this association again the importance of the founder:
+#
+Founders who are committed to their museums will keep them alive, regardless of whether or not they plan to organize temporary exhibitions.
+
+
+
+
+
+
+
+*** founder
+:PROPERTIES:
+:CREATED:  [2024-05-29 wo 12:08]
+:ID:       676af2e2-9b94-489e-88a8-6a87397c864a
+:END:
+
+# FIXME: rewrite from observation level to process level
+# The role of the founder is two sided.
+# #
+# Death and exclusion from a prestigious ranking are not associated with a higher risk of closure, which indicates that private museums have attained a substantial degree of institutionalization.
+# #
+# On the other hand, self-identifying as an institution which is not a museum, foundation or collection possibly reflects a kind of founder attitudes which substantially influences survival chances.
+# #
+# Founders who are less interested in establish institutions might be more inclined to choose a name which less reflects this ambition. 
+# #
+# One way of conceptualizing this distinction might then be that whereas involuntary, externally imposed events are less able to close museums of otherwise motivated founders, some founders might from the very beginning voluntarily decide to not establish a museum that is intended for perpetuity.
+
+
+# However, this group is somewhat small.
+# #
+# Of the XXX museums included in the database, XXX do not carry the term museum, foundation or collection.
+# #
+# Thus given this low share, and the corresponding  higher closing rate, a possible future for the private museum population might be increased institutionalization and consolidation of relatively robust organizations.
+# #
 
 
 ** Conclusion
