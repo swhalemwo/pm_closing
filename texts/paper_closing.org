@@ -79,7 +79,7 @@ wd_nbrs(dt_nbrs)
 :end:
 
 
-* Identity and the closure of private art museums
+* It's so over/Short-lived legacies: The closure of private art museums
 # Johannes Aengenheyster
 
 # #+latex: \noindent
@@ -166,8 +166,14 @@ While the exact power relationships within museums are hard to observe due to th
 Next to exhibiting the founder's collection, they likely also to a large extent dependent on continued financial contributions of the founder, as museums are chronically unprofitable (which is evidenced by their high share of NPOs or publicly owned/run museums, rather than for-profit companies). 
 #
 While the lack of transparency again makes it hard to systematically assess the financial importance of founder contributions to the existence of museums, *anecdotal* evidence suggests it to be substantial [[parencite:&Velthuis_Gera_forthcoming_fragility]].
+#
 
 
+[[textcite:&Adam_2021_rise]]
+- pandemic potentially
+- long-term funding
+- motivations may change
+- difficulties not anticipated
 
 
 
@@ -219,13 +225,13 @@ Private museums:
 
 ** Theoretical framework
 
- As a substantial literature on organizational survival exists, 
+ As a substantial literature on organizational survival exists, thus
 
 
 *** Identity and the survival prospects of non-profit organizations
 # provide legitimacy
 
-An identity that is legitimate (understandable) and favorable (positive) has been shown to have a vast number of positive outcomes for organizations [[parencite:&Lange_Lee_Dai_2010_reputation]].
+An identity that is legitimate (understandable) and favorable (positive) has been argued to have a vast number of positive outcomes for organizations [[parencite:&Lange_Lee_Dai_2010_reputation]].
 # 
 As gaining the approval of different stakeholders is necessary for being understood and/or supported by other organizations in the environment, having a clearly defined and favorable identity influences resource acquisition and thereby survival prospects [[parencite:&Rao_1994_reputation]].
 #
@@ -256,7 +262,7 @@ However, the category of museums could be relatively flexible (for example, it i
 
 Furthermore, identity of a private museum may be influenced by the identity of persons most closely affiliated with it, in particular the identity of its founders.
 #
-Given that founders are the very reason behind the existence of these organizations, and sometimes plan these as their personal legacies [[parencite:&Walker_2019_collector]], founder status gains or losses may very well reflect on the wider organization and affect its survival propspects.
+Given that founders are the very reason behind the existence of these organizations, and sometimes plan these as their personal legacies [[parencite:&Walker_2019_collector]], founder status gains or losses may reflect on the wider organization and affect its survival propspects.
 
 
 #+latex: \bigbreak
@@ -435,10 +441,13 @@ First, self-identification measures whether a the name of a museum includes the 
 Since the name is one of the first aspects that stakeholders perceive when engaging with an organization, it might shape expectations and influence forms of engagement.
 #
 In particular, it might be that museums that also refer to themselves as museums are seen as more favorable and worthy of visits, collaborations and support than other museums.
-#
+
+
 To ensure that inclusion of the word "museum" corresponds to the naming convention of the museum population, the names of the "Museums of the World" (MOW) database [[parencite:&deGruyter_2021_MOW]], a database containing over 55.000 museums, are analyzed.
 #
-In this database, {{{mow_prop_name_museum}}}% of museum names contain the term "museum" (or its equivalent in other languages), which indicates a substantial prevalence of museum founders to include the term museum in the name of their institution[fn::While it would also be possible to construct inclusion in the MOW as an indicator of legitimacy, as it represents recognition of the organization as a museum [[parencite:&Zuckerman_1999_illegitimacy]], preliminary investigations of the database indicated that it has been  updated only sparsely in recent years; thereby inclusion in it does not constitute an accurate measurement of an institutions' recognition as a museum].
+In this database, {{{mow_prop_name_museum}}}% of museum names contain the term "museum" (or its equivalent in other languages), which indicates a substantial naming convention. 
+
+prevalence of museum founders to include the term museum in the name of their institution[fn::While it would also be possible to construct inclusion in the MOW as an indicator of legitimacy, as it represents recognition of the organization as a museum by experts [[parencite:&Zuckerman_1999_illegitimacy]], preliminary investigations of the database indicated that it has been  updated only sparsely in recent years; thereby inclusion in it (or the lack therefore) does not constitute an accurate measurement of the extent of an institutions' recognition as a museum].
 
 
 # Secondly, a binary predictor measures whether the museum is included in the 
@@ -862,10 +871,11 @@ absence of evidence as evidence of absence
 
 
 
+
 {{{ynkplt_p_pred_heatmap}}}
 
 
 
-
+covid effect may take longer to be effective
 
  
