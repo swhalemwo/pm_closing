@@ -2,7 +2,7 @@
 #+PROPERTY: header-args:R+ :output-dir /home/johannes/Dropbox/phd/papers/closing/notes/artfacts/
 #+PROPERTY: header-args:R+ :tangle yes
 #+PROPERTY: header-args:R+ :cache yes
-#+PROPERTY: header-args:R+ :eval no-export
+# #+PROPERTY: header-args:R+ :eval no-export # if this is uncommented, figures are not included??
 
 
 #+latex_class: notes2
@@ -21,14 +21,14 @@ TODO: this stuff is copied from dimred, relies on those objects..
 #+begin_src R :exports none :results none :cache yes
 library(pmdata)
 library(jtls)
-library(purrr) # looping
-library(collapse) # data processing
-library(countrycode) # for getting gd_af_size to work
-library(wpp2022) # import UN population data for taiwan
-data(pop1dt) # actually import Un pop data
-library(survival) # survival models
+library(purrr)                                  # looping
+library(collapse)                               # data processing
+library(countrycode)                            # for getting gd_af_size to work
+library(wpp2022)                                # import UN population data for taiwan
+data(pop1dt)                                    # actually import Un pop data
+library(survival)                               # survival models
 library(Hmisc, include.only = "latexTranslate") # needed for reg table
-library(furrr) # parallel processing
+library(furrr)                                  # parallel processing
 
 c_dirs <- gc_dirs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## project dirs
 PMDATA_LOCS <- gc_pmdata_locs()
