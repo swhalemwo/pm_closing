@@ -20,6 +20,7 @@ wd_nbrs(dt_nbrs)
 :results:
 # descs
 #+MACRO: pmdb_n_nlpm 25
+#+MACRO: mow_prop_name_museum 71
 
 
 # meanhaz
