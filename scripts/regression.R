@@ -1975,14 +1975,18 @@ gp_pred_popprxcnt <- function(l_mdlnames, l_mdls, dt_pmyear) {
     ## plot_comparisons(l_mdls$r_pop4, variables = list(popm_circle10 = c(1,5)),
     ## condition = "proxcnt10", type  = "lp")
     
-    l_lbls <- sprintf("%sm pop. (%sth perc.)", l_popm_circle10_qntls, l_quantile_probs*100) %>%
-        setNames(l_popm_circle10_qntls)
+    ## set up labels: has to be vector
+    l_lbls <- c(
+        sprintf("%sm pop. (%sth perc.)", l_popm_circle10_qntls, l_quantile_probs*100) %>%
+        setNames(paste0("facet",l_popm_circle10_qntls)),
+        setNames(l_mdlnames, l_mdlnames)) %>% unlist
 
-    
 
-    p_pred_popprxnct <- dt_predres_mult %>% copy %>% .[, popm_circle10_mult := as.character(popm_circle10)] %>%
+    p_pred_popprxnct <- dt_predres_mult %>% copy %>%
+        .[, popm_circle10_mult := as.character(popm_circle10)] %>% # set up merging column
         ## .[popm_circle10_mult == 209] %>% print(n=40)
         .[dt_popm_circle10_fltr, on = "popm_circle10_mult"] %>%
+        .[, facet_popm_circle10 := paste0("facet", popm_circle10_mult)] %>%
         .[proxcnt10 < 12] %>% 
         ## .[popm_circle10_mult %in% l_popm_circle10_qntls] %>% 
         ## p_pred_popprxnct <- dt_predres_mult[popm_circle10*10 %in% c(1, 15, 30, 50)] %>% 
@@ -2009,7 +2013,8 @@ gp_pred_popprxcnt <- function(l_mdlnames, l_mdls, dt_pmyear) {
     if (len(l_mdlnames) > 1) {
         
         p_pred_popprxnct <- p_pred_popprxnct +
-            facet_grid(src~popm_circle10_mult, scales = "free", labeller = as_labeller(l_lbls))
+            facet_grid(src~facet_popm_circle10, scales = "free", labeller = as_labeller(l_lbls))
+    
         
     } else if (len(l_mdlnames) == 1) {
 
@@ -2044,10 +2049,12 @@ gp_pred_proxcntpop <- function(l_mdlnames, l_mdls, dt_pmyear) {
         as.character
 
     l_lbls <- sprintf("%s PMs 10km (%sth perc.)", l_quantiles_proxcnt, l_quantile_probs*100) %>%
-        setNames(l_quantiles_proxcnt)
+        setNames(l_quantiles_proxcnt) %>%
+        c(setNames(l_mdlnames, l_mdlnames)) %>% unlist
+        
 
     
-    dt_predres_mult[proxcnt10 %in% l_quantiles_proxcnt] %>%
+    p_pred_proxcntpop <- dt_predres_mult[proxcnt10 %in% l_quantiles_proxcnt] %>%
         ggplot(aes(x=popm_circle10, y=1-est, ymax = 1-upper, ymin = 1-lower,
                    group = factor(proxcnt10))) + 
         geom_line(linewidth = 1) +
@@ -2058,6 +2065,20 @@ gp_pred_proxcntpop <- function(l_mdlnames, l_mdls, dt_pmyear) {
              y = "Predicted closing chance within 20 years,\n 95% CI") +
         facet_grid(~proxcnt10, scales = "free", labeller = as_labeller(l_lbls))
 
+    
+    ## if multiple models, add facetting by model
+    if (len(l_mdlnames) > 1) {
+        
+        p_pred_proxcntpop <- p_pred_proxcntpop + 
+            facet_grid(src~proxcnt10, scales = "free", labeller = as_labeller(l_lbls))
+        
+    } else if (len(l_mdlnames) == 1) {
+
+        p_pred_proxcntpop <- p_pred_proxcntpop + 
+            facet_grid(~proxcnt10, labeller = as_labeller(l_lbls))    
+    }
+
+    return(p_pred_proxcntpop)
     
     ## .[, popm_circle10_cut := round
 
