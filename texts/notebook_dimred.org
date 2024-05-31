@@ -450,26 +450,35 @@ dt_pmyear <- gd_pmyear(dt_pmyear_prep, c_lvrs) # trim down dt to no NAs
 
 
 l_mdls <- list(
-          r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion + exhbany + 
-                            proxcnt10*popm_circle10 + covid + recession,
-                       dt_pmyear),
-        
-        r_wsize1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion + exhbany + 
-                            proxcnt10*popm_circle10 + PC1 +  covid + recession,
-                         dt_pmyear),
-        
+  ## r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+  ##                   slfidfcn + founder_dead + muem_fndr_name + an_inclusion + exhbany + 
+  ##                   proxcnt10*popm_circle10 + covid + recession,
+  ##                dt_pmyear),
+  r_pop4 = coxph(gf_coxph_close(), dt_pmyear),
+  
+  
+  ## r_wsize1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+  ##                    slfidfcn + founder_dead + muem_fndr_name + an_inclusion + exhbany + 
+  ##                    proxcnt10*popm_circle10 + PC1 +  covid + recession,
+  ##                  dt_pmyear),
+  r_wsize1 = coxph(gf_coxph_close(vrbls_to_add = "PC1"), dt_pmyear),
+  
 
-        r_wsize2 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion + exhbany + 
-                            proxcnt10*popm_circle10 + PC2 + covid + recession ,
-                         dt_pmyear),
-        
-        r_wsize3 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion + exhbany + 
-                            proxcnt10*popm_circle10 + PC1 + PC2 + covid + recession,
-                         dt_pmyear))
+  ## r_wsize2 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+  ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion + exhbany + 
+  ##                     proxcnt10*popm_circle10 + PC2 + covid + recession ,
+  ##                  dt_pmyear),
+
+  r_wsize2 = coxph(gf_coxph_close(vrbls_to_add = c("PC2")), dt_pmyear),
+  
+  ## r_wsize3 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+  ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion + exhbany + 
+  ##                     proxcnt10*popm_circle10 + PC1 + PC2 + covid + recession,
+  ##                  dt_pmyear)
+
+  r_wsize3 = coxph(gf_coxph_close(vrbls_to_add = c("PC1", "PC2")), dt_pmyear)
+
+)
 
 gt_reg_coxph_dimred <- gt_reg_coxph
 
