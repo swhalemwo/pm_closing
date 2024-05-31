@@ -212,12 +212,14 @@ gc_vvs <- function() {
         an_inclusion              = "ArtNews Ranking inclusion",
         exhbany                   = "Exhibition any",
         exhbrollany               = "Exhibition any last 5 years",
-        exhbqntl_year             = "Exhibition Quantile (year)",
+        exhbqntl_roll             = "Exhibition Quantile (year, rolled)",
         "I(exhbqntl_year^2)"      = "Exhibition Quantile (year)^2",
         exhbqntl_cy               = "Exhibition Quantile (CY)",
+        exhbcnt                   = "Exhibition count",
+        exhbrollsum_avg           = "Exhibition avg rolled",
+        exhbqntl_year             = "Exhibition Quantile (year)",
         exhbprop_top10_log        = "Exh. top 10% (log)",
         exhbprop_top10_utf        = "Exh. top 10%",
-        exhbqntl_roll             = "Exhibition Quantile (year, rolled)",
         "I(exhbqntl_roll^2)"      = "Exhibition Quantile^2 (year, rolled)",
         PC1                       = "PC1 (Size)",
         PC2                       = "PC2 (Support)",
@@ -232,7 +234,7 @@ gc_vvs <- function() {
         founder  = .c(gender, founder_dead),
         museum   = .c(slfidfcn, muem_fndr_name, mow, an_inclusion, PC1, PC2,
                       exhbany, exhbrollany, 
-                      exhbqntl_cy, 
+                      exhbqntl_cy, exhbcnt, exhbrollsum_avg,
                       exhbqntl_year, "I(exhbqntl_year^2)",
                       exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"), 
         envir    = .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
@@ -251,6 +253,7 @@ gc_vvs <- function() {
                    exhbany, exhbrollany, 
                    exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)", exhbprop_top10_log, exhbprop_top10_utf,
                    exhbqntl_roll, "I(exhbqntl_roll^2)",
+                   exhbcnt, exhbrollsum_avg,
                    covid, recession)
 
     ## specify variable type: binary, numeric, categorical
@@ -260,6 +263,7 @@ gc_vvs <- function() {
                  pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10", PC1, PC2,
                  year, "I(year^2)", "popm_circle10:I(proxcnt10^2)",
                  exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)",
+                 exhbcnt, exhbrollsum_avg,
                  exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"),
         cat = .c(gender, founder_dead, slfidfcn, reg6, an_inclusion, time_period))
 
