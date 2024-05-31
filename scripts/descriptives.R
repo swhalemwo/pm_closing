@@ -241,6 +241,7 @@ gt_selfid <- function(dt_pmx, dt_pmyear) {
 ## ** numbers
 
 gn_mow_prop_museum <- function() {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
     #' generates info on how many MOWs museums have "museum" in their name
     
     l_form_strs <- list(

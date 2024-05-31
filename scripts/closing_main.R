@@ -32,6 +32,7 @@ library(boot)            # bootstrapping for instantaneous hazard SE calculation
 library(marginaleffects) # for condmef plots (conditional marginal effects)
 library(texreg, include.only = c("screenreg", "texreg")) ## inspection of results
 library(Hmisc, include.only = "latexTranslate")  # latexTranslate
+library(stringr)         # for str_count, makes MOW naming convention processing easier
 
 
 ## LOCS <- list(PROJDIR = "/home/johannes/Dropbox/phd/papers/closing/")
@@ -249,6 +250,7 @@ gdtbl("t_reg_coxph")
 
 
 print("everything is DONE")
+stop("everything is DONE")
 
 ## longitudinal development of variables
 
@@ -280,5 +282,8 @@ dt_selfid_mission %>%
     geom_col(position = position_dodge())
     
 
-## library(stringr)
-## str_count
+
+
+
+
+

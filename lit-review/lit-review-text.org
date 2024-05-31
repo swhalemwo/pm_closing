@@ -43,7 +43,7 @@ Larger organizations are also argued to be able to waste some resources during n
 
 A substantial amount of literature focuses on resources as resource depletion is a leading cause of (nonprofit) organizational demise. 
 #
-Diversification and (i.e. a multitude of funding sources) is found to reduce mortality [[parencite:&Fernandez_2007_dissolution;&Bielefeld_1994_survival;&Hager_2001_vulnerability;&Lu_Shon_Zhang_2019_dissolution]]; similarly volatility (rapid changes in revenues) is found to increase mortality [[parencite:&Mayer_2022_slimmer]]. 
+Diversification and (i.e. a multitude of funding sources) is found to reduce mortality [[parencite:&Fernandez_2007_dissolution;&Bielefeld_1994_survival;&Hager_2001_vulnerability;&Lu_Shon_Zhang_2019_dissolution]]; similarly volatility (rapid changes in revenues) is found to increase mortality [[parencite:&Mayer_2022_simmer]]. 
 #
 While private museums are likely already generally leaning toward higher concentration than NPOs generally due to high reliance on the financial contributions of the founder-collector, there might still be variation in the degree of revenue concentration as museums might vary in the proportion of revenues received from ticket prices, restaurants, cafes, museum shops or other activities. 
 

@@ -1103,7 +1103,7 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
 
     leg_labels <- c("gamma" = "Epanechnikov-Kernel (5 years bandwidth)",
                     "epi" = sprintf("Piecewise-Constant (%s years)", cutwidth))
-
+    
 
     ggplot() +
         geom_step(copy(dt_pehaz)[src=="w1"][, src := "epi"], # awkward renaming 
@@ -1280,6 +1280,49 @@ gc_pmdb_tests <- function(dt_pmx, dt_pmyear, dt_pmcpct) {
 
 }
 
+gf_coxph_close <- function(vrbls_to_add = NULL, vrbls_to_yeet = NULL) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    
+    #' generate coxph model formula
+    #' @param vrbls_to_add vector of variables to add
+    #' @param vrbls_to_yeet vector of variables to remove
+
+    vrbls_base <- c("gender",
+                    "pmdens_cry",
+                    "I(pmdens_cry^2)", 
+                    "slfidfcn",
+                    "founder_dead",
+                    "muem_fndr_name",
+                    "an_inclusion",
+                    "proxcnt10",
+                    "popm_circle10",
+                    "proxcnt10:popm_circle10",
+                    "exhbany",
+                    "recession",
+                    "covid")
+
+
+    if (len(intersect(vrbls_to_add, vrbls_to_yeet)) > 0) {stop("can't add and yeet the same")}
+    
+
+    vrbls_touse <- setdiff(vrbls_base, vrbls_to_yeet) %>%
+        union(vrbls_to_add)
+    
+
+    f_coxph_close <- sprintf("Surv(tstart, tstop, closing) ~ %s", paste(vrbls_touse, collapse = " + ")) %>%
+        as.formula
+
+    return(f_coxph_close)
+
+}
+
+
+
+
+    
+
+
 gl_mdls <- function(dt_pmyear, dt_pmcpct) {
     gw_fargs(match.call())
 
@@ -1309,28 +1352,19 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ##                dt_pmyear),
 
         
-        r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                           proxcnt10*popm_circle10 + exhbany + recession + covid,
-                       dt_pmyear),
-        
-        ## only focus on museums that are not in countryside (wo = without), i.e. other PMs around and some people
-        r_onlycryside = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                                  slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                                  proxcnt10*popm_circle10 + exhbany + recession + covid,
-                              dt_pmyear[proxcnt10 <= 1 & popm_circle10 <= 1]),
+        ## r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + 
+        ##                    slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+        ##                    proxcnt10*popm_circle10 + exhbany + recession + covid,
+        ##                dt_pmyear),
 
-        
+        r_pop4 = coxph(gf_coxph_close(), dt_pmyear),
         ## only focus on museums that are not in countryside (wo = without), i.e. other PMs around and some people
-        r_wocryside = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                                slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                                proxcnt10*popm_circle10 + exhbany + recession + covid,
-                            dt_pmyear[!(proxcnt10 < 2 & popm_circle10 <= 2)]),
+        r_onlycryside = coxph(gf_coxph_close(), dt_pmyear[proxcnt10 <= 1 & popm_circle10 <= 1]),
+        ## only focus on museums that are not in countryside (wo = without), i.e. other PMs around and some people
+        r_wocryside = coxph(gf_coxph_close(), dt_pmyear[!(proxcnt10 < 2 & popm_circle10 <= 2)]),
 
-        r_smol = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                           proxcnt10*popm_circle10 + exhbany + recession + covid,
-                       dt_pmyear[age <= 30]),
+        ## only museums which are not too old        
+        r_smol = coxph(gf_coxph_close(), dt_pmyear[age <= 30]),
 
         
         ## try coxme.. looks pretty similar -> yeet for now
@@ -1340,17 +1374,19 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ##                     proxcnt10*popm_circle10 + exhbany + recession + covid + (1 | iso3c),
         ##                dt_pmyear)
 
-        r_pop42 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                            slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                            proxcnt10*popm_circle10 + I(proxcnt10^2)*popm_circle10 + exhbany + recession + covid,
-                        dt_pmyear),
+        r_pop42 = coxph(gf_coxph_close(vrbls_to_add ="I(proxcnt10^2)*popm_circle10"), dt_pmyear),
+
+        ## r_pop42 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
+        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+        ##                     proxcnt10*popm_circle10 + I(proxcnt10^2)*popm_circle10 + exhbany + recession + covid,
+        ##                 dt_pmyear),
 
         ## get rid of environment variables: assume that they affect economic capital directly
         ## including them might overshadow identity effects?
-        r_pop4_woenv = coxph(Surv(tstart, tstop, closing) ~ gender + 
-                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                           exhbany,
-                       dt_pmyear)
+
+        r_pop4_woenv = coxph(gf_coxph_close(
+            vrbls_to_yeet = gc_vvs()$dt_vrblinfo[vrblgrp == "envir", achr(vrbl)]), dt_pmyear)
+        
 
         ## r_pop5 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
         ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
