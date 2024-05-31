@@ -1344,19 +1344,7 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         r_less1 = coxph(Surv(tstart, tstop, closing) ~ mow + pmdens_cry + I(pmdens_cry^2), dt_pmyear),
         r_less2 = coxph(Surv(tstart, tstop, closing)~ founder_dead + mow + slfidfcn + muem_fndr_name, dt_pmyear),
 
-        ## fullest model:
-        ## FIXME: add founder_dead*muem_fndr_name
-        ## r_more = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-        ##                    slfidfcn + founder_dead + muem_fndr_name + an_inclusion + popm_circle10 +
-        ##                    proxcnt10,
-        ##                dt_pmyear),
-
-        
-        ## r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + 
-        ##                    slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-        ##                    proxcnt10*popm_circle10 + exhbany + recession + covid,
-        ##                dt_pmyear),
-
+                
         r_pop4 = coxph(gf_coxph_close(), dt_pmyear),
         ## only focus on museums that are not in countryside (wo = without), i.e. other PMs around and some people
         r_onlycryside = coxph(gf_coxph_close(), dt_pmyear[proxcnt10 <= 1 & popm_circle10 <= 1]),
@@ -1376,17 +1364,21 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
 
         r_pop42 = coxph(gf_coxph_close(vrbls_to_add ="I(proxcnt10^2)*popm_circle10"), dt_pmyear),
 
-        ## r_pop42 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-        ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-        ##                     proxcnt10*popm_circle10 + I(proxcnt10^2)*popm_circle10 + exhbany + recession + covid,
-        ##                 dt_pmyear),
-
         ## get rid of environment variables: assume that they affect economic capital directly
         ## including them might overshadow identity effects?
 
         r_pop4_woenv = coxph(gf_coxph_close(
             vrbls_to_yeet = gc_vvs()$dt_vrblinfo[vrblgrp == "envir", achr(vrbl)]), dt_pmyear)
         
+        
+
+        ## fullest model:
+        ## FIXME: add founder_dead*muem_fndr_name
+        ## r_more = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+        ##                    slfidfcn + founder_dead + muem_fndr_name + an_inclusion + popm_circle10 +
+        ##                    proxcnt10,
+        ##                dt_pmyear),
+
 
         ## r_pop5 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
         ##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
