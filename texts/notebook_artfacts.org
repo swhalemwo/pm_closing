@@ -65,6 +65,15 @@ c_lvrs <- list(
 dt_af_size <- gd_af_size(dt_pmx)
 dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv, c_lvrs) # combine all data sources, as complete as possible
 dt_pmyear <- gd_pmyear(dt_pmyear_prep, c_lvrs)
+
+## only get the sim-ple AF measures to get proper comparison
+c_lvrs_simaf <- list(
+  dtti = c("af_size"),
+  ## dtti = c(""),
+  af_vrbls = c("exhbany", "exhbrollany"))
+
+dt_pmyear_simaf_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv, c_lvrs_simaf) 
+dt_pmyear_simaf <- gd_pmyear(dt_pmyear_simaf_prep, c_lvrs_simaf)
 #+end_src
 
 measures used:
@@ -129,7 +138,7 @@ rbind(dt_pmyear_waf[, .N, year][, src := "waf"], dt_pmyear_woaf[, .N, year][, sr
 #+end_example
 
 
-examples for two museums, one without exhibitions (red) and one with quite some (blue)
+examples for three museums, one without exhibitions (red) and two with quite some (blue, green)
 
 #+name: p_exhb_expl
 #+begin_src R :exports results :results output graphics file :file p_exhb_expl.pdf :width 10 :height 5.5
@@ -191,113 +200,119 @@ suppressWarnings(melt(dt_pmyear, id.vars = c("ID", "year"),
 #+end_example
 
 
-
-#+begin_src R :exports :exports results :results output
+#+begin_src R :exports none :results none
 
 l_mdls1 <- list(
-  r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                   slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                   proxcnt10*popm_circle10 + year,  
-                 dt_pmyear),
-  r_afsize1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                      proxcnt10*popm_circle10 + year + exhbany,
-                    dt_pmyear),
-  r_afsize2 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                      proxcnt10*popm_circle10 + year + exhbrollany,
-                    dt_pmyear),
-  r_afsize3 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                      proxcnt10*popm_circle10 + year + exhbqntl_roll,
-                    dt_pmyear),
-  r_afsize4 = coxph(Surv(tstart, tstop, closing) ~  exhbany,
-                    dt_pmyear),
-  r_afsize5 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                      muem_fndr_name + proxcnt10*popm_circle10 + year + exhbany,
-                    dt_pmyear),
-  r_afsize6 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + 
-                      muem_fndr_name + proxcnt10*popm_circle10 + year + exhbqntl_roll,
-                    dt_pmyear)  
+  
+  ## base model: have to yeet exhbany, which is now default
+  r_pop4 = coxph(gf_coxph_close(vrbls_to_yeet = "exhbany"), dt_pmyear),
+  
+  ## with exhbany
+  r_afsize1 = coxph(gf_coxph_close(), dt_pmyear),
+  r_afsize1_simaf = coxph(gf_coxph_close(), dt_pmyear_simaf),
+
+  r_afsize2 = coxph(gf_coxph_close(vrbls_to_yeet = "exhbany", vrbls_to_add = "exhbrollany"), dt_pmyear),
+  
+  r_afsize3 = coxph(gf_coxph_close(vrbls_to_yeet = "exhbany", vrbls_to_add = "exhbqntl_roll"), dt_pmyear),
+
+  r_afsize4 = coxph(gf_coxph_close(vrbls_to_yeet = "exhbany", vrbls_to_add = "exhbcnt"), dt_pmyear),
+
+  r_afsize5 = coxph(gf_coxph_close(vrbls_to_yeet = "exhbany", vrbls_to_add = "exhbrollsum_avg"), dt_pmyear),
+
+  r_afsize6 = coxph(gf_coxph_close(vrbls_to_yeet = "exhbany", vrbls_to_add = "exhbqntl_year"), dt_pmyear)
+
+  ## ## some other models, idk where they're from
+  ## r_afsize4 = coxph(Surv(tstart, tstop, closing) ~  exhbany,
+  ##                   dt_pmyear),
+
+  ## r_afsize5 = coxph(gf_coxph_close(vrbls_to_yeet = c("founder_dead", "slfidfcn", "an_inclusion")), dt_pmyear),
+  
+  ## r_afsize6 = coxph(gf_coxph_close(vrbls_to_yeet = c("founder_dead", "slfidfcn", "an_inclusion", "exhbany"),
+  ##                                  vrbls_to_add = c("exhbqntl_roll")),
+  ##                                  dt_pmyear)
 )
 
-l_mdls2 <- list(
-  r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                   slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                   proxcnt10*popm_circle10 + year, 
-                 dt_pmyear),
-  r2_afsize1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                      proxcnt10*popm_circle10 + year + exhbany,
-                    dt_pmyear),
-  r2_afsize2 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                      proxcnt10*popm_circle10 + year + exhbrollany,
-                    dt_pmyear),
-  r2_afsize3 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                      proxcnt10*popm_circle10 + year + exhbqntl_roll,
-                    dt_pmyear),
-  r2_afsize2k1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                      proxcnt10*popm_circle10 + year + exhbany,
-                      dt_pmyear[year >= 2000]),
-  r2_afsize2k2 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                      proxcnt10*popm_circle10 + year + exhbrollany,
-                    dt_pmyear[year >= 2000]),
-  r2_afsize2k3 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
-                      slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
-                      proxcnt10*popm_circle10 + year + exhbqntl_roll,
-                    dt_pmyear[year >= 2000])
-)
+## l_mdls2 <- list(
+##   ## r_pop4 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+##   ##                  slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+##   ##                  proxcnt10*popm_circle10 + year, 
+##   ##                dt_pmyear),
+##   r_pop4 = coxph(gf_coxph_close(vrbls_to_yeet = "exhbany"), dt_pmyear),
+
+##   r2_afsize1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+##                       slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+##                       proxcnt10*popm_circle10 + year + exhbany,
+##                     dt_pmyear),
+##   r2_afsize2 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+##                       slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+##                       proxcnt10*popm_circle10 + year + exhbrollany,
+##                     dt_pmyear),
+##   r2_afsize3 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+##                       slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+##                       proxcnt10*popm_circle10 + year + exhbqntl_roll,
+##                      dt_pmyear),
+## r2_afsize2k1 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+##                     proxcnt10*popm_circle10 + year + exhbany,
+##                     dt_pmyear[year >= 2000]),
+## r2_afsize2k2 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+##                     proxcnt10*popm_circle10 + year + exhbrollany,
+##                   dt_pmyear[year >= 2000]),
+## r2_afsize2k3 = coxph(Surv(tstart, tstop, closing) ~ gender + pmdens_cry + I(pmdens_cry^2) + mow +
+##                     slfidfcn + founder_dead + muem_fndr_name + an_inclusion +
+##                     proxcnt10*popm_circle10 + year + exhbqntl_roll,
+##                   dt_pmyear[year >= 2000])
+## )
 
 gt_reg_coxph_afsize <- gt_reg_coxph
 gt_reg_coxph_afsize2 <- gt_reg_coxph
 
 
-l_mdlnames_afsize1 <- l_mdlnames_coxph <- c("r_pop4", paste0("r_afsize", 1:6))
+l_mdlnames_afsize1 <- l_mdlnames_coxph <- c("r_pop4", "r_afsize1", "r_afsize1_simaf", paste0("r_afsize", 2:5))
 l_mdlnames_afsize2 <- l_mdlnames_coxph <- c("r_pop4", paste0("r2_afsize", 1:3), paste0("r2_afsize2k", 1:3))
 
 ## overwrite the gc_tbls, c_tblargs
 gc_tbls <- function() {
   list(
     t_reg_coxph_afsize = list(
-         l_mdls = quote(l_mdls1),
-         l_mdlnames = quote(l_mdlnames_afsize1),
-         caption = "reg results"),
-    t_reg_coxph_afsize2 = list(
-         l_mdls = quote(l_mdls2),
-         l_mdlnames = quote(l_mdlnames_afsize2),
-         caption = "reg results"))  
+      l_mdls = quote(l_mdls1),
+      l_mdlnames = quote(l_mdlnames_afsize1),
+      caption = "reg results"))
+  ## don't need the 2k comparison anymore atm
+  ## t_reg_coxph_afsize2 = list(
+  ##      l_mdls = quote(l_mdls2),
+  ##      l_mdlnames = quote(l_mdlnames_afsize2),
+  ##      caption = "reg results comparing full with since 2k"))  
 }
 c_tblargs <- list()
 l_tbls <- list()
 
 ## gt_reg_coxph_dimred(l_mdls, l_mdlnames_coxph)
-## gtbl("t_reg_coxph_afsize")
-## wtbl("t_reg_coxph_afsize")
-## wtbl(
-  
-  
-  
+## "t_reg_coxph_afsize2"
+map(c("t_reg_coxph_afsize"), ~lapply(c(gtbl, wtbl), \(f) f(.x)))
+
 
 #+end_src
 
-#+RESULTS[9a554ee67aece929097eb6c2a3f4c659629a832a]:
+
+
+
 
 #+latex: \begin{landscape}
 
 
 #+INCLUDE: /home/johannes/Dropbox/phd/papers/closing/tables/t_reg_coxph_afsize_wcpF.tex export latex
 
-#+INCLUDE: /home/johannes/Dropbox/phd/papers/closing/tables/t_reg_coxph_afsize2_wcpF.tex export latex
+# #+INCLUDE: /home/johannes/Dropbox/phd/papers/closing/tables/t_reg_coxph_afsize2_wcpF.tex export latex
 
 
 
-exhbqntl_roll is positive and significant, other exhibiiton activity indicators are positive and not significant
+# exhbqntl_roll is positive and significant, other exhibiiton activity indicators are positive and not significant
 
-only using years > 2000 (weird values, figure 1) doesn't seem to matter
+# only using years > 2000 (weird values, figure 1) doesn't seem to matter
+
+nothing significant, no substantial change of other coefs
 
 
 ** check correlations of different AF measures
