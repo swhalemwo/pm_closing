@@ -195,6 +195,11 @@ l_mdlnames_coxph <- list("r_pop4", "r_pop4_wyo", "r_pop4_wtp", "r_pop4_wyotp")
 ## compare whether proxcnt/popm_circle10 patterns are stable across data ranges
 l_mdlnames_coxph_density <- list("r_pop4", "r_wocryside", "r_onlycryside", "r_pop42") 
 
+## compare whether patterns change if only recent data is used
+l_mdlnames_timeslice <- list("r_pop4", "r_2005", "r_2010", "r_2015")
+
+
+
 
 ## screenreg2(list(l_mdls$r_pop4)) # just smoe display
 
