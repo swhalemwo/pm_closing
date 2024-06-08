@@ -1368,7 +1368,27 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ## including them might overshadow identity effects?
 
         r_pop4_woenv = coxph(gf_coxph_close(
-            vrbls_to_yeet = gc_vvs()$dt_vrblinfo[vrblgrp == "envir", achr(vrbl)]), dt_pmyear)
+            vrbls_to_yeet = gc_vvs()$dt_vrblinfo[vrblgrp == "envir", achr(vrbl)]), dt_pmyear),
+
+        ## with year opened
+        r_pop4_wyo = coxph(gf_coxph_close(vrbls_to_add ="year_opened"), dt_pmyear),
+
+        r_pop4_wtp = coxph(gf_coxph_close(vrbls_to_add ="time_period",
+                                          vrbls_to_yeet = c("covid", "recession")), dt_pmyear),
+
+        r_pop4_wyotp = coxph(gf_coxph_close(vrbls_to_add =c("year_opened", "time_period"),
+                                            vrbls_to_yeet = c("covid", "recession")), dt_pmyear),
+
+
+        ## only with data from 2010
+        r_2005 = coxph(gf_coxph_close(), dt_pmyear[year>=2005]),
+        r_2010 = coxph(gf_coxph_close(vrbls_to_yeet = "recession"), dt_pmyear[year>=2010]),
+        r_2015 = coxph(gf_coxph_close(vrbls_to_yeet = "recession"), dt_pmyear[year>=2015])
+        ## these don't make sense: before 2010 there are only closing events,
+        ## r_2011_2021 is basically equivalent to r_2010
+        ## r_2000_2010 = coxph(gf_coxph_close(vrbls_to_yeet = "covid"), dt_pmyear[year <= 2010]),
+        ## r_2011_2021 = coxph(gf_coxph_close(vrbls_to_yeet = "recession"), dt_pmyear[year > 2010])
+
         
         
 
@@ -2169,6 +2189,7 @@ gt_reg_coxph <- function(l_mdls, l_mdlnames) {
 }
 
 gt_reg_coxph_density <- gt_reg_coxph
+gt_reg_coxph_timeslice <- gt_reg_coxph
 
 
 gt_coxzph <- function(rx) {

@@ -35,7 +35,11 @@ gc_tbls <- function(c_tblargs) {
         t_reg_coxph_density = list(
             l_mdls = quote(l_mdls),
             l_mdlnames = quote(l_mdlnames_coxph_density),
-            caption = "Cox PH models of different local density specifications")        
+            caption = "Cox PH models of different local density specifications"),
+        t_reg_coxph_timeslice = list(
+            l_mdls = quote(l_mdls),
+            l_mdlnames = quote(l_mdlnames_timeslice),
+            caption = "Cox PH regression results with different time slices")        
     )
 
     
@@ -225,6 +229,7 @@ gc_vvs <- function() {
         PC2                       = "PC2 (Support)",
         year                      = "year",
         "I(year^2)"               = "year^2",
+        year_opened               = "Opening year",
         time_period               = "Time Period (5 years)",
         recession                 = "Great Recession (2008/09)",
         covid                     = "Covid Pandemic (2020/21)",
@@ -233,7 +238,8 @@ gc_vvs <- function() {
     l_vrblgrps <- list(# variable groups
         founder  = .c(gender, founder_dead),
         museum   = .c(slfidfcn, muem_fndr_name, mow, an_inclusion, PC1, PC2,
-                      exhbany, exhbrollany, 
+                      exhbany, exhbrollany,
+                      year_opened,
                       exhbqntl_cy, exhbcnt, exhbrollsum_avg,
                       exhbqntl_year, "I(exhbqntl_year^2)",
                       exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"), 
@@ -245,7 +251,7 @@ gc_vvs <- function() {
     )
 
     ## specify whether variable is time-varying or not
-    vrbls_tiv <- .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6, PC1, PC2)
+    vrbls_tiv <- .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6, PC1, PC2, year_opened)
     vrbls_tv <- .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
                    founder_dead, 
                    an_inclusion, pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10",
@@ -262,6 +268,7 @@ gc_vvs <- function() {
         num = .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
                  pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10", PC1, PC2,
                  year, "I(year^2)", "popm_circle10:I(proxcnt10^2)",
+                 year_opened,
                  exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)",
                  exhbcnt, exhbrollsum_avg,
                  exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"),
