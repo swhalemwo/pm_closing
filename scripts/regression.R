@@ -2170,10 +2170,23 @@ gt_reg_coxph <- function(l_mdls, l_mdlnames) {
 
     l_mdls_slct <- map(l_mdlnames, ~chuck(l_mdls, .x))
 
-    l_mdlres <- map2(l_mdls_slct, l_mdlnames, ~gd_reg_coxph(.x, .y))
+    l_mdlres <- map2(l_mdls_slct, l_mdlnames, ~gd_reg_coxph(.x, .y, unit_name = "ID"))
+
+    ## gd_reg_coxph(l_mdls_slct[[2]], l_mdlnames[[2]], unit_name = "ID")
 
     dt_coef <- map(l_mdlres, ~chuck(.x, "dt_coef")) %>% rbindlist
     dt_gof <- map(l_mdlres, ~chuck(.x, "dt_gof")) %>% rbindlist
+
+    ## see how many units there are: use convention that model data.table is called "dt_"
+    ## and that unit has name ID
+    ## this is super not solid
+    ## l_call_objs <- rx %>% chuck("call") %>% as.list
+    ## dt_str <- l_call_objs[which(substring(l_call_objs, 1,3) == "dt_")]
+    ## dt_str <- "dt_pmyear[year > 2010]"
+    ## eval(parse(text = dt_str))
+    
+    
+    ## dt_mdl <- get(dt_str)
 
     c_vvs <- gc_vvs()
 

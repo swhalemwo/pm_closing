@@ -348,6 +348,7 @@ gc_vvs <- function() {
     
     ## information for gofs
     c_gof <- list(
+        list(gof_name = "nunits", digits = 0, gof_lbl = "Museums"),
         list(gof_name = "nobs",   digits = 0, gof_lbl = "Museum-years"),
         list(gof_name = "nevent", digits = 0, gof_lbl = "Closures"),
         list(gof_name = "logLik", digits = 2, gof_lbl = "log. Likelihood"),
