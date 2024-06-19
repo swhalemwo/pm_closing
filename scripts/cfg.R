@@ -91,6 +91,11 @@ gc_plts <- function() {
                 bw.smooth = 5,
                 width = 16,
                 height = 9),
+            p_hazard_time = list(
+                dt_pmyear = quote(dt_pmyear),
+                caption = "Private Museum hazard function by year",
+                width = 16,
+                height = 9),
             p_agedens = list(
                 dt_pmcpct = quote(dt_pmcpct),
                 caption = "Age distribution of private museums",

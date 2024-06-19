@@ -1142,6 +1142,31 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
     
 }
 
+gp_hazard_time <- function(dt_pmyear) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+
+    ## get data
+    dt_vis <- dt_pmyear %>% copy %>%
+        .[, .(mean_closing = mean(closing), .N, nbr_closed = sum(closing)), year] %>%
+        .[, str_annotate := sprintf("%s/%s", nbr_closed, N)] 
+
+        ## .[, year2 := as.integer(floor(year/2)*2)] %>%
+    ## .[, .(mean_closing = mean(mean_closing)), year2] %>%
+    dt_vis %>% 
+        ggplot(aes(x=year, y=mean_closing)) +
+        geom_line() +
+        geom_point() +
+        geom_text_repel(dt_vis[year %in% c(2006, 2011, 2015, 2020, 2021)], mapping = aes(label = str_annotate)) +
+        labs(y = "hazard")
+    ## geom_smooth()
+
+    
+    
+
+}
+
+
 gp_agedens <- function(dt_pmcpct) {
     gw_fargs(match.call())
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
