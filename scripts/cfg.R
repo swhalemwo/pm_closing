@@ -39,7 +39,11 @@ gc_tbls <- function(c_tblargs) {
         t_reg_coxph_timeslice = list(
             l_mdls = quote(l_mdls),
             l_mdlnames = quote(l_mdlnames_timeslice),
-            caption = "Cox PH regression results with different time slices")        
+            caption = "Cox PH regression results with different time slices"),
+        t_reg_coxph_timecfg = list(
+            l_mdls = quote(l_mdls),
+            l_mdlnames = quote(l_mdlnames_timecfg),
+            caption = "Cox PH regression results with different time configurations")
     )
 
     

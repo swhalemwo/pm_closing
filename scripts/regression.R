@@ -2203,6 +2203,7 @@ gt_reg_coxph <- function(l_mdls, l_mdlnames) {
 
 gt_reg_coxph_density <- gt_reg_coxph
 gt_reg_coxph_timeslice <- gt_reg_coxph
+gt_reg_coxph_timecfg <- gt_reg_coxph
 
 
 gt_coxzph <- function(rx) {

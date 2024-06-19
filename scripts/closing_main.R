@@ -180,8 +180,11 @@ dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-yea
 
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
-                                        # set model names for t_reg_coxph
-l_mdlnames_coxph <- list("r_pop4", "r_pop4_wyo", "r_pop4_wtp", "r_pop4_wyotp")
+## set model names for t_reg_coxph
+
+l_mdlnames_coxph <- list("r_pop4")
+
+
 
 
 ## "r_smol")#, "r_pop5", "r_pop42")#  , ",r_pop4_wyr", "r_pop4_wcrises")
@@ -198,6 +201,8 @@ l_mdlnames_coxph_density <- list("r_pop4", "r_wocryside", "r_onlycryside", "r_po
 ## compare whether patterns change if only recent data is used
 l_mdlnames_timeslice <- list("r_pop4", "r_2005", "r_2010", "r_2015")
 
+## check whether patterns depend on itme configuration (time period, year_opened, both)
+l_mdlnames_timecfg <- list("r_pop4", "r_pop4_wyo", "r_pop4_wtp", "r_pop4_wyotp")
 
 
 
