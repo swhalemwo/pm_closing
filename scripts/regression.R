@@ -509,9 +509,13 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_lvrs = c_lvrs) {
 
 
     ## combine with time-invariant variables
-    dt_pmyear_wtiv <- join(dt_pmyear_waf,
+    dt_pmyear_wtiv <- join(dt_pmyear_waf, 
                            copy(dt_pmtiv)[, `:=`(iso3c=NULL, name = NULL)], ## yeet non-essential columns
-                           on = "ID") 
+                           on = "ID",
+                           drop.dup.cols = "x") # don't use year_opened from dt_pmyear_waf, but from dt_pmtiv
+
+    ## dt_pmyear_wtiv[, .SD, .SDcols = patterns("year_opened")] %>% setnames(c("x1", "x2")) %>%
+    ##     .[, diff := x1-x2] %>% .[, .N, diff]
 
     if (any(is.na(dt_pmyear_wtiv$mow))) {stop("some MOW is NA")}
 
