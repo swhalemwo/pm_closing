@@ -43,4 +43,6 @@ reftbl_t_reg_coxph,\ref{tbl:t_reg_coxph},reftbl
 reftbl_t_sumstats,\ref{tbl:t_sumstats},reftbl
 reftbl_t_selfid,\ref{tbl:t_selfid},reftbl
 reftbl_t_reg_coxph_density,\ref{tbl:t_reg_coxph_density},reftbl
+reftbl_t_reg_coxph_timeslice,\ref{tbl:t_reg_coxph_timeslice},reftbl
+reftbl_t_reg_coxph_timecfg,\ref{tbl:t_reg_coxph_timecfg},reftbl
 mow_prop_name_museum,71,descs
