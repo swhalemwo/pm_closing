@@ -261,7 +261,7 @@ gdtbl("t_reg_coxph")
 ## gd_reg_coxph(l_mdls$r_more, "r_more")
 
 
-print("everything is DONE")
+
 stop("everything is DONE")
 
 ## longitudinal development of variables
