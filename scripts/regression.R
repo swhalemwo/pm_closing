@@ -1157,7 +1157,8 @@ gp_hazard_time <- function(dt_pmyear) {
         ggplot(aes(x=year, y=mean_closing)) +
         geom_line() +
         geom_point() +
-        geom_text_repel(dt_vis[year %in% c(2006, 2011, 2015, 2020, 2021)], mapping = aes(label = str_annotate)) +
+        geom_label_repel(dt_vis[year %in% c(2006, 2011, 2015, 2018, 2020, 2021)],
+                        mapping = aes(label = str_annotate)) +
         labs(y = "hazard")
     ## geom_smooth()
 
