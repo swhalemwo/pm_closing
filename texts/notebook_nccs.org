@@ -110,3 +110,4 @@ and then other steps will take a while too
 - matching to PMDB
 - finding good comparison group: all museums, art museums, all museums except some groups, different types of charities
   
+https://offeneregister.de/
