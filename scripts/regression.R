@@ -1149,7 +1149,7 @@ gp_hazard_time <- function(dt_pmyear) {
     ## get data
     dt_vis <- dt_pmyear %>% copy %>%
         .[, .(mean_closing = mean(closing), .N, nbr_closed = sum(closing)), year] %>%
-        .[, str_annotate := sprintf("%s/%s", nbr_closed, N)] 
+        .[, str_annotate := sprintf("%s\n%s", nbr_closed, N)] 
 
         ## .[, year2 := as.integer(floor(year/2)*2)] %>%
     ## .[, .(mean_closing = mean(mean_closing)), year2] %>%
