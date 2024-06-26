@@ -1328,7 +1328,7 @@ gf_coxph_close <- function(vrbls_to_add = NULL, vrbls_to_yeet = NULL) {
                     "proxcnt10",
                     "popm_circle10",
                     "proxcnt10:popm_circle10",
-                    "exhbany",
+                    ## "exhbany",
                     "recession",
                     "covid")
 
