@@ -1,0 +1,199 @@
+#+TITLE: Private Museum closures
+#+email: j.aengenheyster@uva.nl
+
+#+OPTIONS:   H:2 num:t toc:2 \n:t @:t ::t |:t ^:t -:t f:t *:t <:t
+
+#+LaTeX_CLASS_OPTIONS: [aspectratio=169, t]
+
+#+latex_header: \usepackage{tikz}
+#+latex_header: \usepackage{booktabs}
+
+#+latex_header: \usepackage{dcolumn}
+
+#+latex_header: \setbeamertemplate{itemize items}[circle]
+
+#+latex_header: \usepackage{bibentry}
+#+latex_header: \usepackage[style=apa, backend=biber]{biblatex} 
+#+latex_header: \addbibresource{/home/johannes/Dropbox/references.bib}
+#+latex_header: \addbibresource{/home/johannes/Dropbox/references2.bib}
+
+#+BIND: org-export-filter-bold-functions (org-beamer-bold-as-textbf)
+
+# #+latex_header: \usetheme{Madrid}
+
+#+latex_header: \setbeamercolor{section in head/foot}{fg=black,bg=white}
+
+#+latex_header: \beamertemplatenavigationsymbolsempty
+
+#+latex_header: \makeatletter
+#+latex_header: \setbeamertemplate{footline}{%
+#+latex_header:     \begin{beamercolorbox}[ht=2.25ex,dp=3.75ex]{section in head/foot}
+#+latex_header:         \insertnavigation{\paperwidth}
+#+latex_header:     \end{beamercolorbox}%
+#+latex_header: }%
+#+latex_header: \makeatother
+
+#+PROPERTY: header-args:R :session *R:closing*
+#+PROPERTY: header-args:R+ :output-dir /home/johannes/Dropbox/phd/papers/closing/notes/euram/
+#+PROPERTY: header-args:R+ :tangle yes
+#+PROPERTY: header-args:R+ :cache no
+
+
+* Overview
+** private museum definition
+
+- established by art collector/couple (no corporate museums)
+- if original founders died: still controlled by family
+- building
+- collection
+- accessible
+- modern/contemporary art (created since 1900)
+
+-> 451 private museums open in 2021
+
+** private museum development
+
+#+name: p_yearcnt
+#+begin_src R :exports results :results output graphics file :file p_yearcnt.pdf :width 4 :height 2
+dt_pmyear[, .N, year] %>% ggplot(aes(x=year, y=N)) + geom_line() 
+#+end_src
+
+#+RESULTS: p_yearcnt
+[[file:/home/johannes/Dropbox/phd/papers/closing/notes/euram/p_yearcnt.pdf]]
+
+** distribution
+[[file:./images/screenshot-02.png]]
+
+** museum closure
+
+"A museum is a not-for-profit, *permanent* institution in the service of society that researches, collects, conserves, interprets and exhibits tangible and intangible heritage" parencite:&ICOM_2024_definition
+
+
+[[file:~/Dropbox/phd/papers/closing/figures/p_hazard_time.pdf]]
+
+68 closures
+
+
+** museum closure 2
+:PROPERTIES:
+:CREATED:  [2024-06-25 di 22:13]
+:ID:       54f419e1-d88d-4d16-be19-29db523780d5
+:END:
+
+
+
+* Hypotheses
+
+** hypotheses
+:PROPERTIES:
+:BEAMER_act: [<+->]
+:END:
+resources: operating at loss
+
+main variables: 
+- transformation: death of founder 
+- identity, reputation: perception by third parties 
+- audience
+- competition
+
+
+* Data
+
+** data and methods
+
+|----------------+---------------------------------+---------------------------|
+| Concept        | Indicator                       | Data Source               |
+|----------------+---------------------------------+---------------------------|
+| Transformation | Founder death (alive, recently/ | PMDB                      |
+|                | long deceased)                  |                           |
+| Identity       | Reputation                      | ARTnews collector ranking |
+|                | Museum Self-identification      | PMDB                      |
+|                | Founder gender                  | PMDB                      |
+| Audience       | Population in 10km surrounding  | GHSL                      |
+| Competition    | #PMs in 10km surrounding        | PMDB                      |
+|----------------+---------------------------------+---------------------------|
+
+
+** methods
+:PROPERTIES:
+:CREATED:  [2024-06-25 di 23:13]
+:ID:       0025bd70-4101-48da-8a27-dce2a45c8969
+:END:
+
+- Kaplan-Meier
+- Comparison
+- Cox Proportional Hazards
+
+# ** summary stats gender
+# ** summary stats name
+# ** summary stats death
+# ** summary stats audience
+# ** summary stats competition
+
+
+
+
+* Results
+
+** comparison
+
+#+attr_latex: 
+|-----------------------------------+-------------+------------------+
+| study                             | population  | avg. hazard rate |
+|-----------------------------------+-------------+------------------+
+| [[cite:&Bowen_1994_charitable]]       | Museums     |             1.1% |
+| [[cite:&Hager_2001_vulnerability]]    | Art Museums |             2.4% |
+| [[cite:&Gordon_etal_2013_insolvency]] | Museums     |             0.7% |
+|-----------------------------------+-------------+------------------+
+
+Private Museums: 1.1%
+
+
+** Kaplan Meier
+[[file:~/Dropbox/phd/papers/closing/figures/p_surv.pdf]]
+
+** Hazard
+:PROPERTIES:
+:CREATED:  [2024-06-25 di 23:01]
+:ID:       a02ccfe0-ea97-4ee8-a32d-9b790cf2d66f
+:END:
+[[file:~/Dropbox/phd/papers/closing/figures/p_hazard.pdf]]
+
+# ** Hazard time 
+# [[file:~/Dropbox/phd/papers/closing/figures/p_hazard_time.pdf]]
+
+
+** slides image founder
+[[file:./images/screenshot-07.png]]
+
+** slides image museum
+[[file:./images/screenshot-09.png]]
+
+
+** slides image env
+[[file:./images/screenshot-10.png]]
+
+
+** environment
+
+[[file:~/Dropbox/phd/papers/closing/figures/p_pred_heatmap.pdf]]
+
+* Conclusion
+
+** conclusion
+
+- PMs are as robust as other (NPO) museums
+- PM closure associated with
+  - Name 
+  - Audience/competition
+
+Limitations:   
+- transparency: no financial data, facilities
+- founder intentions
+
+
+** References
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks,label=
+:END:
+#+Latex: \printbibliography
