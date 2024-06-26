@@ -65,5 +65,3 @@ gt_reg_coxph,l_mdls,l_mdls
 gt_reg_coxph,l_mdlnames,l_mdlnames_coxph
 gt_reg_coxph,l_mdls,l_mdls
 gt_reg_coxph,l_mdlnames,l_mdlnames_coxph
-gt_reg_coxph_timecfg,l_mdls,l_mdls
-gt_reg_coxph_timecfg,l_mdlnames,l_mdlnames_timecfg
