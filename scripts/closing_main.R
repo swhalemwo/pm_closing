@@ -153,8 +153,10 @@ END_YEAR <- 2021
 ## levers: configuration options
 c_lvrs <- list(
     dtti = c("af_size"),
+    af_vrbls = c("exhbany", "exhbrollany")
     ## dtti = c(""),
-    af_vrbls = c("exhbany", "exhbrollany")) # only import selected vrbls to not pollute dt_pmyear
+    ## af_vrbls = c()
+) # only import selected vrbls to not pollute dt_pmyear
 
 
 
