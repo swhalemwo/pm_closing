@@ -52,6 +52,7 @@ gp_coxphdiag;
 gp_coxphdiag_more; 
 gp_dimred_loads; 
 gp_hazard; 
+gp_hazard_time; 
 gp_heatmap_info; 
 gp_inflcases; 
 gp_lngtdvelp; 
