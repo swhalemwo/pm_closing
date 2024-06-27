@@ -49,7 +49,14 @@
 - accessible
 - modern/contemporary art (created since 1900)
 
--> 451 private museums open in 2021
+451 private museums open in 2021
+
+# ** Literature
+
+# [[file:./images/screenshot-14.png]]
+# [[file:./images/screenshot-15.png]]
+
+
 ** Project
 
 https://privatemuseumresearch.org/
@@ -73,28 +80,46 @@ dt_pmyear[, .N, year] %>% ggplot(aes(x=year, y=N)) + geom_line()
 ** Geographical Distribution 
 [[file:./images/screenshot-02.png]]
 
+
+** Private Museum Closure
+[[file:./images/screenshot-17.png]]
+
+
+** Private Museum Closure
+[[file:./images/screenshot-16.png]]
+
 ** Private Museum Closure
 
-"A museum is a not-for-profit, *permanent* institution in the service of society that researches, collects, conserves, interprets and exhibits tangible and intangible heritage" parencite:&ICOM_2024_definition
+"A museum is a not-for-profit, *permanent* institution in the service of society that researches, collects, conserves, interprets and exhibits tangible and intangible heritage"
+(ICOM definition)
 
 #+latex: \pause{}
+
+*** formulas :B_column:
+:PROPERTIES:
+:BEAMER_env: column
+:BEAMER_col: 0.65
+:END:
+
 
 #+attr_latex: :width 9cm
 [[file:~/Dropbox/phd/papers/closing/figures/p_hazard_time.pdf]]
 
 # 68 closures
 
+#+latex: \pause{}
 
-** Private Museum Closure 
+*** formulas :B_column:
 :PROPERTIES:
-:CREATED:  [2024-06-25 di 22:13]
-:ID:       54f419e1-d88d-4d16-be19-29db523780d5
+:BEAMER_env: column
+:BEAMER_col: 0.35
 :END:
 
-- sustainability
-- untangling heterogeneity
+RQs:
+- assess sustainability
+- explore mechanisms
 
-# *diversificaton*
+
 
 * Hypotheses
 
@@ -102,7 +127,10 @@ dt_pmyear[, .N, year] %>% ggplot(aes(x=year, y=N)) + geom_line()
 :PROPERTIES:
 :BEAMER_act: [<+->]
 :END:
-resources: operating at loss
+
+# low diversifiction -> high mortality
+
+resources: operating at loss -> how to fill gap?
 
 # main variables: 
 # - transformation: death of founder 
@@ -199,13 +227,14 @@ Survival Analysis:
 ** Comparison
 
 #+attr_latex: 
-|-----------------------------------+-------------+------------------+
+|-----------------------------------+-------------+------------------|
 | study                             | population  | avg. hazard rate |
-|-----------------------------------+-------------+------------------+
+|-----------------------------------+-------------+------------------|
 | [[cite:&Bowen_1994_charitable]]       | Museums     |             1.1% |
 | [[cite:&Hager_2001_vulnerability]]    | Art Museums |             2.4% |
 | [[cite:&Gordon_etal_2013_insolvency]] | Museums     |             0.7% |
-|-----------------------------------+-------------+------------------+
+|-----------------------------------+-------------+------------------|
+
 
 Private Museums: 1.1%
 
@@ -225,7 +254,7 @@ Private Museums: 1.1%
 [[file:./images/screenshot-10.png]]
 
 
-** Environment
+** Audience, Competition
 
 [[file:~/Dropbox/phd/papers/closing/figures/p_pred_heatmap.png]]
 
@@ -233,14 +262,19 @@ Private Museums: 1.1%
 
 ** Conclusion
 
+# #+ATTR_BEAMER: :overlay <+->
 - PMs robustness is similar to other (NPO) museums
 - PM closure associated with
-  - [X] Name 
+  - [X] Name -> Identity?
   - [X] Audience/competition
   - [ ] Gender
   - [ ] Ranking
   - [ ] Transformation
 
+#+latex: \pause{}
+
+
+# #+ATTR_BEAMER: :overlay <+->
 Limitations:   
 - transparency -> no financial data, facilities, collaborations
 - transformations into other organizational forms
