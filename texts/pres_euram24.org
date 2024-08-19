@@ -40,6 +40,14 @@
 
 
 * Overview
+
+** Project
+
+https://privatemuseumresearch.org/
+
+[[file:~/Dropbox/phd/papers/closing/images/screenshot_PMR_team.png]]
+
+
 ** Private Museum Definition
 
 - established by art collector/couple (no corporate museums)
@@ -56,29 +64,24 @@
 # [[file:./images/screenshot-14.png]]
 # [[file:./images/screenshot-15.png]]
 
-
-** Project
-
-https://privatemuseumresearch.org/
-
-[[file:~/Dropbox/phd/papers/closing/images/screenshot_PMR_team.png]]
-
-** Map
-[[file:~/Dropbox/phd/papers/closing/images/screenshot_PMR_map.png]]
-
-
 ** Private Museum Development
 
-#+name: p_yearcnt
-#+begin_src R :exports results :results output graphics file :file p_yearcnt.pdf :width 4 :height 2
-dt_pmyear[, .N, year] %>% ggplot(aes(x=year, y=N)) + geom_line() 
-#+end_src
+# #+name: p_yearcnt
+# #+begin_src R :exports results :results output graphics file :file p_yearcnt.pdf :width 4 :height 2
+# dt_pmyear[, .N, year] %>% ggplot(aes(x=year, y=N)) + geom_line() 
+# #+end_src
 
 #+RESULTS: p_yearcnt
 [[file:/home/johannes/Dropbox/phd/papers/closing/notes/euram/p_yearcnt.pdf]]
 
+
+
+** Map
+[[file:~/Dropbox/phd/papers/closing/images/screenshot_PMR_map.png]]
+
 ** Geographical Distribution 
 [[file:./images/screenshot-02.png]]
+
 
 
 ** Private Museum Closure
@@ -87,6 +90,9 @@ dt_pmyear[, .N, year] %>% ggplot(aes(x=year, y=N)) + geom_line()
 
 ** Private Museum Closure
 [[file:./images/screenshot-16.png]]
+
+** Private Museum Closure
+[[file:./images/screenshot-18.png]]
 
 ** Private Museum Closure
 
@@ -141,16 +147,51 @@ resources: operating at loss -> how to fill gap?
 #+begin_src dot :exports results :results output graphics file :file relations2.pdf :width 6 :height 5.5
 digraph D {
   rankdir = "LR";
+  concentrate=true;
 
-
-  Transformation -> econ_capital
+  death_founder -> econ_capital
   identity -> econ_capital
   Audience -> econ_capital -> Closing
   Competition -> econ_capital
 
   identity[label="Identity, Reputation"]
   econ_capital[label = "Resources"]
+  death_founder[label = "Founder Death"]
 
+// Transformation -> Resources:b2:w[dir = none]
+//   identity -> Resources:c3:w[dir = none]
+//   Audience -> Resources:d4:w[dir = none]
+//   Competition -> Resources:e5:w[dir = none]
+
+
+//   Resources:b2 -> Closing
+//   Resources:c3 -> Closing
+//   Resources:d4 -> Closing
+//   Resources:e5 -> Closing
+
+
+//   identity -> motivation:a1:w[dir = none]
+//   audience -> motivation:b2:w[dir= none]
+
+//   motivation:a1:e -> Closing
+//   motivation:b2 -> Closing
+
+  
+
+//   // Resources:e5 -> Resources:e5[tailport=w, headport=e, splines = false, force = 0]
+
+
+//   Resources[shape= "record", label = "<b2>|<c3>|<d4>|<e5>",
+// 	   width = 0.001, height = 0.3, fixedsize=true,
+// 	   margin = 0,
+// 	   color = transparent
+// 	   ]
+
+// motivation[shape= "record", label = "<a1>|<b2>",
+// 	   width = 0.001, height = 0.1, fixedsize=true,
+// 	   margin = 0,
+// 	   color = transparent
+// 	   ]
   
 }
 
@@ -165,17 +206,16 @@ digraph D {
 
 ** Data 
 
-|----------------+---------------------------------+---------------------------|
-| Concept        | Indicator                       | Data Source               |
-|----------------+---------------------------------+---------------------------|
-| Transformation | Founder death (alive, recently/ | PMDB                      |
-|                | long deceased)                  |                           |
-| Identity       | Reputation                      | ARTnews collector ranking |
-|                | Museum Self-identification      | PMDB                      |
-|                | Founder gender                  | PMDB                      |
-| Audience       | Population in 10km surrounding  | GHSL                      |
-| Competition    | #PMs in 10km surrounding        | PMDB                      |
-|----------------+---------------------------------+---------------------------|
+|---------------+--------------------------------+---------------------------|
+| Concept       | Indicator                      | Data Source               |
+|---------------+--------------------------------+---------------------------|
+| Founder death | alive, recently, long deceased | PMDB                      |
+| Identity      | Reputation                     | ARTnews collector ranking |
+|               | Museum Self-identification     | PMDB                      |
+|               | Founder gender                 | PMDB                      |
+| Audience      | Population in 10km surrounding | GHSL                      |
+| Competition   | #PMs in 10km surrounding       | PMDB                      |
+|---------------+--------------------------------+---------------------------|
 
 503 Museums
 6096 Museum-years
@@ -243,7 +283,7 @@ Private Museums: 1.1%
 [[file:~/Dropbox/phd/papers/closing/figures/p_surv.pdf]]
 
 
-** Transformation
+** Founder Death
 [[file:./images/screenshot-11.png]]
 
 ** Identity, Reputation
@@ -269,7 +309,7 @@ Private Museums: 1.1%
   - [X] Audience/competition
   - [ ] Gender
   - [ ] Ranking
-  - [ ] Transformation
+  - [ ] Founder death
 
 #+latex: \pause{}
 
@@ -292,13 +332,13 @@ digraph D {
   rankdir = "LR";
 
 
-  Transformation -> Resources
+  founder_death -> Resources
   identity -> Resources
   Audience -> Resources -> Closing
   Competition -> Resources
 
   identity[label="Identity, Reputation"]
-
+  founder_death[label = "Founder Death"]
 
   self_id[label = "Self-Identification", shape = "box"]
   founder_choices[label = "Founder idiosyncracy", color = "red", penwidth = 2]
@@ -317,9 +357,9 @@ digraph D {
 #+RESULTS:
 [[file:relations3.pdf]]
 
-** Thanks for your attention!
+# ** Thanks for your attention!
 
-Questions?
+# Questions?
 
 
 
