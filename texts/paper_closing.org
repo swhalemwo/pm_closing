@@ -40,6 +40,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: ynkplt_p_vrblcvrg_ratio (eval (concat "#+label: fig:p_vrblcvrg_ratio\n" "#+caption: PMDB variable coverage (abs/rel prop) by museum status and variable group\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_vrblcvrg_ratio.pdf]]"))
 #+MACRO: ynkplt_p_surv (eval (concat "#+label: fig:p_surv\n" "#+caption: Private Museum Survival probability\n" "#+attr_latex: :width 14cm\n" "[[file:../figures/p_surv.pdf]]"))
 #+MACRO: ynkplt_p_hazard (eval (concat "#+label: fig:p_hazard\n" "#+caption: Private Museum hazard function\n" "#+attr_latex: :width 16cm\n" "[[file:../figures/p_hazard.pdf]]"))
+#+MACRO: ynkplt_p_hazard_time (eval (concat "#+label: fig:p_hazard_time\n" "#+caption: Private Museum hazard function by year\n" "#+attr_latex: :width 16cm\n" "[[file:../figures/p_hazard_time.pdf]]"))
 #+MACRO: ynkplt_p_agedens (eval (concat "#+label: fig:p_agedens\n" "#+caption: Age distribution of private museums\n" "#+attr_latex: :width 17cm\n" "[[file:../figures/p_agedens.pdf]]"))
 #+MACRO: ynkplt_p_yeardens (eval (concat "#+label: fig:p_yeardens\n" "#+caption: Private Museum-year Distribution\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_yeardens.pdf]]"))
 #+MACRO: ynkplt_p_coxphdiag_more (eval (concat "#+label: fig:p_coxphdiag_more\n" "#+caption: Model Diagnostics\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_coxphdiag_more.pdf]]"))
@@ -58,6 +59,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: refplt_p_vrblcvrg_ratio \ref{fig:p_vrblcvrg_ratio}
 #+MACRO: refplt_p_surv \ref{fig:p_surv}
 #+MACRO: refplt_p_hazard \ref{fig:p_hazard}
+#+MACRO: refplt_p_hazard_time \ref{fig:p_hazard_time}
 #+MACRO: refplt_p_agedens \ref{fig:p_agedens}
 #+MACRO: refplt_p_yeardens \ref{fig:p_yeardens}
 #+MACRO: refplt_p_coxphdiag_more \ref{fig:p_coxphdiag_more}
@@ -76,6 +78,8 @@ wd_nbrs(dt_nbrs)
 #+MACRO: reftbl_t_sumstats \ref{tbl:t_sumstats}
 #+MACRO: reftbl_t_selfid \ref{tbl:t_selfid}
 #+MACRO: reftbl_t_reg_coxph_density \ref{tbl:t_reg_coxph_density}
+#+MACRO: reftbl_t_reg_coxph_timeslice \ref{tbl:t_reg_coxph_timeslice}
+#+MACRO: reftbl_t_reg_coxph_timecfg \ref{tbl:t_reg_coxph_timecfg}
 :end:
 
 
