@@ -895,3 +895,14 @@ absence of evidence as evidence of absence
 covid effect may take longer to be effective
 
  
+*** future research
+The US register data on NPO tax filings constitutes a promising source for data for museum research (while this data source has seen frequent usage in non-profit management, it remains underexploited in the field of museum research). 
+#
+While the United States private museum population with XX museums and YY closings might not be sufficient to test whether private museums have a a higher closing risks than other museums, it still hosts a large population of museums.
+#
+Thus this data can be used to establish average mortality estimates for museums generally as well as different types of museums, which can be compared to those observed for private museums globally. 
+#
+Its furthermore a rich source of financial data
+
+egmus doesn't have that
+
