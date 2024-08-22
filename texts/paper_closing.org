@@ -83,7 +83,9 @@ wd_nbrs(dt_nbrs)
 :end:
 
 
-* It's so over/Short-lived legacies: The closure of private art museums
+* It's so over/
+# Short-lived legacies: The closure of private art museums
+# Non-diversified but stable? The paradox of private museum closing rates
 # Johannes Aengenheyster
 
 # #+latex: \noindent
@@ -141,7 +143,7 @@ Furthermore, analyzing which museums survive allows to make informed speculation
   
 
 ** lack of regulation -> museums are relatively free as long as they have money
-Museums are subject to relatively little regulation (the term "museum" is not a legally protected term and can be generally used without certification [[parencite:&Museumsbund_ICOMDE_2006_standards;&Moore_2022_best;&Lister_2023_marketing]].
+Museums are subject to relatively little regulation (the term "museum" is not a legally protected term and can be generally used without certification in countries such as the US, UK and Germany [[parencite:&Museumsbund_ICOMDE_2006_standards;&Moore_2022_best;&Lister_2023_marketing]].
 #
 Museum associations on the national (e.g. American Alliance of Museums (AAM) for the United States, Museumsbund for Germany) or international (International council of museums, ICOM) level exist, which aim to standardize e.g. museum setup and operations, such as in relations to ethics [[parencite:&ICOM_2016_ethics]] or sustainability [[parencite:&Bickersteth_2016_environment]]. 
 # 
@@ -843,7 +845,7 @@ One way in which this can happen is when other parties, such as local government
 #
 Sometimes this involves changes in the composition of the board of directors (or equivalent), with new parties gaining seats and hence influence in decision-making, thereby diminishing the private character of the museum to an extent that it no longer fits the working definition.
 #
-Museums which experienced this trajectory have been excluded from the analysis as explorative investigation showed that it was not possible to generally determine the date of such transitions[fn:: As a consequence of this, they are excluded from the analysis alltogether, and thus also not contributing to the the hazard rate for closing, despite being entities at risk for closing. However, as their numbers are limited to {{{pmdb_n_nlpm}}} entries in the database, the bias this introduces into closing risks is likely not substantial.]
+Museums which experienced this trajectory have been excluded from the analysis as explorative investigation showed that it was not possible to generally determine the date of such transitions[fn:: Consequently they are excluded from the analysis alltogether, and thus also not contributing to the the hazard rate for closing, despite being entities at risk for closing. However, as their numbers are limited to {{{pmdb_n_nlpm}}} entries in the database, the bias this introduces into closing risks is likely not substantial.]
 #
 The main issues that made the determination of the date impossible was the intransparency of these organizations (~event in the past, no track of organizational history~), as well as the gradual process.
 # 
@@ -861,6 +863,7 @@ environment can be measured more
 - geocoding of other institutiosn
 - tax incentives
 - government spending
+- government: political changes, censorship, persecution  
 -> this might futher specify the niches in which PMs can endure
 
 
@@ -872,7 +875,7 @@ For example, museums with more XXX might be more expensive to run, but on the ot
 #
 Furthermore, having XXX might reflect founder commitment/resources.
 # 
-While the original data collection included assessing various museum characteristics, such as XXX, it became clear that desk research was
+While the original data collection included the measurement of various museum characteristics, such as floor and collection size, facilities, and cooperations, it became clear in the process that desk research was unsuitable to construct reliabile indicators from these findings due to difficulty in assessing them in many cases.
 #
 Especially for closed museums data collection proved difficult, as in many cases websites had been shut down, and while in many cases snapshots of the main website were available in the Internet archive, ~subdomains~ were archived much less frequently, and sometimes inaccessible despite being archived due to changes in webtechnology (such as flash).
 #
