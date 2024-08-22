@@ -817,6 +817,15 @@ TBD
 
 
 
+#
+It cannot be stated whether private museums experience higher mortality rates than publicly funded museums.
+#
+While public museums have been characterized to some extent as very stable due to government picking up deficits [[parencite:&Meier_Frey_2003_faces]], [[textcite:&Walker_2019_collector]] has argued that due to declining cultural spending even public museums might face hard times.
+#
+While national public flagship institutions will likely remain sufficiently funded to survive, this might not be the case for the vast majority of smaller museums in less touristic regions who rely on limited municipal funding, as textcite:&StylianouLambert_etal_2014_museums demonstrates for a number of smaller publicly funded ethnography museums in Cyprus.
+#
+Without access to museum register comparable to the IRS/NCCS datasets, such questions regarding the relation between type of ownership and survival remain speculative.
+
 
 #+Latex: \begin{sloppypar}
 #+Latex: \printbibliography
