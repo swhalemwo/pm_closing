@@ -801,6 +801,11 @@ This finding also provides no evidence that female founders face gender-specific
 # #
 # These larger cities with low private museum counts are possibly also characterized by lower numbers of other cultural institutions as well as an audience less interested in postmaterial art consumption.
 
+
+{{{ynkplt_p_pred_heatmap}}}
+
+
+
 *** facilities/size :ignhead:
 # FIXME: rewrite with 
 
