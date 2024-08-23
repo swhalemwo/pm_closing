@@ -937,7 +937,11 @@ environment can be measured more
 - government: political changes, censorship, persecution  
 -> this might futher specify the niches in which PMs can endure
 
-
+**** facilities/size :ignhead:
+:PROPERTIES:
+:CREATED:  [2024-08-23 vr 10:32]
+:ID:       4b290835-a2d9-4d50-915f-1eb90d8a7cf5
+:END:
 Museum characteristics might influence closing to a larger extent than has been considered here.
 #
 For example, museum size, facilities, as well as marketing and outreach activities might be related to long-term survival prospect.
@@ -957,9 +961,6 @@ absence of evidence as evidence of absence
 
 
 
-
-
-{{{ynkplt_p_pred_heatmap}}}
 
 
 
