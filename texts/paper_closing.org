@@ -165,7 +165,7 @@ In other words, what can the factors leading to the closure of private museums t
   
 
 
-** Private museums introduction
+** Private museums definition
 
 #+latex: \bigbreak
 #+latex: \noindent
@@ -174,34 +174,40 @@ Private museums:
 - building of its own, limited public/corporate funding, has to be visitable -> requires substantial resources
 
 
-** Private museums relationships
-*** founder :ignhead:
-A private museum is entangled in a number of dependencies.
+
+
+** Private museums dependencies
+
+*** chronic lack of money 
+:PROPERTIES:
+:CREATED:  [2024-08-23 vr 12:03]
+:ID:       746567b9-2f82-4a7e-afa9-726c2646812b
+:END:
+Private museums have been argued to be highly dependent on their founder for their continuing existence, as museums generally cannot cover expenses via revenues from ticket prices, museum shops and cafes.
 #
-A crucial one is the relationship to the founder, without whom the private museum would not exist.
+The [[textcite:&IMLS_2008_funding]] found that for non-profit American art museums, less than half (48.1%) the revenues come from earned income, leaving substantial gaps in the budgets that are filled by a mix of private donations (23.0%), investment (18.5%) and government support (10.4%) (p.27).
 #
-Founders often control some aspects of management/operations.
+Outside of the United States, the reliance on revenue streams beyond operations is even larger:
 #
-While the exact power relationships within museums are hard to observe due to the lack of transparency, which makes it in particular to assess the role of third parties, it is plausible to assume that they cannot exist against the wishes of the founder.
+German museums have had on average only 27% of their expenses covered by operations [[parencite:&Martin_1993_museen p.233]], and even the more market-oriented NPOs in the cultural sector draw around 50% of their funding from public support [[parencite:&Zimmer_Priller_2007_gemeinnuetzig p.82]].
+
+
+Given that operating at "the margin of financial sustainability" is the "ordinary condition" for cultural NPOs, [[cite:&Licci_BaraldiBonini_2024_sustainability p.2]], it is not surprising that costs have been listed as a primary reason for private museum closure:
 # 
-Next to exhibiting the founder's collection, they likely also to a large extent dependent on continued financial contributions of the founder, as museums are chronically unprofitable (which is evidenced by their high share of NPOs or publicly owned/run museums, rather than for-profit companies). 
+[[textcite:&Adam_2021_rise]] argues that "most of the cases of defunct private museums come back to the issue of cost" (p.79); a sentiment shared by [[textcite:&Walker_2019_collector]] who notes that "private institutions struggle to contain escalating costs that are associated with running a museum" (p.234).
 #
-While the lack of transparency again makes it hard to systematically assess the financial importance of founder contributions to the existence of museums, *anecdotal* evidence suggests it to be substantial [[parencite:&Velthuis_Gera_forthcoming_fragility]].
+In other studies, "insufficient funding, high maintenance costs and lack of strong government support" [[parencite:&Zennaro_2017_shanghai p.7]]. or a "shortage of fundings and interruptions in cash [[parencite:&Song_2008_private p.45]]  were central reasons that forced private museums to close.
 #
+In a systematic review of closing reasons given in newspapers, magazines, social media accounts and personal exchange, [[textcite:&Velthuis_Gera_2024_fragility]] find financial issues as the most commonly mentioned reasons for private museum closing.
+#
+Scholars have traced the closure of private museums to numerous types of declining financial situations, such as bankruptcies [[parencite:&Velthuis_Gera_2024_fragility;&Liu_2019_identities;&DeNigris_2018_museums]], costly legal battles [[parencite:&Velthuis_Gera_2024_fragility]], stock devaluations [[parencite:&Walker_2019_collector]], failing auction sales [[parencite:&Bechtler_Imhof_2018_future]] or lack of government support [[parencite:&Zennaro_2017_shanghai;&Velthuis_Gera_2024_fragility]].
 
 
-[[textcite:&Adam_2021_rise]]
-- pandemic potentially
-- long-term funding
-- motivations may change
-- difficulties not anticipated
+*** founder reliance -> diversification :ignhead:
 
-*** diversification
-
-
-
-Private museums have been characterized as vulnerable due to their key reliance on the founder, primarily for for financial support:
-
+#
+A central reason for financial vulnerability has been argued to be the crucial reliance on the single founder, who, as the iniators of their private museums, likely have contribute a large part of their institution's non-operating income [[parencite:&Frey_Meier_2002_beyeler]]:
+# 
 [[textcite:&Adam_2021_rise]] argues that "ultimately, many of these failures demonstrate the fragility of spaces that rely on a single founder, whose motivations and financial stability may change, or who may not have realised the difficulties inherent in establishing their own art space" (p.82).
 # 
 [[textcite:&Velthuis_Gera_2024_fragility]] similarly argue that "because of their funding models and reliance on a sole founder, [private museums] are inherently fragile organizations" (p.1).
@@ -212,15 +218,12 @@ Private museums have been characterized as vulnerable due to their key reliance 
 #
 Beyond a direct financial component, private museums have been also
 characterized as fragile since they can only rely on their founder for "taste", "vision and drive" [[parencite:&Adam_2021_rise p.77]], "passion" [[parencite:&Walker_2019_collector p.234]] or "skills and knowledge" [[parencite:&StylianouLambert_etal_2014_museums p.580]].
+#
+The link between diversification and mortality, i.e. higher survival chances for more diversified organizations, has been found for non-profit organizations more generally parencite:&Fernandez_2007_dissolution;&Bielefeld_1994_survival;&Hager_2001_vulnerability;&Lu_Shon_Zhang_2019_dissolution[fn::An larger literature exists shows a link between diversification and measures of financial health and sustainability besides survival [[parencite:&Licci_BaraldiBonini_2024_sustainability]]]; it is thus plausible to apply to museums as well.
 
+*** death :ignhead:
 
-
-
-The link between diversification and mortality, i.e. higher survival chances for more diversified organizations, has been found for non-profit organizations more generally parencite:&Fernandez_2007_dissolution;&Bielefeld_1994_survival;&Hager_2001_vulnerability;&Lu_Shon_Zhang_2019_dissolution; it is thus plausible to apply to private museums as well.
-
-
-
-Lack of diversification is argued to pose a problem in particular in the case of the founder's death:
+Lack of diversification is then argued to pose a problem in particular in the case of the founder's death:
 #
 textcite:&Walker_2019_collector argues that "the death of the original founder and creator can [...] place the future of private museums and collections in jeopardy" as "seldom do heirs share a similar passion or wish to take on the financial burden of maintaining private museums indefinitely" (p.234). 
 #
@@ -230,10 +233,25 @@ textcite:&Walker_2019_collector argues that "the death of the original founder a
 # 
 [[textcite:&Adam_2021_rise]] argues that succession introduces strains in financial aspects ("Collectors’ successors may not look kindly on what may well be a money pit when [...] they will have to pick up the bills", p.77), which also concerns an aesthetic dimension ("the nature of contemporary art is to be fresh and new, but what is ‘fresh and new’ for the founder might seem ‘old hat’ to their heirs", p.76).
 #
-[[textcite:&Velthuis_Gera_2024_fragility]] simiarly argue that "the founder’s death will almost inevitably have a direct impact on the financial health of the museum" (p.10).
+[[textcite:&Velthuis_Gera_2024_fragility]] similarly argue that "the founder’s death will almost inevitably have a direct impact on the financial health of the museum" (p.10).
 # this is not about closing, just health
 #
 [[cite:&StylianouLambert_etal_2014_museums]], after discussing a case of a private museum whose owner "does not believe that anyone else could love the museum as much as she does", argues that this "generates questions regarding the cultural sustainability of small private museums in cases where their initiators are not able to care for them any longer" (p.580).
+
+*** comparison lacking :ignhead:
+While private museums are thus generally characterized as fragile, it is not always clear in relation to whom.
+# FIXME
+#
+Among the most explicit is [[textcite:&Walker_2019_collector]], who characterizes public institutions as relatively stable (which constitutes the reason why private collectors aim to form cooperations with them); [[textcite:&Bechtler_Imhof_2018_future]] implicitly also highlight the longevity of state-run institutions.
+#
+However, no systematic data is used to estimate public museum longevity, and while some
+remarks are made that public spending cuts might result in problems for public museum operations (p.XX), the overall characterization of them remains as immortal [[parencite:&Frey_Meier_2002_beyeler]].
+#
+Responsible for the characterization of private museums as fragile might also be implicit reliance on the ICOM definition [[parencite:&ICOM_2024_definition]] of museums as "permanent institutions", according to which every closing is indicative of fragility.
+#
+So far a third comparison has been absent, namely that to other non-profit museums which are not initiated and run by a single collector, but by a wider group of founders or foundations.
+#
+As these share with private museums a common organizational form of the non-profit organization or foundation  and a similarly harsh environment, yet and differ primarily in regards to their diversification, i.e. their reliance on a single founder as central authority and income stream, they provide a effective way of investigating the effect of diversification on museum survival. 
 
 
 *** environment :ignhead:
