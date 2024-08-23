@@ -915,7 +915,21 @@ The possibility of other outcomes than surival and closures has been investigate
 #
 Investigating this process of transformation into a different organizational form thus provides fruitful avenue for further research. 
 
+**** closing reasons not as rich as previous studies
+:PROPERTIES:
+:CREATED:  [2024-08-23 vr 10:34]
+:ID:       45725b05-928c-4633-a690-9095ef61b849
+:END:
 
+The extent to which closing factors are investigated does not reach the level of detail by [[cite:&Velthuis_Gera_2024_fragility]], who investigate each closing separately.
+#
+On the other hand, the inclusion of the museums who do not close results in a more more complete comparatison. 
+#
+A research approach that would combine the strengths of both approaches could for example consist of leveraging additional data sources, such as financial histories of founder companies to investigate financial issues or search engine results, media reports or social media posts to assess interest from the public. 
+
+# maybe move to future research
+
+**** environment :ignhead:
 environment can be measured more
 - geocoding of other institutiosn
 - tax incentives
