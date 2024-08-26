@@ -154,7 +154,12 @@ In other words, what can the factors leading to the closure of private museums t
 
 
 - comparison to other forms (more descriptively)
+- NPM angle:
+  - environment
+  - quantitative
+  - legitimation
 
+- voluntary vs non-voluntary closing
 
 # interrelated question of sustainability/longevity and collector decision making
 
@@ -178,7 +183,7 @@ Private museums:
 
 ** Private museums dependencies
 
-*** chronic lack of money 
+*** chronic lack of money of NPOs :ignhead:
 :PROPERTIES:
 :CREATED:  [2024-08-23 vr 12:03]
 :ID:       746567b9-2f82-4a7e-afa9-726c2646812b
@@ -202,8 +207,8 @@ In a systematic review of closing reasons given in newspapers, magazines, social
 #
 Scholars have traced the closure of private museums to numerous types of declining financial situations, such as bankruptcies [[parencite:&Velthuis_Gera_2024_fragility;&Liu_2019_identities;&DeNigris_2018_museums]], costly legal battles [[parencite:&Velthuis_Gera_2024_fragility]], stock devaluations [[parencite:&Walker_2019_collector]], failing auction sales [[parencite:&Bechtler_Imhof_2018_future]] or lack of government support [[parencite:&Zennaro_2017_shanghai;&Velthuis_Gera_2024_fragility]].
 
-
-*** founder reliance -> diversification :ignhead:
+*** diversification
+**** founder reliance -> diversification :ignhead:
 
 #
 A central reason for financial vulnerability has been argued to be the crucial reliance on the single founder, who, as the iniators of their private museums, likely have contribute a large part of their institution's non-operating income [[parencite:&Frey_Meier_2002_beyeler]]:
@@ -221,7 +226,7 @@ characterized as fragile since they can only rely on their founder for "taste", 
 #
 The link between diversification and mortality, i.e. higher survival chances for more diversified organizations, has been found for non-profit organizations more generally parencite:&Fernandez_2007_dissolution;&Bielefeld_1994_survival;&Hager_2001_vulnerability;&Lu_Shon_Zhang_2019_dissolution[fn::An larger literature exists shows a link between diversification and measures of financial health and sustainability besides survival [[parencite:&Licci_BaraldiBonini_2024_sustainability]]]; it is thus plausible to apply to museums as well.
 
-*** death :ignhead:
+**** death :ignhead:
 
 Lack of diversification is then argued to pose a problem in particular in the case of the founder's death:
 #
@@ -238,7 +243,7 @@ textcite:&Walker_2019_collector argues that "the death of the original founder a
 #
 [[cite:&StylianouLambert_etal_2014_museums]], after discussing a case of a private museum whose owner "does not believe that anyone else could love the museum as much as she does", argues that this "generates questions regarding the cultural sustainability of small private museums in cases where their initiators are not able to care for them any longer" (p.580).
 
-*** comparison lacking :ignhead:
+**** comparison lacking :ignhead:
 While private museums are thus generally characterized as fragile, it is not always clear in relation to whom.
 # FIXME
 #
@@ -256,7 +261,7 @@ As these share with private museums a common organizational form of the non-prof
 
 *** environment :ignhead:
 
-Furthermore, private museums, as (non-profit) organizations, is deeply entangled with its environment.
+While the low diversification, i.e. the centrality of the founder for museum finances, has been argued to constitute the key feature of private museum vulnerability, it is also important to consider the other ways in which private museums, as (non-profit) organizations, are entangled with their environments.
 #
 Its ability to attract audiences, which may involve competition with other museums, secure cooperations with other museums, acquire sponsorships from cooperations and fundings from governments and other foundations are likely factors that contribute to its viability and hence longevity.
 # 
@@ -264,17 +269,66 @@ While some of these aspects can be influenced by the founder (in particular the 
 #
 In particular when they rely on the decision-making of other art-field actors, such as competition with other museums and sponsorship/funding choices, the influence of the individual founder is severely limited.
 #
-The image that these parties have of the private museum might be substantial importance in guiding their decision-making.
+# The image that these parties have of the private museum might be substantial importance in guiding their decision-making.
+
+
+**** Competition
+
+needs to write out: 
+- [[cite:&Hager_1999_demise]]:
+  - p.173: Ten organizations cited an inability to compete as a proximate cause for closure, making it the most popular proximate cause of organizational closure.
+  - p.173: Both [art organizations] noted that the majority of the community’s arts dollars, both individual donations/subscriptions and community and corporate grants, tended to go to the singular, most reputable arts organizations of their types (e.g. museums, orchestras, dance troupes) in the metro area. Other arts organizations faced strong competitive pressures from these flagship organizations, a factor which caused the demise of Organizations 276 and 293
+- [[cite:&Lecy_2010_nonprofit]]:
+  - p.27: The analysis shows that a period of rapid sector expansion – a period where many additional resources are being poured into the sector – creates a more competitive environment as evidenced by higher rates of organizational mortality.
+- [[cite:&Park_Shon_Lu_2021_mortality]]
+  - p.844: Furthermore, nonprofits that run their business in a county with greater organizational density and population size are more likely to dissolve, which implies that competition, as well as demand for service, prevents nonprofits from surviving
+- [[cite:&HernandezOrtiz_2022_discontinuity]]
+  - p.116:  A crowded niche increased the competition and limited their access to resources and clients. As reported by informant of organization #C07: "Well, there was less money to go around and more organizations seeking the money. Here we have the same, the same group of people that were supporting the organization, you know, donating to it and that only goes so far. So, we had a full-time grant writer, we were always applying for grants. But there are so many organizations applying for the same grants". (P31, Pos. 49-51)
+- [[cite:&Lu_Shon_Zhang_2019_dissolution]]
+  - p.43: For example, nonprofits operating in a more competitive environment with a higher degree of organizational density would experience a higher chance of dissolution.
+- [[cite:&Haugh_etal_2021_nascent]]:
+  - p.1227: SEs are likely to compete with non-profit organizations for grants,donations, and programme-related investments. Second,both SEs and non-profit organizations serve the disadvantaged and socially excluded and thus may also compete for service users. Although collaboration between SEs and charities could increase the supply of services to those in need (Smiddy 2010), they compete with each other for resources and beneficiaries. The more similar the resource needs and markets served, the greater the competition between the organizational forms (Baum and Haveman 1997). Hence, the population density ofregistered non-profit organizations will thus have a detrimental effect on SE survival.    
+
+resource-based: lack of audience, or many other people competing for audience
+[[cite:&Velthuis_Gera_forthcoming_fragility]]:
+p.23: In other cases, the location of the museum is a factor in limited visitor interest. On the
+one hand, private museums located in metropolitan art centers tend to face competition over
+visitors  from  well-established  other  museums  in  the  vicinity.  On  the  other  hand,  private
+museums located outside of those centers can be confronted with a small local audience, and
+difficulties in attracting visitors from afar.
 
 
 
+mechanism: losing motivation? 
 
-** Theoretical framework
+Private museums have been characterized as highly competitive.
+#
+While some self-descriptions focus on collaborative aspect, previous studies have highlighted how private museums compete with public museums over art works, audiences, sponsoring and donors [[parencite:&Kolbe_etal_2022_privatemuseum p.4]]. 
+#
+So far the primary interest of investigating competition has been to evaluate whether art provision by public institutions is threathed.
+#
+However, competition may also have consequences for the private museums themselves.
+#
+The extent to which a competitive environment may lead to museum closure has not yet been investigated.
+#
+However, a possible mechanism/consequence of competition, "lack of interest by the public", has been identified as the second most mentioned closure reason by [[parencite:&Velthuis_Gera_2024_fragility]].
+#
+As lack of interest can also result from a lack of audience, such as in sparsely populated areas. 
+#
+Disentangling how visitor 
+#
 
- As a substantial literature on organizational survival exists, thus
+#
+ 
+#
 
 
-*** Identity and the survival prospects of non-profit organizations
+
+*Hypothesis 3*: A private museum is more likely to close in a more competitive environment.
+  
+  
+
+**** Identity and the survival prospects of non-profit organizations
 # provide legitimacy
 
 An identity that is legitimate (understandable) and favorable (positive) has been argued to have a vast number of positive outcomes for organizations [[parencite:&Lange_Lee_Dai_2010_reputation]].
@@ -317,69 +371,9 @@ Given that founders are the very reason behind the existence of these organizati
 
 
 
-*** Organizational transformation 
-#
-[[textcite:&Carroll_Khessina_2019_demography]] argue that transformation of core features of organizations such as changes in technology or authority can have divergent consequences. 
-#
-On the one hand, it can disrupt internal routines as well as external customer relations by decreasing (perceived) reliability and accountability as the change upsets established perceptions, which can lead to higher mortality. 
-#
-On the other hand, organizational transformation can be necessary to adapt to a changing environment, and hence be beneficial for survival.
 
 
-
-In the case of private museums, the death of the founder might constitute a substantial transformation as authority has to be reconfigured.
-# 
-Abandonment by insiders (such as divorce of directors) has been argued to contribute to NPO closure [[parencite:&Duckles_Hager_Galaskiewicz_2005_close]].[fn::Conflict is similarly argued to contribute to closure but is not testable with the current data.]
-#
-Even if plans have been made for a handover, the new leaders might not share the same commitment to art as the original founder, potentially decreasing museum sustainability. 
-# question is if death is so important, or rather restructuring of authority
-
-
-In the case of private museums, founder death has been speculated to pose a challenge to their sustainability as "seldom do heirs share a similar passion or wish to take on the financial burden of maintaining private museum indefinitely" [[parencite:&Walker_2019_collector p.234]].
-#
-# 
-However, existing research has not found a straightforward effect of founder death on museum closure [[parencite:&Velthuis_Gera_forthcoming_fragility;&Velthuis_etal_2023_boom]].
-#
-Nevertheless as previous research has relied primarily on descriptive statistics, investigating founder death in a multivariate survival model allows to investigate the effect of founder death with higher precision.
-#
-
-
-#+latex: \bigbreak
-#+latex: \noindent
-*Hypothesis 2*: A private museum is more likely to close after the death of the founder.
-
-
-
-*** Competition
-
-needs to write out: 
-- [[cite:&Hager_1999_demise]]:
-  - p.173: Ten organizations cited an inability to compete as a proximate cause for closure, making it the most popular proximate cause of organizational closure.
-  - p.173: Both [art organizations] noted that the majority of the community’s arts dollars, both individual donations/subscriptions and community and corporate grants, tended to go to the singular, most reputable arts organizations of their types (e.g. museums, orchestras, dance troupes) in the metro area. Other arts organizations faced strong competitive pressures from these flagship organizations, a factor which caused the demise of Organizations 276 and 293
-- [[cite:&Lecy_2010_nonprofit]]:
-  - p.27: The analysis shows that a period of rapid sector expansion – a period where many additional resources are being poured into the sector – creates a more competitive environment as evidenced by higher rates of organizational mortality.
-- [[cite:&Park_Shon_Lu_2021_mortality]]
-  - p.844: Furthermore, nonprofits that run their business in a county with greater organizational density and population size are more likely to dissolve, which implies that competition, as well as demand for service, prevents nonprofits from surviving
-- [[cite:&HernandezOrtiz_2022_discontinuity]]
-  - p.116:  A crowded niche increased the competition and limited their access to resources and clients. As reported by informant of organization #C07: "Well, there was less money to go around and more organizations seeking the money. Here we have the same, the same group of people that were supporting the organization, you know, donating to it and that only goes so far. So, we had a full-time grant writer, we were always applying for grants. But there are so many organizations applying for the same grants". (P31, Pos. 49-51)
-- [[cite:&Lu_Shon_Zhang_2019_dissolution]]
-  - p.43: For example, nonprofits operating in a more competitive environment with a higher degree of organizational density would experience a higher chance of dissolution.
-- [[cite:&Haugh_etal_2021_nascent]]:
-  - p.1227: SEs are likely to compete with non-profit organizations for grants,donations, and programme-related investments. Second,both SEs and non-profit organizations serve the disadvantaged and socially excluded and thus may also compete for service users. Although collaboration between SEs and charities could increase the supply of services to those in need (Smiddy 2010), they compete with each other for resources and beneficiaries. The more similar the resource needs and markets served, the greater the competition between the organizational forms (Baum and Haveman 1997). Hence, the population density ofregistered non-profit organizations will thus have a detrimental effect on SE survival.    
-
-resource-based: lack of audience, or many other people competing for audience
-[[cite:&Velthuis_Gera_forthcoming_fragility]]:
-p.23: In other cases, the location of the museum is a factor in limited visitor interest. On the
-one hand, private museums located in metropolitan art centers tend to face competition over
-visitors  from  well-established  other  museums  in  the  vicinity.  On  the  other  hand,  private
-museums located outside of those centers can be confronted with a small local audience, and
-difficulties in attracting visitors from afar.
-
-*Hypothesis 3*: A private museum is more likely to close in a more competitive environment.
-  
-  
-
-*** Shocks
+**** Shocks
 External shocks can 
 
 
@@ -390,49 +384,8 @@ tightening belt, fundraising, entrepreneurial strategies, downsizing
 The form of museums also implies commitment of resources, larger than that of other NPOs, which in turn provides capabilities, e.g. staff that is able to search for alternative revenue sources.
 #
 
-*** Size
-
-Where
-
-
-
-
-# # Organizational size has been found to be increase survival as larger organizations
-# # # 
-# # : liability of middle -> huh
-# # #
-# In the research of non-profit organizations, larger size has been usually found to increased survival chances [[parencite:&Harrison_Laincz_2008_nonprofit;&Helmig_Ingerfurth_Pinz_2013_nonprofit]]
-
-# Larger NPOs are generally found to have lower mortality rates [[parencite:&Hager_1999_demise;&Duckles_Hager_Galaskiewicz_2005_close]], with size being measured through indicators such as assets [[parencite:&Lu_Shon_Zhang_2019_dissolution]], number of employees parencite:&Bielefeld_1994_survival and volunteers [[parencite:&Fernandez_2007_dissolution]], or revenues parencite:&Searing_2020_zombies.
-# # #
-# Smaller organiations are argued to face greater difficulty in collecting resources and recruiting staff as well as relatively higher costs for administration and regulation [[parencite:&Helmig_Ingerfurth_Pinz_2013_nonprofit]], while being less able to diversify or benefit from economies of scale [[parencite:&Hager_1999_demise]][fn:: This pattern that does not necessarily hold for organizations generally, which led to the term of liability of the middle [[parencite:&Carroll_Khessina_2019_demography]], who argue that medium-sized organizations compete with both small (specialist) as well as large (generalist) organizations and therefore face the highest competition and lowest survival prospects.]
-# # #
-# Larger organizations are also argued to be able to waste some resources during normal times which can be utilized effectively during situations of crisis without having to scale back services (which generate revenue) [[parencite:&Hager_2001_vulnerability]] and hence avoid downsizing, which can lead to dissolution [[parencite:&Duckles_Hager_Galaskiewicz_2005_close;&Bielefeld_1994_survival]].
-
-
-
-
-# Measuring size constitutes a number of challenges:
-# #
-# Private museums are relatively intransparent, and therefor do not always publish financial statements.
-# #
-# Furthermore, as their locations are spread across the globe, even those institutions that do publish them do so according to different regulatory frameworks, sometimes in different languages, and often only make available those of the last couple of years. 
-# #
-# Instead, I use exhibition data to estimate size, assuming larger private museums will organize more exhibitions than smaller ones.
-# # FIXME: order: artists first
-# I use a subset of the Artfacts database of 37,224 organizations, 544,982 exhibitions by 43,593 artists with complete demographics and born from 1945 onwards.
-# #
-# As the coverage of the Artfacts database varies over time, a exhibition count is not feasible as it would 
-# #
-# I therefore instead assign to each museum a quantile score based on its number of exhibitions; the score corresponds to the fraction of organizations with less or equal the number of exhibitions in each given year.
-# #
-
-
-
-
-
-*** Other predictors of organizational survival
-**** Age 
+**** Other predictors of organizational survival
+***** Age 
 
 
 The age of an organization is considered in different ways to be related to closing.
@@ -860,12 +813,15 @@ Founders who are committed to their museums will keep them alive, regardless of 
 # While alternative explanations cannot be completely ruled out, a clearly understandable identity and a favorable founder reputation emerge as important predictors of the chance of a private museum to close.
 # #
 # Future research can expand on these findings by in more detail investigating the resource perspective of private museums, the intransparency of which has so far aggravated insights about budgetary aspects, in particular how these financial and material characteristics are moderated or mediated by processes of organizational identity.
-TBD
 
-
-While the central role of the founder has been argued to constitute a risk factor, I find no conclusive relationship between mortality and a number of founder characteristics, such as founder gender, death, exclusion from the Artnews collector ranking or inclusion of founder name in the museum name.
+Private museum have been characterized as fragile institutions due to their reliance on a single founder.
+#
+However, my analysis finds neither a higher substantially higher mortality rates for private museums compared to (art) museums generally, nor a conclusive relationship between museum closure and a number of founder characteristics, such as founder gender, death, exclusion from the Artnews collector ranking or inclusion of founder name in the museum name.
 # 
 While Self-identification and audience/competition are significantly associated with higher mortality, and possibly reflect or influence founder motivations, they are also subject to alternative mechanisms, namely devaluation by third parties and competition, respectively (self-identification furthermore concerns a relatively small group of institutions).
+#
+Furthermore, even if they reflect founder motivations, these are likely cases of voluntary closure; there is thus no large evidence that private museums are at a higher risk of unvoluntary closure than more diversified museums as a consequence of their reliance on a single founder. 
+
 
 
 A possible explanation of the characterization of private museums as fragile might be due to the focus on case studies, which disregards the much larger population who don't experience closing.
@@ -874,14 +830,8 @@ Due to the "private museum boom", some museums will experience closing over a pe
 
 
 
-voluntary yes, but seems to be exception (both when inferred via naming pattern, and closing reasons)
-non-voluntary closing as high as other NPOs
 
 
-
-
-
-#
 It cannot be stated whether private museums experience higher mortality rates than publicly funded museums (for which European countries would be the most natural comparison).
 #
 While public museums have been characterized to some extent as very stable due to government picking up deficits [[parencite:&Meier_Frey_2003_faces;&Bechtler_Imhof_2018_future]], [[textcite:&Walker_2019_collector]] argues that due to declining cultural spending even public museums might face hard times.
@@ -899,6 +849,7 @@ Without access to museum register comparable to the IRS/NCCS datasets, such ques
 
 *** Limitations
 
+**** no transformation :ignhead:
 For this study, I only investigated the occurence of closure events.
 #
 However, private museums can stop existing as private museums not just by closing down, but also by being transformed into other organizational forms.
