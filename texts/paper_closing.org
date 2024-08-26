@@ -260,6 +260,15 @@ So far a third comparison has been absent, namely that to other non-profit museu
 As these share with private museums a common organizational form of the non-profit organization or foundation  and a similarly harsh environment, yet and differ primarily in regards to their diversification, i.e. their reliance on a single founder as central authority and income stream, they provide a effective way of investigating the effect of diversification on museum survival. 
 
 
+
+*Hypothesis 1*: Private museums have higher closing chance than non-profit museums generally.
+
+*Hypothesis 2*: A founder's death increases the risk of closing.
+*Hypothesis 2*: Reliance on the founder is the mechanism through which PMs are exposed to higher closing risk, thus founder-related variables can be used to predict closing. 
+
+
+
+
 *** environment :ignhead:
 
 While the low diversification, i.e. the centrality of the founder for museum finances, has been argued to constitute the key feature of private museum vulnerability, it is also important to consider the other ways in which private museums, as (non-profit) organizations, are entangled with their environments.
@@ -311,29 +320,29 @@ Quantitative studies have identified a relation between competition and non-prof
 
 
 
-
-
 *Hypothesis 3*: A private museum is more likely to close in a more competitive environment.
   
   
 
-**** Identity and the survival prospects of non-profit organizations
+**** Identity 
 # provide legitimacy
 
+The mere availability of audiences and other potential donors might however not be sufficient if a museum is not perceived as deserving support; i.e. if its identity is found lacking. 
+#
 An identity that is legitimate (understandable) and favorable (positive) has been argued to have a vast number of positive outcomes for organizations [[parencite:&Lange_Lee_Dai_2010_reputation]].
 # 
 As gaining the approval of different stakeholders is necessary for being understood and/or supported by other organizations in the environment, having a clearly defined and favorable identity influences resource acquisition and thereby survival prospects [[parencite:&Rao_1994_reputation]].
 #
-Even for non-profit organizations such as museums, which do not produce tangible goods (a domain where identity-related effects are present, e.g. [[cite:&Hsu_2015_granted;&Bogaert_etal_2014_ecological]]), a clear and positive identity might be helpful in a number of ways:
+Even for non-profit organizations such as museums, which do not produce tangible goods (a domain where identity-related effects are especially prevalent, e.g. [[cite:&Hsu_2015_granted;&Bogaert_etal_2014_ecological]]), a clear and positive identity might be helpful in a number of ways:
 # 
 In particular in the context of private museums, decline of legitimacy or reputation could lead to lower visitor numbers, less discounts from art dealers, less government grants or lower chances on collaborations with other museums or corporations, resulting in lower revenues and higher acquisition costs.
 
 
 The empirical record of the link between identity and survival for non-profit organizations is mixed: 
 # 
-For example [[textcite:&Bielefeld_1994_survival]] finds that NPOs who pursue less legitimation strategies (obtaining endorsements, lobbying or contributing to local causes) are more likely to close.
+For example [[textcite:&Bielefeld_1994_survival]] finds that NPOs who pursue less legitimation strategies (obtaining endorsements, lobbying or contributing to local causes) are more likely to close, and [[textcite:&HernandezOrtiz_2022_discontinuity]] observes a declining image or reputation as a cause of closure in a number of non-profits (p.115).
 #
-However, other studies find limited impact of legitimacy on survival, both when measured via density parencite:&Bogaert_etal_2014_ecological or from archival sources and interviews [[parencite:&Fernandez_2007_dissolution]].
+However, other studies find little to no effect of legitimacy on survival, both when measured via density parencite:&Bogaert_etal_2014_ecological or from archival sources and interviews [[parencite:&Fernandez_2007_dissolution]].
 # 
 # Thus, even while this study cannot conclusively answer the overall link between idenity and survival, it nevertheless contributes insights into which dimensions of organizational identity do, and which do not contribute to survival in a particular organizational population; namely that of private art museums.
 
@@ -356,8 +365,15 @@ Given that founders are the very reason behind the existence of these organizati
 
 #+latex: \bigbreak
 #+latex: \noindent
-*Hypothesis 1*: Private museums with identities more understandable, legitimate and favorable are less likely to close. 
+*Hypothesis 4*: Private museums with identities more understandable and favorable are less likely to close. 
 
+
+# FIXME
+It is however necessary to consider that in particular the name of a museum might be associated with a museum's survival via identity, but also reflect founder intentions regarding the institutions longevity.
+#
+This is discussed in more detail below.
+#
+Furthermore, inferring the status of the museum via the reputaton of the founder again explores the extent to which the founder is a figure of central importance for the private museum.
 
 
 
