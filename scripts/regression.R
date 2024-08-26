@@ -368,7 +368,7 @@ gd_pmx <- function(dt_pmdb) {
 
     ## only basic variables for now to test overall flow, later add more variables
     dt_pmx <- copy(dt_pmdb_fltrd) %>% 
-        .[, .(ID, name, iso3c, museum_status, year_opened, year_closed, deathyear,
+        .[, .(ID, name, iso3c, museum_status, year_opened, year_closed, birthyear, deathyear,
               slfidfcn, muem_fndr_name, gender, founder_id, lat, long)]
 
     
