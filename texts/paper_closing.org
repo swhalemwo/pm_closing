@@ -412,22 +412,35 @@ Given such conflicting predictions, [[textcite:&Carroll_Khessina_2019_demography
 
 ** Data and Methods
 
-*** Dependent Variable
+
 A newly constructed database, assembled from different sources,  is used to measure the survival of private museums (cf. [[textcite:&Velthuis_etal_2023_boom]] for details).
 #
-First, existing databases of private art museums are harmonized.
-#
-Secondly, the online presences of 14 English art publications were exhaustively searched for any mention of private museums.
-#
-After identifying unique institutions, data on these organizations was collected such as opening year, closing year (of those which closed) and founder information.
-# 
 Currently, the database includes 547 museums (of which 446 are currently open, the remainder having closed or transformed into other organizational forms).
 #
-Using this database allows to reconstruct the lifecourse of the each institution with the the unit of analysis as museum-year:
+Using this database, in particular year of opening and, if available, closing, it is possible to reconstruct the life course of the each institution with museum-year as the unit of analysis.
 #
-The main dependenent variable is thus an indicator of museum closure, which takes the value of 1 for the museums which close in the year of their closure, and 0 otherwise.
+This data allows to conduct survival analysis (also known as event history analysis), the most common statistical technique to investigate hazard rates and identify mortality-assocated covariates parencite:&Moore_2015_survival;&Allison_2014_event.
+
+
+
+Hypothesis 1 (comparing closing risk between private museums and other, more diversified institutions) ideally would use a complete population of museums to identify the effect of institutional form on closing rate.
+#
+However, as no institutions are maintaining museum databases on a global scale, I use existing quantitative studies of museum closure to compare to these  private museums in terms of their closing rates.
+# 
+This non-parametric method estimates the hazard rate as the conditional probability of exiting at time t_i given being alive as $h(t_i) = \frac{d_i}{n_i}$, (with $n_i$ as the number of units at risk at time $t_i$ and $d_i$ as the number of exits at time $t_i$), and the survival function as the product of these conditional probabilities as $S(t) = \prod_{t_i \geq t} \left(1-h(t_i) \right)$.
+
+
+Hypothesis 2 to 4, which differentiate the private museum population according to a number of risk factors, are investigated via Cox proportional hazard models. 
+#
+The main dependenent variable is here indicator of museum closure, which takes the value of 1 for the museums which close in the year of their closure, and 0 otherwise.
 #
 Typically for survival data, museums that do not close during the observation period are right-censored, i.e. for such museums the dependent variable is zero for all years.
+#
+The Cox-proportional hazard model has the form $h(t,\mathbf{x}) = h_0(t) \psi$, where $\psi = \exp(\sum_{j} \mathbf{x}_j \beta_j)$; with $h(t)$ as the hazard rate, $h_0(t)$ as the baseline hazard rate, $\mathbf{x}$ as the set of variables indexed by $j$, and $\beta$ as the coefficient vector.
+#
+Partial maximum likelihood estimation allows calculating \beta without defining the baseline hazard rate, which therefore is not constrained to a parametric form parencite:&Moore_2015_survival.
+ 
+
 
 
 *** Main Predictors
@@ -536,14 +549,12 @@ This non-parametric method estimates the hazard rate as the conditional probabil
 
 
 
+
+
 # In a second step,
 Secondly, we use Cox proportional hazard models which estimate the relationship between covariates and the hazard rate.
 #
-The Cox-proportional hazard model has the form $h(t,\mathbf{x}) = h_0(t) \psi$, where $\psi = \exp(\sum_{j} \mathbf{x}_j \beta_j)$; with $h(t)$ as the hazard rate, $h_0(t)$ as the baseline hazard rate, $\mathbf{x}$ as the set of variables indexed by $j$, and $\beta$ as the coefficient vector.
-#
-Partial maximum likelihood estimation allows calculating \beta without defining the baseline hazard rate, which therefore is not constrained to a parametric form. 
-# 
-Coefficients are interpeted as log hazard ratios, i.e. as multipliers of the baseline hazard rate. 
+ 
 
 
 
@@ -654,7 +665,8 @@ In fact, lower dissolution rates are only reported for historical societies (0.5
 #+INCLUDE: "../tables/t_reg_coxph_wcpF.tex" export latex
 
 Table {{{reftbl_t_reg_coxph}}} shows the results of Cox proportional hazard regression model.
-
+#
+Coefficients are interpeted as log hazard ratios, i.e. as multipliers of the baseline hazard rate.
 
 **** Control Variables
 
