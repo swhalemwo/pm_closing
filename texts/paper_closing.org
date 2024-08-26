@@ -226,6 +226,7 @@ characterized as fragile since they can only rely on their founder for "taste", 
 #
 The link between diversification and mortality, i.e. higher survival chances for more diversified organizations, has been found for non-profit organizations more generally parencite:&Fernandez_2007_dissolution;&Bielefeld_1994_survival;&Hager_2001_vulnerability;&Lu_Shon_Zhang_2019_dissolution[fn::An larger literature exists shows a link between diversification and measures of financial health and sustainability besides survival [[parencite:&Licci_BaraldiBonini_2024_sustainability]]]; it is thus plausible to apply to museums as well.
 
+
 **** death :ignhead:
 
 Lack of diversification is then argued to pose a problem in particular in the case of the founder's death:
@@ -245,7 +246,7 @@ textcite:&Walker_2019_collector argues that "the death of the original founder a
 
 **** comparison lacking :ignhead:
 While private museums are thus generally characterized as fragile, it is not always clear in relation to whom.
-# FIXME
+# FIXME: relation to whom?
 #
 Among the most explicit is [[textcite:&Walker_2019_collector]], who characterizes public institutions as relatively stable (which constitutes the reason why private collectors aim to form cooperations with them); [[textcite:&Bechtler_Imhof_2018_future]] implicitly also highlight the longevity of state-run institutions.
 #
@@ -873,6 +874,9 @@ A research approach that would combine the strengths of both approaches could fo
 
 # maybe move to future research
 
+founder age bracket
+
+
 **** environment :ignhead:
 environment can be measured more
 - geocoding of other institutiosn
@@ -886,6 +890,11 @@ environment can be measured more
 :CREATED:  [2024-08-23 vr 10:32]
 :ID:       4b290835-a2d9-4d50-915f-1eb90d8a7cf5
 :END:
+
+remain intransparent
+
+
+
 Museum characteristics might influence closing to a larger extent than has been considered here.
 #
 For example, museum size, facilities, as well as marketing and outreach activities might be related to long-term survival prospect.
@@ -921,4 +930,6 @@ Thus this data can be used to establish average mortality estimates for museums 
 Its furthermore a rich source of financial data
 
 egmus doesn't have that
+
+
 
