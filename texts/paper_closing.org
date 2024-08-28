@@ -377,19 +377,6 @@ This is discussed in more detail below.
 Furthermore, inferring the status of the museum via the reputaton of the founder again explores the extent to which the founder is a figure of central importance for the private museum.
 
 
-
-
-**** Shocks
-External shocks can 
-
-
-Museums, including private museums, might be relatively resilient [[cite:&Geller_Salamon_2010_resilience]]: 
-#
-tightening belt, fundraising, entrepreneurial strategies, downsizing
-#
-The form of museums also implies commitment of resources, larger than that of other NPOs, which in turn provides capabilities, e.g. staff that is able to search for alternative revenue sources.
-#
-
 **** Other predictors of organizational survival
 ***** Age 
 
@@ -522,21 +509,13 @@ On the level of the founder, gender constitutes a time-invariant variable; with 
 Centrality of the founder's vision is measured via the proxy of whether the name of the founder is included in the name of the museum.
 
 
-# Furthermore, organizational theory [[parencite:&hannan89_organ]] predicts a U-shaped relationship between density and mortality:
-# # 
-# While at low levels, increases in the number of organizations are argued to primarily increase legitimacy and lower exit rates, increases at higher numbers increase the competition over resources and thereby raise mortality rates.
+
+
+External shocks might interrupt operations, which reduces income from tickets, as well as make other donors more hesitant to commit money in uncertain times.
 #
-# On the level of the environment, therefore the density (number) of private museum per country is included both in linear and squared form.
-
-
-
-
-
-# limitations:
-# - how many are matched: around 60% -> complain that rest isn't included
-# - 
-
-
+However, museums, including private museums, might also be relatively resilient as they can adopt measures such as tightening their belt, additional fundraising, and expanding their marketing efforts [[parencite:&Geller_Salamon_2010_resilience]], which might bolster their resilience.
+#
+To account for two prevalent shocks in the recent decades, the Great Recession and the Covid-19 pandemic, I thus include two dummy variables for 2008/2009 and 2020/2021; respectively.
 
 
 
