@@ -1764,14 +1764,14 @@ gp_heatmap_info <- function(dt_pmyear) {
         ggplot(aes(x=proxcnt10, y= popm_circle10, fill = log(N), label = N)) +
         geom_tile() + 
         geom_text() +
-        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88))
+        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj")
 
     ## coverage plot of where data exists
     p2 <- dt_cell_info %>%
         ggplot(aes(x=proxcnt10, y= popm_circle10, fill = N, label = N)) +
         geom_tile() + 
         geom_text() +
-        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88))
+        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj")
 
     ## observed closings
     dt_pred_obs <- dt_pmyear[, .(N = fnunique(ID), closing = sum(closing), OY = .N),
@@ -1782,13 +1782,13 @@ gp_heatmap_info <- function(dt_pmyear) {
 
     p3 <- ggplot(dt_pred_obs, aes(x=proxcnt10, y=popm_circle10, fill = mort2,
                                   label = round(mort2, 2))) +
-        geom_tile() + scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) +
+        geom_tile() + scale_fill_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj") +
         geom_text() +
         labs(caption = "mort2: closing/N(unique_ID)")
 
     p4 <- ggplot(dt_pred_obs, aes(x=proxcnt10, y=popm_circle10, fill = mort1,
                                   label = round(mort1, 2))) +
-        geom_tile() + scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) +
+        geom_tile() + scale_fill_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj")  +
         geom_text() +
         labs(caption = "mort1: closing/OY")
 
@@ -1870,8 +1870,11 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
         .[mort_cat != mort_cat_up] # identify mort_cat transitions
 
     ## construct manual scale
+    
+    
     scale_ylorbr <- scale_color_YlOrBr(limits = dt_pred_cell[, c(min(mort), max(mort))],
-                                       reverse = T, range = c(0, 0.88), guide = "none") %>%
+                                       reverse = T, range = c(0, 0.88), guide = "none",
+                                       scale_name = "jj") %>%
         chuck("palette")
 
     ## ## still necessary to scale input values, doesn't work when passing to limits apparently
@@ -1893,7 +1896,7 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
     
     ## check that bar is working
     dt_bar %>% ggplot(aes(x=x, y=pos, fill = pos)) + geom_tile() +
-        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88))
+        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj")
 
     ## horizontal lines on vertical color bar
     dt_hlines <- data.table(y=c(mortbound_lo, mortbound_hi))
@@ -1908,8 +1911,8 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
         ## geom_segment(dt_hlines, mapping = aes(x = y, xend = y, y = -75, yend = -25), color = "black") +
         ## the horizontal lines
         coord_flip(expand = F) + # need to use coord_flip: can't have decimal-point y-axis with horizontal bars
-        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) +
-        scale_color_YlOrBr(reverse = T, range = c(0, 0.88)) +
+        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj") +
+        scale_color_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj") +
         labs(y= "Nbr. unique PMs", x = element_blank(), title = "Pred. closing chance\nwithin 20 years") +
         theme(plot.margin = margin(0, 0, 0, 0),
               panel.background = element_blank(),
@@ -1951,8 +1954,8 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
         ## geom_segment(dt_border_up, mapping = aes(x=proxcnt10-0.5, y=popm_circle10 + 0.5,
         ##                                          xend = proxcnt10 + 0.5, yend = popm_circle10_up - 0.5),
         ##              color = "black") + 
-        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88)) +
-        scale_color_YlOrBr(reverse = T, range = c(0, 0.88)) +
+        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj") +
+        scale_color_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj") +
         theme_bw() +
         scale_y_continuous(expand = expansion(add = c(0, 0.5))) +
         scale_x_continuous(expand = expansion(add = c(0, 0.5))) + 
