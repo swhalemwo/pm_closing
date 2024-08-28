@@ -63,7 +63,23 @@ gd_nbrs <- function() {
               nbr_fmt = sprintf("%s%%", format(mean_haz*100, digits = 2, nsmall = 2)),
               grp = "meanhaz")]
 
+    ## hazards by year
+    dt_yearhaz <- dt_pmyear[, .(rate_closing = sum(closing)/.N), year]
+    
+    ## what is good selection of slices?
+    ## setting slice lengths, then generating for each slice length all the periods?
+    ## but is mess wiht last period (2020+) in most cases
+    ## just do some manually
 
+    dt_nbr_yearhaz <- data.table(year_id = c("all", "upto2010", "from2010"),
+                                 nbr = c(dt_yearhaz[, mean(rate_closing)],
+                                         dt_yearhaz[year < 2010, mean(rate_closing)], 
+                                         dt_yearhaz[year >= 2010, mean(rate_closing)])) %>%
+        .[, .(nbr_name = paste0("yearhaz_", year_id),
+              nbr_fmt = sprintf("%s%%", format(nbr*100, digits = 2, nsmall = 2)),
+              grp = "yearhaz")]
+    
+    
     
     dt_mow_prop_museum <- gn_mow_prop_museum()
     
@@ -75,7 +91,7 @@ gd_nbrs <- function() {
     ## dt_ynktbl <- gc_ynktbl()
     dt_reftbl <- gc_reftbl()
 
-    dt_nbrs_cbnd <- Reduce(rbind, list(dt_descs, dt_meanhaz, dt_ynkplt, dt_refplt, dt_reftbl,
+    dt_nbrs_cbnd <- Reduce(rbind, list(dt_descs, dt_meanhaz, dt_nbr_yearhaz, dt_ynkplt, dt_refplt, dt_reftbl,
                                        dt_mow_prop_museum))
 
     
