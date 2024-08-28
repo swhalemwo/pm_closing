@@ -233,3 +233,49 @@ dt_selfid_mission %>%
     geom_col(position = position_dodge())
 
 ## mission statements are just GARBAGE
+
+
+## * reconstruct Gordon, assuming constant haz
+
+dt_gordon <- data.table(
+    year = c(2000, 2001, 2002, 2003),
+    alive = c(1305, 1295, 1287, 1280), # assume no openings
+    alive2 = c(1291, 1292, 1292, 1292), # assume openings = closings
+    dead = c(9,9,9,9)) %>%
+    .[, .(mort1 = dead/alive, mort2 = dead/alive2)] %>%
+    .[, lapply(.SD, mean)]
+
+## * compare my methodology with Hager
+## who is still there in 2020 from those who are active in 2010
+
+dt_open10 <- dt_pmyear[year == 2010 & closing == 0]
+# 264
+
+## see how many survived
+dt_pmyear[year == 2020 & ID %in% dt_open10$ID & closing == 0]
+
+dt_pmyear[year == 2020 & closing == 0][dt_open10, on = "ID", nomatch = NULL]
+# 228
+
+# 36 closed
+## how many which were alive in 2010 closed in next decade
+
+dt_pmyear[closing == 1 & year %between% c(2010, 2020) & year_opened < 2010]
+
+(264/228)^0.1
+
+# pretty sure taking the limit of what Hager is doing is the average annual hazard
+
+## ** Bowen
+
+## dt_bowen <-
+
+data.table(
+    year = seq(1981, 1990),
+    exits = rep(27, 10)) %>%
+    ## .[order(-year)] %>% 
+    ## .[year == 1990, total := 2481] %>%
+    ## .[,  cumsum(exits)]
+    .[, total := 2484 + 271 - cumsum(exits)]
+    
+    
