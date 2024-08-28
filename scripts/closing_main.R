@@ -63,6 +63,13 @@ gd_nbrs <- function() {
               nbr_fmt = sprintf("%s%%", format(mean_haz*100, digits = 2, nsmall = 2)),
               grp = "meanhaz")]
 
+    dt_meanhaz_later <- data.table(section_id = c("8onwards", "8to30"),
+                                   nbr = c(dt_pehaz[age >= 8, mean(est)],
+                                           dt_pehaz[age >= 8 & age <= 30, mean(est)])) %>%
+        .[, .(nbr_name = paste0("meanhaz_", section_id),
+              nbr_fmt = sprintf("%s%%", format(nbr*100, digits = 2, nsmall = 2)),
+              grp = "meanhaz")]
+
     ## hazards by year
     dt_yearhaz <- dt_pmyear[, .(rate_closing = sum(closing)/.N), year]
     
@@ -91,7 +98,8 @@ gd_nbrs <- function() {
     ## dt_ynktbl <- gc_ynktbl()
     dt_reftbl <- gc_reftbl()
 
-    dt_nbrs_cbnd <- Reduce(rbind, list(dt_descs, dt_meanhaz, dt_nbr_yearhaz, dt_ynkplt, dt_refplt, dt_reftbl,
+    dt_nbrs_cbnd <- Reduce(rbind, list(dt_descs, dt_meanhaz, dt_meanhaz_later, dt_nbr_yearhaz,
+                                       dt_ynkplt, dt_refplt, dt_reftbl,
                                        dt_mow_prop_museum))
 
     
