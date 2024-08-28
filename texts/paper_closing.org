@@ -32,6 +32,14 @@ wd_nbrs(dt_nbrs)
 #+MACRO: meanhaz_upto_30 1.16%
 #+MACRO: meanhaz_upto_40 0.96%
 #+MACRO: meanhaz_upto_100 0.90%
+#+MACRO: meanhaz_8onwards 0.92%
+#+MACRO: meanhaz_8to30 1.20%
+
+
+# yearhaz
+#+MACRO: yearhaz_all 0.84%
+#+MACRO: yearhaz_upto2010 0.21%
+#+MACRO: yearhaz_from2010 1.36%
 
 
 # pltcfgs
@@ -377,25 +385,6 @@ This is discussed in more detail below.
 Furthermore, inferring the status of the museum via the reputaton of the founder again explores the extent to which the founder is a figure of central importance for the private museum.
 
 
-**** Other predictors of organizational survival
-***** Age 
-
-
-The age of an organization is considered in different ways to be related to closing.
-#
-What started with liability of newness [[parencite:&Stinchcombe_1965_structure]], which posited that organizational mortality decreases over time due to acquisition of capabilities and connections, has lead to a number of extensions [[parencite:&Carroll_Khessina_2019_demography;&Hannan_1998_mortality]]:
-#
-Liability of adolescence argues that shortly after foundings organizations can still draw on endowments, the expiration of which leads to a peak of mortality some time after opening.
-#
-While according to this view mortality still decreases after the peak as the organization becomes more established, other perspectives argue also for a positive relationship between age and mortality:
-# 
-According to the liability of obsolescence paradigm the environment changes faster than organizations which are seen as relatively constrained by inertia, which therefore leads to declining fitness and survival chances.
-#
-Similar, according to "liability of senescence" capabilities/routines/coalitions can constrain the actions of organizations.
-#
-Given such conflicting predictions, [[textcite:&Carroll_Khessina_2019_demography]] propose to model age dependence with piece-wise constant hazard models (rather than parametric models) to estimate age-specific effects which can, but do not have to, indicate a relationship between age and mortality.
-
-
 
 
 ** Data and Methods
@@ -431,9 +420,23 @@ Partial maximum likelihood estimation allows calculating \beta without defining 
 
 
 
-*** Main Predictors
+*** Main Predictors (Cox Proportional Hazards Model)
 
 # The organizational identity of a museum is measured primarily in terms of its legitimacy, i.e. its adherence to museum standards, and reputation of its founders.
+
+**** Founder death
+:PROPERTIES:
+:CREATED:  [2024-04-07 zo 15:06]
+:ID:       764f17aa-0bd3-400b-a3ee-d72770e988f1
+:END:
+
+A measure of founder death is constructed as a time-varying covariate, which can take the values of the founder being alive, having deceased recently (the year in question and the year after that), and having been deceased for more than 2 years.
+#
+While it would have been possible to model founder death as a binary variable, two separate stages of death allows to separately investigate the short- and long-term impacts.
+
+
+# should I have founder name here as well? would tie in to diversification
+
 
 **** Legitimacy
 
@@ -475,13 +478,6 @@ Cases where multiple individuals are involved in the founding of a private museu
 The variable is lagged by one year to avoid reverse causality, i.e. to exclude the possibility that an association is observed which is present due to founders being dropped from the ranking as a consequence of the closure of their museum.
 
 
-**** Organizational transformation 
-:PROPERTIES:
-:CREATED:  [2024-04-07 zo 15:06]
-:ID:       764f17aa-0bd3-400b-a3ee-d72770e988f1
-:END:
-
-A measure of founder death is constructed as a time-varying covariate, and is set to 1 for museum-years after the death of the founder. 
 
 **** Competition
 :PROPERTIES:
@@ -557,45 +553,83 @@ In total, 479 private museums are included in the database, 53 of them have clos
 
 Figure {{{refplt_p_hazard}}} shows the hazard rate over time, figure {{{refplt_p_surv}}} the corresponding survival probability.
 #
-The hazard rate doubles over the first 10 years from approximately 0.45% to 0.9%, at which value it approximately stays constant for the next 20 years, after which it appears to decline.
+The hazard rate increases strongly from {{{meanhaz_upto_2}}} in the first two years, to {{{meanhaz_upto_5}}} in the first 5 years, to {{{meanhaz_8to30}}} at year 8, around which it then fluctuates, leading to an average hazard of {{{meanhaz_upto_30}}} for the first 30 years. [fn::While it is possible to calculate the average hazard over longer periods (e.g. the overall average hazard rate is {{{meanhaz_upto_100}}}), for ages above 30 only few observations are available, which make these predictions rather uncertain.]
 #
-However, the decline after thirty years is presumably less certain as very few private museums have already reached this age.
-
-
-The increase in the first years is likely due to endowments: As the establishment of a museum requires considerable resources, their founders appear to allocate enough resources to keep the risk of closure small in the first years after opening.
+# FIXME endowment definition
+The increase in the first years is likely due to what has been called "initial resource endowments" in organizational research [[cite:&Carroll_Khessina_2019_demography;&Hannan_1998_mortality]] (not to be confused with the practice of a particular endowment for e.g. a museum REF, i.e. a stock of money, often invested in stocks, whose capital gains are used for operations).
+# 
+As the establishment of a museum requires considerable resources, their founders appear to allocate enough resources to keep the risk of closure small in the first years after opening.
 #
 Given that founders are likely aware that their endeavor is unlikely to generate a profit, they are not vulnerable to the liability of newness [[parencite:&Stinchcombe_1965_structure]].
 #
-The relative stability of the hazard rate after ten years has no correspondence in classical theories on age dependence:
-#
-While an increase in mortality as observed here is predicted by the idea of "liability of adolescence" [[parencite:&Carroll_Khessina_2019_demography]], this framework also predicts a decline in mortality after a peak due to becoming established.
-# 
-Furthermore, while "liability of obsolescence" and "liability of senescence" (ibid.) predict higher mortality for older organizations due to mismatch with the environment and inertia (inflexible internal routines), it seems questionable whether museums would have reached obsolescence or senescence already after ten years.
-#
-Furthermore, the applicability of obsolescence and senescence might be limited for non-profit organizations.
+
+*** Calendar Year hazard
+:PROPERTIES:
+:CREATED:  [2024-08-28 wo 15:14]
+:ID:       3a7b6903-0a1e-44b9-98e7-f89535b6fd6e
+:END:
 
 
-Overall the entire life span, the average hazard rate is {{{meanhaz_upto_100}}}, which allows comparison to other studies of NPO closure.
-# 
-While I did not find a systematic literature review or meta-analysis, a number of individual studies had investigated similar populations based on IRS data (see table \ref{tbl:litreview}) 
+Overall the entire life span, the average hazard rate is {{{meanhaz_upto_100}}} {{{yearhaz_all}}}, which allows comparison to other studies of NPO closure.
+#
+
+
+
+While I did not find a systematic literature review or meta-analysis, a number of individual studies had investigated similar populations based on IRS data (see table \ref{tbl:litreview})[fn::IRS data is not without limitations, such as only being required from larger organizations, misreporting, and the difficulty of inferring closing from non-filing. Nevertheless, it constitutes the most fine-grained data source to investigate non-profit survival].
+#
+None of these focus specifically on museums ([[textcite:&Hager_2001_vulnerability]] focuses on Art NPOs, [[textcite:&Bowen_1994_charitable]] and [[cite:&Gordon_etal_2013_insolvency]] on non-profits generally), but report survival estimates by organizational form, including museums.
+#
+[[textcite:&Bowen_1994_charitable]] reports average annual exit rates for the 1981-1991 time period of 1.1% (p.103)
+#
+[[cite:&Bowen_1994_charitable]] presumably base their sample on all active 501(c)(3) organizations (rather than only institutions with revenues exceeding 25,000 USD).
+#
+[[textcite:&Gordon_etal_2013_insolvency]] observes 35 closures over the years of 2000-2003 with 5,167 "firm-years" (p.368), resulting in an annual "average insolvency rate" of 0.68% (p.377).
+#
+Some of this difference may be explained by higher shares of smaller organizations in [[textcite:&Bowen_1994_charitable]], where NPOs of any size are included, whereas [[textcite:&Gordon_etal_2013_insolvency]] excluded NPOs wiht operational revenues below 150,000 USD by, as smaller non-profits are at higher risk of closing [[parencite:&Harrison_Laincz_2008_nonprofit;&Helmig_Ingerfurth_Pinz_2013_nonprofit]].
+#
+Focusing directly on Art museums, rather than museumm generally, [[textcite:&Hager_2001_vulnerability]] observes 42 closures over a period of 4 years from a starting populaton of 448 (p.383).
+#
+As his way of delineating the population (having "filed an annual Form 990 tax return with the IRS for the 1990, 1991, or 1992 tax year", p.380) does not rule out that some closings took place in 1991 or 1992, attributing some closings to these years is likely appropriate, and roughly equivalent to assuming an observation period of five (rather than four) years, which results (assuming a constant hazard) in an average closing rate of $1-\sqrt[5]{406/448}$ = 1.9%.
+
+
+
+So far it is hard to tell why art museums appear to have higher closing rates than museums generally.
+#
+According to [[textcite:&IMLS_2008_funding]], art museums have above-average reliance on earned income (46.1% compared to 43.7% on average, p.26), and [[textcite:&Bowen_1994_charitable]] argue that a higher reliance on income is associated with exit rates (p.102), but it is questionable whether such an a small difference in percent earned can explain a 1.7-2.7 higher closing risk.
+#
+Similarly, while art museums do not have the largest coffers (in particular museums of natural history and science are substantially larger [[cite:&IMLS_2008_funding;&Bowen_1994_charitable]]), art museums have substantially higher incomes than the history museums (which are more frequent), historical societies and botanical gardens [[parencite:&IMLS_2008_funding]] as well as "other museums" with more specialized and/or local focuses parencite:Bowen_1994_charitable.
+
+
+
+
+
+
+
+#
+Neither focuses on age-based hazard rate, but as the average number of exits in a calendar year.
+
 
 #+caption: Hazard rates in studies of museums and art NPOs
 #+label: tbl:litreview
-|-----------------------------------+--------------+------------------+
-| study                             | population   | avg. hazard rate |
-|-----------------------------------+--------------+------------------+
-| [[cite:&Hager_2001_vulnerability]]    | Art Museums  |             2.4% |
-| [[cite:&Gordon_etal_2013_insolvency]] | Museums      |             0.7% |
-| [[cite:&Bowen_1994_charitable]]       | Museums      |             1.1% |
-|-----------------------------------+--------------+------------------+
-| cite:&Hager_2001_vulnerability    | all Art NPOs |             2.8% |
-| cite:&Gordon_etal_2013_insolvency | all Art NPOs |            2.08% |
-|-----------------------------------+--------------+------------------+
+|-----------------------------------+--------------+-------------+-----------------------+-------------|
+| study                             | population   | measurement | calculation           | time period |
+|-----------------------------------+--------------+-------------+-----------------------+-------------|
+| [[cite:&Hager_2001_vulnerability]]    | Art Museums  |        2.4% |                       |   1994-1997 |
+| [[cite:&Gordon_etal_2013_insolvency]] | Museums      |        0.7% | Closings/museum years |   2000-2003 |
+| [[cite:&Bowen_1994_charitable]]       | Museums      |        1.1% |                       |             |
+|-----------------------------------+--------------+-------------+-----------------------+-------------|
+| cite:&Hager_2001_vulnerability    | all Art NPOs |        2.8% |                       |             |
+| cite:&Gordon_etal_2013_insolvency | all Art NPOs |       2.08% |                       |             |
+|-----------------------------------+--------------+-------------+-----------------------+-------------|
 
 # this is kinda the main comparison...
-[[textcite:&Hager_2001_vulnerability]] and [[textcite:&Gordon_etal_2013_insolvency]] both study NPOs more generally, but report survival estimates by organizational form.
 #
-# At the moment it is not clear which factors account for their hazard rates to differ substantially, but it might be due to selection criteria.
+{{{yearhaz_all}}}
+
+
+
+#
+# At the moment it is not clear which factors account for their hazard rates to differ substantially, but it might be due to selection criteria
 #
 Both these studies also report substantial variation in hazard rates between organizational forms.
 #
