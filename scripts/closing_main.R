@@ -46,10 +46,30 @@ gd_nbrs <- function() {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     
-    dt_descs <-
+    ## descripti nbrs
+    dt_descs <- list(
+        list(nbr_name = "pmdb_n_all",
+             nbr_fmt = dt_pmdb[, .N]),
+        list(nbr_name = "pmdb_open_atm",
+             nbr_fmt = dt_pmdb[museum_status == "private museum", .N]),
+        list(nbr_name = "pm_n_closed",
+             nbr_fmt = dt_pmyear[, sum(closing)]),
+        list(nbr_name = "n_pmyears",
+             nbr_fmt = dt_pmyear[, .N]),
         list(nbr_name = "pmdb_n_nlpm",
-             nbr_fmt = dt_pmdb[museum_status == "no longer a private museum", .N],
-             grp = "descs") %>% adt
+             nbr_fmt = dt_pmdb[museum_status == "no longer a private museum", .N]),
+        list(nbr_name = "pmdb_n",
+             nbr_fmt = dt_pmdb[museum_status %in% c("private museum", "closed"), .N]),
+        list(nbr_name = "pmx_n",
+             nbr_fmt = dt_pmx[, .N]),
+        list(nbr_name = "pm_open_from2021",
+             nbr_fmt = dt_pmdb[year_opened >= 2021 & museum_status %in% c("private museum", "closed"), .N]),
+        list(nbr_name = "pm_n_used",
+             nbr_fmt = dt_pmyear[, fnunique(ID)])) %>%        
+        rbindlist %>%
+        .[, grp := "descs"]
+
+    
 
     ## calculate average hazard rate numbers, depending on maximum age
 

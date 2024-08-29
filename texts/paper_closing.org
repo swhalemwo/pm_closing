@@ -19,7 +19,15 @@ wd_nbrs(dt_nbrs)
 #+RESULTS:
 :results:
 # descs
+#+MACRO: pmdb_n_all 548
+#+MACRO: pmdb_open_atm 451
+#+MACRO: pm_n_closed 68
+#+MACRO: n_pmyears 6096
 #+MACRO: pmdb_n_nlpm 25
+#+MACRO: pmdb_n 523
+#+MACRO: pmx_n 505
+#+MACRO: pm_open_from2021 15
+#+MACRO: pm_n_used 503
 #+MACRO: mow_prop_name_museum 71
 
 
@@ -392,7 +400,7 @@ Furthermore, inferring the status of the museum via the reputaton of the founder
 
 A newly constructed database, assembled from different sources,  is used to measure the survival of private museums (cf. [[textcite:&Velthuis_etal_2023_boom]] for details).
 #
-Currently, the database includes 547 museums (of which 446 are currently open, the remainder having closed or transformed into other organizational forms).
+Currently, the database includes {{{pmdb_n_all}}} museums (of which {{{pmdb_open_atm}}} are currently open, the remainder having closed or transformed into other organizational forms).
 #
 Using this database, in particular year of opening and, if available, closing, it is possible to reconstruct the life course of the each institution with museum-year as the unit of analysis.
 #
@@ -540,9 +548,15 @@ Secondly, we use Cox proportional hazard models which estimate the relationship 
 
 #+INCLUDE: "../tables/t_sumstats_wcpF.tex" export latex
 
-In total, 479 private museums are included in the database, 53 of them have closed.
+In total, {{{pmdb_n}}} private museums are included in the dataset which are either open or have closed[fn:: This does not include {{{pmdb_n_nlpm}}} institutions which were private museums at some point and have since been transformed into other organizational forms; these cases are discussed in the limitations.].
 #
-6903 museum-years are observed; table {{{reftbl_t_sumstats}}} shows summary statistics for all variables.
+A small number of museums are excluded:
+# 
+Three museums for which the closing date could not be found, {{{pm_open_from2021}}} which opened in 2021 and later (as survival analyses requires positive survival times), as well as two which closed before 2000 as they fall outside the period under investigation.
+#
+This leaves {{{pm_n_used}}} private museums at risk, of which {{{pm_n_closed}}} have closed.
+#
+{{{n_pmyears}}} museum-years are observed; table {{{reftbl_t_sumstats}}} shows summary statistics for all variables.
 
 *** Hazard rate and Age Dependence 
 
