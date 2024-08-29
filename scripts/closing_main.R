@@ -210,15 +210,11 @@ l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
 
 l_mdlnames_coxph <- list("r_pop4")
 
-
-
-
 ## "r_smol")#, "r_pop5", "r_pop42")#  , ",r_pop4_wyr", "r_pop4_wcrises")
 ## l_mdlnames_coxph <- c("r_pop4", paste0("r_wsize", 3:1))
 ## c("r_more", paste0("r_pop", c(1, 3:6)))
 ## "r_woaf", "r_waf_year", "r_waf_roll", "r_waf_roll2")
 ## "r_waf_cy", "r_waf_proplog", "r_waf_prop", "r_waf_year_sqrd") 
-
 
 
 ## compare whether proxcnt/popm_circle10 patterns are stable across data ranges
@@ -229,12 +225,6 @@ l_mdlnames_timeslice <- list("r_pop4", "r_2005", "r_2010", "r_2015")
 
 ## check whether patterns depend on itme configuration (time period, year_opened, both)
 l_mdlnames_timecfg <- list("r_pop4", "r_pop4_wyo", "r_pop4_wtp", "r_pop4_wyotp")
-
-
-
-## screenreg2(list(l_mdls$r_pop4)) # just smoe display
-
-## screenreg2(list(l_mdls$r_west_cpct, l_mdls$r_west_year, l_mdls$r_west_year2), digits = 4)
 
 
 ## write numbers
