@@ -700,6 +700,13 @@ Neither gender nor inclusion of founder name is significantly associated with mo
 While generally organizations whose name include the name of their founder might be more centered around the founder, and hence display higher inertia, making them less able to adapt to changing environments, these results indicate that it does not seem to be case for private museums.
 
 
+
+**** Organizational transformation
+
+The death of the founder is not associated with a significant difference in private museum closure, i.e. museums are not significantly more likely to close after their founder has died.
+#
+This possibly indicates that private museums might be less dependent on the mood of a single person (or couple), and have in fact become institutionalized to an extent that heirs of founders feel as motivated to continue the original founders' efforts as these founders themselves.
+
 **** Identity Variables
 
 Museums which include the term "museum" in their name are the least likely to close, while those with the term "foundation" or "collection" have higher closure rates (but not significantly higher).
@@ -727,11 +734,6 @@ Museums whose founders are not included in the ARTnews collector ranking (refere
 #
 # While the order of the categories does not fully correspond to the expected order, according to which museums whose collectors are not included would be more likely to close than collectors who are, it nevertheless provides some evidence that status matters; as in particular the loss of status appears to be substantially associated with museum closure.
 
-**** Organizational transformation
-
-The death of the founder is not associated with a significant difference in private museum closure, i.e. museums are not significantly more likely to close after their founder has died.
-#
-This possibly indicates that private museums might be less dependent on the mood of a single person (or couple), and have in fact become institutionalized to an extent that heirs of founders feel as motivated to continue the original founders' efforts as these founders themselves.
 
 **** Competition
 {{{ynkplt_p_pred_popprxcnt}}}
