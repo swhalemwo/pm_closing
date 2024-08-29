@@ -563,13 +563,81 @@ Secondly, we use Cox proportional hazard models which estimate the relationship 
 
 In total, {{{pmdb_n}}} private museums are included in the dataset which are either open or have closed[fn:: This does not include {{{pmdb_n_nlpm}}} institutions which were private museums at some point and have since been transformed into other organizational forms; these cases are discussed in the limitations.].
 #
-A small number of museums are excluded:
-# 
-Three museums for which the closing date could not be found, {{{pm_open_from2021}}} which opened in 2021 and later (as survival analyses requires positive survival times), as well as two which closed before 2000 as they fall outside the period under investigation.
+A small number of museums are excluded, in particular three museums for which the closing date could not be found, {{{pm_open_from2021}}} museums which opened in 2021 and later (as survival analyses requires positive survival times), as well as two which closed before 2000 as they fall outside the period under investigation.
 #
 This leaves {{{pm_n_used}}} private museums at risk, of which {{{pm_n_closed}}} have closed.
 #
 {{{n_pmyears}}} museum-years are observed; table {{{reftbl_t_sumstats}}} shows summary statistics for all variables.
+
+
+*** Calendar Year hazard
+:PROPERTIES:
+:CREATED:  [2024-08-28 wo 15:14]
+:ID:       3a7b6903-0a1e-44b9-98e7-f89535b6fd6e
+:END:
+
+{{{ynkplt_p_hazard_time}}}
+
+While typically in survival analysis closing risk is seen as a function of age, previous studies have not done so, instead focusing on average yearly closing rates.
+#
+To ensure comparability with these, I first analyze closing rates the same, and discuss age-related closing rate below.
+#
+Summary yearly closing results in an average closing rate of {{{yearhaz_all}}}; i.e. on average each year {{{yearhaz_all}}} of the private museum population closes (weighing the yearly mortality rate by number of museums at risk results in an estimate of {{{yearhaz_allw}}}).
+#
+It is worth pointing out however that closing rates appear to vary substantially over time (figure {{{refplt_p_hazard_time}}}); with an average closing rate of {{{yearhaz_upto2010}}} from 2000 to 2010 (with only 4 closures taking place in that time period), and a rate of {{{yearhaz_from2010}}} from 2010 onwards.
+
+
+
+
+
+While I did not find a systematic literature review or meta-analysis, a number of individual studies had investigated similar populations based on IRS data (see table \ref{tbl:litreview})[fn::IRS data is not without limitations, such as only being required from larger organizations, misreporting, and the difficulty of inferring closing from non-filing. Nevertheless, it constitutes the most fine-grained data source to investigate non-profit survival].
+#
+None of these focus specifically on art museums ([[textcite:&Hager_2001_vulnerability]] focuses on Art NPOs, [[textcite:&Bowen_1994_charitable]] and [[cite:&Gordon_etal_2013_insolvency]] on NPOs generally), but report survival estimates by organizational form, including museums.
+#
+[[textcite:&Bowen_1994_charitable]] reports average annual exit rates for all 501(c)(3) museums in the 1981-1991 time period of 1.1% (p.103)
+#
+# (rather than only institutions with revenues exceeding 25,000 USD).
+#
+[[textcite:&Gordon_etal_2013_insolvency]] observes 35 closures over the years of 2000-2003 with 5,167 "firm-years" (p.368), resulting in an annual "average insolvency rate" of 0.68% (p.377).
+#
+Some of this difference may be explained by higher shares of smaller organizations in [[textcite:&Bowen_1994_charitable]], where NPOs of any size are included, whereas [[textcite:&Gordon_etal_2013_insolvency]] excluded NPOs with operational revenues below 150,000 USD by, as smaller non-profits are at higher risk of closing [[parencite:&Harrison_Laincz_2008_nonprofit;&Helmig_Ingerfurth_Pinz_2013_nonprofit]].
+#
+Focusing directly on Art museums, rather than museum generally, [[textcite:&Hager_2001_vulnerability]] observes 42 closures over a period of 4 years (1994-1997) from a starting populaton of 448 (p.383).
+#
+As his way of delineating the population (having "filed an annual Form 990 tax return with the IRS for the 1990, 1991, or 1992 tax year", p.380) does not rule out that some closings took place in 1991, 1992 or 1993[fn::In particular it is unclear why 1993 is not treated as belonging to the observation period], attributing some closings to these years is likely appropriate, and presumably roughly equivalent to assuming an observation period of five (rather than four) years, which corresponds to an average yearly closing rate of $1-\sqrt[5]{406/448}$ = 1.9%[fn::So far it is hard to tell why art museums appear to have higher closing rates than museums generally.
+#
+According to [[textcite:&IMLS_2008_funding]], art museums have above-average reliance on earned income (46.1% compared to 43.7% on average, p.26), and [[textcite:&Bowen_1994_charitable]] argue that a higher reliance on income is associated with exit rates (p.102), but it is questionable whether such an a small difference in percent earned can explain a 1.7-2.7 times higher closing risk.
+#
+Similarly, while art museums do not have the largest coffers (in particular museums of natural history and science are substantially larger [[cite:&IMLS_2008_funding;&Bowen_1994_charitable]]), art museums have substantially higher incomes than the history museums (which are more frequent), historical societies and botanical gardens [[parencite:&IMLS_2008_funding]] as well as "other museums" with more specialized and/or local focuses parencite:Bowen_1994_charitable.
+#
+Especially the larger number of history museums, and the more restrictive inclusion by [[textcite:&Hager_2001_vulnerability]] in comparison to [[textcite:&Bowen_1994_charitable]] make the higher mortality rate for art museums than museums generally puzzling.] 
+
+
+
+
+
+#+caption: Hazard rates in studies of museums and art NPOs
+#+label: tbl:litreview
+|-----------------------------------+---------------------+-------------------------|
+| Study                             | Population          | Average Yearly Closings |
+|-----------------------------------+---------------------+-------------------------|
+| [[cite:&Hager_2001_vulnerability]]    | Art Museums         | 1.9%                    |
+| [[cite:&Gordon_etal_2013_insolvency]] | Museums             | 0.7%                    |
+| [[cite:&Bowen_1994_charitable]]       | Museums             | 1.1%                    |
+| current study                     | Private Art Museums | {{{yearhaz_all}}} (overall)         |
+|                                   |                     | {{{yearhaz_from2010}}} (2010-2021)       |
+|                                   |                     | {{{yearhaz_allw}}} (weighted)        |
+|-----------------------------------+---------------------+-------------------------|
+
+
+Results are summarized in table \ref{tbl:litreview}.
+#
+Average annual closing rates fall within closing rates found in previous studies, and even the 2010-2021 time periods with higher risk is below the general estimate for art museums by [[textcite:&Hager_2001_vulnerability]].
+#
+There is thus overall little support to the idea that private museums are exposed to higher closing risk than museums, thus refuting Hypothesis 1.
+
+
+
 
 *** Hazard rate and Age Dependence 
 
@@ -578,115 +646,28 @@ This leaves {{{pm_n_used}}} private museums at risk, of which {{{pm_n_closed}}} 
 {{{ynkplt_p_surv}}}
 
 
+Next to average yearly closing rates, private museum closing can also be investigated over its age (unfortunately, no comparison to previous studies can be done as age-dependent mortality estimates are not reported).
+# 
 Figure {{{refplt_p_hazard}}} shows the hazard rate over time, figure {{{refplt_p_surv}}} the corresponding survival probability.
 #
 The hazard rate increases strongly from {{{meanhaz_upto_2}}} in the first two years, to {{{meanhaz_upto_5}}} in the first 5 years, to {{{meanhaz_8to30}}} at year 8, around which it then fluctuates, leading to an average hazard of {{{meanhaz_upto_30}}} for the first 30 years. [fn::While it is possible to calculate the average hazard over longer periods (e.g. the overall average hazard rate is {{{meanhaz_upto_100}}}), for ages above 30 only few observations are available, which make these predictions rather uncertain.]
-#
+
+
 # FIXME endowment definition
 The increase in the first years is likely due to what has been called "initial resource endowments" in organizational research [[cite:&Carroll_Khessina_2019_demography;&Hannan_1998_mortality]] (not to be confused with the practice of a particular endowment for e.g. a museum REF, i.e. a stock of money, often invested in stocks, whose capital gains are used for operations).
 # 
 As the establishment of a museum requires considerable resources, their founders appear to allocate enough resources to keep the risk of closure small in the first years after opening.
 #
 Given that founders are likely aware that their endeavor is unlikely to generate a profit, they are not vulnerable to the liability of newness [[parencite:&Stinchcombe_1965_structure]].
+
+
+Such analysis can be used to estimate the average life expectancy of a private museum.
 #
-
-*** Calendar Year hazard
-:PROPERTIES:
-:CREATED:  [2024-08-28 wo 15:14]
-:ID:       3a7b6903-0a1e-44b9-98e7-f89535b6fd6e
-:END:
-
-
-Overall the entire life span, the average hazard rate is {{{meanhaz_upto_100}}} {{{yearhaz_all}}}, which allows comparison to other studies of NPO closure.
+While only a fraction of all opened museums has closed ({{{pm_n_closed}}} out of {{{pm_n_used}}}), under the assumption of average closing risk of {{{meanhaz_upto_8}}} in the first 8 years and {{{meanhaz_8to30}}} onwards, median life expectancy can be estimated as approximately {{{median_life_expectancy}}} years.
 #
-
-
-
-While I did not find a systematic literature review or meta-analysis, a number of individual studies had investigated similar populations based on IRS data (see table \ref{tbl:litreview})[fn::IRS data is not without limitations, such as only being required from larger organizations, misreporting, and the difficulty of inferring closing from non-filing. Nevertheless, it constitutes the most fine-grained data source to investigate non-profit survival].
+On first sight such findings seems to differ from a previous quantitative analysis of the database, which argued that "the median number of years that private museums were open before they closed is 10 years" [[parencite:&Velthuis_Gera_2024_fragility p.5]], as previously only closed museums were considered.
 #
-None of these focus specifically on museums ([[textcite:&Hager_2001_vulnerability]] focuses on Art NPOs, [[textcite:&Bowen_1994_charitable]] and [[cite:&Gordon_etal_2013_insolvency]] on non-profits generally), but report survival estimates by organizational form, including museums.
-#
-[[textcite:&Bowen_1994_charitable]] reports average annual exit rates for the 1981-1991 time period of 1.1% (p.103)
-#
-[[cite:&Bowen_1994_charitable]] presumably base their sample on all active 501(c)(3) organizations (rather than only institutions with revenues exceeding 25,000 USD).
-#
-[[textcite:&Gordon_etal_2013_insolvency]] observes 35 closures over the years of 2000-2003 with 5,167 "firm-years" (p.368), resulting in an annual "average insolvency rate" of 0.68% (p.377).
-#
-Some of this difference may be explained by higher shares of smaller organizations in [[textcite:&Bowen_1994_charitable]], where NPOs of any size are included, whereas [[textcite:&Gordon_etal_2013_insolvency]] excluded NPOs wiht operational revenues below 150,000 USD by, as smaller non-profits are at higher risk of closing [[parencite:&Harrison_Laincz_2008_nonprofit;&Helmig_Ingerfurth_Pinz_2013_nonprofit]].
-#
-Focusing directly on Art museums, rather than museumm generally, [[textcite:&Hager_2001_vulnerability]] observes 42 closures over a period of 4 years from a starting populaton of 448 (p.383).
-#
-As his way of delineating the population (having "filed an annual Form 990 tax return with the IRS for the 1990, 1991, or 1992 tax year", p.380) does not rule out that some closings took place in 1991 or 1992, attributing some closings to these years is likely appropriate, and roughly equivalent to assuming an observation period of five (rather than four) years, which results (assuming a constant hazard) in an average closing rate of $1-\sqrt[5]{406/448}$ = 1.9%.
-
-
-
-So far it is hard to tell why art museums appear to have higher closing rates than museums generally.
-#
-According to [[textcite:&IMLS_2008_funding]], art museums have above-average reliance on earned income (46.1% compared to 43.7% on average, p.26), and [[textcite:&Bowen_1994_charitable]] argue that a higher reliance on income is associated with exit rates (p.102), but it is questionable whether such an a small difference in percent earned can explain a 1.7-2.7 higher closing risk.
-#
-Similarly, while art museums do not have the largest coffers (in particular museums of natural history and science are substantially larger [[cite:&IMLS_2008_funding;&Bowen_1994_charitable]]), art museums have substantially higher incomes than the history museums (which are more frequent), historical societies and botanical gardens [[parencite:&IMLS_2008_funding]] as well as "other museums" with more specialized and/or local focuses parencite:Bowen_1994_charitable.
-
-
-
-
-
-
-
-#
-Neither focuses on age-based hazard rate, but as the average number of exits in a calendar year.
-
-
-#+caption: Hazard rates in studies of museums and art NPOs
-#+label: tbl:litreview
-|-----------------------------------+--------------+-------------+-----------------------+-------------|
-| study                             | population   | measurement | calculation           | time period |
-|-----------------------------------+--------------+-------------+-----------------------+-------------|
-| [[cite:&Hager_2001_vulnerability]]    | Art Museums  |        2.4% |                       |   1994-1997 |
-| [[cite:&Gordon_etal_2013_insolvency]] | Museums      |        0.7% | Closings/museum years |   2000-2003 |
-| [[cite:&Bowen_1994_charitable]]       | Museums      |        1.1% |                       |             |
-|-----------------------------------+--------------+-------------+-----------------------+-------------|
-| cite:&Hager_2001_vulnerability    | all Art NPOs |        2.8% |                       |             |
-| cite:&Gordon_etal_2013_insolvency | all Art NPOs |       2.08% |                       |             |
-|-----------------------------------+--------------+-------------+-----------------------+-------------|
-
-# this is kinda the main comparison...
-#
-{{{yearhaz_all}}}
-
-
-
-#
-# At the moment it is not clear which factors account for their hazard rates to differ substantially, but it might be due to selection criteria
-#
-Both these studies also report substantial variation in hazard rates between organizational forms.
-#
-While these comparisons indicate that private museums have dissolution rates lower or similar to museums and non-profit organizations generally, more research is needed to establish the comparability of these hazard rates.
-
-
-Comparison to other forms of nonprofit organizations reported by [[parencite:&Gordon_etal_2013_insolvency]]
-places private museum at a risk similar to that of animal shelters and zoos (0.7%), botanical & environmental centers (0.8%), colleges and universities (0.8%), food and agricultural-oriented human service organizations (0.8%) and  student and educational services (0.8%).
-#
-While the diversity of non-profit organizations makes comparisons to its entirety difficult, it is still worthwhile to consider that the average hazard of private museums {{{meanhaz_upto_100}}} is around half that of that NPOs generally (1.58%, see table \ref{tbl:litreview2} for studies on wider nonprofit populations).
-#
-It is furthermore substantially lower than that of youth centers (1.4%), children-focused human services (2.4%), K12 schools (1.8%), mental health organizations (2.4%) or performing arts organizations (3.7%).
-#
-In fact, lower dissolution rates are only reported for historical societies (0.5%) and libraries (0.2%).
-
-
-
-#+caption: Hazard rates in studies of NPOs
-#+label: tbl:litreview2
-|------------------------------------------------+------------------+------------------+------------------------|
-| study                                          | population       | avg. hazard rate | data source            |
-|------------------------------------------------+------------------+------------------+------------------------|
-| cite:&Gordon_etal_2013_insolvency              | NPOs             |            1.58% | IRS                    |
-| [[cite:&Hager_Galaskiewicz_Larson_2007_liability]] | NPOs             |            1.25% | own data               |
-| [[cite:&Clifford_2018_reinforcing]]                | Charities        |            2%-5% | Reg. of Charities (UK) |
-| [[cite:&Mayer_2022_simmer]]                        | public charities |            0.17% | IRS                    |
-|------------------------------------------------+------------------+------------------+------------------------|
-
-
-# The Kaplan-Meier survival probability is around 75% after thirty years (figure {{{refplt_p_surv}}}).
+Focusing on the entire population of private museums instead, this analysis provides additional insights into the expected longevity of private art museums.
 
 
 
@@ -705,7 +686,8 @@ In fact, lower dissolution rates are only reported for historical societies (0.5
 
 #+INCLUDE: "../tables/t_reg_coxph_wcpF.tex" export latex
 
-Table {{{reftbl_t_reg_coxph}}} shows the results of Cox proportional hazard regression model.
+#
+To investigate which covariates are associated with increased risk of closing, table {{{reftbl_t_reg_coxph}}} shows the results of Cox proportional hazard regression model.
 #
 Coefficients are interpeted as log hazard ratios, i.e. as multipliers of the baseline hazard rate.
 
