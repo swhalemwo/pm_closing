@@ -223,7 +223,7 @@ Given that operating at "the margin of financial sustainability" is the "ordinar
 #
 In other studies, "insufficient funding, high maintenance costs and lack of strong government support" [[parencite:&Zennaro_2017_shanghai p.7]]. or a "shortage of fundings and interruptions in cash [[parencite:&Song_2008_private p.45]]  were central reasons that forced private museums to close.
 #
-In a systematic review of closing reasons given in newspapers, magazines, social media accounts and personal exchange, [[textcite:&Velthuis_Gera_2024_fragility]] find financial issues as the most commonly mentioned reasons for private museum closing.
+In a systematic review of closing reasons given in newspapers, magazines, social media accounts and personal exchanges, [[textcite:&Velthuis_Gera_2024_fragility]] find financial issues as the most commonly mentioned reasons for private museum closing.
 #
 Scholars have traced the closure of private museums to numerous types of declining financial situations, such as bankruptcies [[parencite:&Velthuis_Gera_2024_fragility;&Liu_2019_identities;&DeNigris_2018_museums]], costly legal battles [[parencite:&Velthuis_Gera_2024_fragility]], stock devaluations [[parencite:&Walker_2019_collector]], failing auction sales [[parencite:&Bechtler_Imhof_2018_future]] or lack of government support [[parencite:&Zennaro_2017_shanghai;&Velthuis_Gera_2024_fragility]].
 
@@ -280,11 +280,15 @@ So far a third comparison has been absent, namely that to other non-profit museu
 As these share with private museums a common organizational form of the non-profit organization or foundation  and a similarly harsh environment, yet and differ primarily in regards to their diversification, i.e. their reliance on a single founder as central authority and income stream, they provide a effective way of investigating the effect of diversification on museum survival. 
 
 
-
 *Hypothesis 1*: Private museums have higher closing chance than non-profit museums generally.
 
 *Hypothesis 2*: A founder's death increases the risk of closing.
 *Hypothesis 2*: Reliance on the founder is the mechanism through which PMs are exposed to higher closing risk, thus founder-related variables can be used to predict closing. 
+
+*Hypothesis 2*: Private museums with higher reliance on the founder are more likely to close
+- *Hypothesis 2a*: Private museums are more likely to close after the death of the founder
+- *Hypothesis 2b*: Private museums are more likely to clos after their founder is excluded from a prestigious ranking.
+- *Hypothesis 2c*: Private museums which carry their founder's name in the museum name are more likely to close.
 
 
 
@@ -510,6 +514,11 @@ To be able to estimate both competition and demand/audience/population separatel
 A number of control variables are used: 
 # 
 On the level of the founder, gender constitutes a time-invariant variable; with possible values being male, female and couple.
+#
+Women constitute a minority of the private museums founders, thus from a typicality perspective [[parencite:&Rosch_1975_family]] museums by female founders would be expected to close more often as female founders would have a greater difficulties in securing resources third parties, presumably primarily governments and corporate sponsors.
+#
+However, women may also be particularly associated with philanthropic initiatives (unlike e.g. corporate activities, [[cite:&Milam_2013_artgirls]]) to such an extent that devaluation of female initiatives may not necessarily be present.
+
 #
 # Organizational transformation, such as change of authority has been to increase chances of closure both generally [[parencite:&Carroll_Khessina_2019_demography]] and in the case of private museums specifically ([[cite:&Walker_2019_collector p.234]]: "seldom do heirs share a similar passion or wish to take on the financial burden of maintaining private museum indefinitely").
 # Therefore, a measure of founder death is constructed as a time-varying covariate, and is set to 1 for museum-years after the death of the founder. 
