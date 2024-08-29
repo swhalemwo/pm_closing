@@ -1149,14 +1149,14 @@ gp_hazard_time <- function(dt_pmyear) {
     ## get data
     dt_vis <- dt_pmyear %>% copy %>%
         .[, .(mean_closing = mean(closing), .N, nbr_closed = sum(closing)), year] %>%
-        .[, str_annotate := sprintf("%s\n%s", nbr_closed, N)] 
+        .[, str_annotate := sprintf("closed: %s\nopen: %s", nbr_closed, N)] 
 
         ## .[, year2 := as.integer(floor(year/2)*2)] %>%
     ## .[, .(mean_closing = mean(mean_closing)), year2] %>%
     dt_vis %>% 
         ggplot(aes(x=year, y=mean_closing)) +
-        geom_line() +
-        geom_point() +
+        geom_step() +
+        ## geom_point() +
         geom_label_repel(dt_vis[year %in% c(2006, 2011, 2015, 2018, 2020, 2021)],
                         mapping = aes(label = str_annotate)) +
         labs(y = "hazard")
