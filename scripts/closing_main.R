@@ -62,6 +62,8 @@ gd_nbrs <- function() {
              nbr_fmt = dt_pmdb[museum_status %in% c("private museum", "closed"), .N]),
         list(nbr_name = "pmx_n",
              nbr_fmt = dt_pmx[, .N]),
+        list(nbr_name = "n_founder_dead",
+             nbr_fmt = dt_pmyear[founder_dead == "recently_dead", fnunique(ID)]),
         list(nbr_name = "pm_open_from2021",
              nbr_fmt = dt_pmdb[year_opened >= 2021 & museum_status %in% c("private museum", "closed"), .N]),
         list(nbr_name = "pm_n_used",
@@ -76,7 +78,7 @@ gd_nbrs <- function() {
     
     dt_pehaz <- gd_pehaz(dt_pmcpct, cutwidth = 2)[src == "w1"]
 
-    dt_meanhaz <- map(c(2, 4, 5, 10, 20, 30, 40, 100),
+    dt_meanhaz <- map(c(2, 4, 5, 8, 10, 20, 30, 40, 100),
                       ~list(upper_bound = .x, mean_haz = dt_pehaz[age < .x, mean(est)])) %>%
         rbindlist %>%
         .[, .(nbr_name = sprintf("meanhaz_upto_%s", upper_bound),
@@ -90,16 +92,25 @@ gd_nbrs <- function() {
               nbr_fmt = sprintf("%s%%", format(nbr*100, digits = 2, nsmall = 2)),
               grp = "meanhaz")]
 
+    ## median life expectancy assuming constant hazard for first 8 and 8 onwards
+    dt_med_life_expect <- data.table(
+        nbr_fmt = log((0.5/(1-dt_pehaz[age < 8, mean(est)])^8),
+                      base = 1-dt_pehaz[age %between% c(8, 30), mean(est)]) %>%
+            round %>% as.character,
+        nbr_name = "median_life_expectancy",
+        grp = "meanhaz")
+
     ## hazards by year
-    dt_yearhaz <- dt_pmyear[, .(rate_closing = sum(closing)/.N), year]
+    dt_yearhaz <- dt_pmyear[, .(.N, rate_closing = sum(closing)/.N), year]
     
     ## what is good selection of slices?
     ## setting slice lengths, then generating for each slice length all the periods?
     ## but is mess wiht last period (2020+) in most cases
     ## just do some manually
 
-    dt_nbr_yearhaz <- data.table(year_id = c("all", "upto2010", "from2010"),
+    dt_nbr_yearhaz <- data.table(year_id = c("all","allw", "upto2010", "from2010"),
                                  nbr = c(dt_yearhaz[, mean(rate_closing)],
+                                         dt_yearhaz[, weighted.mean(rate_closing, N)],
                                          dt_yearhaz[year < 2010, mean(rate_closing)], 
                                          dt_yearhaz[year >= 2010, mean(rate_closing)])) %>%
         .[, .(nbr_name = paste0("yearhaz_", year_id),
@@ -118,7 +129,8 @@ gd_nbrs <- function() {
     ## dt_ynktbl <- gc_ynktbl()
     dt_reftbl <- gc_reftbl()
 
-    dt_nbrs_cbnd <- Reduce(rbind, list(dt_descs, dt_meanhaz, dt_meanhaz_later, dt_nbr_yearhaz,
+    dt_nbrs_cbnd <- Reduce(rbind, list(dt_descs, dt_meanhaz, dt_meanhaz_later, dt_med_life_expect,
+                                       dt_nbr_yearhaz,
                                        dt_ynkplt, dt_refplt, dt_reftbl,
                                        dt_mow_prop_museum))
 

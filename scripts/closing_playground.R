@@ -277,5 +277,23 @@ data.table(
     ## .[year == 1990, total := 2481] %>%
     ## .[,  cumsum(exits)]
     .[, total := 2484 + 271 - cumsum(exits)]
+
+
+
     
     
+## * liability of newness
+
+dt_pmyear[, .(.N, N_unique = fnunique(ID), N_closed = sum(closing)), floor(year_opened/5)*5] %>%
+    .[, prop_closed := N_closed/N_unique] %>%
+    ggplot(aes(x=floor, y=prop_closed)) + geom_col()
+
+## hmm that's not it, that's just general survival (older have had more time to die -> more of them are dead)
+
+## let's do it the other way around: look at 2010-2021 period, see which proportion of those who entered there have died
+
+dt_pmyear[year >= 2015, .(entered = fnunique(ID), closed = sum(closing)), floor(year_opened/10)*10] %>%
+    .[, prop_closed := closed/entered] %>%
+    ggplot(aes(x=floor, y=prop_closed)) + geom_col()
+
+dt_pmyear[year >= 2010 & year_opened %between% c(1990, 1999), fnunique(ID)]

@@ -26,6 +26,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: pmdb_n_nlpm 25
 #+MACRO: pmdb_n 523
 #+MACRO: pmx_n 505
+#+MACRO: n_founder_dead 44
 #+MACRO: pm_open_from2021 15
 #+MACRO: pm_n_used 503
 #+MACRO: mow_prop_name_museum 71
@@ -35,6 +36,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: meanhaz_upto_2 0.10%
 #+MACRO: meanhaz_upto_4 0.49%
 #+MACRO: meanhaz_upto_5 0.69%
+#+MACRO: meanhaz_upto_8 0.73%
 #+MACRO: meanhaz_upto_10 0.89%
 #+MACRO: meanhaz_upto_20 1.09%
 #+MACRO: meanhaz_upto_30 1.16%
@@ -42,10 +44,12 @@ wd_nbrs(dt_nbrs)
 #+MACRO: meanhaz_upto_100 0.90%
 #+MACRO: meanhaz_8onwards 0.92%
 #+MACRO: meanhaz_8to30 1.20%
+#+MACRO: median_life_expectancy 52
 
 
 # yearhaz
 #+MACRO: yearhaz_all 0.84%
+#+MACRO: yearhaz_allw 1.12%
 #+MACRO: yearhaz_upto2010 0.21%
 #+MACRO: yearhaz_from2010 1.36%
 
