@@ -27,6 +27,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: pmdb_n 523
 #+MACRO: pmx_n 505
 #+MACRO: n_founder_dead 44
+#+MACRO: n_pm_close_after_recent_death 3
 #+MACRO: pm_open_from2021 15
 #+MACRO: pm_n_used 503
 #+MACRO: mow_prop_name_museum 71
@@ -701,38 +702,48 @@ Coefficients are interpeted as log hazard ratios, i.e. as multipliers of the bas
 **** Control Variables
 
 #
-Neither gender nor inclusion of founder name is significantly associated with mortality rates.
+Neither gender nor external shocks (the Great Recession and the Covid-19 Pandemic) are associated with higher closing rates.
+
+inclusion of founder name is significantly associated with mortality rates.
 #
 # (TODO: add reference, very speculative!!)
 While generally organizations whose name include the name of their founder might be more centered around the founder, and hence display higher inertia, making them less able to adapt to changing environments, these results indicate that it does not seem to be case for private museums.
 
 
 
-**** Organizational transformation
+**** Founder dependence
+
+#+INCLUDE: "../tables/t_reg_coxph_deathcfg_wcpF.tex" export latex
 
 The death of the founder is not associated with a significant difference in private museum closure, i.e. museums are not significantly more likely to close after their founder has died.
 #
+It is in principle possible to construct an alternative measure of founder death by splitting the time after the death in a short-term and long-term period; the short-term period might then capture the disruption by the founder, whereas the long-term period would only be reached by museums who have successfully acquired alternative funding models and are hence relatively viable.
+#
+However, the choice of choosing a cut-off point between the short- and long-term periods is relatively arbitrary.
+
+
+Table \ref{tbl:t_reg_coxph_deathcfg} shows coefficients of both periods with different cut-off points.
+#
+While the coefficient in the short-term period is consistently higher than both the overall death coefficient and the long-term period coefficients, so far the evidence is inconclusive as only few cases are statistically significant[fn:: P-values are not adjusted for multiple tests].
+#
+Considering the underlying numbers supports this:
+# 
+While {{{n_founder_dead}}} private museums have seen the death of their founders, only {{{n_pm_close_after_recent_death}}} of these have closed in the following 5 years; observing statistical significance in some configurations of founder death time more likely reflect random clustering than an underlying pattern.
+#
+
+*Effect sizes*:
+- death overall
+- short-term death
+stress how few people it is
+
+
+
+#
 This possibly indicates that private museums might be less dependent on the mood of a single person (or couple), and have in fact become institutionalized to an extent that heirs of founders feel as motivated to continue the original founders' efforts as these founders themselves.
 
-**** Identity Variables
-
-Museums which include the term "museum" in their name are the least likely to close, while those with the term "foundation" or "collection" have higher closure rates (but not significantly higher).
-#
-Museums which include neither of these are the most likely to close, and have mortality rates more than three times as high ($e$^1.18 = 3.25, p<0.01) than institutions including the term "museum".
-#
-The usage of unconventional names might reflect adherence to museum standards which makes museums more understandable and familiar to third parties (e.g. audiences, other museums, companies or the government) and thereby facilitates interactions which are beneficial for long-term survival (e.g. attracting visitors, cooperations, sponsorships or subsidies).
-# 
-However, as founders can choose the name of their museum arbitrarily, they might choose a name without reference to organizational forms associated with perpetuity precisely because their intention is not an institution enduring in perpetuity but rather a more temporally bounded project.
 
 
-Museums included in the Museum of the World Database are $e$^-0.88 = 0.41 (p < 0.05) times as likely to close than museums which are not, yet this result might be produced by different mechanisms.
-#
-On the one hand, it might reflect that larger and richer institutions are both more likely to be noticed by the MOW and more likely to survive (MOW inclusion would then be a proxy for resources).
-#
-#
-# (TODO: Because of this I wonder if it even makes even sense to include MOW)
-# Thirdly, the MOW effect might be endogenous: As no longitudinal MOW data is available, museums might be absent in the MOW because they have closed.
-On the other hand, similar to unconventional naming patterns, lack of inclusion in the MOW could be an indicator of deviance from museum standards, which could increase the unfamiliarity of the museum vis-a-vis third parties, reducing the chance of survival-enhancing interactions.
+
 
 
 The reputation of the founder is not statistically related to closure. 

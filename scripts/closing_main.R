@@ -63,7 +63,9 @@ gd_nbrs <- function() {
         list(nbr_name = "pmx_n",
              nbr_fmt = dt_pmx[, .N]),
         list(nbr_name = "n_founder_dead",
-             nbr_fmt = dt_pmyear[founder_dead == "recently_dead", fnunique(ID)]),
+             nbr_fmt = dt_pmyear[founder_dead5 == "recently_dead", fnunique(ID)]),
+        list(nbr_name = "n_pm_close_after_recent_death",
+             nbr_fmt = dt_pmyear[founder_dead5 == "recently_dead" & closing == 1, .N]),
         list(nbr_name = "pm_open_from2021",
              nbr_fmt = dt_pmdb[year_opened >= 2021 & museum_status %in% c("private museum", "closed"), .N]),
         list(nbr_name = "pm_n_used",
@@ -121,7 +123,7 @@ gd_nbrs <- function() {
     
     dt_mow_prop_museum <- gn_mow_prop_museum()
     
-    
+        
     ## plots: yanking (insertion) and in-text referencing
     dt_ynkplt <- gc_ynkplt()
     dt_refplt <- gc_refplt()
@@ -257,6 +259,8 @@ l_mdlnames_timeslice <- list("r_pop4", "r_2005", "r_2010", "r_2015")
 
 ## check whether patterns depend on itme configuration (time period, year_opened, both)
 l_mdlnames_timecfg <- list("r_pop4", "r_pop4_wyo", "r_pop4_wtp", "r_pop4_wyotp")
+
+
 
 
 ## write numbers

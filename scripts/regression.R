@@ -407,7 +407,11 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_lvrs = c_lvrs) {
     #' @param dt_pmtiv dt with time invariant variables
     #' @c_lvrs flags/switches of which datasets to optionally/additionally include
     
+    ## set up founder_dead variable names
+    l_founder_dead_years <- seq(0,11)
+    l_vrbls_founder_dead <- paste0("founder_dead", l_founder_dead_years)
 
+    
     #' generate dt in pm-year format
     dt_pmyear <- dt_pmx[, last_year := fifelse(museum_status == "closed", year_closed, END_YEAR)] %>%
         ## expand to pm_year UoA
@@ -416,20 +420,31 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_lvrs = c_lvrs) {
         ## set closing variable
         .[, closing := fifelse(museum_status == "closed" & year_closed == year, 1, 0)] %>% 
         .[, age := year - year_opened] %>% # set age
-        ## founder death: 1 if year > deathyear, else 0 (before death or not dead at all)
-        ## .[, founder_dead := fifelse(!is.na(deathyear),fifelse(year > deathyear, 1, 0), 0)] %>%
         ## .[, founder_dead := fifelse(!is.na(deathyear),
-        ##                             fifelse(year %between% list(deathyear, deathyear + 1), 1, 0), 0)] %>%
-        .[, founder_dead := fifelse(!is.na(deathyear),
-                                    fifelse(year %between% list(deathyear, deathyear + 2), "recently_dead", 
-                                            fifelse(year > deathyear + 2, "long_dead", "alive")),
-                                    "alive")] %>%
-        .[, founder_dead := factor(founder_dead, levels = c("alive", "recently_dead", "long_dead"))] %>% 
+        ##                             fifelse(year %between% list(deathyear, deathyear + 2), "recently_dead", 
+        ##                                     fifelse(year > deathyear + 2, "long_dead", "alive")),
+        ##                             "alive")] %>%
+        ## .[, founder_dead := factor(founder_dead, levels = c("alive", "recently_dead", "long_dead"))] %>% 
+        .[, paste0("founder_dead", l_founder_dead_years) := # can't just pass vector, need to paste in DT
+                map(l_founder_dead_years, #' map over time specifications
+                    ~fifelse(!is.na(deathyear),
+                             ## when founder just died -> recently dead
+                             fifelse(year %between% list(deathyear, deathyear + .x), "recently_dead",
+                                     ## when year is longer ago -> long dead; else alive
+                                     fifelse(year > deathyear + .x, "long_dead", "alive")),
+                             "alive"))] %>%
+        .[, paste0("founder_dead", l_founder_dead_years) :=
+          lapply(.SD, \(x) factor(x, levels = c("alive", "recently_dead", "long_dead"))),
+          .SDcols = l_vrbls_founder_dead] %>%
+        .[, founder_dead_binary := fifelse(founder_dead0 == "alive", 0, 1)] %>%
         .[, `:=`(tstart = age, tstop = age+1)] %>% # set survival time interval variables
         .[, time_period := as.factor(paste0("tp", 5*(floor(year/5))))] %>%
         .[, covid := fifelse(year %in% c(2020, 2021), 1, 0)] %>%
         .[, recession := fifelse(year %in% c(2008, 2009), 1, 0)]
     
+    ## dt_pmyear[founder_dead1 != "alive" & ID==227, .SD, .SDcols = c("ID", "deathyear", "year", l_vrbls_founder_dead)] %>% print(n=300)
+        
+
 
     ## get country population data
     dt_pop_country <- gd_pop()
@@ -1322,7 +1337,7 @@ gf_coxph_close <- function(vrbls_to_add = NULL, vrbls_to_yeet = NULL) {
                     "pmdens_cry",
                     "I(pmdens_cry^2)", 
                     "slfidfcn",
-                    "founder_dead",
+                    "founder_dead_binary",
                     "muem_fndr_name",
                     "an_inclusion",
                     "proxcnt10",
@@ -1372,7 +1387,7 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         
         ## test model for table testing
         r_less1 = coxph(Surv(tstart, tstop, closing) ~ mow + pmdens_cry + I(pmdens_cry^2), dt_pmyear),
-        r_less2 = coxph(Surv(tstart, tstop, closing)~ founder_dead + mow + slfidfcn + muem_fndr_name, dt_pmyear),
+        r_less2 = coxph(Surv(tstart, tstop, closing)~ founder_dead1 + mow + slfidfcn + muem_fndr_name, dt_pmyear),
 
                 
         r_pop4 = coxph(gf_coxph_close(), dt_pmyear),
@@ -1489,10 +1504,20 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ##                           slfidfcn + founder_dead + muem_fndr_name + an_inclusion + pop + proxcnt10,
         ##                    dt_pmyear)
 
-        
 
-        
     )
+
+    ## add models with different founder death specifications
+    l_founder_dead_years <- seq(0,11)
+    l_vrbls_founder_dead <- paste0("founder_dead", l_founder_dead_years)
+
+    l_mdls <- c(l_mdls,
+                map(l_vrbls_founder_dead,
+                    ~coxph(gf_coxph_close(vrbls_to_add = .x, vrbls_to_yeet = "founder_dead_binary"), dt_pmyear)) %>%
+                setNames(paste0("r_", l_vrbls_founder_dead))
+                )
+
+    
 
     attr(l_mdls, "gnrtdby") <- as.character(match.call()[[1]])
     return(l_mdls)
@@ -2292,3 +2317,58 @@ gt_coxzph <- function(rx) {
         number_cols = c(rep(F,2), rep(T,3)))
 
 }
+
+
+gt_reg_coxph_deathcfg <- function(l_mdls) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+
+    #' founder death robustness checks
+
+    
+    ## select models about death
+    l_mdlnames <- keep(names(l_mdls), ~grepl("r_founder_dead[0-9]+", .x))
+    l_mdls_slct <- l_mdls[l_mdlnames]
+
+    ## put into tidy format
+    l_mdlres <- map2(l_mdls_slct, l_mdlnames, ~gd_reg_coxph(.x, .y, unit_name = "ID"))
+
+    ## combine into one table
+    dt_death_fmtd <-
+
+    map(l_mdlres, ~chuck(.x, "dt_coef")) %>% rbindlist %>%
+        .[grepl("founder_dead", term)] %>% # only focus on death coefs
+        .[, term_short := gsub("founder_dead[0-9]+", "", term)] %>% # yeet numbers from terms (use model instead)
+        .[, cell_fmt := fmt_cell(coef = coef, pvalue = pvalue, se = se, type = "coef-se-stars"), .I] %>% # format
+        dcast(mdl_name ~ term_short, value.var = "cell_fmt") %>% # variables as columns, models as rows
+        ## extract "recent" length, add 1 for more understandable interpretation
+        .[, death_recent_length := as.integer(str_extract(mdl_name, "[0-9]+"))+1L] %>% 
+        .[order(death_recent_length), .(death_recent_length, recently_dead, long_dead)]
+
+    ## construct colum names
+
+    c_colnames <- gc_colnames(names(dt_death_fmtd),
+                              setNames(c("Recent death length", "Recently dead", "Long dead"),
+                                       names(dt_death_fmtd)))
+                                                                                                     
+    c_atr <- list(
+        pos = list(-1),
+        command = c_colnames)
+
+    list(dt_fmtd = dt_death_fmtd,
+         align_cfg = c("l", "r", rep("D{)}{)}{8)3}", 2)),
+         hline_after = c(-1, nrow(dt_death_fmtd)),
+         add_to_row = c_atr,
+         number_cols = c(T, T,T))
+
+}
+         
+                         
+
+
+    
+
+
+
+
+

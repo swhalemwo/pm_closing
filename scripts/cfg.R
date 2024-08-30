@@ -40,6 +40,10 @@ gc_tbls <- function(c_tblargs) {
             l_mdls = quote(l_mdls),
             l_mdlnames = quote(l_mdlnames_timeslice),
             caption = "Cox PH regression results with different time slices"),
+        t_reg_coxph_deathcfg = list(
+            l_mdls = quote(l_mdls),
+            ## l_mdlnames = quote(l_mdlnames_deathcfg),
+            caption = "Cox PH regression results wiht different death configurations"),
         t_reg_coxph_timecfg = list(
             l_mdls = quote(l_mdls),
             l_mdlnames = quote(l_mdlnames_timecfg),
@@ -206,7 +210,8 @@ gc_vvs <- function() {
 
     l_vrbl_lbls <- list( # variable labels
         gender                    = "Founder Gender",
-        founder_dead              = "Founder died",
+        founder_dead1             = "Founder died",
+        founder_dead_binary       = "Founder died",
         slfidfcn                  = "Self- Identification",
         muem_fndr_name            = "Founder name in Museum name",
         mow                       = "MOW inclusion",
@@ -245,7 +250,7 @@ gc_vvs <- function() {
         GLOBAL                    = "Global") # from cox.zph
     
     l_vrblgrps <- list(# variable groups
-        founder  = .c(gender, founder_dead),
+        founder  = .c(gender, founder_dead1, founder_dead_binary),
         museum   = .c(slfidfcn, muem_fndr_name, mow, an_inclusion, PC1, PC2,
                       exhbany, exhbrollany,
                       year_opened,
@@ -262,7 +267,7 @@ gc_vvs <- function() {
     ## specify whether variable is time-varying or not
     vrbls_tiv <- .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6, PC1, PC2, year_opened)
     vrbls_tv <- .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
-                   founder_dead, 
+                   founder_dead1, founder_dead_binary, 
                    an_inclusion, pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10",
                    year, "I(year^2)", time_period, "popm_circle10:I(proxcnt10^2)",
                    exhbany, exhbrollany, 
@@ -273,7 +278,7 @@ gc_vvs <- function() {
 
     ## specify variable type: binary, numeric, categorical
     l_vrbltypes <- list(        
-        bin = .c(muem_fndr_name, mow, west, exhbany, exhbrollany, covid, recession),
+        bin = .c(muem_fndr_name, mow, west, exhbany, exhbrollany, covid, recession, founder_dead_binary),
         num = .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
                  pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10", PC1, PC2,
                  year, "I(year^2)", "popm_circle10:I(proxcnt10^2)",
@@ -281,7 +286,7 @@ gc_vvs <- function() {
                  exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)",
                  exhbcnt, exhbrollsum_avg,
                  exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"),
-        cat = .c(gender, founder_dead, slfidfcn, reg6, an_inclusion, time_period))
+        cat = .c(gender, founder_dead1, slfidfcn, reg6, an_inclusion, time_period))
 
 
     l_vrblgrp_lbls <- list(# variable group labels
@@ -326,9 +331,9 @@ gc_vvs <- function() {
         list(vrbl = "gender", term = "genderF",      term_lbl = "Gender - Female"),
         list(vrbl = "gender", term = "gendercouple", term_lbl = "Gender - Couple"),
         list(vrbl = "gender", term = "genderM",      term_lbl = "Gender - Male"),
-        list(vrbl = "founder_dead", term = "founder_deadalive", term_lbl = "Founder - alive"),
-        list(vrbl = "founder_dead", term = "founder_deadrecently_dead", term_lbl = "Founder - died recently"),
-        list(vrbl = "founder_dead", term = "founder_deadlong_dead", term_lbl = "Founder - died 2+ years ago"),
+        list(vrbl = "founder_dead1", term = "founder_dead1alive", term_lbl = "Founder - alive"),
+        list(vrbl = "founder_dead1", term = "founder_dead1recently_dead", term_lbl = "Founder - died recently"),
+        list(vrbl = "founder_dead1", term = "founder_dead1long_dead", term_lbl = "Founder - died 2+ years ago"),
         list(vrbl = "slfidfcn", term = "slfidfcnmuseum",     term_lbl = "Self-Identification - Museum"),
         list(vrbl = "slfidfcn", term = "slfidfcnfoundation", term_lbl = "Self-Identification - Foundation"),
         list(vrbl = "slfidfcn", term = "slfidfcncollection", term_lbl = "Self-Identification - Collection"),
@@ -383,8 +388,6 @@ gc_vvs <- function() {
     list(
         ## time-invariant variables
         vrbls_base = .c(ID, iso3c, year, tstart, tstop, age),
-        ## vrbls_tiv = .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6),
-        ## vrbls_tv= .c(pm_dens, founder_dead),
         dt_vrblinfo = dt_vrblinfo,
         dt_ctgterm_lbls = dt_ctgterm_lbls,
         dt_gof_cfg = dt_gof_cfg,
