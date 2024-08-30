@@ -1348,7 +1348,7 @@ gf_coxph_close <- function(vrbls_to_add = NULL, vrbls_to_yeet = NULL) {
                     "covid")
 
 
-    if (len(intersect(vrbls_to_add, vrbls_to_yeet)) > 0) {stop("can't add and yeet the same")}
+    ## if (len(intersect(vrbls_to_add, vrbls_to_yeet)) > 0) {stop("can't add and yeet the same")}
     
 
     vrbls_touse <- setdiff(vrbls_base, vrbls_to_yeet) %>%
@@ -1369,9 +1369,10 @@ gf_coxph_close <- function(vrbls_to_add = NULL, vrbls_to_yeet = NULL) {
 
 
 gl_mdls <- function(dt_pmyear, dt_pmcpct) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
     gw_fargs(match.call())
 
-
+    
     l_mdls <- list(
         r_null = coxph(Surv(tstart, tstop, closing) ~ 1, dt_pmyear),
 
