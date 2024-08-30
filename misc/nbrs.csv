@@ -6,7 +6,8 @@ n_pmyears,6096,descs
 pmdb_n_nlpm,25,descs
 pmdb_n,523,descs
 pmx_n,505,descs
-n_founder_dead,44,descs
+n_founder_dead,47,descs
+n_pm_close_after_recent_death,3,descs
 pm_open_from2021,15,descs
 pm_n_used,503,descs
 meanhaz_upto_2,0.10%,meanhaz

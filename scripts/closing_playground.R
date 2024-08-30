@@ -297,3 +297,95 @@ dt_pmyear[year >= 2015, .(entered = fnunique(ID), closed = sum(closing)), floor(
     ggplot(aes(x=floor, y=prop_closed)) + geom_col()
 
 dt_pmyear[year >= 2010 & year_opened %between% c(1990, 1999), fnunique(ID)]
+
+
+## * predict test
+
+r_pred <- coxph(Surv(age, closing) ~ gender, dt_pmcpct)
+
+dt_new <- expand.grid(gender = c("F", "M", "couple"), age = seq(0,30), closing = 0) %>% adt %>%
+    .[, pred := predict(r_pred, newdata = ., type = "survival")]
+
+
+dt_new %>% ggplot(aes(x=age, y=pred, color = gender)) + geom_step()
+
+
+dt_new <- expand.grid(founder_dead_binary = c(0,1), age = seq(0,30), closing = 0) %>% adt %>%
+    .[, pred := predict(l_mdls$r_pop4, newdata = ., type = "survival")]
+
+
+## predicted effect of founder death
+
+dt_pred_prep <- cbind(
+        dt_pmyear[, lapply(.SD, Mode), # categorical/binary variables: use mode
+                  .SDcols = gc_vvs()$dt_vrblinfo[vrbltype %in% c("bin", "cat"), achr(vrbl)]],
+        dt_pmyear[, lapply(.SD, median), .SDcols = c("pmdens_cry", "year", "proxcnt10", "popm_circle10")])
+
+dt_pred_prep2 <- rbind(dt_pred_prep, dt_pred_prep) %>%
+    .[2, founder_dead_binary := 1]
+
+gd_pred("r_pop4", l_mdls, dt_pred_prep2, measure = "surv", year_range = 10)
+
+
+map(1:30, ~gd_pred("r_pop4", l_mdls, dt_pred_prep2, measure = "surv", year_range = .x) %>%
+              .[, `:=`(age = .x, founder_dead_binary = c(0,1))]) %>% rbindlist %>%
+    .[, founder_dead_binary := factor(founder_dead_binary)] %>% 
+    ggplot(aes(x=age, y=est, ymax = upper, ymin=lower, group = founder_dead_binary,
+               color = founder_dead_binary, linetype = founder_dead_binary)) +
+    geom_step() +
+    geom_ribbon(alpha = 0.1, stat = "stepribbon")
+
+
+
+
+## predicted founder death partitioned
+## would need alive for some year
+
+
+## three phases: 1-5: alive, 6-7: recently dead, then long dead
+## but that won't work: gd_pred will assume it has always been recently dead
+## estimate hazard, then do KM myself
+
+
+dt_pred_prep3 <- cbind(
+        dt_pmyear[, lapply(.SD, Mode), # categorical/binary variables: use mode
+                  .SDcols = gc_vvs()$dt_vrblinfo[vrbltype %in% c("bin", "cat"), achr(vrbl)]],
+    dt_pmyear[, lapply(.SD, median), .SDcols = c("pmdens_cry", "year", "proxcnt10", "popm_circle10")])
+
+## estimate the alive curve
+
+## gd_pred_prep needs at least two conditions: add row for recently_dead, which gets yeeted later
+dt_pred_prep_partition <- rbind(dt_pred_prep3, dt_pred_prep3) %>%
+    .[, founder_dead1 := c("recently_dead", "alive")]
+
+## generate the alive survival curve for first 30 yeares
+map(1:30, ~gd_pred("r_founder_dead1", l_mdls, dt_pred_prep_partition, "surv", year_range = .x) %>%
+              .[, `:=`(age = .x, founder_dead1 = c("recently_dead", "alive"))]) %>% rbindlist %>%
+    .[founder_dead1 == "alive"]
+
+## hazard for death
+gd_pred("r_founder_dead1", l_mdls, dt_pred_prep_partition, "hazard", year_range = 10)
+## fuck won't get SE for recently dead
+
+rx <- survfit(Surv(tstart, tstop, closing) ~ founder_dead1, dt_pmyear)
+lines(rx, col = "red")
+rx %>% str
+rx$std.chaz
+
+## fuck i'm back to reverse engineering hazard standard errors
+## which I had given up for the age dependency already..
+## this should not be impossible tho, since now I 
+
+
+
+
+
+## figuring out what exactly the predict.coxph is doing: 
+## compare to survfit for men
+
+survfit2(Surv(age, closing) ~ 1, dt_pmcpct[gender == "M"]) %>% chuck("surv") %>% chuck(30)
+    ggsurvfit()
+
+## not exactly the same, but kinda close
+survfit2(Surv(age, closing) ~ 1, dt_pmcpct[gender == "M"]) %>% chuck("surv") %>% chuck(30)
+dt_new[age == 30 & gender == "M", pred]
