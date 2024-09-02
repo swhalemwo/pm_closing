@@ -122,6 +122,22 @@ gd_nbrs <- function() {
     
     
     dt_mow_prop_museum <- gn_mow_prop_museum()
+
+    ## ---------- regression coefs ---------
+
+    dt_coefs <- gd_reg_coxph(l_mdls$r_pop4, "r_pop4") %>% chuck("dt_coef")
+
+    dt_coefnbrs <- list(
+        list(nbr_name = "coef_death",
+             nbr_fmt = dt_coefs[term =="founder_dead_binary", format(coef, digits =2, nsmall = 2)]),
+        list(nbr_name = "coef_death_exp",
+             nbr_fmt = dt_coefs[term =="founder_dead_binary", format(exp(coef), digits =2, nsmall = 2)]),
+        list(nbr_name = "coef_death_perc",
+             nbr_fmt = dt_coefs[term =="founder_dead_binary", format((exp(coef)-1)*100, digits =2, nsmall = 0)])
+        ) %>% rbindlist %>% .[, grp := "coefs"]
+    
+    
+
     
         
     ## plots: yanking (insertion) and in-text referencing
@@ -134,7 +150,8 @@ gd_nbrs <- function() {
     dt_nbrs_cbnd <- Reduce(rbind, list(dt_descs, dt_meanhaz, dt_meanhaz_later, dt_med_life_expect,
                                        dt_nbr_yearhaz,
                                        dt_ynkplt, dt_refplt, dt_reftbl,
-                                       dt_mow_prop_museum))
+                                       dt_mow_prop_museum,
+                                       dt_coefnbrs))
 
     
     return(dt_nbrs_cbnd)

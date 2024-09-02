@@ -71,7 +71,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: ynkplt_p_pred_heatmap (eval (concat "#+label: fig:p_pred_heatmap\n" "#+caption: Predicted Avg. Hazard Rate on Regional PM Density and Population\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_pred_heatmap.pdf]]"))
 #+MACRO: ynkplt_p_heatmap_info (eval (concat "#+label: fig:p_heatmap_info\n" "#+caption: heatmap info plots\n" "#+attr_latex: :width 35cm\n" "[[file:../figures/p_heatmap_info.pdf]]"))
 #+MACRO: ynkplt_p_pred_heatmap_wocryside (eval (concat "#+label: fig:p_pred_heatmap_wocryside\n" "#+caption: Predicted Avg. Hazard Rate from Regional PM Density and Population (without proxcnt < 2 & popm_circle10 <2)\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_pred_heatmap_wocryside.pdf]]"))
-#+MACRO: ynkplt_p_surv_death (eval (concat "#+label: fig:p_surv_death\n" "#+caption: Comparison of Survival Estimates by Founder Death (95% CI)\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_surv_death.pdf]]"))
+#+MACRO: ynkplt_p_surv_death (eval (concat "#+label: fig:p_surv_death\n" "#+caption: Comparison of Survival Estimates by Founder Death\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_surv_death.pdf]]"))
 #+MACRO: ynkplt_p_lngtdvelp (eval (concat "#+label: fig:p_lngtdvelp\n" "#+caption: Composition of private museum population\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_lngtdvelp.pdf]]"))
 
 
@@ -104,6 +104,12 @@ wd_nbrs(dt_nbrs)
 #+MACRO: reftbl_t_reg_coxph_timeslice \ref{tbl:t_reg_coxph_timeslice}
 #+MACRO: reftbl_t_reg_coxph_deathcfg \ref{tbl:t_reg_coxph_deathcfg}
 #+MACRO: reftbl_t_reg_coxph_timecfg \ref{tbl:t_reg_coxph_timecfg}
+
+
+# coefs
+#+MACRO: coef_death 0.28
+#+MACRO: coef_death_exp 1.32
+#+MACRO: coef_death_perc 32
 :end:
 
 
@@ -718,8 +724,14 @@ While generally organizations whose name include the name of their founder might
 
 #+INCLUDE: "../tables/t_reg_coxph_deathcfg_wcpF.tex" export latex
 
+{{{ynkplt_p_surv_death}}}
+
 The death of the founder is not associated with a significant difference in private museum closure, i.e. museums are not significantly more likely to close after their founder has died.
 #
+While the point estimate is positive, with {{{coef_death}}}, corresponding to a {{{coef_death_perc}}}% increase in mortality for museums whose founders have died compared to those who have not, the low risk overall means that despite the cumulative character even decade-long survival times do not differ substantially (figure {{{refplt_p_surv_death}}}).
+
+
+# 
 It is in principle possible to construct an alternative measure of founder death by splitting the time after the death in a short-term and long-term period; the short-term period might then capture the disruption by the founder, whereas the long-term period would only be reached by museums who have successfully acquired alternative funding models and are hence relatively viable.
 #
 However, the choice of choosing a cut-off point between the short- and long-term periods is relatively arbitrary.
