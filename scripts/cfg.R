@@ -142,7 +142,7 @@ gc_plts <- function() {
                 dt_pmyear = quote(dt_pmyear),
                 mortbound_lo = 0.165,
                 mortbound_hi = 0.165,
-                caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population",
+                caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population (at available values)",
                 width = 18,
                 height = 10),
             p_heatmap_info = list(
@@ -153,7 +153,7 @@ gc_plts <- function() {
             p_pred_heatmap_wocryside = list(
                 mdlname = "r_wocryside",
                 l_mdls = quote(l_mdls),
-                dt_pmyear = quote(dt_pmyear),
+                dt_pmyear = quote(dt_pmyear[!(proxcnt10 < 2 & popm_circle10 <= 2)]),
                 mortbound_lo = 0.165,
                 mortbound_hi = 0.165,
                 caption = paste0("Predicted Avg. Hazard Rate from Regional PM Density and Population",
