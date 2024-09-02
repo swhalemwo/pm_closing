@@ -767,6 +767,7 @@ While generally organizations whose name include the name of their founder might
 
 **** Founder dependence
 
+***** death :ignhead:
 #+INCLUDE: "../tables/t_reg_coxph_deathcfg_wcpF.tex" export latex
 
 {{{ynkplt_p_surv_death}}}
@@ -777,51 +778,59 @@ While the point estimate is positive, with {{{coef_death}}}, corresponding to a 
 
 
 # 
-It is in principle possible to construct an alternative measure of founder death by splitting the time after the death in a short-term and long-term period; the short-term period might then capture the disruption by the founder, whereas the long-term period would only be reached by museums who have successfully acquired alternative funding models and are hence relatively viable.
+It is in principle possible to construct an alternative measure of founder death by partioning the time after the death in a short-term and long-term period; the short-term period might then capture the disruption by the founder, whereas the long-term period would only be reached by museums who have successfully acquired alternative funding models and are hence relatively viable.
 #
 However, the choice of choosing a cut-off point between the short- and long-term periods is relatively arbitrary.
 
 
 Table \ref{tbl:t_reg_coxph_deathcfg} shows coefficients of both periods with different cut-off points.
 #
-While the coefficient in the short-term period is consistently higher than both the overall death coefficient and the long-term period coefficients, so far the evidence is inconclusive as only few cases are statistically significant[fn:: P-values are not adjusted for multiple tests].
+While the coefficient in the short-term period is consistently higher than both the overall death coefficient and the long-term period coefficients, so far the evidence is inconclusive as only few cases are statistically significant[fn:: P-values are also not adjusted for multiple tests].
 #
-Considering the underlying numbers supports this:
+Furthermore, such a shock passes quickly relative to the median life-time of museums of {{{median_life_expectancy}}} years, thus "giving" the founder death little time to lead to many museum closures. 
 # 
-While {{{n_founder_dead}}} private museums have seen the death of their founders, only {{{n_pm_close_after_recent_death}}} of these have closed in the following 5 years; observing statistical significance in some configurations of founder death time more likely reflect random clustering than an underlying pattern.
+
+
+
+Considering the numbers underlying the death effect estimates illustrates the uncertainty of the determning the effect of the death of the founder on aclosing: 
+# 
+While {{{n_founder_dead}}} private museums have seen the death of their founders, only {{{n_pm_close_after_recent_death}}} of these have closed in the following 5 years; given such low numbers it cannot be ruled out that the statistical significance in a few configurations of founder death time results from random fluctuations rather than an underlying pattern.
 #
 
-*Effect sizes*:
-- death overall
-- short-term death
-stress how few people it is
 
-
-
-#
-This possibly indicates that private museums might be less dependent on the mood of a single person (or couple), and have in fact become institutionalized to an extent that heirs of founders feel as motivated to continue the original founders' efforts as these founders themselves.
-
-
-
-
+***** artnews ranking :ignhead:
 
 
 The reputation of the founder is not statistically related to closure. 
 #
-Museums whose founders are not included in the ARTnews collector ranking (reference category) are the least likely to close, followed by museums whose founders are included (not statistically significant) and by founders who were included at some point but are no longer included (not statistically significant).
+Museums whose founders are not included in the ARTnews collector ranking (reference category) are the least likely to close, followed by museums whose founders are included ({{{coef_an_inclusionincluded_perc}}}% elevated closing risk) and by founders who were included at some point but are no longer included ({{{coef_an_inclusiondropped_perc}}}% elevated closing risk), however none of the differences are statistically significant.
 #
-# While the order of the categories does not fully correspond to the expected order, according to which museums whose collectors are not included would be more likely to close than collectors who are, it nevertheless provides some evidence that status matters; as in particular the loss of status appears to be substantially associated with museum closure.
-
-**** Identity Variables
-
-Museums which include the term "museum" in their name are the least likely to close, while those with the term "foundation" or "collection" have higher closure rates (but not significantly higher).
+It is also worth to point out that the order of the categories does not fully correspond to the expected order, according to which museums whose collectors are not included would be more likely to close than collectors who are.
 #
-Museums which include neither of these are the most likely to close, and have mortality rates more than three times as high ($e$^1.18 = 3.25, p<0.01) than institutions including the term "museum".
+However, as all differences are not statistically significant, there is no strong evidence that this reflects unexpected status mechanisms rather than randomness.
 #
-The usage of unconventional names might reflect adherence to museum standards which makes museums more understandable and familiar to third parties (e.g. audiences, other museums, companies or the government) and thereby facilitates interactions which are beneficial for long-term survival (e.g. attracting visitors, cooperations, sponsorships or subsidies).
-# 
-However, as founders can choose the name of their museum arbitrarily, they might choose a name without reference to organizational forms associated with perpetuity precisely because their intention is not an institution enduring in perpetuity but rather a more temporally bounded project.
 
+
+it nevertheless provides some evidence that status matters; as in particular the loss of status appears to be substantially associated with museum closure.
+
+***** founder name :ignhead:
+
+Museums whose name contain the name of the founder face a non-significantly {{{coef_muem_fndr_name_perc}}}% elevated risk of closure, which indicates that there is little evidence that founders face greater difficulties to secure a long-term future for their museums by choosing to emphasize their personal contribution.
+#
+It might have been expected that such central positioning of the founder might limit longevity by disincentivizing contributions by other parties.
+#
+However, as the direct mechanism of declining contributions cannot be observed, its absence cannot be assumed either.
+#
+It might be the case that other parties do indeed feel less inclined to contribute but that these gaps are filled by a stronger commitment of the founder, who having committed her name to the enterprise, wants to keep her museum open event at great costs.
+
+***** founder conclusion
+
+
+
+Taken together, the inability to explain private museum closing with the death of founder, her exclusion from a prestitious ranking and the presence of her name in the museum's name question the hypothesized central role of the founder.
+#
+In other words, so far little evidence points to founders constituting a substantial source of involuntary closing risk.
+#
 
 
 
@@ -919,6 +928,18 @@ Founders who are committed to their museums will keep them alive, regardless of 
 :CREATED:  [2024-05-29 wo 12:08]
 :ID:       676af2e2-9b94-489e-88a8-6a87397c864a
 :END:
+
+
+
+It has been widely argued that the death of the founder would lead to his or her private museum to close, while this analysis has not found conclusive evidence for this relationship.
+#
+It is important to keep in mind that the lack of observing a clear relationship between the death of the founder and museum closure does not imply that no relationship exists.
+#
+It is possible that previous scholars who argued for such an association have correctly identified the dependency relationships in private museums, which will become visible once more founder deaths have occurred.
+#
+At the same time, it is possible that private museums are indeed generally less dependent on the mood of a single person (or couple), and have in fact become institutionalized to an extent that heirs of founders feel as motivated to continue the original founders' efforts as these founders themselves.
+
+
 
 # FIXME: rewrite from observation level to process level
 # The role of the founder is two sided.
