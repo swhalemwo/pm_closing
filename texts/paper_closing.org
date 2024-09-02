@@ -107,9 +107,54 @@ wd_nbrs(dt_nbrs)
 
 
 # coefs
-#+MACRO: coef_death 0.28
-#+MACRO: coef_death_exp 1.32
-#+MACRO: coef_death_perc 32
+#+MACRO: coef_genderF -0.038
+#+MACRO: coef_gendercouple -0.140
+#+MACRO: coef_pmdens_cry 0.648
+#+MACRO: coef_I(pmdens_cry^2) -0.027
+#+MACRO: coef_slfidfcnfoundation 0.203
+#+MACRO: coef_slfidfcncollection -0.454
+#+MACRO: coef_slfidfcnother 1.091
+#+MACRO: coef_founder_dead_binary 0.280
+#+MACRO: coef_muem_fndr_name 0.048
+#+MACRO: coef_an_inclusionincluded 0.193
+#+MACRO: coef_an_inclusiondropped 0.460
+#+MACRO: coef_proxcnt10 0.263
+#+MACRO: coef_popm_circle10 0.268
+#+MACRO: coef_recession -1.586
+#+MACRO: coef_covid 0.423
+#+MACRO: coef_proxcnt10:popm_circle10 -0.089
+#+MACRO: coef_genderF_exp 0.96
+#+MACRO: coef_gendercouple_exp 0.87
+#+MACRO: coef_pmdens_cry_exp 1.91
+#+MACRO: coef_I(pmdens_cry^2)_exp 0.97
+#+MACRO: coef_slfidfcnfoundation_exp 1.23
+#+MACRO: coef_slfidfcncollection_exp 0.63
+#+MACRO: coef_slfidfcnother_exp 2.98
+#+MACRO: coef_founder_dead_binary_exp 1.32
+#+MACRO: coef_muem_fndr_name_exp 1.05
+#+MACRO: coef_an_inclusionincluded_exp 1.21
+#+MACRO: coef_an_inclusiondropped_exp 1.58
+#+MACRO: coef_proxcnt10_exp 1.30
+#+MACRO: coef_popm_circle10_exp 1.31
+#+MACRO: coef_recession_exp 0.20
+#+MACRO: coef_covid_exp 1.53
+#+MACRO: coef_proxcnt10:popm_circle10_exp 0.92
+#+MACRO: coef_genderF_perc 3.9
+#+MACRO: coef_gendercouple_perc 15
+#+MACRO: coef_pmdens_cry_perc 91
+#+MACRO: coef_I(pmdens_cry^2)_perc 2.8
+#+MACRO: coef_slfidfcnfoundation_perc 23
+#+MACRO: coef_slfidfcncollection_perc 58
+#+MACRO: coef_slfidfcnother_perc 198
+#+MACRO: coef_founder_dead_binary_perc 32
+#+MACRO: coef_muem_fndr_name_perc 4.9
+#+MACRO: coef_an_inclusionincluded_perc 21
+#+MACRO: coef_an_inclusiondropped_perc 58
+#+MACRO: coef_proxcnt10_perc 30
+#+MACRO: coef_popm_circle10_perc 31
+#+MACRO: coef_recession_perc 389
+#+MACRO: coef_covid_perc 53
+#+MACRO: coef_proxcnt10:popm_circle10_perc 9.3
 :end:
 
 

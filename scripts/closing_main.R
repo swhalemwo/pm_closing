@@ -127,14 +127,23 @@ gd_nbrs <- function() {
 
     dt_coefs <- gd_reg_coxph(l_mdls$r_pop4, "r_pop4") %>% chuck("dt_coef")
 
-    dt_coefnbrs <- list(
-        list(nbr_name = "coef_death",
-             nbr_fmt = dt_coefs[term =="founder_dead_binary", format(coef, digits =2, nsmall = 2)]),
-        list(nbr_name = "coef_death_exp",
-             nbr_fmt = dt_coefs[term =="founder_dead_binary", format(exp(coef), digits =2, nsmall = 2)]),
-        list(nbr_name = "coef_death_perc",
-             nbr_fmt = dt_coefs[term =="founder_dead_binary", format((exp(coef)-1)*100, digits =2, nsmall = 0)])
-        ) %>% rbindlist %>% .[, grp := "coefs"]
+    ## list of variaables to use in text
+    l_vrbls_tt <- c("founder_dead_binary", "slfidfcnfoundation", "slfidfcncollection", "slfidfcnother",
+                    "muem_fndr_name", "an_")
+
+    dt_coefnbrs <- rbind(
+        dt_coefs[, .(nbr_name = paste0("coef_", term), # original coefs
+                     nbr_fmt = format(coef, digits =2, nsmall = 2))],
+        dt_coefs[, .(nbr_name = sprintf("coef_%s_exp", term), # exponentiated
+                     nbr_fmt = format(exp(coef), digits =2, nsmall = 2))],
+        dt_coefs[, .(nbr_name = sprintf("coef_%s_perc", term), # percentage change
+                     nbr_fmt = format((exp(abs(coef))-1)*100, digits =2, nsmall = 0)), .I] %>%
+        .[, .(nbr_name, nbr_fmt)]) %>%
+        .[, grp := "coefs"]
+        
+
+
+    
     
     
 
