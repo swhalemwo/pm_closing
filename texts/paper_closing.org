@@ -26,7 +26,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: pmdb_n_nlpm 25
 #+MACRO: pmdb_n 523
 #+MACRO: pmx_n 505
-#+MACRO: n_founder_dead 44
+#+MACRO: n_founder_dead 47
 #+MACRO: n_pm_close_after_recent_death 3
 #+MACRO: pm_open_from2021 15
 #+MACRO: pm_n_used 503
