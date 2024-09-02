@@ -840,7 +840,7 @@ In other words, so far little evidence points to founders constituting a substan
 
 
 
-Country-level Environmental variables show no association with mortality.
+Country-level measures of the private museum population show no association with mortality.
 #
 However, at the local level the number of private museum and population density predicts survival chances as the main effects of population number of private museums as well as its interaction is significant.
 #
@@ -848,14 +848,41 @@ Figure {{{refplt_p_pred_popprxcnt}}} shows predicted average hazard rates for di
 #
 Museums located in sparsely populated areas have (at low PM densities) lower hazard rates than museums in more densely populated areas. 
 #
-Furthermore, these "rural" museums see an increase in the risk of closing for each additional private museum present within 10 kilometers, whereas the risk of closing decreases with  each additional private museum in the local environment for museums in more urban areas. 
+However, these museums in less densely populated regions see an increase in the risk of closing for each additional private museum present within 10 kilometers, whereas the risk of closing decreases with each additional private museum in the local environment for museums in more densely-populated areas.
 #
+The increase in mortality in less densely populated regions when the number of nearby private museums increases could indicate competition:
+#
+As the potential pool of resources is somewhat limited, each new museum trying to claim its share limits the average resources available to other institutions, leading to higher mortality.
+#
+In the more densely populated regions with larger resources the marginal impact of an additional private museum appears declines and eventually turns negative (i.e., enhances survival chances).
+#
+
+
+The absence of private museums in otherwise densely populated areas might also reflect the absence of a wider cultural infrastructure; thus even a large potential audience might not be able to sustain private museums in the absence of other foundations, public or corporate museums.
+
+#
+
 
 #
 # However, they have at low PM density lower closing rates than museum in more populated areas.
 
 # #
 # While the density-dependence paradigm predicts a negative effect of numbers of organizations on closing rate at low numbers (due to legitimacy, i.e. growing familiarity with a new organizational form), and a positive effect at high numbers (due to competition over resources), neither relationship is significant in the case of private museums.
+
+**** Identity Variables
+
+Museums which include the term "collections" in their name are the least likely to close ({{{coef_slfidfcncollection_exp}}} times the rate of museums with the name "museum", while those with the term foundation experience {{{coef_slfidfcnfoundation_perc}}}% elevated closure rates (but not significantly higher).
+#
+However, institutions which include neither of these are the most likely to close, and have mortality rates almost three times as high ({{{coef_slfidfcnother_perc}}}%) than institutions including the term "museum".
+# 
+The usage of unconventional names might reflect adherence to museum standards which makes museums more understandable and familiar to third parties (e.g. audiences, other museums, companies or the government) and thereby facilitates interactions which are beneficial for long-term survival (e.g. attracting visitors, cooperations, sponsorships or subsidies).
+# 
+However, as founders can choose the name of their museum arbitrarily, they might choose a name without reference to organizational forms associated with perpetuity precisely because their intention is not an institution enduring in perpetuity but rather a more temporally bounded project.
+
+
+
+
+
 
 
 ** Discussion
