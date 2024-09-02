@@ -159,7 +159,14 @@ gc_plts <- function() {
                 caption = paste0("Predicted Avg. Hazard Rate from Regional PM Density and Population",
                                  " (without proxcnt < 2 & popm_circle10 <2)"),
                 width = 18,
-                height = 10),        
+                height = 10),
+
+            p_surv_death = list(
+                l_mdls = quote(l_mdls),
+                name_mainmdl = "r_pop4",
+                caption = "Comparison of Survival Estimates by Founder Death (95% CI)",
+                width = 18,
+                height = 10),
             p_lngtdvelp = list(
                 dt_pmyear = quote(dt_pmyear),
                 caption = "Composition of private museum population",

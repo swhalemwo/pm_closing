@@ -2219,6 +2219,49 @@ gp_condmef <- function(mdlname, l_mdls, dt_pmyear) {
 ##     ggplot(aes(x=proxcnt10, y=popm_circle10, color = factor(museum_status))) +
 ##     geom_jitter(size = 0.8, width = 0.2)
 
+gp_surv_death <- function(l_mdls, name_mainmdl) {
+    #' generate survival plot by death/alive
+    #' @param l_mdls list of models
+    #' @param name_mainmdl name of the main model
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+
+    ## set up the data to predict
+    dt_pred_prep <- cbind(
+        dt_pmyear[, lapply(.SD, Mode), # categorical/binary variables: use mode
+                  .SDcols = gc_vvs()$dt_vrblinfo[vrbltype %in% c("bin", "cat"), achr(vrbl)]],
+        dt_pmyear[, lapply(.SD, median), .SDcols = c("pmdens_cry", "year", "proxcnt10", "popm_circle10")])
+
+    ## assing one as dead
+    dt_pred_prep2 <- rbind(dt_pred_prep, dt_pred_prep) %>%
+        .[2, founder_dead_binary := 1]
+
+    ## predict for 30 years
+    dt_pred_vis <- map(1:30, ~gd_pred("r_pop4", l_mdls, dt_pred_prep2, measure = "surv", year_range = .x) %>%
+                  .[, `:=`(age = .x, founder_dead_binary = c(0,1))]) %>% rbindlist %>%
+                  .[, founder_dead_binary := factor(founder_dead_binary)]
+
+    leg_labels <- c("0" = "Alive", "1" = "Dead")
+
+    dt_pred_vis %>% 
+        ggplot(aes(x=age, y=est, ymax = upper, ymin=lower, group = founder_dead_binary,
+                   color = founder_dead_binary, linetype = founder_dead_binary)) +                   
+        geom_step(linewidth = 0.8) +
+        geom_ribbon(alpha = 0.1, stat = "stepribbon", show.legend = F, linewidth = 0.2) +
+        guides(color = guide_legend(title = "Founder status"),
+               linetype = guide_legend(title = "Founder status")) +
+        scale_color_manual(values = c("0" = "blue", "1" = "red"), labels = leg_labels) +
+        scale_linetype_manual(values = c("0" = "solid", "1" = "32"), labels = leg_labels) +
+        theme(legend.position = "bottom",
+              legend.spacing = unit(0, "pt"),
+              legend.key.height = unit(0, "pt"),
+              legend.box.spacing = unit(3, "pt"),
+              legend.margin = margin(0,0,0,0)) +
+        labs(x = "Age", y = "Survival")
+    
+
+}
+
 
 gt_reg_coxph <- function(l_mdls, l_mdlnames) {
     #' collect some models from l_mdls and format them into nice custom regression table

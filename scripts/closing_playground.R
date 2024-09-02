@@ -316,24 +316,7 @@ dt_new <- expand.grid(founder_dead_binary = c(0,1), age = seq(0,30), closing = 0
 
 ## predicted effect of founder death
 
-dt_pred_prep <- cbind(
-        dt_pmyear[, lapply(.SD, Mode), # categorical/binary variables: use mode
-                  .SDcols = gc_vvs()$dt_vrblinfo[vrbltype %in% c("bin", "cat"), achr(vrbl)]],
-        dt_pmyear[, lapply(.SD, median), .SDcols = c("pmdens_cry", "year", "proxcnt10", "popm_circle10")])
 
-dt_pred_prep2 <- rbind(dt_pred_prep, dt_pred_prep) %>%
-    .[2, founder_dead_binary := 1]
-
-gd_pred("r_pop4", l_mdls, dt_pred_prep2, measure = "surv", year_range = 10)
-
-
-map(1:30, ~gd_pred("r_pop4", l_mdls, dt_pred_prep2, measure = "surv", year_range = .x) %>%
-              .[, `:=`(age = .x, founder_dead_binary = c(0,1))]) %>% rbindlist %>%
-    .[, founder_dead_binary := factor(founder_dead_binary)] %>% 
-    ggplot(aes(x=age, y=est, ymax = upper, ymin=lower, group = founder_dead_binary,
-               color = founder_dead_binary, linetype = founder_dead_binary)) +
-    geom_step() +
-    geom_ribbon(alpha = 0.1, stat = "stepribbon")
 
 
 
