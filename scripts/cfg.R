@@ -44,6 +44,9 @@ gc_tbls <- function(c_tblargs) {
             l_mdls = quote(l_mdls),
             ## l_mdlnames = quote(l_mdlnames_deathcfg),
             caption = "Cox PH regression results wiht different death configurations"),
+        t_drop1 = list(
+            dt_drop1 = quote(dt_drop1),
+            caption = "Model Fit Improvement by Single Term Deletions"),
         t_reg_coxph_timecfg = list(
             l_mdls = quote(l_mdls),
             l_mdlnames = quote(l_mdlnames_timecfg),
@@ -160,7 +163,16 @@ gc_plts <- function() {
                                  " (without proxcnt < 2 & popm_circle10 <2)"),
                 width = 18,
                 height = 10),
-
+            p_pred_heatmap_onlycryside = list(
+                mdlname = "r_onlycryside",
+                l_mdls = quote(l_mdls),
+                dt_pmyear = quote(dt_pmyear[proxcnt10 <= 1 & popm_circle10 <= 1]),
+                mortbound_lo = 0.165,
+                mortbound_hi = 0.165,
+                caption = paste0("Predicted Avg. Hazard Rate from Regional PM Density and Population",
+                                 " (only proxcnt < 2 & popm_circle10 <2)"),
+                width = 18,
+                height = 10),
             p_surv_death = list(
                 l_mdls = quote(l_mdls),
                 name_mainmdl = "r_pop4",

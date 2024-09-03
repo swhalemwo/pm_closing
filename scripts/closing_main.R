@@ -286,7 +286,7 @@ l_mdlnames_timeslice <- list("r_pop4", "r_2005", "r_2010", "r_2015")
 ## check whether patterns depend on itme configuration (time period, year_opened, both)
 l_mdlnames_timecfg <- list("r_pop4", "r_pop4_wyo", "r_pop4_wtp", "r_pop4_wyotp")
 
-
+dt_drop1 <- gd_drop1(l_mdls)
 
 
 ## write numbers

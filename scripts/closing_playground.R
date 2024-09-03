@@ -372,3 +372,25 @@ survfit2(Surv(age, closing) ~ 1, dt_pmcpct[gender == "M"]) %>% chuck("surv") %>%
 ## not exactly the same, but kinda close
 survfit2(Surv(age, closing) ~ 1, dt_pmcpct[gender == "M"]) %>% chuck("surv") %>% chuck(30)
 dt_new[age == 30 & gender == "M", pred]
+
+## model improvement
+
+dt_drop1 <- drop1(l_mdls$r_pop4, trace = T) %>% adt(keep.rownames = "term") %>% .[order(AIC)]
+
+dt_drop1 %>% copy %>% .[, AIC_none := .SD[term == "<none>", AIC]] %>%
+    .[, AIC_diff := AIC_none - AIC]
+
+## strange, AIC is lower for all the insignificant variables...
+## AIC is AIC of model without variable -> higher AIC means model gets worse by yeeting variable
+
+
+
+
+
+coxph(gf_coxph_close(vrbls_to_yeet = "gender"), dt_pmyear) %>% gd_reg_coxph("gender_gone") %>%
+    chuck("dt_gof") %>% .[, AIC]
+## gender gone AIC: 707.5468
+
+
+
+

@@ -2009,6 +2009,7 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
 
 ## add a function for model without countryside
 gp_pred_heatmap_wocryside <- gp_pred_heatmap
+gp_pred_heatmap_onlycryside <- gp_pred_heatmap
 
 
 
@@ -2277,7 +2278,8 @@ gt_reg_coxph <- function(l_mdls, l_mdlnames) {
     ## gd_reg_coxph(l_mdls_slct[[2]], l_mdlnames[[2]], unit_name = "ID")
 
     dt_coef <- map(l_mdlres, ~chuck(.x, "dt_coef")) %>% rbindlist
-    dt_gof <- map(l_mdlres, ~chuck(.x, "dt_gof")) %>% rbindlist
+    dt_gof <- map(l_mdlres, ~chuck(.x, "dt_gof")) %>% rbindlist %>%
+        .[, df := NULL]
 
     ## see how many units there are: use convention that model data.table is called "dt_"
     ## and that unit has name ID
@@ -2410,6 +2412,86 @@ gt_reg_coxph_deathcfg <- function(l_mdls) {
                          
 
 
+gd_drop1 <- function(l_mdls) {
+    ## split formula into terms
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+
+    main_formula <- gf_coxph_close()
+
+    ## split formula into terms
+    dt_terms <- data.table(term = terms(main_formula) %>% attr("term.labels")) %>%
+        .[, type := fifelse(grepl(":", term), "interaction", 
+                            fifelse(grepl("\\^2)$", term), "quadratic", "main"), "main")]
+    
+    ## get children
+    dt_terms[, child := dt_terms$term[grepl(term, dt_terms$term) & term != dt_terms$term], .I]
+
+    ## if (dt_terms[type == "interaction", .N] > 1) {stop("more than 1 interaction not supported")}
+
+    l_mdls_drop1 <- split(dt_terms, 1:nrow(dt_terms)) %>%
+        map(~na.omit(.[, c(term, child)])) %>% setNames(dt_terms$term) %>% 
+        ## c(., setNames(dt_terms[type == "interaction", list(c(term, unlist(strsplit(term, ":"))))],
+        ##               "allinteractions")) %>% 
+        imap(~coxph(gf_coxph_close(vrbls_to_yeet = .x), dt_pmyear))
+    
+    ## summarize model performance, add comparison AIC
+    dt_terms_eval <- l_mdls_drop1 %>% imap(~chuck(gd_reg_coxph(.x, mdl_name = .y), "dt_gof")) %>% rbindlist %>%
+        .[, AIC_diff := AIC(l_mdls$r_pop4) - AIC]
+        
+    ## generate table of anova comparisons for p-value
+    dt_drop1_anova <- imap(l_mdls_drop1, ~adt(anova(l_mdls$r_pop4, .x))[2][, mdl_name := .y]) %>% rbindlist
+    
+    ## anova(l_mdls$r_pop4, l_mdls_drop1$founder_dead_binary)
+    
+
+    ## combine anova and AIC terms
+    dt_drop1 <- merge(dt_terms_eval, dt_drop1_anova, by = "mdl_name") %>%
+        .[, .(mdl_name, AIC_diff, Chisq, p = `Pr(>|Chi|)`)] %>%
+        .[, chisq_fmt := fmt_cell(Chisq, pvalue = p, type = "coef-stars"), .I]
+
+    attr(dt_drop1, "gnrtdby") <- as.character(match.call()[[1]])
+    return(dt_drop1)
+}
+
+gt_drop1 <- function(dt_drop1) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    
+    ## get vrblinfo for order/labels
+    dt_vrblinfo <- gc_vvs() %>% chuck("dt_vrblinfo")
+    
+    ## combine dt_drop1 with vrblinfo for labels/order
+    dt_drop1_viz <- dt_vrblinfo %>% .[dt_drop1, on = c(vrbl = "mdl_name")] %>%
+        .[, vrbl := factor(vrbl, levels = dt_vrblinfo$vrbl)] %>%
+        .[order(vrblgrp, vrbl)]
+
+    ## select columns
+    dt_drop1_viz2 <- copy(dt_drop1_viz)[, .(grp = "", vrbl_lbl = latexTranslate(vrbl_lbl), AIC_diff, chisq_fmt)]
+
+    ## set up column names, signote, group names
+    dt_grpstrs <- gc_grpstrs(dt_drop1_viz, grp = "vrblgrp_lbl", nbr_cols = 3)
+
+    signote <- gc_signote(se_mention = F, ncol = 2)
+
+    ## signote <- sprintf("\\hline \n \\multicolumn{%s}{l}{\\footnotesize{%s}}\\\\\n", 3, "jj")
+
+    c_colnames <- gc_colnames(names(dt_drop1_viz2),
+                              setNames(c("", "Variable dropped", "AIC difference", "Chisq"), names(dt_drop1_viz2)))
+
+    ## 
+    ## , signote
+
+    c_atr <- list(
+        pos = c(list(-1, nrow(dt_drop1_viz2)), dt_grpstrs$pos),
+        command = c(c_colnames, signote, dt_grpstrs$grpstr))
+
+    list(dt_fmtd = dt_drop1_viz2,
+         align_cfg = c("l", "l", "l", "r", "D{.}{.}{5}"),
+         hline_after = c(-1),
+         add_to_row = c_atr,
+         number_cols = c(F, T,T))
+
+}
     
 
 

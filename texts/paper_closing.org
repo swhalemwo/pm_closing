@@ -68,10 +68,11 @@ wd_nbrs(dt_nbrs)
 #+MACRO: ynkplt_p_pred_popprxcnt (eval (concat "#+label: fig:p_pred_popprxcnt\n" "#+caption: Predicted Avg. Hazard Rate on Regional PM Density and Population\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_pred_popprxcnt.pdf]]"))
 #+MACRO: ynkplt_p_pred_proxcntpop (eval (concat "#+label: fig:p_pred_proxcntpop\n" "#+caption: Predicted Avg. Hazard Rate on Regional PM Density and Population\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_pred_proxcntpop.pdf]]"))
 #+MACRO: ynkplt_p_condmef (eval (concat "#+label: fig:p_condmef\n" "#+caption: Conditional effects of Regional PM Density and Population\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_condmef.pdf]]"))
-#+MACRO: ynkplt_p_pred_heatmap (eval (concat "#+label: fig:p_pred_heatmap\n" "#+caption: Predicted Avg. Hazard Rate on Regional PM Density and Population\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_pred_heatmap.pdf]]"))
+#+MACRO: ynkplt_p_pred_heatmap (eval (concat "#+label: fig:p_pred_heatmap\n" "#+caption: Predicted Avg. Hazard Rate on Regional PM Density and Population (at available values)\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_pred_heatmap.pdf]]"))
 #+MACRO: ynkplt_p_heatmap_info (eval (concat "#+label: fig:p_heatmap_info\n" "#+caption: heatmap info plots\n" "#+attr_latex: :width 35cm\n" "[[file:../figures/p_heatmap_info.pdf]]"))
 #+MACRO: ynkplt_p_pred_heatmap_wocryside (eval (concat "#+label: fig:p_pred_heatmap_wocryside\n" "#+caption: Predicted Avg. Hazard Rate from Regional PM Density and Population (without proxcnt < 2 & popm_circle10 <2)\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_pred_heatmap_wocryside.pdf]]"))
-#+MACRO: ynkplt_p_surv_death (eval (concat "#+label: fig:p_surv_death\n" "#+caption: Comparison of Survival Estimates by Founder Death\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_surv_death.pdf]]"))
+#+MACRO: ynkplt_p_pred_heatmap_onlycryside (eval (concat "#+label: fig:p_pred_heatmap_onlycryside\n" "#+caption: Predicted Avg. Hazard Rate from Regional PM Density and Population (only proxcnt < 2 & popm_circle10 <2)\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_pred_heatmap_onlycryside.pdf]]"))
+#+MACRO: ynkplt_p_surv_death (eval (concat "#+label: fig:p_surv_death\n" "#+caption: Comparison of Survival Estimates by Founder Death (95% CI)\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_surv_death.pdf]]"))
 #+MACRO: ynkplt_p_lngtdvelp (eval (concat "#+label: fig:p_lngtdvelp\n" "#+caption: Composition of private museum population\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_lngtdvelp.pdf]]"))
 
 
@@ -91,6 +92,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: refplt_p_pred_heatmap \ref{fig:p_pred_heatmap}
 #+MACRO: refplt_p_heatmap_info \ref{fig:p_heatmap_info}
 #+MACRO: refplt_p_pred_heatmap_wocryside \ref{fig:p_pred_heatmap_wocryside}
+#+MACRO: refplt_p_pred_heatmap_onlycryside \ref{fig:p_pred_heatmap_onlycryside}
 #+MACRO: refplt_p_surv_death \ref{fig:p_surv_death}
 #+MACRO: refplt_p_lngtdvelp \ref{fig:p_lngtdvelp}
 
@@ -103,6 +105,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: reftbl_t_reg_coxph_density \ref{tbl:t_reg_coxph_density}
 #+MACRO: reftbl_t_reg_coxph_timeslice \ref{tbl:t_reg_coxph_timeslice}
 #+MACRO: reftbl_t_reg_coxph_deathcfg \ref{tbl:t_reg_coxph_deathcfg}
+#+MACRO: reftbl_t_drop1 \ref{tbl:t_drop1}
 #+MACRO: reftbl_t_reg_coxph_timecfg \ref{tbl:t_reg_coxph_timecfg}
 
 
