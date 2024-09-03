@@ -261,14 +261,14 @@ dt_pmyear_prep <- gd_pmyear_prep(dt_pmx, dt_pmtiv, c_lvrs) # combine all data so
 dt_pmyear <- gd_pmyear(dt_pmyear_prep, c_lvrs) # trim down dt to no NAs
 
 
-
+## ** model running
 dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-year)
-
 
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
 ## set model names for t_reg_coxph
 
-l_mdlnames_coxph <- list("r_pop4")
+l_mdlnames_coxph <- list("r_pop4", "r_comp1", "r_comp2", "r_comp3")
+l_mdlnames_coxph <- list("r_pop4", "r_audience1", "r_audience2", "r_audience_log1", "r_audience_log2")
 
 ## "r_smol")#, "r_pop5", "r_pop42")#  , ",r_pop4_wyr", "r_pop4_wcrises")
 ## l_mdlnames_coxph <- c("r_pop4", paste0("r_wsize", 3:1))
@@ -288,7 +288,7 @@ l_mdlnames_timecfg <- list("r_pop4", "r_pop4_wyo", "r_pop4_wtp", "r_pop4_wyotp")
 
 dt_drop1 <- gd_drop1(l_mdls)
 
-
+## ** number/figure/table export
 ## write numbers
 dt_nbrs <- gd_nbrs()
 fwrite(dt_nbrs, paste0(c_dirs$misc, "nbrs.csv"), quote = F)

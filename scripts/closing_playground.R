@@ -394,3 +394,38 @@ coxph(gf_coxph_close(vrbls_to_yeet = "gender"), dt_pmyear) %>% gd_reg_coxph("gen
 
 
 
+## ** competition respecification
+
+
+dt_pmyear %>% copy %>%
+    .[, audience := popm_circle10/(proxcnt10+1)] %>%
+    .[, .(ID, year, audience, popm_circle10, proxcnt10)] %>% 
+    melt(id.vars = c("ID", "year", "audience")) %>%
+    ggplot(aes(x=audience, y=value)) + geom_jitter() + facet_wrap(~variable, scales = "free")
+
+
+    
+dt_aud <- data.table(aud =  seq(dt_pmyear[, quantile(audience10_log, 0.1)],
+                                dt_pmyear[, quantile(audience10_log, 0.9)], 0.01)) %>%
+    .[, pred := -0.19338*aud + -0.16334*aud^2]
+    ## .[, pred := 4.32*aud + -0.16334*aud^2]
+
+dt_aud %>% 
+    ggplot(aes(x=aud, y=pred)) + geom_line()
+
+ggplot(dt_pmyear, aes(x=audience10_log)) + geom_density()
+## where is the top point of the curve if the linear term is -0.19 and the squared term is -0.16?
+
+
+
+
+
+
+dt_aud[which.max(pred)]
+
+
+
+dt_pmyear[, .SD, .SDcols = c("proxcnt10", "proxcnt10_log", "popm_circle10", "popm_circle10_log", "ID", "year")] %>%
+    melt(id.vars = c("ID", "year")) %>%
+    ggplot(aes(x=value, color = variable)) + geom_density(show.legend = F) +
+    facet_wrap(~variable, scales = "free")

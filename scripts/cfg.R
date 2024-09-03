@@ -173,6 +173,15 @@ gc_plts <- function() {
                                  " (only proxcnt < 2 & popm_circle10 <2)"),
                 width = 18,
                 height = 10),
+            p_pred_heatmap_comp1 = list(
+                mdlname = "r_comp1",
+                l_mdls = quote(l_mdls),
+                dt_pmyear = quote(dt_pmyear),
+                mortbound_lo = 0.165,
+                mortbound_hi = 0.165,
+                caption = "kappa",
+                width = 18,
+                height = 10),            
             p_surv_death = list(
                 l_mdls = quote(l_mdls),
                 name_mainmdl = "r_pop4",
@@ -243,7 +252,22 @@ gc_vvs <- function() {
         pmdens_circle10           = "PM density (10km)",
         "I(pmdens_circle10^2)"    = "PM density^2 (10km)",
         "proxcnt10:popm_circle10" = "Nbr PM (10km) * Pop (10km)",
-        "popm_circle10:I(proxcnt10^2)" = "Nbr PM^2 (10km) * Pop (10km)",
+        
+        proxcnt10_log             = "Nbr PM^2 within 10km (log)",
+        popm_circle10_log         = "Pop. (millions) within 10km (log)",
+        
+        
+        "popm_circle10:I(proxcnt10^2)"    = "Nbr PM^2 (10km) * Pop (10km)",
+        "proxcnt10_log:popm_circle10_log" = "Nbr PM^2 (10km, log) * Pop (10km, log)",
+        "popm_circle10:proxcnt10_log"     = "Nbr PM^2 (10km, log) * Pop (10km)",
+        "proxcnt10:popm_circle10_log"     = "Nbr PM^2 (10km) * Pop (10km, log)",
+        
+                
+
+        audience10                = "Local Audience per PM",
+        "I(audience10^2)"         = "Local Audience per PM^2",
+        audience10_log            = "Local Audience per PM (log)",
+        "I(audience10_log^2)"     = "Local Audience per PM (log)^2",
         west                      = "Europe and North America",
         reg6                      = "Region",
         an_inclusion              = "ArtNews Ranking inclusion",
@@ -279,7 +303,11 @@ gc_vvs <- function() {
         envir    = .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
                       west, reg6, "popm_circle10:I(proxcnt10^2)",
                       pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10",
-                      year, "I(year^2)",  time_period, covid, recession),
+                      year, "I(year^2)",  time_period, covid, recession,
+                      audience10, "I(audience10^2)", audience10_log, "I(audience10_log^2)",
+                      proxcnt10_log, popm_circle10_log, "popm_circle10:I(proxcnt10^2)",
+                      "proxcnt10_log:popm_circle10_log", "proxcnt10:popm_circle10_log",
+                      "popm_circle10:proxcnt10_log"),
         misc     = .c(GLOBAL)
     )
 
@@ -292,8 +320,10 @@ gc_vvs <- function() {
                    exhbany, exhbrollany, 
                    exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)", exhbprop_top10_log, exhbprop_top10_utf,
                    exhbqntl_roll, "I(exhbqntl_roll^2)",
-                   exhbcnt, exhbrollsum_avg,
-                   covid, recession)
+                   exhbcnt, exhbrollsum_avg, audience10, "I(audience10^2)", audience10_log, "I(audience10_log^2)",
+                   covid, recession, proxcnt10_log, popm_circle10_log, "popm_circle10:I(proxcnt10^2)",
+                   "proxcnt10_log:popm_circle10_log", "proxcnt10:popm_circle10_log",
+                   "popm_circle10:proxcnt10_log")
 
     ## specify variable type: binary, numeric, categorical
     l_vrbltypes <- list(        
@@ -301,10 +331,12 @@ gc_vvs <- function() {
         num = .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
                  pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10", PC1, PC2,
                  year, "I(year^2)", "popm_circle10:I(proxcnt10^2)",
-                 year_opened,
+                 year_opened, audience10, "I(audience10^2)", audience10_log, "I(audience10_log^2)",
                  exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)",
                  exhbcnt, exhbrollsum_avg,
-                 exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"),
+                 exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)",
+                 proxcnt10_log, popm_circle10_log, "popm_circle10:I(proxcnt10^2)",
+                 "proxcnt10_log:popm_circle10_log", "proxcnt10:popm_circle10_log", "popm_circle10:proxcnt10_log"),
         cat = .c(gender, founder_dead1, slfidfcn, reg6, an_inclusion, time_period))
 
 

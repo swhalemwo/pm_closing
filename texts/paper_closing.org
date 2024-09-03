@@ -847,9 +847,9 @@ Country-level measures of the private museum population show no association with
 #
 However, at the local level the number of private museum and population density predicts survival chances as the main effects of population and number of private museums as well as its interaction is significant.
 #
-Figure {{{refplt_p_pred_popprxcnt}}} shows predicted average hazard rates for different conditions of regional PM density and population numbers.
+Figure {{{refplt_p_pred_popprxcnt}}} shows average predicted survival prospects for the value range of regional PM density and population numbers.
 #
-Museums located in sparsely populated areas have (at low PM densities) lower hazard rates than museums in more densely populated areas. 
+Museums located in less densely populated areas have (at low PM densities) lower hazard rates than museums in more densely populated areas. 
 #
 However, these museums in less densely populated regions see an increase in the risk of closing for each additional private museum present within 10 kilometers, whereas the risk of closing decreases with each additional private museum in the local environment for museums in more densely-populated areas.
 #

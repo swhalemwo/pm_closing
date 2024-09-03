@@ -487,7 +487,11 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_lvrs = c_lvrs) {
 
     dt_pmyear_wproxcnt <- join(dt_pmyear_wpop_circle, dt_proxcnt, on = c("ID", "year")) %>%
         .[, proxcnt10 := proxcnt10-1] %>% # -1: don't count itself
-        .[, pmdens_circle10 := (proxcnt10)/popm_circle10] # 
+        .[, pmdens_circle10 := (proxcnt10)/popm_circle10] %>% #
+        .[, audience10 := popm_circle10/(proxcnt10+1)] %>%
+        .[, audience10_log := log(audience10)] %>%
+        .[, `:=`(proxcnt10_log = log(proxcnt10+1), popm_circle10_log = log(popm_circle10))]
+    
 
     ## ## all museums
     ## ggplot(dt_pmyear_wproxcnt[, .SD, ID], aes(x=year, y=pmdens_circle10, group = ID)) + geom_line()
@@ -1429,14 +1433,39 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ## only with data from 2010
         r_2005 = coxph(gf_coxph_close(), dt_pmyear[year>=2005]),
         r_2010 = coxph(gf_coxph_close(vrbls_to_yeet = "recession"), dt_pmyear[year>=2010]),
-        r_2015 = coxph(gf_coxph_close(vrbls_to_yeet = "recession"), dt_pmyear[year>=2015])
+        r_2015 = coxph(gf_coxph_close(vrbls_to_yeet = "recession"), dt_pmyear[year>=2015]),
         ## these don't make sense: before 2010 there are only closing events,
         ## r_2011_2021 is basically equivalent to r_2010
         ## r_2000_2010 = coxph(gf_coxph_close(vrbls_to_yeet = "covid"), dt_pmyear[year <= 2010]),
         ## r_2011_2021 = coxph(gf_coxph_close(vrbls_to_yeet = "recession"), dt_pmyear[year > 2010])
 
+        r_audience1 = coxph(gf_coxph_close(vrbls_to_add = "audience10",
+                                           vrbls_to_yeet = c("proxcnt10", "popm_circle10",
+                                                             "proxcnt10:popm_circle10")), dt_pmyear),
+
+        r_audience2 = coxph(gf_coxph_close(vrbls_to_add = c("audience10","I(audience10^2)"),
+                                           vrbls_to_yeet = c("proxcnt10", "popm_circle10",
+                                                             "proxcnt10:popm_circle10")), dt_pmyear),
         
+        r_audience_log1 = coxph(gf_coxph_close(vrbls_to_add = "audience10_log",
+                                               vrbls_to_yeet = c("proxcnt10", "popm_circle10",
+                                                                 "proxcnt10:popm_circle10")), dt_pmyear),
+
+        r_audience_log2 = coxph(gf_coxph_close(vrbls_to_add = c("audience10_log","I(audience10_log^2)"),
+                                           vrbls_to_yeet = c("proxcnt10", "popm_circle10",
+                                                             "proxcnt10:popm_circle10")), dt_pmyear),
         
+        r_comp1 = coxph(gf_coxph_close(
+            vrbls_to_add = c("proxcnt10_log", "popm_circle10_log", "proxcnt10_log:popm_circle10_log"),
+            vrbls_to_yeet = c("proxcnt10", "popm_circle10", "proxcnt10:popm_circle10")), dt_pmyear),
+
+        r_comp2 = coxph(gf_coxph_close(
+            vrbls_to_add = c("proxcnt10_log", "popm_circle10:proxcnt10_log"),
+            vrbls_to_yeet = c("proxcnt10", "proxcnt10:popm_circle10")), dt_pmyear),
+
+        r_comp3 = coxph(gf_coxph_close(
+            vrbls_to_add = c("popm_circle10_log", "proxcnt10:popm_circle10_log"),
+            vrbls_to_yeet = c("popm_circle10", "proxcnt10:popm_circle10")), dt_pmyear)
 
         ## fullest model:
         ## FIXME: add founder_dead*muem_fndr_name
@@ -1778,7 +1807,8 @@ gp_heatmap_info <- function(dt_pmyear) {
 
     
     ## get the cells where data actually exists
-    dt_cell_info <- dt_pmyear[, .(N = fnunique(ID)), .(proxcnt10, popm_circle10 = round(popm_circle10))]
+    dt_cell_info <- dt_pmyear[, .(N = fnunique(ID)), .(proxcnt10, popm_circle10 = round(popm_circle10))] %>%
+        .[, audience10 := popm_circle10/proxcnt10]
 
     ## combine cells and pred
     ## dt_topred_cplt <- cbind(dt_topred_cell, dt_pred_prep) %>%
@@ -1798,6 +1828,14 @@ gp_heatmap_info <- function(dt_pmyear) {
         geom_tile() + 
         geom_text() +
         scale_fill_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj")
+
+    p5 <- dt_cell_info %>%
+        ggplot(aes(x=proxcnt10, y= popm_circle10, fill = audience10, label = N)) +
+        geom_tile() + 
+        geom_text() +
+        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj")
+
+
 
     ## observed closings
     dt_pred_obs <- dt_pmyear[, .(N = fnunique(ID), closing = sum(closing), OY = .N),
@@ -1819,7 +1857,8 @@ gp_heatmap_info <- function(dt_pmyear) {
         labs(caption = "mort1: closing/OY")
 
 
-    (p1 + p2) / (p3 + p4)
+    (p1 + p2) / (p3 + p4) / (p5 + p5)
+                             
 
 }
 
@@ -1849,11 +1888,17 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
     ## get the cells where data actually exists
     dt_topred_cell <- dt_pmyear[, .(N = fnunique(ID)), .(proxcnt10, popm_circle10 = round(popm_circle10))]
 
-    ## combine cells and pred
+    
+    dt_topred_cell <- dt_pmyear[, .N, .(proxcnt10, popm_circle10, proxcnt10_log, popm_circle10_log)] %>% funique
+
+    ## get values for 
+
+    ## combine cells and pred, use update join
     dt_topred_cplt <- cbind(dt_topred_cell, dt_pred_prep) %>%
-        .[, pmdens_circle10 := proxcnt10/popm_circle10]
-
-
+        .[, pmdens_circle10 := proxcnt10/popm_circle10] 
+        ## .[, `:=`(proxcnt10_log = log(proxcnt10+1), popm_circle10_log = log(popm_circle10))]
+        ## .[popm_circle10 == 0, popm_circle10_log := log(0.01)] # assing 0.2 to log(0), otherwise empty
+    
     ## if (mdlname != ) {stop("r_pop4 not in l_mdlnames")}
 
     ## mortbound_hi <- 0.25
@@ -1867,7 +1912,19 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
                                 fifelse(mort < mortbound_lo, sprintf("0-%s", mortbound_lo),
                                         sprintf("%s-%s", mortbound_lo, mortbound_hi)))] 
     
+    ## library(ggvoronoi)
+            
+    dt_pred_cell %>% # [sample(1:.N, size = 50)] %>%
+        ggplot(aes(y = popm_circle10_log, x = proxcnt10, color = 1-est)) + 
+        ## geom_voronoi() + 
+        geom_jitter(size=3, width = 0.4) 
+        
     
+        
+
+    ## dt_pred_cell
+
+
     ## construct cross vertical
     ## find the column where the overall slope is the smallest
     dt_cross <- data.table(
@@ -1916,7 +1973,7 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
     ## .[order(floor)] %>% .[, floor := as.factor(floor)]
 
     ## the vertical color bar
-    dt_bar <- dt_pred_cell[, .(pos = seq(0.0+0.005, (ceiling(max(mort)*40)/40), 0.005))] %>%
+    dt_bar <- dt_pred_cell[, .(pos = seq(0.0+0.005, (ceiling(max(mort, na.rm = T)*40)/40), 0.005))] %>%
         .[, x := 0]
     
     
@@ -1949,8 +2006,6 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
     ## p_legend
     ## scale_fill_manual(values = setNames(dt_viz_bar$color, dt_viz_bar$floor)) 
     ## geom_hline(yintercept = "0.15")
-
-
 
 
     p_heatmap <- ggplot() +
@@ -2010,6 +2065,7 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
 ## add a function for model without countryside
 gp_pred_heatmap_wocryside <- gp_pred_heatmap
 gp_pred_heatmap_onlycryside <- gp_pred_heatmap
+gp_pred_heatmap_comp1 <- gp_pred_heatmap
 
 
 
