@@ -231,7 +231,7 @@ gc_vvs <- function() {
         gender                    = "Founder Gender",
         founder_dead1             = "Founder died",
         founder_dead_binary       = "Founder died",
-        slfidfcn                  = "Self- Identification",
+        slfidfcn                  = "Self-Identification",
         muem_fndr_name            = "Founder name in Museum name",
         mow                       = "MOW inclusion",
         pmdens_cry                = "PM density (country)",

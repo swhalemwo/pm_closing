@@ -845,7 +845,7 @@ In other words, so far little evidence points to founders constituting a substan
 
 Country-level measures of the private museum population show no association with mortality.
 #
-However, at the local level the number of private museum and population density predicts survival chances as the main effects of population number of private museums as well as its interaction is significant.
+However, at the local level the number of private museum and population density predicts survival chances as the main effects of population and number of private museums as well as its interaction is significant.
 #
 Figure {{{refplt_p_pred_popprxcnt}}} shows predicted average hazard rates for different conditions of regional PM density and population numbers.
 #
