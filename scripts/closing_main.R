@@ -33,6 +33,7 @@ library(marginaleffects) # for condmef plots (conditional marginal effects)
 library(texreg, include.only = c("screenreg", "texreg")) ## inspection of results
 library(Hmisc, include.only = "latexTranslate")  # latexTranslate
 library(stringr)         # for str_count, makes MOW naming convention processing easier
+library(scales, include.only = c("trans_format", "label_number")) ## for heatmap legend transformation
 
 
 ## LOCS <- list(PROJDIR = "/home/johannes/Dropbox/phd/papers/closing/")
@@ -267,8 +268,9 @@ dt_pmcpct <- gd_pmcpct(dt_pmyear) # time-invariant variables (UoA PM, not pm-yea
 l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
 ## set model names for t_reg_coxph
 
-l_mdlnames_coxph <- list("r_pop4", "r_comp1", "r_comp2", "r_comp3")
-l_mdlnames_coxph <- list("r_pop4", "r_audience1", "r_audience2", "r_audience_log1", "r_audience_log2")
+l_mdlnames_coxph <- list("r_pop4")
+
+
 
 ## "r_smol")#, "r_pop5", "r_pop42")#  , ",r_pop4_wyr", "r_pop4_wcrises")
 ## l_mdlnames_coxph <- c("r_pop4", paste0("r_wsize", 3:1))
@@ -285,6 +287,9 @@ l_mdlnames_timeslice <- list("r_pop4", "r_2005", "r_2010", "r_2015")
 
 ## check whether patterns depend on itme configuration (time period, year_opened, both)
 l_mdlnames_timecfg <- list("r_pop4", "r_pop4_wyo", "r_pop4_wtp", "r_pop4_wyotp")
+
+## alternative competition specficication
+l_mdlnames_comp <- c("r_pop4", "r_comp1", "r_audience1", "r_audience2", "r_audience_log1", "r_audience_log2")
 
 dt_drop1 <- gd_drop1(l_mdls)
 

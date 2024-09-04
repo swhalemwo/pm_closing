@@ -47,10 +47,15 @@ gc_tbls <- function(c_tblargs) {
         t_drop1 = list(
             dt_drop1 = quote(dt_drop1),
             caption = "Model Fit Improvement by Single Term Deletions"),
+        t_reg_coxph_comp = list(
+            l_mdls = quote(l_mdls),
+            l_mdlnames = quote(l_mdlnames_comp),
+            caption = "Alternative competition specifications"),
         t_reg_coxph_timecfg = list(
             l_mdls = quote(l_mdls),
             l_mdlnames = quote(l_mdlnames_timecfg),
             caption = "Cox PH regression results with different time configurations")
+        
     )
 
     
@@ -143,8 +148,8 @@ gc_plts <- function() {
                 mdlname = 'r_pop4',
                 l_mdls = quote(l_mdls),
                 dt_pmyear = quote(dt_pmyear),
-                mortbound_lo = 0.165,
-                mortbound_hi = 0.165,
+                vx = "proxcnt10",
+                vy = "popm_circle10",
                 caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population (at available values)",
                 width = 18,
                 height = 10),
@@ -156,9 +161,9 @@ gc_plts <- function() {
             p_pred_heatmap_wocryside = list(
                 mdlname = "r_wocryside",
                 l_mdls = quote(l_mdls),
+                vx = "proxcnt10",
+                vy = "popm_circle10",
                 dt_pmyear = quote(dt_pmyear[!(proxcnt10 < 2 & popm_circle10 <= 2)]),
-                mortbound_lo = 0.165,
-                mortbound_hi = 0.165,
                 caption = paste0("Predicted Avg. Hazard Rate from Regional PM Density and Population",
                                  " (without proxcnt < 2 & popm_circle10 <2)"),
                 width = 18,
@@ -167,8 +172,8 @@ gc_plts <- function() {
                 mdlname = "r_onlycryside",
                 l_mdls = quote(l_mdls),
                 dt_pmyear = quote(dt_pmyear[proxcnt10 <= 1 & popm_circle10 <= 1]),
-                mortbound_lo = 0.165,
-                mortbound_hi = 0.165,
+                vx = "proxcnt10",
+                vy = "popm_circle10",
                 caption = paste0("Predicted Avg. Hazard Rate from Regional PM Density and Population",
                                  " (only proxcnt < 2 & popm_circle10 <2)"),
                 width = 18,
@@ -176,9 +181,9 @@ gc_plts <- function() {
             p_pred_heatmap_comp1 = list(
                 mdlname = "r_comp1",
                 l_mdls = quote(l_mdls),
+                vx = "proxcnt10",
+                vy = "popm_circle10_log",
                 dt_pmyear = quote(dt_pmyear),
-                mortbound_lo = 0.165,
-                mortbound_hi = 0.165,
                 caption = "kappa",
                 width = 18,
                 height = 10),            

@@ -429,3 +429,83 @@ dt_pmyear[, .SD, .SDcols = c("proxcnt10", "proxcnt10_log", "popm_circle10", "pop
     melt(id.vars = c("ID", "year")) %>%
     ggplot(aes(x=value, color = variable)) + geom_density(show.legend = F) +
     facet_wrap(~variable, scales = "free")
+
+## * old heatmap stuff
+
+## ** neighbors for regions
+## get neighbors: each cell can have 4 neighbors
+    dt_neib_prep <- dt_pred_cell[, .(proxcnt10, popm_circle10, mort_cat)]
+
+    ## look where you have a border to the left
+    dt_border_left <- dt_neib_prep %>% copy %>%
+        .[, proxcnt10_left := proxcnt10 - 1] %>% # join with left
+        join(copy(dt_neib_prep)[, .(proxcnt10_left = proxcnt10, popm_circle10, mort_cat_left = mort_cat)],
+             on = c("proxcnt10_left", "popm_circle10")) %>%
+        .[mort_cat != mort_cat_left] # identify mort_cat transitions
+    
+    ## look where the border is on the top
+    dt_border_up <- dt_neib_prep %>% copy %>%
+        .[, popm_circle10_up := popm_circle10 + 1] %>% # 
+        join(copy(dt_neib_prep)[, .(popm_circle10_up = popm_circle10, proxcnt10, mort_cat_up = mort_cat)],
+             on = c("popm_circle10_up", "proxcnt10")) %>%
+        .[mort_cat != mort_cat_up] # identify mort_cat transitions
+
+    ## construct manual scale
+
+## ** histogram legend (replaced by rug)
+gp_heatmap_legend_barplot <- function(dt_pred_cell) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    #' generate colorbar with histogram, serves as legend for the heatmap
+
+    ## the horizontal bar plot
+    dt_viz_bar <- dt_pred_cell %>% copy %>%
+        .[, .(sumN = sum(N), mean_mort = mean(mort)), floor(mort*40)/40] %>%
+        .[, color := scale_ylorbr(mean_mort/dt_pred_cell[, max(mort)])] 
+    ## .[order(floor)] %>% .[, floor := as.factor(floor)]
+
+    ## the vertical color bar
+    dt_bar <- dt_pred_cell[, .(pos = seq(0.0+0.005, (ceiling(max(mort, na.rm = T)*40)/40), 0.005))] %>%
+        .[, x := 0]
+    
+    
+    ## check that bar is working
+    dt_bar %>% ggplot(aes(x=x, y=pos, fill = pos)) + geom_tile() +
+        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj")
+
+    ## horizontal lines on vertical color bar
+    ## dt_hlines <- data.table(y=c(mortbound_lo, mortbound_hi))
+
+    ## generate plot to use as colorbar legend: allows to have lines (segments on legend)
+    p_legend <- ggplot() +
+        geom_tile(dt_bar, mapping = aes(y=x, x=pos, fill = pos, color = pos), height = 50, show.legend = F,
+                  position = position_nudge(y=-50)) + # the actual colorbar
+        geom_col(dt_viz_bar, mapping = aes(y=sumN, x=floor, fill = floor),
+                 position = position_nudge(x=0.0125), # an info histogram 
+                 show.legend = F) +
+        ## geom_segment(dt_hlines, mapping = aes(x = y, xend = y, y = -75, yend = -25), color = "black") +
+        ## the horizontal lines
+        coord_flip(expand = F) + # need to use coord_flip: can't have decimal-point y-axis with horizontal bars
+        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj") +
+        scale_color_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj") +
+        labs(y= "Nbr. unique PMs", x = element_blank(), title = "Pred. closing chance\nwithin 20 years") +
+        theme(plot.margin = margin(0, 0, 0, 0),
+              panel.background = element_blank(),
+              panel.grid = element_blank(),
+              title = element_text(size = 9),
+              plot.title.position = "plot"
+              )
+
+    return(p_legend)
+    ## p_legend
+    ## scale_fill_manual(values = setNames(dt_viz_bar$color, dt_viz_bar$floor)) 
+    ## geom_hline(yintercept = "0.15")
+}
+## tag = "lines demarcate \ndifferent closing\n chance categories") 
+    ## scale_fill_nightfall(midpoint = fmean(dt_pred_cell$est, w = dt_topred_cell$N), reverse = T)
+
+    
+
+    ## p_heatmap + p_legend +
+    ##     ## plot_layout(widths = c(0.8, 0.2))
+    ##                                     # need to use awkward patchwork design to properly size legend
+    ##     plot_layout(design = "1111#\n11112\n11112\n11112\n11112\n1111#") 

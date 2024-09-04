@@ -1690,6 +1690,7 @@ Mode <- function(x, na.rm = FALSE) {
 ## generate some prediction data to test pop3
 
 gd_predprep_popprxcnt <- function(dt_pmyear) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
     #' generate prediction DT
 
     ## variables that don't change
@@ -1863,7 +1864,7 @@ gp_heatmap_info <- function(dt_pmyear) {
 }
 
 
-gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_hi) {
+gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, vx, vy) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     gw_fargs(match.call())
     #' @param l_mdlnames list of modelnames
@@ -1886,9 +1887,6 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
     
 
     ## get the cells where data actually exists
-    dt_topred_cell <- dt_pmyear[, .(N = fnunique(ID)), .(proxcnt10, popm_circle10 = round(popm_circle10))]
-
-    
     dt_topred_cell <- dt_pmyear[, .N, .(proxcnt10, popm_circle10, proxcnt10_log, popm_circle10_log)] %>% funique
 
     ## get values for 
@@ -1896,147 +1894,41 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
     ## combine cells and pred, use update join
     dt_topred_cplt <- cbind(dt_topred_cell, dt_pred_prep) %>%
         .[, pmdens_circle10 := proxcnt10/popm_circle10] 
-        ## .[, `:=`(proxcnt10_log = log(proxcnt10+1), popm_circle10_log = log(popm_circle10))]
-        ## .[popm_circle10 == 0, popm_circle10_log := log(0.01)] # assing 0.2 to log(0), otherwise empty
-    
-    ## if (mdlname != ) {stop("r_pop4 not in l_mdlnames")}
-
-    ## mortbound_hi <- 0.25
-    ## mortbound_lo <- 0.25
+        
     
     ## predicted for cells, and categorize
     dt_pred_cell <- gd_pred(mdlname, l_mdls, dt_pred = dt_topred_cplt, measure = "surv", year_range = 20) %>%
         join(dt_topred_cell, on = c("proxcnt10", "popm_circle10")) %>% # join frequency data
-        .[, mort := 1-est] %>% # mortality categories
-        .[, mort_cat := fifelse(mort > mortbound_hi, paste0(mortbound_hi, "+"),
-                                fifelse(mort < mortbound_lo, sprintf("0-%s", mortbound_lo),
-                                        sprintf("%s-%s", mortbound_lo, mortbound_hi)))] 
+        .[, mort := 1-est] %>% # mortality calculation
+        .[, .(mort = mean(mort)), .(vx = get(vx), vy = round(get(vy)))] %>% ## aggregate afterwards
+        setnames(old = c("vx", "vy"), new = c(vx, vy))
     
-    ## library(ggvoronoi)
+
             
-    dt_pred_cell %>% # [sample(1:.N, size = 50)] %>%
-        ggplot(aes(y = popm_circle10_log, x = proxcnt10, color = 1-est)) + 
-        ## geom_voronoi() + 
-        geom_jitter(size=3, width = 0.4) 
-        
-    
-        
-
-    ## dt_pred_cell
-
-
     ## construct cross vertical
     ## find the column where the overall slope is the smallest
     dt_cross <- data.table(
-        cross_vert = dt_pred_cell[, .(var_mort = var(mort)), proxcnt10][, .SD[which.min(var_mort), proxcnt10]],
-        cross_horiz = dt_pred_cell[, .(var_mort = var(mort)), popm_circle10] %>%
-            .[, .SD[which.min(var_mort), popm_circle10]])
+        cross_vert = dt_pred_cell[, .(var_mort = var(mort)), get(vx)][which.min(var_mort), get],
+        cross_horiz = dt_pred_cell[, .(var_mort = var(mort)), get(vy)][which.min(var_mort), get])
 
 
-    ## library(ggpattern)
-
-    ## get neighbors: each cell can have 4 neighbors
-    dt_neib_prep <- dt_pred_cell[, .(proxcnt10, popm_circle10, mort_cat)]
-
-    ## look where you have a border to the left
-    dt_border_left <- dt_neib_prep %>% copy %>%
-        .[, proxcnt10_left := proxcnt10 - 1] %>% # join with left
-        join(copy(dt_neib_prep)[, .(proxcnt10_left = proxcnt10, popm_circle10, mort_cat_left = mort_cat)],
-             on = c("proxcnt10_left", "popm_circle10")) %>%
-        .[mort_cat != mort_cat_left] # identify mort_cat transitions
-    
-    ## look where the border is on the top
-    dt_border_up <- dt_neib_prep %>% copy %>%
-        .[, popm_circle10_up := popm_circle10 + 1] %>% # 
-        join(copy(dt_neib_prep)[, .(popm_circle10_up = popm_circle10, proxcnt10, mort_cat_up = mort_cat)],
-             on = c("popm_circle10_up", "proxcnt10")) %>%
-        .[mort_cat != mort_cat_up] # identify mort_cat transitions
-
-    ## construct manual scale
-    
-    
     scale_ylorbr <- scale_color_YlOrBr(limits = dt_pred_cell[, c(min(mort), max(mort))],
                                        reverse = T, range = c(0, 0.88), guide = "none",
                                        scale_name = "jj") %>%
         chuck("palette")
-
-    ## ## still necessary to scale input values, doesn't work when passing to limits apparently
-    ## dt_pred_cell[, .(mean_mort = mean(mort)), mort_cat] %>%
-    ##     .[order(mean_mort)] %>% 
-    ##     .[, color := scale_ylorbr(mean_mort/dt_pred_cell[, max(mort)])] %>%
-    ##     .[, color] %>% pal
     
-    ## the horizontal bar plot
-    dt_viz_bar <- dt_pred_cell %>% copy %>%
-        .[, .(sumN = sum(N), mean_mort = mean(mort)), floor(mort*40)/40] %>%
-        .[, color := scale_ylorbr(mean_mort/dt_pred_cell[, max(mort)])] 
-    ## .[order(floor)] %>% .[, floor := as.factor(floor)]
-
-    ## the vertical color bar
-    dt_bar <- dt_pred_cell[, .(pos = seq(0.0+0.005, (ceiling(max(mort, na.rm = T)*40)/40), 0.005))] %>%
-        .[, x := 0]
-    
-    
-    ## check that bar is working
-    dt_bar %>% ggplot(aes(x=x, y=pos, fill = pos)) + geom_tile() +
-        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj")
-
-    ## horizontal lines on vertical color bar
-    dt_hlines <- data.table(y=c(mortbound_lo, mortbound_hi))
-
-    ## generate plot to use as colorbar legend: allows to have lines (segments on legend)
-    p_legend <- ggplot() +
-        geom_tile(dt_bar, mapping = aes(y=x, x=pos, fill = pos, color = pos), height = 50, show.legend = F,
-                  position = position_nudge(y=-50)) + # the actual colorbar
-        geom_col(dt_viz_bar, mapping = aes(y=sumN, x=floor, fill = floor),
-                 position = position_nudge(x=0.0125), # an info histogram 
-                 show.legend = F) +
-        ## geom_segment(dt_hlines, mapping = aes(x = y, xend = y, y = -75, yend = -25), color = "black") +
-        ## the horizontal lines
-        coord_flip(expand = F) + # need to use coord_flip: can't have decimal-point y-axis with horizontal bars
-        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj") +
-        scale_color_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj") +
-        labs(y= "Nbr. unique PMs", x = element_blank(), title = "Pred. closing chance\nwithin 20 years") +
-        theme(plot.margin = margin(0, 0, 0, 0),
-              panel.background = element_blank(),
-              panel.grid = element_blank(),
-              title = element_text(size = 9),
-              plot.title.position = "plot"
-              )
-    ## p_legend
-    ## scale_fill_manual(values = setNames(dt_viz_bar$color, dt_viz_bar$floor)) 
-    ## geom_hline(yintercept = "0.15")
-
 
     p_heatmap <- ggplot() +
-        geom_tile(dt_pred_cell, mapping = aes(x=proxcnt10, y= popm_circle10, fill = mort, color = mort),
-                  show.legend = F) +
-        geom_rug(dt_pmyear, mapping = aes(x=proxcnt10, y= popm_circle10),
+        geom_tile(dt_pred_cell, mapping = aes(x=get(vx), y= get(vy), fill = mort, color = mort),
+                  show.legend = T) +
+        geom_rug(dt_pmyear, mapping = aes(x=get(vx), y= get(vy)),
                  position = position_jitter(width = 0.4), alpha = 0.1, linewidth = 0.1,
                  length = unit(8, "pt"),
                  sides = "tr") +  
-        ## geom_tile(dt_pred_cell[mort_cat == "0-0.15", .(mean_mort_cat = mean(mort))],
-        ##           mapping = aes(x=10,y=0, fill = mean_mort_cat))         
-        ## geom_tile_pattern(dt_pred_cell,
-        ##                   mapping = aes(
-        ##                       fill = 1-est,
-        ##                       x = proxcnt10, y = popm_circle10,
-        ##                       pattern_spacing = mort_cat, pattern_angle = mort_cat,
-        ##                       pattern_size = mort_cat),                          
-        ##                   pattern_fill = "black", pattern_color = "grey30",
-        ##                   pattern_density = 0.02) + 
-        ## scale_pattern_manual(values = c("0-0.15" = "stripe", "0.15-0.25" = "crosshatch", "0.25+" = "circle")) +
-        ## scale_pattern_spacing_manual(values = c("0-0.15" = 0.02, "0.15-0.25" = 0.02, "0.25+" = 0.01)) +
-        ## scale_pattern_angle_manual(values = c("0-0.15" = 10, "0.15-0.25" = 45, "0.25+" = 80)) +
-        ## scale_pattern_size_manual(values = c("0-0.15" = 0.3, "0.15-0.25" = 0.3, "0.25+" = 0.5)) +
-        ## geom_segment(dt_border_left, mapping = aes(x=proxcnt10-0.5, y=popm_circle10-0.5,
-        ##                                            xend = proxcnt10_left + 0.5, yend = popm_circle10 + 0.5),
-        ##              color = "black") +
-        ## geom_segment(dt_border_up, mapping = aes(x=proxcnt10-0.5, y=popm_circle10 + 0.5,
-        ##                                          xend = proxcnt10 + 0.5, yend = popm_circle10_up - 0.5),
-        ##              color = "black") + 
-        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj") +
-        scale_color_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj") +
+        scale_fill_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj",
+                          name = "Closing change\nwithin 20 years") +
+        scale_color_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj",
+                           name = "Closing change\nwithin 20 years") +
         theme_bw() +
         scale_y_continuous(expand = expansion(add = c(0, 0.5))) +
         scale_x_continuous(expand = expansion(add = c(0, 0.5))) + 
@@ -2044,22 +1936,28 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, mortbound_lo, mortbound_
         geom_vline(xintercept = dt_cross$cross_vert, linetype = "dashed") +
         geom_hline(yintercept = dt_cross$cross_horiz, linetype = "dashed") + 
         theme(legend.position = "right",
-              plot.tag.position = c(0.8, 0.3)) +
-        labs(x=gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "proxcnt10", vrbl_lbl],
-             y = gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == "popm_circle10", vrbl_lbl])
+              plot.tag.position = c(0.8, 0.3),
+              legend.key.height = unit(1.5, "cm")) +
+        labs(x=gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == vx, vrbl_lbl],
+             y = gc_vvs() %>% chuck("dt_vrblinfo") %>% .[vrbl == vy, vrbl_lbl])  
     ## p_heatmap
-    ## tag = "lines demarcate \ndifferent closing\n chance categories") 
-    ## scale_fill_nightfall(midpoint = fmean(dt_pred_cell$est, w = dt_topred_cell$N), reverse = T)
 
+    if (grepl("_log", vy)) {
+    
+        p_heatmap <- p_heatmap +
+            scale_y_continuous(
+                ## expand = expansion(add = c(0, 0.5)),
+                breaks = log((10**seq(2,7))/1e6),
+                labels = \(x) scales::label_number(scale_cut = scales::cut_short_scale())(exp(x)*1e6))
+        
+    
+    }
+
+    return(p_heatmap)
     
 
-    p_heatmap + p_legend +
-        ## plot_layout(widths = c(0.8, 0.2))
-                                        # need to use awkward patchwork design to properly size legend
-        plot_layout(design = "1111#\n11112\n11112\n11112\n11112\n1111#") 
 
-
-    
+        
 }
 
 ## add a function for model without countryside
@@ -2364,7 +2262,7 @@ gt_reg_coxph <- function(l_mdls, l_mdlnames) {
 gt_reg_coxph_density <- gt_reg_coxph
 gt_reg_coxph_timeslice <- gt_reg_coxph
 gt_reg_coxph_timecfg <- gt_reg_coxph
-
+gt_reg_coxph_comp <- gt_reg_coxph
 
 gt_coxzph <- function(rx) {
     gw_fargs(match.call())

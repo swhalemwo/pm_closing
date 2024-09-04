@@ -48,6 +48,9 @@ gp_pred_heatmap_wocryside,mdlname,"""r_wocryside"""
 gp_pred_heatmap_wocryside,l_mdls,l_mdls
 gp_pred_heatmap_onlycryside,mdlname,"""r_onlycryside"""
 gp_pred_heatmap_onlycryside,l_mdls,l_mdls
+gp_pred_heatmap_comp1,mdlname,"""r_comp1"""
+gp_pred_heatmap_comp1,l_mdls,l_mdls
+gp_pred_heatmap_comp1,dt_pmyear,dt_pmyear
 gp_lngtdvelp,dt_pmyear,dt_pmyear
 gt_coxzph,rx,l_mdls$r_pop4
 gt_reg_coxph,l_mdls,l_mdls
@@ -60,6 +63,8 @@ gt_reg_coxph_density,l_mdls,l_mdls
 gt_reg_coxph_density,l_mdlnames,l_mdlnames_coxph_density
 gt_reg_coxph_timeslice,l_mdls,l_mdls
 gt_reg_coxph_timeslice,l_mdlnames,l_mdlnames_timeslice
+gt_reg_coxph_comp,l_mdls,l_mdls
+gt_reg_coxph_comp,l_mdlnames,l_mdlnames_comp
 gt_reg_coxph_timecfg,l_mdls,l_mdls
 gt_reg_coxph_timecfg,l_mdlnames,l_mdlnames_timecfg
 gd_inflcases,rx,rx
@@ -67,3 +72,9 @@ gt_reg_coxph,l_mdls,l_mdls
 gt_reg_coxph,l_mdlnames,l_mdlnames_coxph
 gt_reg_coxph,l_mdls,l_mdls
 gt_reg_coxph,l_mdlnames,l_mdlnames_coxph
+gt_reg_coxph_comp,l_mdls,l_mdls
+gt_reg_coxph_comp,l_mdlnames,l_mdlnames_comp
+gt_reg_coxph_timecfg,l_mdls,l_mdls
+gt_reg_coxph_timecfg,l_mdlnames,l_mdlnames_timecfg
+gt_reg_coxph_timecfg,l_mdls,l_mdls
+gt_reg_coxph_timecfg,l_mdlnames,l_mdlnames_timecfg
