@@ -120,7 +120,9 @@ gt_sumstats <- function(dt_pmyear, dt_pmcpct) {
         .[, min_fmtd := format(min, digits = 2, scientific = F, trim = F), .I] %>% # row-wise min for small mins
         .[, max_fmtd := format(max, digits = 2, scientific = F, trim = F,
                                nsmall = fifelse(max %% 1 == 0, 0, 2)), .I] %>% # non-Ints: two decimal places
-        .[, .(grp_filler = "", term_lbl, pm_sum = as.character(pm_sum),
+        .[, .(grp_filler = "",
+              term_lbl,
+              pm_sum = as.character(pm_sum),
               pm_mean = format(pm_mean, digits=2, trim = T),
               mean = format(mean, digits = 2, trim = F),
               sd = format(sd, digits = 2, trim = F),
