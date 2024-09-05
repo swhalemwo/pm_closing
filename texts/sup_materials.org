@@ -1,12 +1,13 @@
-#+latex_class: elsarticle
+#+latex_class: article_egos
 # erases make title
 # #+BIND: org-export-latex-title-command ""
-
 
 # fucks all the maketitlestuff just to be sure
 #+OPTIONS: num:nil
 #+OPTIONS: toc:nil
 #+OPTIONS: h:5
+
+
 
 #+BEGIN_SRC R :session calc :exports none :results values drawer :dir /home/johannes/
 library(jtls)
@@ -188,13 +189,28 @@ Secondly, one might argue that the competition between private museums is scaled
 In this case, the absence of other private museums assumes absence of competition, regardless of the audience size.
 
 
-These while it would be possible for these different specifications to lead to similar interpretations, in practice they diverge substantially.
+These while it would be possible for these different specifications to lead to similar interpretations, in practice they diverge substantially (table {{{reftbl_t_reg_coxph_env}}}).
 #
-Using Private museum density (ref), the general conclusion would be that competition increases mortality as predicted closing chance is highest in areas of low population and large private museum populations.
+Using Private museum density (model 2 and 3 for linear and log-transformed audience, figure {{{refplt_p_pred_heatmap_alt}}} bottom left), the general conclusion would be that (logged) competition increases mortality as predicted closing chance is highest in areas of low population and large private museum populations.
 #
-However, using audience leads to the opposite conclusion, as higher audience is associated with higher mortality; predicted closing chance is highest for areas of low numbers of private museums and large populations.
+However, using audience (models 4 and 5, figure {{{refplt_p_pred_heatmap_alt}}} bottom right) leads to the opposite conclusion, as higher audience is associated with higher mortality; predicted closing chance is highest for areas of low numbers of private museums and large populations.
 #
-It is beyond the scope of the paper to explore the origin of these diverging perspectives in detail.
+While it is beyond the scope of the paper to explore the origin of these diverging perspectives in detail, it is worth pointing out that the main specification of private interacted private museum and population counts captures both of these relationships, which arguably makes it preferable for its encompassingness.
 #
+
+
+
+
+** Alternative sample specifications
+
+#+INCLUDE: "../tables/t_reg_coxph_density_wcpF.tex" export latex
+
+To investigate the robustness of the coefficients across different values, table {{{reftbl_t_reg_coxph_density}}} shows how coefficients according to sample restrictions. 
+# 
+In model 1, only museums are included which are located in areas with the highest value combination of number and private museums and population, i.e. museums located in an environment of less than 2 million people and 0 or 1 other private museums (the "countryside").
+#
+In model 2, the "countryside" is excluded.
+#
+However, both these models are not reliable, as they do not properly converge (indicated by extremely large coefficients in both models).
 
 
