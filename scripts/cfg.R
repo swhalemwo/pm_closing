@@ -51,6 +51,14 @@ gc_tbls <- function(c_tblargs) {
             l_mdls = quote(l_mdls),
             l_mdlnames = quote(l_mdlnames_comp),
             caption = "Alternative competition specifications"),
+        t_reg_coxph_dens = list(
+            l_mdls = quote(l_mdls),
+            l_mdlnames = quote(l_mdlnames_dens),
+            caption = "Alternative competition specifications"),
+        t_reg_coxph_env = list(
+            l_mdls = quote(l_mdls),
+            l_mdlnames = quote(l_mdlnames_env),
+            caption = "Alternative specification of environment"),
         t_reg_coxph_timecfg = list(
             l_mdls = quote(l_mdls),
             l_mdlnames = quote(l_mdlnames_timecfg),
@@ -150,6 +158,7 @@ gc_plts <- function() {
                 dt_pmyear = quote(dt_pmyear),
                 vx = "proxcnt10",
                 vy = "popm_circle10",
+                add_cross = T,
                 caption = "Predicted Avg. Hazard Rate on Regional PM Density and Population (at available values)",
                 width = 18,
                 height = 10),
@@ -163,6 +172,7 @@ gc_plts <- function() {
                 l_mdls = quote(l_mdls),
                 vx = "proxcnt10",
                 vy = "popm_circle10",
+                add_cross = T,
                 dt_pmyear = quote(dt_pmyear[!(proxcnt10 < 2 & popm_circle10 <= 2)]),
                 caption = paste0("Predicted Avg. Hazard Rate from Regional PM Density and Population",
                                  " (without proxcnt < 2 & popm_circle10 <2)"),
@@ -172,21 +182,19 @@ gc_plts <- function() {
                 mdlname = "r_onlycryside",
                 l_mdls = quote(l_mdls),
                 dt_pmyear = quote(dt_pmyear[proxcnt10 <= 1 & popm_circle10 <= 1]),
+                add_cross = F,
                 vx = "proxcnt10",
                 vy = "popm_circle10",
                 caption = paste0("Predicted Avg. Hazard Rate from Regional PM Density and Population",
                                  " (only proxcnt < 2 & popm_circle10 <2)"),
                 width = 18,
                 height = 10),
-            p_pred_heatmap_comp1 = list(
-                mdlname = "r_comp1",
+            p_pred_heatmap_alt = list(
                 l_mdls = quote(l_mdls),
-                vx = "proxcnt10",
-                vy = "popm_circle10_log",
                 dt_pmyear = quote(dt_pmyear),
-                caption = "kappa",
+                caption = "Prediction Heatmap of Alternative model specifications",
                 width = 18,
-                height = 10),            
+                height = 10),
             p_surv_death = list(
                 l_mdls = quote(l_mdls),
                 name_mainmdl = "r_pop4",
@@ -256,6 +264,8 @@ gc_vvs <- function() {
         "I(proxcnt10^2)"          = "Nbr PM^2 within 10km",
         pmdens_circle10           = "PM density (10km)",
         "I(pmdens_circle10^2)"    = "PM density^2 (10km)",
+        pmdens_circle10_log       = "PM density (10km, log)",
+        "I(pmdens_circle10_log^2)"= "PM density (10km, log^2)",
         "proxcnt10:popm_circle10" = "Nbr PM (10km) * Pop (10km)",
         
         proxcnt10_log             = "Nbr PM^2 within 10km (log)",
@@ -312,7 +322,7 @@ gc_vvs <- function() {
                       audience10, "I(audience10^2)", audience10_log, "I(audience10_log^2)",
                       proxcnt10_log, popm_circle10_log, "popm_circle10:I(proxcnt10^2)",
                       "proxcnt10_log:popm_circle10_log", "proxcnt10:popm_circle10_log",
-                      "popm_circle10:proxcnt10_log"),
+                      "popm_circle10:proxcnt10_log", pmdens_circle10_log, "I(pmdens_circle10_log^2)"),
         misc     = .c(GLOBAL)
     )
 
@@ -328,7 +338,7 @@ gc_vvs <- function() {
                    exhbcnt, exhbrollsum_avg, audience10, "I(audience10^2)", audience10_log, "I(audience10_log^2)",
                    covid, recession, proxcnt10_log, popm_circle10_log, "popm_circle10:I(proxcnt10^2)",
                    "proxcnt10_log:popm_circle10_log", "proxcnt10:popm_circle10_log",
-                   "popm_circle10:proxcnt10_log")
+                   "popm_circle10:proxcnt10_log", pmdens_circle10_log, "I(pmdens_circle10_log^2)")
 
     ## specify variable type: binary, numeric, categorical
     l_vrbltypes <- list(        
@@ -341,7 +351,8 @@ gc_vvs <- function() {
                  exhbcnt, exhbrollsum_avg,
                  exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)",
                  proxcnt10_log, popm_circle10_log, "popm_circle10:I(proxcnt10^2)",
-                 "proxcnt10_log:popm_circle10_log", "proxcnt10:popm_circle10_log", "popm_circle10:proxcnt10_log"),
+                 "proxcnt10_log:popm_circle10_log", "proxcnt10:popm_circle10_log", "popm_circle10:proxcnt10_log",
+                 pmdens_circle10_log, "I(pmdens_circle10_log^2)"),
         cat = .c(gender, founder_dead1, slfidfcn, reg6, an_inclusion, time_period))
 
 

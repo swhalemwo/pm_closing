@@ -487,10 +487,12 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_lvrs = c_lvrs) {
 
     dt_pmyear_wproxcnt <- join(dt_pmyear_wpop_circle, dt_proxcnt, on = c("ID", "year")) %>%
         .[, proxcnt10 := proxcnt10-1] %>% # -1: don't count itself
-        .[, pmdens_circle10 := (proxcnt10)/popm_circle10] %>% #
+        .[, pmdens_circle10 := (proxcnt10)/popm_circle10] %>%
+        .[, pmdens_circle10_log := log(pmdens_circle10+1)] %>%
         .[, audience10 := popm_circle10/(proxcnt10+1)] %>%
         .[, audience10_log := log(audience10)] %>%
         .[, `:=`(proxcnt10_log = log(proxcnt10+1), popm_circle10_log = log(popm_circle10))]
+        
     
 
     ## ## all museums
@@ -1439,6 +1441,9 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ## r_2000_2010 = coxph(gf_coxph_close(vrbls_to_yeet = "covid"), dt_pmyear[year <= 2010]),
         ## r_2011_2021 = coxph(gf_coxph_close(vrbls_to_yeet = "recession"), dt_pmyear[year > 2010])
 
+        ## audience group: using amount of people available per museum
+        ## assumes there's no difference between 3m people and 3 museums and 1m people and 1 museum
+        
         r_audience1 = coxph(gf_coxph_close(vrbls_to_add = "audience10",
                                            vrbls_to_yeet = c("proxcnt10", "popm_circle10",
                                                              "proxcnt10:popm_circle10")), dt_pmyear),
@@ -1454,7 +1459,10 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         r_audience_log2 = coxph(gf_coxph_close(vrbls_to_add = c("audience10_log","I(audience10_log^2)"),
                                            vrbls_to_yeet = c("proxcnt10", "popm_circle10",
                                                              "proxcnt10:popm_circle10")), dt_pmyear),
-        
+
+
+        ## comp group: testing logs of variables: r_pop4 is implicitly r_comp0 (no logs)
+        ## comp1-3 have different combinations of logs
         r_comp1 = coxph(gf_coxph_close(
             vrbls_to_add = c("proxcnt10_log", "popm_circle10_log", "proxcnt10_log:popm_circle10_log"),
             vrbls_to_yeet = c("proxcnt10", "popm_circle10", "proxcnt10:popm_circle10")), dt_pmyear),
@@ -1465,7 +1473,36 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
 
         r_comp3 = coxph(gf_coxph_close(
             vrbls_to_add = c("popm_circle10_log", "proxcnt10:popm_circle10_log"),
+            vrbls_to_yeet = c("popm_circle10", "proxcnt10:popm_circle10")), dt_pmyear),
+
+        ## pmdens: use different specifications of pm density (proxcnt/popm);
+        ## rather than proxcnt and popm separately
+        r_pmdens1 = coxph(gf_coxph_close(
+            vrbls_to_add = "pmdens_circle10",
+            vrbls_to_yeet = c("proxcnt10", "popm_circle10", "proxcnt10:popm_circle10")), dt_pmyear),
+
+        r_pmdens2 = coxph(gf_coxph_close(
+            vrbls_to_add = "pmdens_circle10_log",
+            vrbls_to_yeet = c("proxcnt10", "popm_circle10", "proxcnt10:popm_circle10")), dt_pmyear),
+            
+        r_pmdens3 = coxph(gf_coxph_close(
+            vrbls_to_add = c("pmdens_circle10", "I(pmdens_circle10^2)"),
+            vrbls_to_yeet = c("proxcnt10", "popm_circle10", "proxcnt10:popm_circle10")), dt_pmyear),
+
+        r_pmdens4 = coxph(gf_coxph_close(
+            vrbls_to_add = c("pmdens_circle10_log", "I(pmdens_circle10_log^2)"),
+            vrbls_to_yeet = c("proxcnt10", "popm_circle10", "proxcnt10:popm_circle10")), dt_pmyear),
+
+        ## pmdens_aud: combine pmdens (rate) and count measures;
+        ## leads to awfully convoluted coefs interpretation
+        r_pmdens_aud1 = coxph(gf_coxph_close(
+            vrbls_to_add = "pmdens_circle10",
+            vrbls_to_yeet = c("proxcnt10", "proxcnt10:popm_circle10")), dt_pmyear),
+
+        r_pmdens_aud2 = coxph(gf_coxph_close(
+            vrbls_to_add = "pmdens_circle10",
             vrbls_to_yeet = c("popm_circle10", "proxcnt10:popm_circle10")), dt_pmyear)
+        
 
         ## fullest model:
         ## FIXME: add founder_dead*muem_fndr_name
@@ -1864,20 +1901,19 @@ gp_heatmap_info <- function(dt_pmyear) {
 }
 
 
-gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, vx, vy) {
+gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, vx, vy, add_cross) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     gw_fargs(match.call())
-    #' @param l_mdlnames list of modelnames
+    #' @param mdlname the model to choose from l_mdls
     #' @param l_mdls list of models
     #' @param dt_pmyear data.table with PM-year data
+    #' @param vx variable to plot on x-axis
+    #' @param vy variable to plot on y-axis
+    #' @param add_cross whether to add cross vertical and horizontal lines for "sectors"
+    #' this only really makes sense for interactions, not log variables
+    
     #' the function generates a heatmap plot of the predicted 20-year hazard
     #' for a grid of present proxcnt and popm_circle10 values 
-
-
-    ## get the overall prediction data 
-    ## dt_pred_full <- gd_predprep_popprxcnt(dt_pmyear) %>%
-    ##     gd_pred("r_pop4", l_mdls, dt_pred = ., measure = "surv", year_range = 20) %>%
-    ##     .[, popm_circle10 := round(popm_circle10)] %>% funique
 
     ## generate pred (median/mode data)
     dt_pred_prep <- cbind(
@@ -1891,10 +1927,12 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, vx, vy) {
 
     ## get values for 
 
-    ## combine cells and pred, use update join
+    ## combine cells and pred, use update join, 
     dt_topred_cplt <- cbind(dt_topred_cell, dt_pred_prep) %>%
-        .[, pmdens_circle10 := proxcnt10/popm_circle10] 
-        
+        .[, pmdens_circle10 := proxcnt10/popm_circle10] %>% ## add pmdens_circle10 in case it's needed
+        .[, pmdens_circle10_log := log(pmdens_circle10 + 1)] %>%
+        .[, audience10 := popm_circle10/(proxcnt10+1)] %>% # also add audience10 in case its needed
+        .[, audience10_log := log(audience10)] 
     
     ## predicted for cells, and categorize
     dt_pred_cell <- gd_pred(mdlname, l_mdls, dt_pred = dt_topred_cplt, measure = "surv", year_range = 20) %>%
@@ -1902,7 +1940,8 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, vx, vy) {
         .[, mort := 1-est] %>% # mortality calculation
         .[, .(mort = mean(mort)), .(vx = get(vx), vy = round(get(vy)))] %>% ## aggregate afterwards
         setnames(old = c("vx", "vy"), new = c(vx, vy))
-    
+
+    ## FIXME: could add parameter to control granularity of rounding
 
             
     ## construct cross vertical
@@ -1933,8 +1972,6 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, vx, vy) {
         scale_y_continuous(expand = expansion(add = c(0, 0.5))) +
         scale_x_continuous(expand = expansion(add = c(0, 0.5))) + 
         ## coord_cartesian(expand = F) +
-        geom_vline(xintercept = dt_cross$cross_vert, linetype = "dashed") +
-        geom_hline(yintercept = dt_cross$cross_horiz, linetype = "dashed") + 
         theme(legend.position = "right",
               plot.tag.position = c(0.8, 0.3),
               legend.key.height = unit(1.5, "cm")) +
@@ -1949,9 +1986,15 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, vx, vy) {
                 ## expand = expansion(add = c(0, 0.5)),
                 breaks = log((10**seq(2,7))/1e6),
                 labels = \(x) scales::label_number(scale_cut = scales::cut_short_scale())(exp(x)*1e6))
-        
-    
     }
+
+
+    if (add_cross == T) {
+        p_heatmap <- p_heatmap +
+            geom_vline(xintercept = dt_cross$cross_vert, linetype = "dashed") +
+            geom_hline(yintercept = dt_cross$cross_horiz, linetype = "dashed")
+    }
+        
 
     return(p_heatmap)
     
@@ -1963,7 +2006,73 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, vx, vy) {
 ## add a function for model without countryside
 gp_pred_heatmap_wocryside <- gp_pred_heatmap
 gp_pred_heatmap_onlycryside <- gp_pred_heatmap
-gp_pred_heatmap_comp1 <- gp_pred_heatmap
+
+
+gp_pred_heatmap_alt <- function(l_mdls, dt_pmyear) {
+    if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    gw_fargs(match.call())
+    #' @param l_mdlnames list of modelnames
+    #' @param l_mdls list of models
+    #' @param dt_pmyear data.table with PM-year data
+    #' the function generates a heatmap plot of the predicted 20-year hazard
+    #' for a grid of present proxcnt and popm_circle10 values
+    #' for the models in l_mdlnames
+    #' to quickly check different specifications
+
+    p_pred_heatmap_comp1 <- gp_pred_heatmap(
+        mdlname = "r_comp1",
+        l_mdls = l_mdls,
+        vx = "proxcnt10",
+        vy = "popm_circle10_log",
+        add_cross = T,
+        dt_pmyear = dt_pmyear) +
+        labs(title = "popm_circle10 (log)") +
+        theme(legend.key.height = unit(0.5, "cm"))
+
+    p_pred_heatmap_pop42 <- gp_pred_heatmap(
+        mdlname = "r_pop42",
+        l_mdls = l_mdls,
+        vx = "proxcnt10",
+        vy = "popm_circle10",
+        add_cross = T,
+        dt_pmyear = dt_pmyear) +
+        labs(title = "base + proxcnt10^2") +
+        theme(legend.key.height = unit(0.5, "cm"))
+
+
+    p_pred_heatmap_dens3 <- gp_pred_heatmap(
+        mdlname = "r_pmdens2",
+        l_mdls = l_mdls,
+        vx = "proxcnt10",
+        vy = "popm_circle10",
+        add_cross = F,
+        dt_pmyear = dt_pmyear) +
+        labs(title = "surv ~ PM density (log)") + 
+        theme(legend.key.height = unit(0.5, "cm"))
+
+    p_pred_heatmap_audlog <- gp_pred_heatmap(
+        mdlname = "r_audience_log1",
+        l_mdls = l_mdls,
+        vx = "proxcnt10",
+        vy = "popm_circle10",
+        add_cross = F,
+        dt_pmyear = dt_pmyear) +
+        labs(title = "survb ~ audience (log)") +
+        theme(legend.key.height = unit(0.5, "cm"))
+
+
+    
+    
+    (p_pred_heatmap_comp1 + p_pred_heatmap_pop42) / (p_pred_heatmap_dens3 + p_pred_heatmap_audlog) 
+        ## plot_layout(guides = "collect") ## scales not comparable
+
+}
+
+    
+                
+            
+
+    
 
 
 
@@ -2263,6 +2372,8 @@ gt_reg_coxph_density <- gt_reg_coxph
 gt_reg_coxph_timeslice <- gt_reg_coxph
 gt_reg_coxph_timecfg <- gt_reg_coxph
 gt_reg_coxph_comp <- gt_reg_coxph
+gt_reg_coxph_dens <- gt_reg_coxph
+gt_reg_coxph_env <- gt_reg_coxph
 
 gt_coxzph <- function(rx) {
     gw_fargs(match.call())

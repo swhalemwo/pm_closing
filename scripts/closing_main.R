@@ -270,7 +270,7 @@ l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
 
 l_mdlnames_coxph <- list("r_pop4")
 
-
+l_mdlnames_dens <- list("r_pop4", "r_comp1", "r_pmdens1", "r_pmdens3", "r_pmdens_aud1", "r_pmdens_aud2")
 
 ## "r_smol")#, "r_pop5", "r_pop42")#  , ",r_pop4_wyr", "r_pop4_wcrises")
 ## l_mdlnames_coxph <- c("r_pop4", paste0("r_wsize", 3:1))
@@ -290,6 +290,9 @@ l_mdlnames_timecfg <- list("r_pop4", "r_pop4_wyo", "r_pop4_wtp", "r_pop4_wyotp")
 
 ## alternative competition specficication
 l_mdlnames_comp <- c("r_pop4", "r_comp1", "r_audience1", "r_audience2", "r_audience_log1", "r_audience_log2")
+
+## combination of density/competition specifications
+l_mdlnames_env <- c("r_pop4", "r_pmdens1", "r_pmdens2", "r_audience1", "r_audience_log1")
 
 dt_drop1 <- gd_drop1(l_mdls)
 

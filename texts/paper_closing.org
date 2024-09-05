@@ -72,7 +72,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: ynkplt_p_heatmap_info (eval (concat "#+label: fig:p_heatmap_info\n" "#+caption: heatmap info plots\n" "#+attr_latex: :width 35cm\n" "[[file:../figures/p_heatmap_info.pdf]]"))
 #+MACRO: ynkplt_p_pred_heatmap_wocryside (eval (concat "#+label: fig:p_pred_heatmap_wocryside\n" "#+caption: Predicted Avg. Hazard Rate from Regional PM Density and Population (without proxcnt < 2 & popm_circle10 <2)\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_pred_heatmap_wocryside.pdf]]"))
 #+MACRO: ynkplt_p_pred_heatmap_onlycryside (eval (concat "#+label: fig:p_pred_heatmap_onlycryside\n" "#+caption: Predicted Avg. Hazard Rate from Regional PM Density and Population (only proxcnt < 2 & popm_circle10 <2)\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_pred_heatmap_onlycryside.pdf]]"))
-#+MACRO: ynkplt_p_pred_heatmap_comp1 (eval (concat "#+label: fig:p_pred_heatmap_comp1\n" "#+caption: kappa\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_pred_heatmap_comp1.pdf]]"))
+#+MACRO: ynkplt_p_pred_heatmap_alt (eval (concat "#+label: fig:p_pred_heatmap_alt\n" "#+caption: Prediction Heatmap of Alternative model specifications\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_pred_heatmap_alt.pdf]]"))
 #+MACRO: ynkplt_p_surv_death (eval (concat "#+label: fig:p_surv_death\n" "#+caption: Comparison of Survival Estimates by Founder Death (95% CI)\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_surv_death.pdf]]"))
 #+MACRO: ynkplt_p_lngtdvelp (eval (concat "#+label: fig:p_lngtdvelp\n" "#+caption: Composition of private museum population\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_lngtdvelp.pdf]]"))
 
@@ -94,7 +94,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: refplt_p_heatmap_info \ref{fig:p_heatmap_info}
 #+MACRO: refplt_p_pred_heatmap_wocryside \ref{fig:p_pred_heatmap_wocryside}
 #+MACRO: refplt_p_pred_heatmap_onlycryside \ref{fig:p_pred_heatmap_onlycryside}
-#+MACRO: refplt_p_pred_heatmap_comp1 \ref{fig:p_pred_heatmap_comp1}
+#+MACRO: refplt_p_pred_heatmap_alt \ref{fig:p_pred_heatmap_alt}
 #+MACRO: refplt_p_surv_death \ref{fig:p_surv_death}
 #+MACRO: refplt_p_lngtdvelp \ref{fig:p_lngtdvelp}
 
@@ -109,6 +109,8 @@ wd_nbrs(dt_nbrs)
 #+MACRO: reftbl_t_reg_coxph_deathcfg \ref{tbl:t_reg_coxph_deathcfg}
 #+MACRO: reftbl_t_drop1 \ref{tbl:t_drop1}
 #+MACRO: reftbl_t_reg_coxph_comp \ref{tbl:t_reg_coxph_comp}
+#+MACRO: reftbl_t_reg_coxph_dens \ref{tbl:t_reg_coxph_dens}
+#+MACRO: reftbl_t_reg_coxph_env \ref{tbl:t_reg_coxph_env}
 #+MACRO: reftbl_t_reg_coxph_timecfg \ref{tbl:t_reg_coxph_timecfg}
 
 
