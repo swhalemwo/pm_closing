@@ -509,3 +509,45 @@ gp_heatmap_legend_barplot <- function(dt_pred_cell) {
     ##     ## plot_layout(widths = c(0.8, 0.2))
     ##                                     # need to use awkward patchwork design to properly size legend
     ##     plot_layout(design = "1111#\n11112\n11112\n11112\n11112\n1111#") 
+
+## * map visualization
+
+## plots the museums as points on a map, identified by lat/long, with background map
+## limit the map to New York
+
+## https://ggplot2tutor.com/tutorials/streetmaps
+
+library(osmdata)
+getbb("New York")
+
+streets <- getbb("New York") %>%
+  opq() %>%
+  add_osm_feature(key = "highway", 
+                  value = c("motorway", "primary", 
+                            "secondary", "tertiary")) %>%
+  osmdata_sf()
+
+
+
+
+
+ggplot() +
+    geom_sf(data = streets$osm_lines, color = "grey") +
+    geom_point(dt_pmdb[city == "New York", .(lat, long, ID, year_opened)],
+               mapping = aes(x=long, y=lat)) +
+    geom_text(dt_pmdb[city == "New York"],
+               mapping = aes(x = long, y=lat, label = paste0(year_opened, "/", year_closed))) +     
+    coord_sf(xlim = c(-74.05, -73.9), ylim = c(40.70, 40.80))
+    
+    theme_minimal() + theme(legend.position = "bottom")  +
+    scale_x_continuous(limits = c(-74.05, -73.9)) +
+    scale_y_continuous(limits = c(40.65, 40.85))
+        
+## data looks ok.. landau has 7 in 2017 because bunch of the others opened later
+
+## look at which closed in high population, low PM areas
+dt_pmdb[dt_pmyear[popm_circle10 > 3 & proxcnt10 < 4, .(year = max(year), closing = max(closing)), ID], on ="ID"] %>%
+    .[, .(name, iso3c, closing, city, year, ID)] %>% print(n=30) %>%
+    .[closing == 1]
+
+## Jakarta, Istanbul, Paris.. 
