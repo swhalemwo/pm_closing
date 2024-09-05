@@ -128,10 +128,7 @@ gd_nbrs <- function() {
 
     dt_coefs <- gd_reg_coxph(l_mdls$r_pop4, "r_pop4") %>% chuck("dt_coef")
 
-    ## list of variaables to use in text
-    l_vrbls_tt <- c("founder_dead_binary", "slfidfcnfoundation", "slfidfcncollection", "slfidfcnother",
-                    "muem_fndr_name", "an_")
-
+    ## just export them all
     dt_coefnbrs <- rbind(
         dt_coefs[, .(nbr_name = paste0("coef_", term), # original coefs
                      nbr_fmt = format(coef, digits =2, nsmall = 2))],
@@ -145,6 +142,57 @@ gd_nbrs <- function() {
         .[, grp := "coefs"]
             
 
+    ## add where do coefs of proxcnt10/popm_circle10 become 0?
+
+    ## get threshold values in dt
+    dt_thlds <- data.table(
+        popm_circle10_marg0 = dt_coefs[term=="proxcnt10", coef]/
+            dt_coefs[term=="proxcnt10:popm_circle10", abs(coef)],
+        proxcnt10_marg0 = dt_coefs[term=="popm_circle10", coef]/
+                              dt_coefs[term=="proxcnt10:popm_circle10", abs(coef)])
+
+    ## prep for printing with melting
+    dt_thlds_fmt <- melt(dt_thlds, measure.vars = names(dt_thlds)) %>%
+        .[, .(nbr_name = variable, nbr_fmt = sprintf("%.2f", value))]
+
+    ## formt the 
+    dt_marg0_fmt <- 
+        dt_pmyear[, .(N_below_popm_circle0_marg0 = .SD[popm_circle10 < dt_thlds$popm_circle10_marg0, .N],
+                      perc_below_popm_circle10_marg0 = .SD[popm_circle10 < dt_thlds$popm_circle10_marg0, .N]/.N*100,
+                      N_below_proxcnt10_marg0 = .SD[proxcnt10 < dt_thlds$proxcnt10_marg0, .N],
+                      perc_below_proxcnt10_marg0 = .SD[proxcnt10 < dt_thlds$proxcnt10_marg0, .N]/.N*100)] %>%
+        melt(measure.vars = names(.)) %>%
+        .[, .(nbr_name = variable, nbr_fmt = format(value, digits = 2, trim = T, nsmall = 0))]
+
+    ## generate summary stats for "zones", the division of the proxcnt/popm space by the coxph reg model
+
+    dt_zonenbrs <- rbind(dt_pmyear %>% copy %>%
+          .[proxcnt10 < dt_thlds$proxcnt10_marg0 & popm_circle10 < dt_thlds$popm_circle10_marg0, zone := "BL"] %>%
+          .[proxcnt10 > dt_thlds$proxcnt10_marg0 & popm_circle10 < dt_thlds$popm_circle10_marg0, zone := "BR"] %>%
+          .[proxcnt10 > dt_thlds$proxcnt10_marg0 & popm_circle10 > dt_thlds$popm_circle10_marg0, zone := "TR"] %>%
+          .[proxcnt10 < dt_thlds$proxcnt10_marg0 & popm_circle10 > dt_thlds$popm_circle10_marg0, zone := "TL"] %>%
+          .[, .N, zone] %>% .[, zonetype := "quarter"],
+          dt_pmyear %>% copy %>% 
+          .[popm_circle10 < dt_thlds$popm_circle10_marg0, zone := "bottom"] %>%
+          .[popm_circle10 > dt_thlds$popm_circle10_marg0, zone := "top"] %>% 
+          .[, .N, zone] %>% .[, zonetype := "half1"],
+          dt_pmyear %>% copy %>% 
+          .[proxcnt10 > dt_thlds$proxcnt10_marg0, zone := "right"] %>%
+          .[proxcnt10 < dt_thlds$proxcnt10_marg0, zone := "left"] %>%
+          .[, .N, zone] %>% .[, zonetype := "half2"]) %>%
+        .[, perc := (N/sum(N))*100, zonetype] %>% 
+        melt(id.vars ="zone", measure.vars = c("N", "perc")) %>%
+        .[, nbr_fmt := format(value, digits = 1, nsmall = 0), .I] %>%
+        .[, .(nbr_fmt, nbr_name = sprintf("%s_zone%s", variable, zone))]
+
+
+    dt_coefnbrs2 <- rbindlist(list(dt_thlds_fmt, dt_marg0_fmt, dt_zonenbrs), use.names = T) %>%
+        .[, grp := "coefs2"]
+    
+
+    ## slopes(l_mdls$r_pop4, variables = "proxcnt10", type = "lp") %>% adt %>%
+    ##     .[, .(rowid, estimate, proxcnt10, popm_circle10)] %>%
+    ##     .[which.min(abs(estimate)), popm_circle10]
     
         
     ## plots: yanking (insertion) and in-text referencing
@@ -158,7 +206,7 @@ gd_nbrs <- function() {
                                        dt_nbr_yearhaz,
                                        dt_ynkplt, dt_refplt, dt_reftbl,
                                        dt_mow_prop_museum,
-                                       dt_coefnbrs))
+                                       dt_coefnbrs, dt_coefnbrs2))
 
     ## replace ^2 with _sq (org-macros don't like ^2)
     dt_nbrs_cbnd[, nbr_name := gsub("\\^2", "_sq", nbr_name)]

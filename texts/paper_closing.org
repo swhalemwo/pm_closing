@@ -179,6 +179,31 @@ wd_nbrs(dt_nbrs)
 #+MACRO: coef_recession_perc 389
 #+MACRO: coef_covid_perc 53
 #+MACRO: coef_proxcnt10:popm_circle10_perc 9.3
+
+
+# coefs2
+#+MACRO: popm_circle10_marg0 2.97
+#+MACRO: proxcnt10_marg0 3.03
+#+MACRO: N_below_popm_circle0_marg0 5056
+#+MACRO: perc_below_popm_circle10_marg0 83
+#+MACRO: N_below_proxcnt10_marg0 4960
+#+MACRO: perc_below_proxcnt10_marg0 81
+#+MACRO: N_zoneBL 4508
+#+MACRO: N_zoneTL 452
+#+MACRO: N_zoneBR 548
+#+MACRO: N_zoneTR 588
+#+MACRO: N_zonebottom 5056
+#+MACRO: N_zonetop 1040
+#+MACRO: N_zoneleft 4960
+#+MACRO: N_zoneright 1136
+#+MACRO: perc_zoneBL 74
+#+MACRO: perc_zoneTL 7
+#+MACRO: perc_zoneBR 9
+#+MACRO: perc_zoneTR 10
+#+MACRO: perc_zonebottom 83
+#+MACRO: perc_zonetop 17
+#+MACRO: perc_zoneleft 81
+#+MACRO: perc_zoneright 19
 :end:
 
 
@@ -860,13 +885,45 @@ In other words, so far little evidence points to founders constituting a substan
 
 
 **** Competition
+
+{{{ynkplt_p_condmef}}}
+
+
 {{{ynkplt_p_pred_popprxcnt}}}
 
 
 
-Country-level measures of the private museum population show no association with mortality.
+
+Country-level measures of the private museum population show a marginally significant association with mortality (b={{{coef_pmdens_cry}}}, p={{{pvlu_pmdens_cry}}}).
 #
-However, at the local level the number of private museum and population density predicts survival chances as the main effects of population and number of private museums as well as its interaction is significant.
+While these results provide a support for evidence of competition on the country level leading to closure, it is worth noting that the observed relationship does not correspond to the generally accepted non-monotonic relationship between density and closures (as the linear term is positive, and the squared term not significant at p = {{{pvlu_pmdens_cry_sq}}}), which postulates that density increases at low densities reduce closing risk (corresponding to a negative linear coefficient), and increases at high numbers increase risk (corresponding to a positive squard term).
+
+
+
+
+At the local level, the number of private museum and population numbers predict survival chances as the main effects of population and number of private museums as well as its interaction are significant.
+#
+The particular pattern is complex:
+#
+As both main terms are positive and the interaction negative, at low values increases in either variable are associated with increases in mortality (figure {{{refplt_p_condmef}}}).
+#
+Thus, for population values of 0 to {{{popm_circle10_marg0}}} million people, an increase in the number of private museums corresponds to an increase in mortality (bottom half of figure {{{refplt_p_pred_heatmap}}}), which provides support for the view that competition leads to museum closure, in particular as this range includes {{{N_zonebottom}}} museums years, {{{perc_zonebottom}}}% of the dataset. 
+#
+Yet at the same time, at low private museums numbers (0 to 3 private museums), increases in population also increase mortality; this range also includes a large number of museum-years ({{{N_zoneleft}}}, or {{{perc_zoneleft}}}%).
+#
+Such a relationship is unexpected insofar as it is unclear why a larger potential audience would be associated with a higher risk of closure.[fn::Alternative approaches of modeling competition are discussed in the supplementary materials, but cannot answer this question.]
+#
+A possible explanation might be that collectors in less densely populated areas are more committed than those in less populated areas precisely because they know they cannot count visitors to contribute substantially.
+#
+Alternatively,
+- environmental resources: low when there are many people but few PMs (India, China)
+- 
+
+
+
+
+
+
 #
 Figure {{{refplt_p_pred_popprxcnt}}} shows average predicted survival prospects for the value range of regional PM density and population numbers.
 #
