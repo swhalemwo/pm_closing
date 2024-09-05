@@ -48,32 +48,32 @@ gd_nbrs <- function() {
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     
     ## descripti nbrs
-    dt_descs <- list(
-        list(nbr_name = "pmdb_n_all",
-             nbr_fmt = dt_pmdb[, .N]),
-        list(nbr_name = "pmdb_open_atm",
-             nbr_fmt = dt_pmdb[museum_status == "private museum", .N]),
-        list(nbr_name = "pm_n_closed",
-             nbr_fmt = dt_pmyear[, sum(closing)]),
-        list(nbr_name = "n_pmyears",
-             nbr_fmt = dt_pmyear[, .N]),
-        list(nbr_name = "pmdb_n_nlpm",
-             nbr_fmt = dt_pmdb[museum_status == "no longer a private museum", .N]),
-        list(nbr_name = "pmdb_n",
-             nbr_fmt = dt_pmdb[museum_status %in% c("private museum", "closed"), .N]),
-        list(nbr_name = "pmx_n",
-             nbr_fmt = dt_pmx[, .N]),
-        list(nbr_name = "n_founder_dead",
-             nbr_fmt = dt_pmyear[founder_dead5 == "recently_dead", fnunique(ID)]),
+    dt_descs_prep1 <- list(
+        list(nbr_name = "pmdb_n_all",    nbr_fmt = dt_pmdb[, .N]),
+        list(nbr_name = "pmdb_open_atm", nbr_fmt = dt_pmdb[museum_status == "private museum", .N]),
+        list(nbr_name = "pm_n_closed",   nbr_fmt = dt_pmyear[, sum(closing)]),
+        list(nbr_name = "n_pmyears",     nbr_fmt = dt_pmyear[, .N]),
+        list(nbr_name = "pmdb_n_nlpm",   nbr_fmt = dt_pmdb[museum_status == "no longer a private museum", .N]),
+        list(nbr_name = "pmdb_n",        nbr_fmt = dt_pmdb[museum_status %in% c("private museum", "closed"), .N]),
+        list(nbr_name = "pmx_n",         nbr_fmt = dt_pmx[, .N]),
+        list(nbr_name = "n_founder_dead",nbr_fmt = dt_pmyear[founder_dead5 == "recently_dead", fnunique(ID)]),
+        list(nbr_name = "pm_n_used",     nbr_fmt = dt_pmyear[, fnunique(ID)]),
         list(nbr_name = "n_pm_close_after_recent_death",
              nbr_fmt = dt_pmyear[founder_dead5 == "recently_dead" & closing == 1, .N]),
         list(nbr_name = "pm_open_from2021",
-             nbr_fmt = dt_pmdb[year_opened >= 2021 & museum_status %in% c("private museum", "closed"), .N]),
-        list(nbr_name = "pm_n_used",
-             nbr_fmt = dt_pmyear[, fnunique(ID)])) %>%        
-        rbindlist %>%
-        .[, grp := "descs"]
+             nbr_fmt=dt_pmdb[year_opened>= 2021 & museum_status %in% c("private museum", "closed"),.N])) %>%        
+        rbindlist
+        
 
+    ## get descriptive stats for slfidfcn
+    dt_descs_prep2 <- dt_pmyear[, .(ID, slfidfcn)] %>% funique %>% .[, .N, slfidfcn] %>%
+        .[, perc := N/sum(N)*100] %>%
+        melt(id.vars = "slfidfcn") %>%
+        .[, .(nbr_name = sprintf("%s_slfid_%s", variable, slfidfcn),
+              nbr_fmt = format(value, digits = 2, nsmall = 0, trim = T))]
+
+
+    dt_descs <- rbind(dt_descs_prep1, dt_descs_prep2) %>% .[, grp := "descs"]
     
 
     ## calculate average hazard rate numbers, depending on maximum age

@@ -27,9 +27,17 @@ wd_nbrs(dt_nbrs)
 #+MACRO: pmdb_n 523
 #+MACRO: pmx_n 505
 #+MACRO: n_founder_dead 47
+#+MACRO: pm_n_used 503
 #+MACRO: n_pm_close_after_recent_death 3
 #+MACRO: pm_open_from2021 15
-#+MACRO: pm_n_used 503
+#+MACRO: N_slfid_other 140
+#+MACRO: N_slfid_museum 190
+#+MACRO: N_slfid_foundation 104
+#+MACRO: N_slfid_collection 69
+#+MACRO: perc_slfid_other 28
+#+MACRO: perc_slfid_museum 38
+#+MACRO: perc_slfid_foundation 21
+#+MACRO: perc_slfid_collection 14
 #+MACRO: mow_prop_name_museum 71
 
 
@@ -950,7 +958,9 @@ However, as founders can choose the name of their museum arbitrarily, they might
 #
 Some support for the latter interpretaton is given by the fact that two of the three museums for which [[textcite:&Velthuis_Gera_2024_fragility]] identify a temporal intention as the closing reason do not self-identify as museum, collection or foundation.
 #
-A temporal intentions are however the exceptions among closing reasons identified by [[textcite:&Velthuis_Gera_2024_fragility]] (p.6), and as similarly only a small fraction of private museum chooses such a name (XX), the overall proportion of these types of closures compared to all closures is presumably limited. 
+A temporal intentions are however the exceptions among closing reasons identified by [[textcite:&Velthuis_Gera_2024_fragility]] (p.6), and as similarly only a small fraction of private museum chooses such a name ({{{N_slfid_other}}} museums, or {{{perc_slfid_other}}}%), the overall proportion of these types of voluntary closures compared to all closures is presumably limited.
+# oof is actually more than I thought.. FIXME
+
 
 
 
