@@ -280,7 +280,7 @@ l_mdlnames_dens <- list("r_pop4", "r_comp1", "r_pmdens1", "r_pmdens2", "r_pmdens
 
 
 ## compare whether proxcnt/popm_circle10 patterns are stable across data ranges
-l_mdlnames_coxph_density <- list("r_pop4", "r_wocryside", "r_onlycryside", "r_pop42") 
+l_mdlnames_coxph_density <- list("r_pop4", "r_onlycryside", "r_wocryside", "r_pop42") 
 
 ## compare whether patterns change if only recent data is used
 l_mdlnames_timeslice <- list("r_pop4", "r_2005", "r_2010", "r_2015")
