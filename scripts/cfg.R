@@ -194,7 +194,7 @@ gc_plts <- function() {
                 dt_pmyear = quote(dt_pmyear),
                 caption = "Prediction Heatmap of Alternative model specifications",
                 width = 18,
-                height = 10),
+                height = 15),
             p_surv_death = list(
                 l_mdls = quote(l_mdls),
                 name_mainmdl = "r_pop4",

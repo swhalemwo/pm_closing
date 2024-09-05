@@ -1484,7 +1484,9 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         r_pmdens2 = coxph(gf_coxph_close(
             vrbls_to_add = "pmdens_circle10_log",
             vrbls_to_yeet = c("proxcnt10", "popm_circle10", "proxcnt10:popm_circle10")), dt_pmyear),
-            
+
+        ## this does not really make sense:
+        ## no good reason why density defined as pop/pm should be quadratic
         r_pmdens3 = coxph(gf_coxph_close(
             vrbls_to_add = c("pmdens_circle10", "I(pmdens_circle10^2)"),
             vrbls_to_yeet = c("proxcnt10", "popm_circle10", "proxcnt10:popm_circle10")), dt_pmyear),
@@ -2019,6 +2021,17 @@ gp_pred_heatmap_alt <- function(l_mdls, dt_pmyear) {
     #' for the models in l_mdlnames
     #' to quickly check different specifications
 
+    theme_heatmap_alt <- function() {
+
+        theme(legend.position = "bottom",
+              axis.title.x = element_text(size = 11, margin = margin(0,0,0,0)),
+              legend.spacing = unit(0, "pt"),
+              legend.key.height = unit(8, "pt"),
+              legend.box.spacing = unit(3, "pt"),
+              legend.margin = margin(0,0,0,0))
+    }
+
+
     p_pred_heatmap_comp1 <- gp_pred_heatmap(
         mdlname = "r_comp1",
         l_mdls = l_mdls,
@@ -2027,7 +2040,7 @@ gp_pred_heatmap_alt <- function(l_mdls, dt_pmyear) {
         add_cross = T,
         dt_pmyear = dt_pmyear) +
         labs(title = "popm_circle10 (log)") +
-        theme(legend.key.height = unit(0.5, "cm"))
+        theme_heatmap_alt()
 
     p_pred_heatmap_pop42 <- gp_pred_heatmap(
         mdlname = "r_pop42",
@@ -2037,7 +2050,7 @@ gp_pred_heatmap_alt <- function(l_mdls, dt_pmyear) {
         add_cross = T,
         dt_pmyear = dt_pmyear) +
         labs(title = "base + proxcnt10^2") +
-        theme(legend.key.height = unit(0.5, "cm"))
+        theme_heatmap_alt()
 
 
     p_pred_heatmap_dens3 <- gp_pred_heatmap(
@@ -2048,7 +2061,7 @@ gp_pred_heatmap_alt <- function(l_mdls, dt_pmyear) {
         add_cross = F,
         dt_pmyear = dt_pmyear) +
         labs(title = "surv ~ PM density (log)") + 
-        theme(legend.key.height = unit(0.5, "cm"))
+        theme_heatmap_alt()
 
     p_pred_heatmap_audlog <- gp_pred_heatmap(
         mdlname = "r_audience_log1",
@@ -2058,9 +2071,7 @@ gp_pred_heatmap_alt <- function(l_mdls, dt_pmyear) {
         add_cross = F,
         dt_pmyear = dt_pmyear) +
         labs(title = "survb ~ audience (log)") +
-        theme(legend.key.height = unit(0.5, "cm"))
-
-
+        theme_heatmap_alt()
     
     
     (p_pred_heatmap_comp1 + p_pred_heatmap_pop42) / (p_pred_heatmap_dens3 + p_pred_heatmap_audlog) 
