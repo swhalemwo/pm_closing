@@ -270,7 +270,7 @@ l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
 
 l_mdlnames_coxph <- list("r_pop4")
 
-l_mdlnames_dens <- list("r_pop4", "r_comp1", "r_pmdens1", "r_pmdens3", "r_pmdens_aud1", "r_pmdens_aud2")
+l_mdlnames_dens <- list("r_pop4", "r_comp1", "r_pmdens1", "r_pmdens2", "r_pmdens3", "r_pmdens_aud1", "r_pmdens_aud2")
 
 ## "r_smol")#, "r_pop5", "r_pop42")#  , ",r_pop4_wyr", "r_pop4_wcrises")
 ## l_mdlnames_coxph <- c("r_pop4", paste0("r_wsize", 3:1))

@@ -248,7 +248,7 @@ gc_vvs <- function() {
     
 
     ## group variables thematically, add also labels
-
+    
     l_vrbl_lbls <- list( # variable labels
         gender                    = "Founder Gender",
         founder_dead1             = "Founder died",
@@ -268,14 +268,14 @@ gc_vvs <- function() {
         "I(pmdens_circle10_log^2)"= "PM density (10km, log^2)",
         "proxcnt10:popm_circle10" = "Nbr PM (10km) * Pop (10km)",
         
-        proxcnt10_log             = "Nbr PM^2 within 10km (log)",
+        proxcnt10_log             = "Nbr PM within 10km (log)",
         popm_circle10_log         = "Pop. (millions) within 10km (log)",
         
         
         "popm_circle10:I(proxcnt10^2)"    = "Nbr PM^2 (10km) * Pop (10km)",
-        "proxcnt10_log:popm_circle10_log" = "Nbr PM^2 (10km, log) * Pop (10km, log)",
-        "popm_circle10:proxcnt10_log"     = "Nbr PM^2 (10km, log) * Pop (10km)",
-        "proxcnt10:popm_circle10_log"     = "Nbr PM^2 (10km) * Pop (10km, log)",
+        "proxcnt10_log:popm_circle10_log" = "Nbr PM (10km, log) * Pop (10km, log)",
+        "popm_circle10:proxcnt10_log"     = "Nbr PM (10km, log) * Pop (10km)",
+        "proxcnt10:popm_circle10_log"     = "Nbr PM (10km) * Pop (10km, log)",
         
                 
 

@@ -1965,9 +1965,9 @@ gp_pred_heatmap <- function(mdlname, l_mdls, dt_pmyear, vx, vy, add_cross) {
                  length = unit(8, "pt"),
                  sides = "tr") +  
         scale_fill_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj",
-                          name = "Closing change\nwithin 20 years") +
+                          name = "Closing chance\nwithin 20 years") +
         scale_color_YlOrBr(reverse = T, range = c(0, 0.88), scale_name = "jj",
-                           name = "Closing change\nwithin 20 years") +
+                           name = "Closing chance\nwithin 20 years") +
         theme_bw() +
         scale_y_continuous(expand = expansion(add = c(0, 0.5))) +
         scale_x_continuous(expand = expansion(add = c(0, 0.5))) + 
