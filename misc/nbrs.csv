@@ -80,7 +80,7 @@ mow_prop_name_museum,71,descs
 coef_genderF,-0.038,coefs
 coef_gendercouple,-0.140,coefs
 coef_pmdens_cry, 0.648,coefs
-coef_I(pmdens_cry^2),-0.027,coefs
+coef_pmdens_cry_sq,-0.027,coefs
 coef_slfidfcnfoundation, 0.203,coefs
 coef_slfidfcncollection,-0.454,coefs
 coef_slfidfcnother, 1.091,coefs
@@ -93,10 +93,26 @@ coef_popm_circle10, 0.268,coefs
 coef_recession,-1.586,coefs
 coef_covid, 0.423,coefs
 coef_proxcnt10:popm_circle10,-0.089,coefs
+pvlu_genderF,0.91,coefs
+pvlu_gendercouple,0.66,coefs
+pvlu_pmdens_cry,0.058,coefs
+pvlu_pmdens_cry_sq,0.22,coefs
+pvlu_slfidfcnfoundation,0.62,coefs
+pvlu_slfidfcncollection,0.40,coefs
+pvlu_slfidfcnother,0.00032,coefs
+pvlu_founder_dead_binary,0.52,coefs
+pvlu_muem_fndr_name,0.87,coefs
+pvlu_an_inclusionincluded,0.57,coefs
+pvlu_an_inclusiondropped,0.35,coefs
+pvlu_proxcnt10,0.00047,coefs
+pvlu_popm_circle10,0.0047,coefs
+pvlu_recession,0.12,coefs
+pvlu_covid,0.15,coefs
+pvlu_proxcnt10:popm_circle10,0.0032,coefs
 coef_genderF_exp,0.96,coefs
 coef_gendercouple_exp,0.87,coefs
 coef_pmdens_cry_exp,1.91,coefs
-coef_I(pmdens_cry^2)_exp,0.97,coefs
+coef_pmdens_cry_sq_exp,0.97,coefs
 coef_slfidfcnfoundation_exp,1.23,coefs
 coef_slfidfcncollection_exp,0.63,coefs
 coef_slfidfcnother_exp,2.98,coefs
@@ -112,7 +128,7 @@ coef_proxcnt10:popm_circle10_exp,0.92,coefs
 coef_genderF_perc,3.9,coefs
 coef_gendercouple_perc,15,coefs
 coef_pmdens_cry_perc,91,coefs
-coef_I(pmdens_cry^2)_perc,2.8,coefs
+coef_pmdens_cry_sq_perc,2.8,coefs
 coef_slfidfcnfoundation_perc,23,coefs
 coef_slfidfcncollection_perc,58,coefs
 coef_slfidfcnother_perc,198,coefs

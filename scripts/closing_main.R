@@ -135,18 +135,15 @@ gd_nbrs <- function() {
     dt_coefnbrs <- rbind(
         dt_coefs[, .(nbr_name = paste0("coef_", term), # original coefs
                      nbr_fmt = format(coef, digits =2, nsmall = 2))],
+        dt_coefs[, .(nbr_name = paste0("pvlu_", term), # pvalues
+                     nbr_fmt = format(pvalue, digits = 2, nsmall = 2)), .I][, .(nbr_name, nbr_fmt)],
         dt_coefs[, .(nbr_name = sprintf("coef_%s_exp", term), # exponentiated
                      nbr_fmt = format(exp(coef), digits =2, nsmall = 2))],
         dt_coefs[, .(nbr_name = sprintf("coef_%s_perc", term), # percentage change
                      nbr_fmt = format((exp(abs(coef))-1)*100, digits =2, nsmall = 0)), .I] %>%
         .[, .(nbr_name, nbr_fmt)]) %>%
         .[, grp := "coefs"]
-        
-
-
-    
-    
-    
+            
 
     
         
@@ -163,6 +160,11 @@ gd_nbrs <- function() {
                                        dt_mow_prop_museum,
                                        dt_coefnbrs))
 
+    ## replace ^2 with _sq (org-macros don't like ^2)
+    dt_nbrs_cbnd[, nbr_name := gsub("\\^2", "_sq", nbr_name)]
+    # also yeet brackets and interaction indicator
+    dt_nbrs_cbnd[, nbr_name := gsub("I\\(|\\)", "", nbr_name)] 
+    
     
     return(dt_nbrs_cbnd)
 }
