@@ -907,48 +907,33 @@ The particular pattern is complex:
 #
 As both main terms are positive and the interaction negative, at low values increases in either variable are associated with increases in mortality (figure {{{refplt_p_condmef}}}).
 #
-Thus, for population values of 0 to {{{popm_circle10_marg0}}} million people, an increase in the number of private museums corresponds to an increase in mortality (bottom half of figure {{{refplt_p_pred_heatmap}}}), which provides support for the view that competition leads to museum closure, in particular as this range includes {{{N_zonebottom}}} museums years, {{{perc_zonebottom}}}% of the dataset. 
+Thus, for population values of 0 to {{{popm_circle10_marg0}}} million people, an increase in the number of private museums corresponds to an increase in mortality (bottom half of figure {{{refplt_p_pred_heatmap}}}), which provides support for the view that competition leads to museum closure, in particular as this range includes {{{N_zonebottom}}} museums years, or {{{perc_zonebottom}}}% of the dataset. 
 #
-Yet at the same time, at low private museums numbers (0 to 3 private museums), increases in population also increase mortality; this range also includes a large number of museum-years ({{{N_zoneleft}}}, or {{{perc_zoneleft}}}%).
+Yet at the same time, at low private museums numbers (0 to 3 private museums), increases in population also increase mortality; this range also includes a large number of museum-years ({{{N_zoneleft}}} museum years; {{{perc_zoneleft}}}% of the data).
 #
 Such a relationship is unexpected insofar as it is unclear why a larger potential audience would be associated with a higher risk of closure.[fn::Alternative approaches of modeling competition are discussed in the supplementary materials, but cannot answer this question.]
 #
 A possible explanation might be that collectors in less densely populated areas are more committed than those in less populated areas precisely because they know they cannot count visitors to contribute substantially.
 #
-Alternatively,
-- environmental resources: low when there are many people but few PMs (India, China)
-- 
-
-
-
-
-
-
+Alternatively, areas with high population and low private museum numbers might more generally lack cultural infrastructure; which one could see supported by closures in Jakarta, Istanbul and Mexico City, but less so by closings in Paris, Tokyo or Madrid.
 #
-Figure {{{refplt_p_pred_popprxcnt}}} shows average predicted survival prospects for the value range of regional PM density and population numbers.
+Low private museums indicating lack of cultural infrastructure might also explain the decrease in mortality associated with increases in private museum numbers at high population values (figure {{{refplt_p_pred_heatmap}}}, upper half), as such pattern does not correspond to that predicted by competition.
 #
-Museums located in less densely populated areas have (at low PM densities) lower hazard rates than museums in more densely populated areas. 
-#
-However, these museums in less densely populated regions see an increase in the risk of closing for each additional private museum present within 10 kilometers, whereas the risk of closing decreases with each additional private museum in the local environment for museums in more densely-populated areas.
-#
-The increase in mortality in less densely populated regions when the number of nearby private museums increases could indicate competition:
-#
-As the potential pool of resources is somewhat limited, each new museum trying to claim its share limits the average resources available to other institutions, leading to higher mortality.
-#
-In the more densely populated regions with larger resources the marginal impact of an additional private museum appears declines and eventually turns negative (i.e., enhances survival chances).
-#
+# maybe add something here that at high pop numbers competition might be harder to identify
+# 
+More in line with expectation is however the association between increases of population numbers and lower mortality at higher numbers of private museums (right half), as it indicates that audiences can facilitate museum survival.
 
 
-The absence of private museums in otherwise densely populated areas might also reflect the absence of a wider cultural infrastructure; thus even a large potential audience might not be able to sustain private museums in the absence of other foundations, public or corporate museums.
-
-#
+Taken together, figure {{{refplt_p_pred_heatmap}}} indicates two niches as particular supportive of private museum survival, on the one hand remote areas with low population and no competing private museums, and on the other densely populated areas with at least some other private museums.
 
 
-#
-# However, they have at low PM density lower closing rates than museum in more populated areas.
+While not all associations correspond to predictions made by resource dependence, the most direct measurement of increased competition, number of private museums in the local surrounding, is associated with higher closing chances for a large part of the sample, which in turn supports the substantial role of competition.
 
-# #
-# While the density-dependence paradigm predicts a negative effect of numbers of organizations on closing rate at low numbers (due to legitimacy, i.e. growing familiarity with a new organizational form), and a positive effect at high numbers (due to competition over resources), neither relationship is significant in the case of private museums.
+
+
+
+
+
 
 **** Identity Variables
 
@@ -959,6 +944,11 @@ However, institutions which include neither of these are the most likely to clos
 The usage of unconventional names might reflect adherence to museum standards which makes museums more understandable and familiar to third parties (e.g. audiences, other museums, companies or the government) and thereby facilitates interactions which are beneficial for long-term survival (e.g. attracting visitors, cooperations, sponsorships or subsidies).
 # 
 However, as founders can choose the name of their museum arbitrarily, they might choose a name without reference to organizational forms associated with perpetuity precisely because their intention is not an institution enduring in perpetuity but rather a more temporally bounded project.
+#
+Some support for the latter interpretaton is given by the fact that two of the three museums for which [[textcite:&Velthuis_Gera_2024_fragility]] identify a temporal intention as the closing reason do not self-identify as museum, collection or foundation.
+#
+A temporal intentions are however the exceptions among closing reasons identified by [[textcite:&Velthuis_Gera_2024_fragility]] (p.6), and as similarly only a small fraction of private museum chooses such a name (XX), the overall proportion of these types of closures compared to all closures is presumably limited. 
+
 
 
 
