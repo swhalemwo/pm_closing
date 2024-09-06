@@ -1,4 +1,4 @@
-% Created 2024-08-31 za 13:35
+% Created 2024-09-06 vr 09:44
 % Intended LaTeX compiler: pdflatex
 \documentclass[12pt]{article}
 
@@ -328,7 +328,7 @@ While it would have been possible to model founder death as a binary variable, t
 
 
 % latex table generated in R 4.3.3 by xtable 1.8-4 package
-% Fri Aug 30 12:00:47 2024
+% Thu Sep  5 13:08:13 2024
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrll}
@@ -412,7 +412,7 @@ Secondly, we use Cox proportional hazard models which estimate the relationship 
 
 
 % latex table generated in R 4.3.3 by xtable 1.8-4 package
-% Fri Aug 30 12:00:46 2024
+% Thu Sep  5 13:08:11 2024
 \begin{table}[ht]
 \centering
 \begin{tabular}{llrrrrrr}
@@ -421,41 +421,46 @@ Secondly, we use Cox proportional hazard models which estimate the relationship 
 \cmidrule(r){3-4}\cmidrule(r){5-8} \multicolumn{1}{l}{} & \multicolumn{1}{l}{Variable} & \multicolumn{1}{l}{Count} & \multicolumn{1}{l}{Mean} & \multicolumn{1}{l}{Mean} & \multicolumn{1}{l}{SD} & \multicolumn{1}{l}{Min.} & \multicolumn{1}{l}{Max.}\\ 
  \hline
   \multicolumn{8}{l}{\textbf{Founder}} \\ 
- & Gender - Male & 294 & 0.584 & 6.0e-01 &  0.49 & 0 & 1 \\ 
-   & Gender - Female & 79 & 0.157 & 1.7e-01 &  0.37 & 0 & 1 \\ 
-   & Gender - Couple & 130 & 0.258 & 2.3e-01 &  0.42 & 0 & 1 \\ 
-   & Founder - alive &  &  & 9.0e-01 &  0.30 & 0 & 1 \\ 
-   & Founder - died recently &  &  & 1.3e-02 &  0.11 & 0 & 1 \\ 
-   & Founder - died 2+ years ago &  &  & 8.4e-02 &  0.28 & 0 & 1 \\ 
-   & Founder died &  &  & 9.7e-02 &  0.30 & 0 & 1 \\ 
+ & Gender - Male & 294 & 0.584 &    0.604 &  0.49 & 0 & 1 \\ 
+   & Gender - Female & 79 & 0.157 &    0.166 &  0.37 & 0 & 1 \\ 
+   & Gender - Couple & 130 & 0.258 &    0.231 &  0.42 & 0 & 1 \\ 
+   & Founder - alive &  &  &    0.903 &  0.30 & 0 & 1 \\ 
+   & Founder - died recently &  &  &    0.013 &  0.11 & 0 & 1 \\ 
+   & Founder - died 2+ years ago &  &  &    0.084 &  0.28 & 0 & 1 \\ 
+   & Founder died &  &  &    0.097 &  0.30 & 0 & 1 \\ 
    \multicolumn{8}{l}{\textbf{Museum}} \\ 
- & Self-Identification - Museum & 190 & 0.378 & 4.1e-01 &  0.49 & 0 & 1 \\ 
-   & Self-Identification - Foundation & 104 & 0.207 & 1.9e-01 &  0.39 & 0 & 1 \\ 
-   & Self-Identification - Collection & 69 & 0.137 & 1.3e-01 &  0.34 & 0 & 1 \\ 
-   & Self-Identification - Other & 140 & 0.278 & 2.7e-01 &  0.45 & 0 & 1 \\ 
-   & Founder name in Museum name & 240 & 0.477 & 4.8e-01 &  0.50 & 0 & 1 \\ 
-   & AN Ranking - Not Included &  &  & 8.0e-01 &  0.40 & 0 & 1 \\ 
-   & AN Ranking - Included &  &  & 1.4e-01 &  0.35 & 0 & 1 \\ 
-   & AN Ranking - Dropped &  &  & 5.3e-02 &  0.23 & 0 & 1 \\ 
-   & Exhibition any &  &  & 6.3e-01 &  0.48 & 0 & 1 \\ 
-   & Opening year &  &  & 2.0e+03 & 11.10 & 1960 & 2020 \\ 
+ & Self-Identification - Museum & 190 & 0.378 &    0.408 &  0.49 & 0 & 1 \\ 
+   & Self-Identification - Foundation & 104 & 0.207 &    0.189 &  0.39 & 0 & 1 \\ 
+   & Self-Identification - Collection & 69 & 0.137 &    0.130 &  0.34 & 0 & 1 \\ 
+   & Self-Identification - Other & 140 & 0.278 &    0.274 &  0.45 & 0 & 1 \\ 
+   & Founder name in Museum name & 240 & 0.477 &    0.477 &  0.50 & 0 & 1 \\ 
+   & AN Ranking - Not Included &  &  &    0.802 &  0.40 & 0 & 1 \\ 
+   & AN Ranking - Included &  &  &    0.144 &  0.35 & 0 & 1 \\ 
+   & AN Ranking - Dropped &  &  &    0.053 &  0.23 & 0 & 1 \\ 
+   & Exhibition any &  &  &    0.630 &  0.48 & 0 & 1 \\ 
+   & Opening year &  &  & 2001.493 & 11.10 & 1960 & 2020 \\ 
    \multicolumn{8}{l}{\textbf{Environment}} \\ 
- & PM density (country) &  &  & 4.5e-01 &  1.26 & 0.00077 & 27.26 \\ 
-   & Pop. (millions) within 10km &  &  & 1.3e+00 &  1.68 & 0.000087 & 10.81 \\ 
-   & Nbr PM within 10km &  &  & 1.8e+00 &  3.14 & 0 & 16 \\ 
-   & Region - Africa & 8 & 0.016 & 1.2e-02 &  0.11 & 0 & 1 \\ 
-   & Region - Asia & 142 & 0.282 & 2.9e-01 &  0.45 & 0 & 1 \\ 
-   & Region - Europe & 248 & 0.493 & 5.0e-01 &  0.50 & 0 & 1 \\ 
-   & Region - Latin America & 23 & 0.046 & 4.2e-02 &  0.20 & 0 & 1 \\ 
-   & Region - North America & 72 & 0.143 & 1.4e-01 &  0.34 & 0 & 1 \\ 
-   & Region - Oceania & 10 & 0.020 & 1.9e-02 &  0.13 & 0 & 1 \\ 
-   & Time Period 2000-2004 &  &  & 1.0e-01 &  0.30 & 0 & 1 \\ 
-   & Time Period 2005-2009 &  &  & 1.7e-01 &  0.37 & 0 & 1 \\ 
-   & Time Period 2010-2014 &  &  & 2.6e-01 &  0.44 & 0 & 1 \\ 
-   & Time Period 2015-2019 &  &  & 3.3e-01 &  0.47 & 0 & 1 \\ 
-   & Time Period 2020-2024 &  &  & 1.4e-01 &  0.35 & 0 & 1 \\ 
-   & Great Recession (2008/09) &  &  & 7.6e-02 &  0.27 & 0 & 1 \\ 
-   & Covid Pandemic (2020/21) &  &  & 1.4e-01 &  0.35 & 0 & 1 \\ 
+ & PM density (country) &  &  &    0.450 &  1.26 & 0.00077 & 27.26 \\ 
+   & Pop. (millions) within 10km &  &  &    1.337 &  1.68 & 0.000087 & 10.81 \\ 
+   & Nbr PM within 10km &  &  &    1.778 &  3.14 & 0 & 16 \\ 
+   & PM density (10km, log) &  &  &    0.527 &  0.79 & 0 & 4.35 \\ 
+   & Nbr PM within 10km (log) &  &  &    0.613 &  0.82 & 0 & 2.83 \\ 
+   & Pop. (millions) within 10km (log) &  &  &   -0.893 &  1.97 & -9.3 & 2.38 \\ 
+   & Local Audience per PM &  &  &    0.567 &  0.86 & 0.000087 & 8.16 \\ 
+   & Local Audience per PM (log) &  &  &   -1.505 &  1.64 & -9.3 & 2.10 \\ 
+   & Region - Africa & 8 & 0.016 &    0.012 &  0.11 & 0 & 1 \\ 
+   & Region - Asia & 142 & 0.282 &    0.292 &  0.45 & 0 & 1 \\ 
+   & Region - Europe & 248 & 0.493 &    0.497 &  0.50 & 0 & 1 \\ 
+   & Region - Latin America & 23 & 0.046 &    0.042 &  0.20 & 0 & 1 \\ 
+   & Region - North America & 72 & 0.143 &    0.138 &  0.34 & 0 & 1 \\ 
+   & Region - Oceania & 10 & 0.020 &    0.019 &  0.13 & 0 & 1 \\ 
+   & Time Period 2000-2004 &  &  &    0.101 &  0.30 & 0 & 1 \\ 
+   & Time Period 2005-2009 &  &  &    0.166 &  0.37 & 0 & 1 \\ 
+   & Time Period 2010-2014 &  &  &    0.258 &  0.44 & 0 & 1 \\ 
+   & Time Period 2015-2019 &  &  &    0.331 &  0.47 & 0 & 1 \\ 
+   & Time Period 2020-2024 &  &  &    0.145 &  0.35 & 0 & 1 \\ 
+   & Great Recession (2008/09) &  &  &    0.076 &  0.27 & 0 & 1 \\ 
+   & Covid Pandemic (2020/21) &  &  &    0.145 &  0.35 & 0 & 1 \\ 
    \hline
 \end{tabular}
 \caption{Summary Statistics} 
@@ -553,7 +558,7 @@ Focusing on the entire population of private museums instead, this analysis prov
 
 
 % latex table generated in R 4.3.3 by xtable 1.8-4 package
-% Fri Aug 30 12:00:45 2024
+% Thu Sep  5 13:08:31 2024
 \begin{table}[ht]
 \centering
 \begin{tabular}{p{0mm}lD{)}{)}{8)3}}
@@ -605,8 +610,10 @@ While generally organizations whose name include the name of their founder might
 \paragraph*{Founder dependence}
 
 
+
+
 % latex table generated in R 4.3.3 by xtable 1.8-4 package
-% Fri Aug 30 12:08:04 2024
+% Thu Sep  5 13:08:17 2024
 \begin{table}[ht]
 \centering
 \begin{tabular}{rD{)}{)}{8)3}D{)}{)}{8)3}}
@@ -631,41 +638,57 @@ While generally organizations whose name include the name of their founder might
 \label{tbl:t_reg_coxph_deathcfg}
 \end{table}
 
-The death of the founder is not associated with a significant difference in private museum closure, i.e. museums are not significantly more likely to close after their founder has died.
-It is in principle possible to construct an alternative measure of founder death by splitting the time after the death in a short-term and long-term period; the short-term period might then capture the disruption by the founder, whereas the long-term period would only be reached by museums who have successfully acquired alternative funding models and are hence relatively viable.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=18cm]{../figures/p_surv_death.pdf}
+\caption{\label{fig:p_surv_death}Comparison of Survival Estimates by Founder Death (95\% CI)}
+\end{figure}
+
+The death of the founder is not associated with a significant difference (p=0.52) in private museum closure, i.e. museums are not significantly more likely to close after their founder has died.
+While the point estimate is positive (0.280, corresponding to a  32\% increase in mortality for museums whose founders have died compared to those who have not), the low risk overall means that despite the cumulative character even decade-long survival times do not differ substantially (figure \ref{fig:p_surv_death}).
+
+
+It is in principle possible to construct an alternative measure of founder death by partioning the time after the death in a short-term and long-term period; the short-term period might then capture the disruption by the founder, whereas the long-term period would only be reached by museums who have successfully acquired alternative funding models and are hence relatively viable.
 However, the choice of choosing a cut-off point between the short- and long-term periods is relatively arbitrary.
 
 
 Table \ref{tbl:t_reg_coxph_deathcfg} shows coefficients of both periods with different cut-off points.
-While the coefficient in the short-term period is consistently higher than both the overall death coefficient and the long-term period coefficients, so far the evidence is inconclusive as only few cases are statistically significant\footnote{P-values are not adjusted for multiple tests}.
-Considering the underlying numbers supports this:
-While 47 private museums have seen the death of their founders, only 3 of these have closed in the following 5 years; observing statistical significance in some configurations of founder death time more likely reflect random clustering than an underlying pattern.
-\textbf{Effect sizes}:
-\begin{itemize}
-\item death overall
-\item short-term death
-\end{itemize}
-stress how few people it is
-
-
-
-This possibly indicates that private museums might be less dependent on the mood of a single person (or couple), and have in fact become institutionalized to an extent that heirs of founders feel as motivated to continue the original founders' efforts as these founders themselves.
-
-
+While the coefficient in the short-term period is consistently higher than both the overall death coefficient and the long-term period coefficients, so far the evidence is inconclusive as only few cases are statistically significant\footnote{P-values are also not adjusted for multiple tests}.
+Furthermore, such a shock passes quickly relative to the median life-time of museums of 52 years, thus "giving" the founder death little time to lead to many museum closures. 
+Considering the numbers underlying the death effect estimates illustrates the uncertainty of the determning the effect of the death of the founder on aclosing: 
+While 47 private museums have seen the death of their founders, only 3 of these have closed in the following 5 years; given such low numbers it cannot be ruled out that the statistical significance in a few configurations of founder death time results from random fluctuations rather than an underlying pattern.
 
 
 
 
 The reputation of the founder is not statistically related to closure. 
-Museums whose founders are not included in the ARTnews collector ranking (reference category) are the least likely to close, followed by museums whose founders are included (not statistically significant) and by founders who were included at some point but are no longer included (not statistically significant).
-\paragraph*{Identity Variables}
+Museums whose founders are not included in the ARTnews collector ranking (reference category) are the least likely to close, followed by museums whose founders are included (21\% elevated closing risk) and by founders who were included at some point but are no longer included (58\% elevated closing risk), however none of the differences are statistically significant.
+It is also worth to point out that the order of the categories does not fully correspond to the expected order, according to which museums whose collectors are not included would be more likely to close than collectors who are.
+However, as all differences are not statistically significant, there is no strong evidence that this reflects unexpected status mechanisms rather than randomness.
+it nevertheless provides some evidence that status matters; as in particular the loss of status appears to be substantially associated with museum closure.
 
 
-Museums which include the term "museum" in their name are the least likely to close, while those with the term "foundation" or "collection" have higher closure rates (but not significantly higher).
-Museums which include neither of these are the most likely to close, and have mortality rates more than three times as high (\(e\)\textsuperscript{1.18} = 3.25, p<0.01) than institutions including the term "museum".
-The usage of unconventional names might reflect adherence to museum standards which makes museums more understandable and familiar to third parties (e.g. audiences, other museums, companies or the government) and thereby facilitates interactions which are beneficial for long-term survival (e.g. attracting visitors, cooperations, sponsorships or subsidies).
-However, as founders can choose the name of their museum arbitrarily, they might choose a name without reference to organizational forms associated with perpetuity precisely because their intention is not an institution enduring in perpetuity but rather a more temporally bounded project.
+
+Museums whose name contain the name of the founder face a non-significantly 4.9\% elevated risk of closure, which indicates that there is little evidence that founders face greater difficulties to secure a long-term future for their museums by choosing to emphasize their personal contribution.
+It might have been expected that such central positioning of the founder might limit longevity by disincentivizing contributions by other parties.
+However, as the direct mechanism of declining contributions cannot be observed, its absence cannot be assumed either.
+It might be the case that other parties do indeed feel less inclined to contribute but that these gaps are filled by a stronger commitment of the founder, who having committed her name to the enterprise, wants to keep her museum open event at great costs.
+\subparagraph*{founder conclusion}
+
+
+
+
+Taken together, the inability to explain private museum closing with the death of founder, her exclusion from a prestitious ranking and the presence of her name in the museum's name question the hypothesized central role of the founder.
+In other words, so far little evidence points to founders constituting a substantial source of involuntary closing risk.
 \paragraph*{Competition}
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=18cm]{../figures/p_condmef.pdf}
+\caption{\label{fig:p_condmef}Conditional effects of Regional PM Density and Population}
+\end{figure}
+
 
 \begin{figure}[htbp]
 \centering
@@ -675,11 +698,38 @@ However, as founders can choose the name of their museum arbitrarily, they might
 
 
 
-Country-level Environmental variables show no association with mortality.
-However, at the local level the number of private museum and population density predicts survival chances as the main effects of population number of private museums as well as its interaction is significant.
-Figure \ref{fig:p_pred_popprxcnt} shows predicted average hazard rates for different conditions of regional PM density and population numbers.
-Museums located in sparsely populated areas have (at low PM densities) lower hazard rates than museums in more densely populated areas. 
-Furthermore, these "rural" museums see an increase in the risk of closing for each additional private museum present within 10 kilometers, whereas the risk of closing decreases with  each additional private museum in the local environment for museums in more urban areas. 
+
+Country-level measures of the private museum population show a marginally significant association with mortality (b=0.648, p=0.058).
+While these results provide a support for evidence of competition on the country level leading to closure, it is worth noting that the observed relationship does not correspond to the generally accepted non-monotonic relationship between density and closures (as the linear term is positive, and the squared term not significant at p = 0.22), which postulates that density increases at low densities reduce closing risk (corresponding to a negative linear coefficient), and increases at high numbers increase risk (corresponding to a positive squard term).
+
+
+
+
+At the local level, the number of private museum and population numbers predict survival chances as the main effects of population and number of private museums as well as its interaction are significant.
+The particular pattern is complex:
+As both main terms are positive and the interaction negative, at low values increases in either variable are associated with increases in mortality (figure \ref{fig:p_condmef}).
+Thus, for population values of 0 to 2.97 million people, an increase in the number of private museums corresponds to an increase in mortality (bottom half of figure \ref{fig:p_pred_heatmap}), which provides support for the view that competition leads to museum closure, in particular as this range includes 5056 museums years, or 83\% of the dataset. 
+Yet at the same time, at low private museums numbers (0 to 3 private museums), increases in population also increase mortality; this range also includes a large number of museum-years (4960 museum years; 81\% of the data).
+Such a relationship is unexpected insofar as it is unclear why a larger potential audience would be associated with a higher risk of closure.\footnote{Alternative approaches of modeling competition are discussed in the supplementary materials, but cannot answer this question.}
+A possible explanation might be that collectors in less densely populated areas are more committed than those in less populated areas precisely because they know they cannot count visitors to contribute substantially.
+Alternatively, areas with high population and low private museum numbers might more generally lack cultural infrastructure; which one could see supported by closures in Jakarta, Istanbul and Mexico City, but less so by closings in Paris, Tokyo or Madrid.
+Low private museums indicating lack of cultural infrastructure might also explain the decrease in mortality associated with increases in private museum numbers at high population values (figure \ref{fig:p_pred_heatmap}, upper half), as such pattern does not correspond to that predicted by competition.
+More in line with expectation is however the association between increases of population numbers and lower mortality at higher numbers of private museums (right half), as it indicates that audiences can facilitate museum survival.
+
+
+Taken together, figure \ref{fig:p_pred_heatmap} indicates two niches as particular supportive of private museum survival, on the one hand remote areas with low population and no competing private museums, and on the other densely populated areas with at least some other private museums.
+
+
+While not all associations correspond to predictions made by resource dependence, the most direct measurement of increased competition, number of private museums in the local surrounding, is associated with higher closing chances for a large part of the sample, which in turn supports the substantial role of competition.
+\paragraph*{Identity Variables}
+
+
+Museums which include the term "collections" in their name are the least likely to close (0.63 times the rate of museums with the name "museum", while those with the term foundation experience 23\% elevated closure rates (but not significantly higher).
+However, institutions which include neither of these are the most likely to close, and have mortality rates almost three times as high (198\%) than institutions including the term "museum".
+The usage of unconventional names might reflect adherence to museum standards which makes museums more understandable and familiar to third parties (e.g. audiences, other museums, companies or the government) and thereby facilitates interactions which are beneficial for long-term survival (e.g. attracting visitors, cooperations, sponsorships or subsidies).
+However, as founders can choose the name of their museum arbitrarily, they might choose a name without reference to organizational forms associated with perpetuity precisely because their intention is not an institution enduring in perpetuity but rather a more temporally bounded project.
+Some support for the latter interpretaton is given by the fact that two of the three museums for which \textcite{Velthuis_Gera_2024_fragility} identify a temporal intention as the closing reason do not self-identify as museum, collection or foundation.
+A temporal intentions are however the exceptions among closing reasons identified by \textcite{Velthuis_Gera_2024_fragility} (p.6), and as similarly only a small fraction of private museum chooses such a name (140 museums, or 28\%), the overall proportion of these types of voluntary closures compared to all closures is presumably limited.
 \subsection*{Discussion}
 
 
@@ -697,7 +747,7 @@ This finding also provides no evidence that female founders face gender-specific
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=18cm]{../figures/p_pred_heatmap.pdf}
-\caption{\label{fig:p_pred_heatmap}Predicted Avg. Hazard Rate on Regional PM Density and Population}
+\caption{\label{fig:p_pred_heatmap}Predicted Avg. Hazard Rate on Regional PM Density and Population (at available values)}
 \end{figure}
 
 
@@ -709,6 +759,10 @@ One might see in this association again the importance of the founder:
 Founders who are committed to their museums will keep them alive, regardless of whether or not they plan to organize temporary exhibitions.
 \subsubsection*{founder}
 
+It has been widely argued that the death of the founder would lead to his or her private museum to close, while this analysis has not found conclusive evidence for this relationship.
+It is important to keep in mind that the lack of observing a clear relationship between the death of the founder and museum closure does not imply that no relationship exists.
+It is possible that previous scholars who argued for such an association have correctly identified the dependency relationships in private museums, which will become visible once more founder deaths have occurred.
+At the same time, it is possible that private museums are indeed generally less dependent on the mood of a single person (or couple), and have in fact become institutionalized to an extent that heirs of founders feel as motivated to continue the original founders' efforts as these founders themselves.
 \subsection*{Conclusion}
 
 Private museum have been characterized as fragile institutions due to their reliance on a single founder.
