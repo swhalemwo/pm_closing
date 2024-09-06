@@ -26,9 +26,17 @@ wd_nbrs(dt_nbrs)
 #+MACRO: pmdb_n 523
 #+MACRO: pmx_n 505
 #+MACRO: n_founder_dead 47
+#+MACRO: pm_n_used 503
 #+MACRO: n_pm_close_after_recent_death 3
 #+MACRO: pm_open_from2021 15
-#+MACRO: pm_n_used 503
+#+MACRO: N_slfid_other 140
+#+MACRO: N_slfid_museum 190
+#+MACRO: N_slfid_foundation 104
+#+MACRO: N_slfid_collection 69
+#+MACRO: perc_slfid_other 28
+#+MACRO: perc_slfid_museum 38
+#+MACRO: perc_slfid_foundation 21
+#+MACRO: perc_slfid_collection 14
 #+MACRO: mow_prop_name_museum 71
 
 
@@ -117,7 +125,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: coef_genderF -0.038
 #+MACRO: coef_gendercouple -0.140
 #+MACRO: coef_pmdens_cry 0.648
-#+MACRO: coef_I(pmdens_cry^2) -0.027
+#+MACRO: coef_pmdens_cry_sq -0.027
 #+MACRO: coef_slfidfcnfoundation 0.203
 #+MACRO: coef_slfidfcncollection -0.454
 #+MACRO: coef_slfidfcnother 1.091
@@ -130,10 +138,26 @@ wd_nbrs(dt_nbrs)
 #+MACRO: coef_recession -1.586
 #+MACRO: coef_covid 0.423
 #+MACRO: coef_proxcnt10:popm_circle10 -0.089
+#+MACRO: pvlu_genderF 0.91
+#+MACRO: pvlu_gendercouple 0.66
+#+MACRO: pvlu_pmdens_cry 0.058
+#+MACRO: pvlu_pmdens_cry_sq 0.22
+#+MACRO: pvlu_slfidfcnfoundation 0.62
+#+MACRO: pvlu_slfidfcncollection 0.40
+#+MACRO: pvlu_slfidfcnother 0.00032
+#+MACRO: pvlu_founder_dead_binary 0.52
+#+MACRO: pvlu_muem_fndr_name 0.87
+#+MACRO: pvlu_an_inclusionincluded 0.57
+#+MACRO: pvlu_an_inclusiondropped 0.35
+#+MACRO: pvlu_proxcnt10 0.00047
+#+MACRO: pvlu_popm_circle10 0.0047
+#+MACRO: pvlu_recession 0.12
+#+MACRO: pvlu_covid 0.15
+#+MACRO: pvlu_proxcnt10:popm_circle10 0.0032
 #+MACRO: coef_genderF_exp 0.96
 #+MACRO: coef_gendercouple_exp 0.87
 #+MACRO: coef_pmdens_cry_exp 1.91
-#+MACRO: coef_I(pmdens_cry^2)_exp 0.97
+#+MACRO: coef_pmdens_cry_sq_exp 0.97
 #+MACRO: coef_slfidfcnfoundation_exp 1.23
 #+MACRO: coef_slfidfcncollection_exp 0.63
 #+MACRO: coef_slfidfcnother_exp 2.98
@@ -149,7 +173,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: coef_genderF_perc 3.9
 #+MACRO: coef_gendercouple_perc 15
 #+MACRO: coef_pmdens_cry_perc 91
-#+MACRO: coef_I(pmdens_cry^2)_perc 2.8
+#+MACRO: coef_pmdens_cry_sq_perc 2.8
 #+MACRO: coef_slfidfcnfoundation_perc 23
 #+MACRO: coef_slfidfcncollection_perc 58
 #+MACRO: coef_slfidfcnother_perc 198
@@ -162,6 +186,31 @@ wd_nbrs(dt_nbrs)
 #+MACRO: coef_recession_perc 389
 #+MACRO: coef_covid_perc 53
 #+MACRO: coef_proxcnt10:popm_circle10_perc 9.3
+
+
+# coefs2
+#+MACRO: popm_circle10_marg0 2.97
+#+MACRO: proxcnt10_marg0 3.03
+#+MACRO: N_below_popm_circle0_marg0 5056
+#+MACRO: perc_below_popm_circle10_marg0 83
+#+MACRO: N_below_proxcnt10_marg0 4960
+#+MACRO: perc_below_proxcnt10_marg0 81
+#+MACRO: N_zoneBL 4508
+#+MACRO: N_zoneTL 452
+#+MACRO: N_zoneBR 548
+#+MACRO: N_zoneTR 588
+#+MACRO: N_zonebottom 5056
+#+MACRO: N_zonetop 1040
+#+MACRO: N_zoneleft 4960
+#+MACRO: N_zoneright 1136
+#+MACRO: perc_zoneBL 74
+#+MACRO: perc_zoneTL 7
+#+MACRO: perc_zoneBR 9
+#+MACRO: perc_zoneTR 10
+#+MACRO: perc_zonebottom 83
+#+MACRO: perc_zonetop 17
+#+MACRO: perc_zoneleft 81
+#+MACRO: perc_zoneright 19
 :end:
 
 
