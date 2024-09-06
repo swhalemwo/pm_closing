@@ -214,3 +214,9 @@ In model 2, the "countryside" is excluded.
 However, both these models are not reliable, as they do not properly converge (indicated by extremely large coefficients in both models).
 
 
+** Alternative time range specifications
+#+INCLUDE: "../tables/t_reg_coxph_timeslice_wcpF.tex" export latex
+
+Table {{{reftbl_t_reg_coxph_timecfg}}} investigates whether relationships have substantially changed over time.
+#
+However, subsetting the dataset to different year ranges shows general consistency of the main findings, in particular insignificant coefficients for the founder's death, gender, Artnews ranking variables, inclusion of founder name in museum name, positive and significant coefficients for self-identification as other, population and private museum numbers, and a significant negative interaction between private museum numbers and population.
