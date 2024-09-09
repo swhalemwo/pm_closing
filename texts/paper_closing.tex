@@ -1,4 +1,4 @@
-% Created 2024-09-06 vr 17:50
+% Created 2024-09-09 ma 10:48
 % Intended LaTeX compiler: pdflatex
 \documentclass[12pt]{article}
 
@@ -236,7 +236,7 @@ As these share with private museums a common organizational form of the non-prof
 
 \textbf{Hypothesis 1}: Private museums have higher closing chance than non-profit museums generally.
 
-\textbf{Hypothesis 2}: Reliance on the founder is the mechanism through which PMs are exposed to a higher closing risk, thus founder-related variables predict closing, in particular
+\textbf{Hypothesis 2}: Reliance on the founder is the mechanism through which PMs are exposed to a higher closing risk, thus founder-related variables predict closing, in particular: 
 \begin{itemize}
 \item \textbf{Hypothesis 2a}: Private museums are more likely to close after the death of the founder.
 \item \textbf{Hypothesis 2b}: Private museums are more likely to close after their founder is excluded from a prestigious ranking.
@@ -306,12 +306,15 @@ Furthermore, inferring the status of the museum via the reputaton of the founder
 
 
 
-A newly constructed database, assembled from different sources, is used to measure the survival of private museums (cf. \textcite{Velthuis_etal_2023_boom} for details).
-Currently, the database includes 548 museums (of which 451 are currently open, the remainder having closed or transformed into other organizational forms).
+A newly constructed database, assembled from a wide range of sources, is used to measure the survival of private museums (cf. \textcite{Velthuis_etal_2023_boom} for details).
+Currently, the database includes 548 museums, of which 451 are currently open, 72 have closed and 25 have transformed into other organizational forms.\footnote{The 25 institutions which were private museums at some point and have since been transformed into other organizational forms are not included in this analysis and discussed in the limitations.}
 Using this database, in particular year of opening and, if available, closing, it is possible to reconstruct the life course of the each institution with museum-year as the unit of analysis.
-While around 20\% of private museums have opened before 2000, the retrospective data collection does not rule out the possibility that some institutions were missed, with such risks likely being higher for earlier time periods.
-To ensure that the effect of such missed museums is does not distort insights, the time range in question is limited to events between 2000-2021.
+While the database is not limited to private museums of a particular time period, due to the recency of the private museum boom in the last two decades 80\% of the museums included in it have opened after 2000.
+As the databse was constructed retrospectively from 2020 to 2022, I focus here on closing events from 2000 to 2021 to limit the possibility that some institutions were missed, as such risks are likely higher for earlier time periods.
+Furthermore, a small number of museums are excluded, in particular 2 museums for which the closing date could not be found, 15 museums which opened in 2021 and later (as survival analyses requires positive survival times), 1 museum the opening year of which could not be determined, as well as 2 which closed before 2000 thereby fall outside the period under investigation.
+This leaves 503 private museums at risk which have accumulated 6096 museum-years and 68 closures.
 This data allows to conduct survival analysis (also known as event history analysis), the most common statistical technique to investigate hazard rates and identify mortality-assocated covariates \parencite{Moore_2015_survival,Allison_2014_event}.
+
 
 
 
@@ -456,10 +459,7 @@ To account for two prevalent shocks in the recent decades, the Great Recession a
 \label{tbl:t_sumstats}
 \end{table}
 
-In total, 523 private museums are included in the dataset which are either open or have closed\footnote{This does not include 25 institutions which were private museums at some point and have since been transformed into other organizational forms; these cases are discussed in the limitations.}.
-A small number of museums are excluded, in particular three museums for which the closing date could not be found, 15 museums which opened in 2021 and later (as survival analyses requires positive survival times), as well as two which closed before 2000 as they fall outside the period under investigation.
-This leaves 503 private museums at risk, of which 68 have closed.
-6096 museum-years are observed; table \ref{tbl:t_sumstats} shows summary statistics for all variables.
+Table \ref{tbl:t_sumstats} shows summary statistics for all variables.
 \subsubsection*{Comparing private museum hazard rates to previous studies}
 
 \begin{figure}[htbp]
@@ -591,11 +591,8 @@ Coefficients are interpeted as log hazard ratios, i.e. as multipliers of the bas
 \paragraph*{Control Variables}
 
 
-Neither gender nor external shocks (the Great Recession and the Covid-19 Pandemic) are associated with higher closing rates.
-
-inclusion of founder name is significantly associated with mortality rates.
-While generally organizations whose name include the name of their founder might be more centered around the founder, and hence display higher inertia, making them less able to adapt to changing environments, these results indicate that it does not seem to be case for private museums.
-\paragraph*{Founder dependence}
+Neither gender of the founder nor external shocks (the Great Recession and the Covid-19 Pandemic) are associated with significantly higher closing rates.
+\paragraph*{Founder dependence (H2)}
 
 
 
@@ -632,7 +629,7 @@ While generally organizations whose name include the name of their founder might
 \caption{\label{fig:p_surv_death}Comparison of Survival Estimates by Founder Death (95\% CI)}
 \end{figure}
 
-The death of the founder is not associated with a significant difference (p=0.52) in private museum closure, i.e. museums are not significantly more likely to close after their founder has died.
+The death of the founder is not associated with a significant difference (p=0.52) in private museum closure, i.e. museums are not significantly more likely to close after their founder has died, which provides little support to H2a.
 While the point estimate is positive (0.280, corresponding to a  32\% increase in mortality for museums whose founders have died compared to those who have not), the low risk overall means that despite the cumulative character even decade-long survival times do not differ substantially (figure \ref{fig:p_surv_death}).
 
 
@@ -649,17 +646,24 @@ While 47 private museums have seen the death of their founders, only 3 of these 
 
 
 Other founder-level characteristics also do not indicate that founder-related variables are strongly associated to museum closure, as the coefficients of ARTnews ranking inclusion (measuring reputation) and inclusion of founder's name in the museum name are not statistically significant.
-Museums whose founders are not included in the ARTnews collector ranking (reference category) are the least likely to close, followed by museums whose founders are included (21\% elevated closing risk) and by founders who were included at some point but are no longer included (58\% elevated closing risk), however none of the differences are statistically significant.
+Museums whose founders are not included in the ARTnews collector ranking (reference category) are the least likely to close, followed by museums whose founders are included (21\% elevated closing risk) and by founders who were included at some point but are no longer included (58\% elevated closing risk).
+However as none of the differences are statistically significant, they provide little support for hypothesis 2b.
 It is also worth to point out that the order of the categories does not fully correspond to the expected order, according to which museums whose collectors are not included would be more likely to close than collectors who are.
 However, as all differences are not statistically significant, there is no strong evidence that this reflects unexpected status mechanisms rather than randomness.
 
 
 
 
+Museums whose name contain the name of the founder face a non-significantly 4.9\% elevated risk of closure, which indicates that there is little evidence that founders face greater difficulties to secure a long-term future for their museums by choosing to emphasize their personal contribution; thus providing no support for hypothesis 2c.
+A possible explanation might be that even when other parties do indeed feel less inclined to contribute, these gaps are filled by a stronger commitment of the founder, who having committed her name to the initiative, wants to keep the museum open event at great costs.
 
-Taken together, the inability to explain private museum closing with the death of founder, her exclusion from a prestitious ranking and the presence of her name in the museum's name question the hypothesized central role of the founder.
-In other words, so far little evidence points to founders constituting a substantial source of involuntary closing risk.
-\paragraph*{Competition}
+
+
+
+
+Taken together, the inability to explain private museum closing with the death of founder, her exclusion from a prestitious ranking and the presence of her name in the museum's name question the hypothesized central role of the founder (Hypothesis 2).
+In other words, so far little evidence points to low diversification, i.e. reliance on founders, as a substantial source of involuntary closing risk for private museums.
+\paragraph*{Competition (H3)}
 
 
 \begin{figure}[htbp]
@@ -673,15 +677,20 @@ Country-level measures of the private museum population show a marginally signif
 While these results provide a support for evidence of competition on the country level leading to closure, it is worth noting that the observed relationship does not correspond to the generally accepted non-monotonic relationship between density and closures (as the linear term is positive, and the squared term not significant at p = 0.22), which postulates that density increases at low densities reduce closing risk (corresponding to a negative linear coefficient), and increases at high numbers increase risk (corresponding to a positive squard term).
 
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=18cm]{../figures/p_pred_heatmap.pdf}
+\caption{\label{fig:p_pred_heatmap}Predicted Avg. Hazard Rate on Regional PM Density and Population (at available values)}
+\end{figure}
 
 
 At the local level, the number of private museum and population numbers predict survival chances as the main effects of population and number of private museums as well as its interaction are significant.
-The particular pattern is complex:
+The particular pattern however is complex:
 As both main terms are positive and the interaction negative, at low values increases in either variable are associated with increases in mortality (figure \ref{fig:p_condmef}).
-Thus, for population values of 0 to 2.97 million people, an increase in the number of private museums corresponds to an increase in mortality (bottom half of figure \ref{fig:p_pred_heatmap}), which provides support for the view that competition leads to museum closure, in particular as this range includes 5056 museums years, or 83\% of the dataset. 
+Thus, for population values of 0 to 2.97 million people, an increase in the number of private museums corresponds to an increase in mortality (bottom half of figure \ref{fig:p_pred_heatmap}), which provides support for hypothesis 3 according to which competition leads to museum closure, in particular as this range includes 5056 museums years, or 83\% of the dataset. 
 Yet at the same time, at low private museums numbers (0 to 3 private museums), increases in population also increase mortality; this range also includes a large number of museum-years (4960 museum years; 81\% of the data).
 Such a relationship is unexpected insofar as it is unclear why a larger potential audience would be associated with a higher risk of closure.\footnote{Alternative approaches of modeling competition are discussed in the supplementary materials, but cannot answer this question.}
-A possible explanation might be that collectors in less densely populated areas are more committed than those in less populated areas precisely because they know they cannot count visitors to contribute substantially.
+A possible explanation might be that collectors in less densely populated areas are more committed than those in less populated areas precisely because they know they cannot count on visitors to contribute substantially.
 Alternatively, areas with high population and low private museum numbers might more generally lack cultural infrastructure; which one could see supported by closures in Jakarta, Istanbul and Mexico City, but less so by closings in Paris, Tokyo or Madrid.
 However, low private museums indicating lack of cultural infrastructure might also explain the decrease in mortality associated with increases in private museum numbers at high population values (figure \ref{fig:p_pred_heatmap}, upper half), as such pattern does not correspond to that predicted by competition.
 More in line with expectation is however the association between increases of population numbers and lower mortality at higher numbers of private museums (right half), as it indicates that audiences can facilitate museum survival.
@@ -691,7 +700,7 @@ Taken together, figure \ref{fig:p_pred_heatmap} indicates two niches as particul
 
 
 While not all associations correspond to predictions made by resource dependence, the most direct measurement of increased competition, number of private museums in the local surrounding, is associated with higher closing chances for a large part of the sample, which in turn supports the substantial role of competition (H3).
-\paragraph*{Identity Variables}
+\paragraph*{Identity (H4)}
 
 
 Museums which include the term "collections" in their name are the least likely to close (0.63 times the rate of museums with the name "museum", while those with the term foundation experience 23\% elevated closure rates (but not significantly higher).
@@ -707,18 +716,9 @@ A temporal intentions are however the exceptions among closing reasons identifie
 Investigating the survival prospects of private museum furthermore illucidates the long-term development of the organizational form as a whole, as it provides insights into factors related to variation of sustainability and thereby into trends in composition. 
 
 
-Given the non-significant gender difference, it can be expected that (unless given a strong increase in founding by women) the population of private museums will continue to remain a man-dominated affair.
-This finding also provides no evidence that female founders face gender-specific challenges that decrease the survival prospects of their private museums. 
 
 
 
-
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=18cm]{../figures/p_pred_heatmap.pdf}
-\caption{\label{fig:p_pred_heatmap}Predicted Avg. Hazard Rate on Regional PM Density and Population (at available values)}
-\end{figure}
 
 
 The lack of a relation between temporary exhibitions and survival prospect is somewhat unexpected.
