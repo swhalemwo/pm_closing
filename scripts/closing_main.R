@@ -64,6 +64,9 @@ gd_nbrs <- function() {
              nbr_fmt = dt_pmdb[museum_status %in% c("private museum", "closed") & is.na(year_opened), .N]),
         list(nbr_name = "pmx_n",         nbr_fmt = dt_pmx[, .N]),
         list(nbr_name = "n_founder_dead",nbr_fmt = dt_pmyear[founder_dead5 == "recently_dead", fnunique(ID)]),
+        list(nbr_name = "perc_founder_dead",
+             nbr_fmt = dt_pmyear[, .SD[founder_dead5 == "recently_dead", fnunique(ID)*100]/fnunique(ID)] %>%
+                 format(digits = 2)),
         list(nbr_name = "pm_n_used",     nbr_fmt = dt_pmyear[, fnunique(ID)]),
         list(nbr_name = "n_pm_close_after_recent_death",
              nbr_fmt = dt_pmyear[founder_dead5 == "recently_dead" & closing == 1, .N]),

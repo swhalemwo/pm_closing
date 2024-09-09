@@ -31,6 +31,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: pmdb_n_open_NAopeningyear 1
 #+MACRO: pmx_n 505
 #+MACRO: n_founder_dead 47
+#+MACRO: perc_founder_dead 9.3
 #+MACRO: pm_n_used 503
 #+MACRO: n_pm_close_after_recent_death 3
 #+MACRO: pm_open_from2021 15
@@ -123,6 +124,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: reftbl_t_reg_coxph_comp \ref{tbl:t_reg_coxph_comp}
 #+MACRO: reftbl_t_reg_coxph_dens \ref{tbl:t_reg_coxph_dens}
 #+MACRO: reftbl_t_reg_coxph_env \ref{tbl:t_reg_coxph_env}
+#+MACRO: reftbl_t_reg_coxph_af \ref{tbl:t_reg_coxph_af}
 #+MACRO: reftbl_t_reg_coxph_timecfg \ref{tbl:t_reg_coxph_timecfg}
 
 
@@ -916,8 +918,50 @@ A temporal intentions are however the exceptions among closing reasons identifie
 
 ** Discussion
 
+The overall picture that emerges from the analysis is complex.
+#
+While private museums do close, they do not so at higher rates at other non-profit museums
+#
+A possible reason for that is that founder-level variables, in particular the founder's death, are not significantly associated with closing that is unvoluntary.
+#
+While so far little evidence points toward low diversification, i.e. reliance on the founder as a key vulnerability of private museums, the longevity of a subgroup of private museums might be limited by the temporary intentions of their founders.
+#
+Beyond founder-reliance, private museums depend substantially on their environment, which additional private museums in their surrounding constituting an increase in closing risk for the majority. 
 
-Investigating the survival prospects of private museum furthermore illucidates the long-term development of the organizational form as a whole, as it provides insights into factors related to variation of sustainability and thereby into trends in composition. 
+
+
+While previously the dozens of closures have been seen as indicator of their vulnerability and short-livedness [[parencite:&Adam_2020_close]], this analysis shows the importance of establishing a proper comparisons.
+#
+While the booming numbers of private museums themselves have received substantial attention, less consideration has been given to the fact that large populations can generate dozens of closures without requiring high closing rates, especially when considered over a span of several years.
+#
+In other words, the sheer size to which the the private museum population has grown over the last decades has made it all but inevitable that some of them would close, and do so after only a few years.
+#
+Based on the current analysis, private museums will continue to close in the years to come, at hazard rates of around 1% a handful of closures every year are to be expected. 
+
+# FIXME better integration to previous paragraph
+While overall private museum closing rates are generally not diverging from museums in general, and may even lie below the average, it has to be kept in mind that this comparison is based on American non-profit museums.
+#
+To the best of my knowledge, currently no data sources exist that allow estimation of closing rates of (European) public, state-funded museums.
+#
+While public museums have been characterized to some extent as very stable due to government picking up deficits [[parencite:&Meier_Frey_2003_faces;&Bechtler_Imhof_2018_future]], [[textcite:&Walker_2019_collector]] argues that due to declining cultural spending even public museums might face hard times.
+#
+While most national public flagship institutions will likely remain sufficiently funded to survive, this might not be the case for the vast majority of smaller museums in less touristic regions who rely on limited municipal funding, as textcite:&StylianouLambert_etal_2014_museums demonstrate for a number of smaller publicly funded ethnography museums in Cyprus.
+#
+Yet without access to museum register comparable to the IRS/NCCS datasets, such questions regarding the relation between type of ownership and survival remain speculative.
+
+
+
+
+However, it is necessary to consider that so far only a small fraction ({{{n_founder_dead}}} museums, {{{perc_founder_dead}}}%) of museums has experienced the death of their founder, one of the primary reasons hypothesized to lead to the private museum closure. 
+#
+While so far these museums have not seen substantially elevated closing risks, these estimates will become more precise as more founders pass away.
+# 
+As the currently large confidence interval (figure {{{refplt_p_surv_death}}}) for museums whose founders have died allows a wide range of values, it is entirely possible that previous scholars have indeed correctly identified a key dependency (the current absence of evidence of it should not be taken as evidence of absence) and that therefore later analyses will a significantly association between founder death and closing risk. 
+#
+At the same time, it is also possible that private museums are generally less dependent on a single person (or couple) than has been assumed, and have in fact become institutionalized to an extent that most heirs of founders feel as motivated to continue the original founders' efforts as these founders themselves.
+
+
+# Investigating the survival prospects of private museum furthermore illucidates the long-term development of the organizational form as a whole, as it provides insights into factors related to variation of sustainability and thereby into trends in composition. 
 
 # *** gender :ignhead:
 # #
@@ -931,7 +975,6 @@ Investigating the survival prospects of private museum furthermore illucidates t
 
 
 # FIXME: rewrite with focus on audience/competition
-# The effects of location might be seen
 # #
 # On the one hand, museum location is chosen by the founder at the time of founding (or rather, several years in advance).
 # #
@@ -949,53 +992,6 @@ Investigating the survival prospects of private museum furthermore illucidates t
 # #
 # These larger cities with low private museum counts are possibly also characterized by lower numbers of other cultural institutions as well as an audience less interested in postmaterial art consumption.
 
-
-
-
-
-
-
-
-
-
-
-
-*** founder
-:PROPERTIES:
-:CREATED:  [2024-05-29 wo 12:08]
-:ID:       676af2e2-9b94-489e-88a8-6a87397c864a
-:END:
-
-
-
-It has been widely argued that the death of the founder would lead to his or her private museum to close, while this analysis has not found conclusive evidence for this relationship.
-#
-It is important to keep in mind that the lack of observing a clear relationship between the death of the founder and museum closure does not imply that no relationship exists.
-#
-It is possible that previous scholars who argued for such an association have correctly identified the dependency relationships in private museums, which will become visible once more founder deaths have occurred.
-#
-At the same time, it is possible that private museums are indeed generally less dependent on the mood of a single person (or couple), and have in fact become institutionalized to an extent that heirs of founders feel as motivated to continue the original founders' efforts as these founders themselves.
-
-
-
-# FIXME: rewrite from observation level to process level
-# The role of the founder is two sided.
-# #
-# Death and exclusion from a prestigious ranking are not associated with a higher risk of closure, which indicates that private museums have attained a substantial degree of institutionalization.
-# #
-# On the other hand, self-identifying as an institution which is not a museum, foundation or collection possibly reflects a kind of founder attitudes which substantially influences survival chances.
-# #
-# Founders who are less interested in establish institutions might be more inclined to choose a name which less reflects this ambition. 
-# #
-# One way of conceptualizing this distinction might then be that whereas involuntary, externally imposed events are less able to close museums of otherwise motivated founders, some founders might from the very beginning voluntarily decide to not establish a museum that is intended for perpetuity.
-
-
-# However, this group is somewhat small.
-# #
-# Of the XXX museums included in the database, XXX do not carry the term museum, foundation or collection.
-# #
-# Thus given this low share, and the corresponding  higher closing rate, a possible future for the private museum population might be increased institutionalization and consolidation of relatively robust organizations.
-# #
 
 
 ** Conclusion
@@ -1025,11 +1021,7 @@ Due to the "private museum boom", some museums will experience closing over a pe
 
 It cannot be stated whether private museums experience higher mortality rates than publicly funded museums (for which European countries would be the most natural comparison).
 #
-While public museums have been characterized to some extent as very stable due to government picking up deficits [[parencite:&Meier_Frey_2003_faces;&Bechtler_Imhof_2018_future]], [[textcite:&Walker_2019_collector]] argues that due to declining cultural spending even public museums might face hard times.
-#
-While national public flagship institutions will likely remain sufficiently funded to survive, this might not be the case for the vast majority of smaller museums in less touristic regions who rely on limited municipal funding, as textcite:&StylianouLambert_etal_2014_museums demonstrate for a number of smaller publicly funded ethnography museums in Cyprus.
-#
-Without access to museum register comparable to the IRS/NCCS datasets, such questions regarding the relation between type of ownership and survival remain speculative.
+
 
 
 #+Latex: \begin{sloppypar}
