@@ -54,7 +54,14 @@ gd_nbrs <- function() {
         list(nbr_name = "pm_n_closed",   nbr_fmt = dt_pmyear[, sum(closing)]),
         list(nbr_name = "n_pmyears",     nbr_fmt = dt_pmyear[, .N]),
         list(nbr_name = "pmdb_n_nlpm",   nbr_fmt = dt_pmdb[museum_status == "no longer a private museum", .N]),
+        list(nbr_name = "pmdb_n_closed", nbr_fmt = dt_pmdb[museum_status == "closed", .N]),
         list(nbr_name = "pmdb_n",        nbr_fmt = dt_pmdb[museum_status %in% c("private museum", "closed"), .N]),
+        list(nbr_name = "pmdb_n_closed_NAclosingyear",
+             nbr_fmt = dt_pmdb[museum_status == "closed" & is.na(year_closed), .N]),
+        list(nbr_name = "pmdb_n_closed_before2k",
+             nbr_fmt = dt_pmdb[museum_status == "closed" & year_closed < 2000, .N]),
+        list(nbr_name = "pmdb_n_open_NAopeningyear",
+             nbr_fmt = dt_pmdb[museum_status %in% c("private museum", "closed") & is.na(year_opened), .N]),
         list(nbr_name = "pmx_n",         nbr_fmt = dt_pmx[, .N]),
         list(nbr_name = "n_founder_dead",nbr_fmt = dt_pmyear[founder_dead5 == "recently_dead", fnunique(ID)]),
         list(nbr_name = "pm_n_used",     nbr_fmt = dt_pmyear[, fnunique(ID)]),
@@ -344,6 +351,7 @@ l_mdlnames_comp <- c("r_pop4", "r_comp1", "r_audience1", "r_audience2", "r_audie
 ## combination of density/competition specifications
 l_mdlnames_env <- c("r_pop4", "r_pmdens1", "r_pmdens2", "r_audience1", "r_audience_log1")
 
+## improvement by adding variables
 dt_drop1 <- gd_drop1(l_mdls)
 
 ## ** number/figure/table export

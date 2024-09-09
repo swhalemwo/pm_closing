@@ -4,7 +4,11 @@ pmdb_open_atm,451,descs
 pm_n_closed,68,descs
 n_pmyears,6096,descs
 pmdb_n_nlpm,25,descs
+pmdb_n_closed,72,descs
 pmdb_n,523,descs
+pmdb_n_closed_NAclosingyear,2,descs
+pmdb_n_closed_before2k,2,descs
+pmdb_n_open_NAopeningyear,1,descs
 pmx_n,505,descs
 n_founder_dead,47,descs
 pm_n_used,503,descs
