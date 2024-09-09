@@ -1503,7 +1503,11 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
 
         r_pmdens_aud2 = coxph(gf_coxph_close(
             vrbls_to_add = "pmdens_circle10",
-            vrbls_to_yeet = c("popm_circle10", "proxcnt10:popm_circle10")), dt_pmyear)
+            vrbls_to_yeet = c("popm_circle10", "proxcnt10:popm_circle10")), dt_pmyear),
+
+        r_exhbany = coxph(gf_coxph_close(vrbls_to_add = "exhbany"), dt_pmyear),
+
+        r_exhbroll = coxph(gf_coxph_close(vrbls_to_add = "exhbrollany"), dt_pmyear)
         
 
         ## fullest model:
@@ -2385,6 +2389,7 @@ gt_reg_coxph_timecfg <- gt_reg_coxph
 gt_reg_coxph_comp <- gt_reg_coxph
 gt_reg_coxph_dens <- gt_reg_coxph
 gt_reg_coxph_env <- gt_reg_coxph
+gt_reg_coxph_af <- gt_reg_coxph
 
 gt_coxzph <- function(rx) {
     gw_fargs(match.call())

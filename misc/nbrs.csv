@@ -87,6 +87,7 @@ reftbl_t_drop1,\ref{tbl:t_drop1},reftbl
 reftbl_t_reg_coxph_comp,\ref{tbl:t_reg_coxph_comp},reftbl
 reftbl_t_reg_coxph_dens,\ref{tbl:t_reg_coxph_dens},reftbl
 reftbl_t_reg_coxph_env,\ref{tbl:t_reg_coxph_env},reftbl
+reftbl_t_reg_coxph_af,\ref{tbl:t_reg_coxph_af},reftbl
 reftbl_t_reg_coxph_timecfg,\ref{tbl:t_reg_coxph_timecfg},reftbl
 mow_prop_name_museum,71,descs
 coef_genderF,-0.038,coefs

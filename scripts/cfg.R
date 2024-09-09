@@ -59,6 +59,10 @@ gc_tbls <- function(c_tblargs) {
             l_mdls = quote(l_mdls),
             l_mdlnames = quote(l_mdlnames_env),
             caption = "Alternative specification of environment"),
+        t_reg_coxph_af = list(
+            l_mdls = quote(l_mdls),
+            l_mdlnames = quote(l_mdlnames_af),
+            caption = "Alternative specification: include Exhibition"),
         t_reg_coxph_timecfg = list(
             l_mdls = quote(l_mdls),
             l_mdlnames = quote(l_mdlnames_timecfg),

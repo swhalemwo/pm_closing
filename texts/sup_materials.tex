@@ -1,4 +1,4 @@
-% Created 2024-09-06 vr 15:46
+% Created 2024-09-09 ma 11:38
 % Intended LaTeX compiler: pdflatex
 \documentclass[12pt]{article}
 
@@ -156,8 +156,23 @@
 
 
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=18cm]{../figures/p_pred_heatmap_alt.pdf}
+\caption{\label{fig:p_pred_heatmap_alt}Prediction Heatmap of Alternative model specifications}
+\end{figure}
+
+
+Alternative Specifications of competition exist.
+First, it is possible to argue that the primary mechanism through which private museums compete with each other is by limiting each other's audience.
+This specification leads to the construction of the Audience variable, which describes the number of people in the 10 km surrounding by the number of private museums present.
+Under this assumption, the situation of a private museum which is alone in an environment of 1 million people is equivalent to one in an environment of 3 million people with 2 other private museums, as each museums is "assigned" a pool of 1 million people.
+Secondly, one might argue that the competition between private museums is scaled by the amount of people, which corresponds to specifying competition as the number of other private museums per (million) population.
+In this case, the absence of other private museums assumes absence of competition, regardless of the audience size.
+
+\begin{landscape}
 % latex table generated in R 4.3.3 by xtable 1.8-4 package
-% Fri Sep  6 15:29:56 2024
+% Fri Sep  6 15:49:47 2024
 \begin{table}[ht]
 \centering
 \begin{tabular}{p{0mm}lD{)}{)}{8)3}D{)}{)}{8)3}D{)}{)}{8)3}D{)}{)}{8)3}D{)}{)}{8)3}}
@@ -200,21 +215,7 @@
 \caption{Alternative specification of environment} 
 \label{tbl:t_reg_coxph_env}
 \end{table}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=18cm]{../figures/p_pred_heatmap_alt.pdf}
-\caption{\label{fig:p_pred_heatmap_alt}Prediction Heatmap of Alternative model specifications}
-\end{figure}
-
-
-Alternative Specifications of competition exist.
-First, it is possible to argue that the primary mechanism through which private museums compete with each other is by limiting each other's audience.
-This specification leads to the construction of the Audience variable, which describes the number of people in the 10 km surrounding by the number of private museums present.
-Under this assumption, the situation of a private museum which is alone in an environment of 1 million people is equivalent to one in an environment of 3 million people with 2 other private museums, as each museums is "assigned" a pool of 1 million people.
-Secondly, one might argue that the competition between private museums is scaled by the amount of people, which corresponds to specifying competition as the number of other private museums per (million) population.
-In this case, the absence of other private museums assumes absence of competition, regardless of the audience size.
-
+\end{landscape}
 
 These while it would be possible for these different specifications to lead to similar interpretations, in practice they diverge substantially (table \ref{tbl:t_reg_coxph_env}).
 Using Private museum density (model 2 and 3 for linear and log-transformed audience, figure \ref{fig:p_pred_heatmap_alt} bottom left), the general conclusion would be that (logged) competition increases mortality as predicted closing chance is highest in areas of low population and large private museum populations.
@@ -224,7 +225,7 @@ While it is beyond the scope of the paper to explore the origin of these divergi
 
 
 % latex table generated in R 4.3.3 by xtable 1.8-4 package
-% Fri Sep  6 15:29:49 2024
+% Fri Sep  6 15:49:39 2024
 \begin{table}[ht]
 \centering
 \begin{tabular}{p{0mm}lD{)}{)}{8)3}D{)}{)}{8)3}D{)}{)}{8)3}D{)}{)}{8)3}}
@@ -273,7 +274,7 @@ However, both these models are not reliable, as they do not properly converge (i
 \subsection*{Alternative time range specifications}
 
 % latex table generated in R 4.3.3 by xtable 1.8-4 package
-% Fri Sep  6 15:29:50 2024
+% Fri Sep  6 15:49:41 2024
 \begin{table}[ht]
 \centering
 \begin{tabular}{p{0mm}lD{)}{)}{8)3}D{)}{)}{8)3}D{)}{)}{8)3}D{)}{)}{8)3}}
@@ -313,6 +314,59 @@ However, both these models are not reliable, as they do not properly converge (i
 \label{tbl:t_reg_coxph_timeslice}
 \end{table}
 
-Table \ref{tbl:t_reg_coxph_timecfg} investigates whether relationships have substantially changed over time.
+Table \ref{tbl:t_reg_coxph_timeslice} investigates whether relationships have substantially changed over time.
 However, subsetting the dataset to different year ranges shows general consistency of the main findings, in particular insignificant coefficients for the founder's death, gender, Artnews ranking variables, inclusion of founder name in museum name, positive and significant coefficients for self-identification as other, population and private museum numbers, and a significant negative interaction between private museum numbers and population.
+\subsection*{Inclusion of Exhibition data}
+
+
+% latex table generated in R 4.3.3 by xtable 1.8-4 package
+% Mon Sep  9 11:20:03 2024
+\begin{table}[ht]
+\centering
+\begin{tabular}{p{0mm}lD{)}{)}{8)3}D{)}{)}{8)3}D{)}{)}{8)3}}
+  \hline 
+ \multicolumn{1}{l}{} & \multicolumn{1}{l}{Variable} & \multicolumn{1}{l}{r\_pop4} & \multicolumn{1}{l}{r\_exhbany} & \multicolumn{1}{l}{r\_exhbroll}\\ 
+ \hline
+  \multicolumn{5}{l}{\textbf{Founder}} \\ 
+ & Gender - Female & -.04 \; (0.34) & -.01 \; (0.34) & -.06 \; (0.34) \\ 
+   & Gender - Couple & -.14 \; (0.32) & -.12 \; (0.32) & -.15 \; (0.32) \\ 
+   & Founder died & .28 \; (0.43) & .31 \; (0.43) & .26 \; (0.43) \\ 
+   \multicolumn{5}{l}{\textbf{Museum}} \\ 
+ & Self-Identification - Foundation & .20 \; (0.41) & .24 \; (0.42) & .17 \; (0.41) \\ 
+   & Self-Identification - Collection & -.45 \; (0.54) & -.47 \; (0.55) & -.42 \; (0.54) \\ 
+   & Self-Identification - Other & 1.09 \; (0.30)^{***} & 1.13 \; (0.31)^{***} & 1.07 \; (0.30)^{***} \\ 
+   & AN Ranking - Included & .19 \; (0.34) & .26 \; (0.36) & .13 \; (0.35) \\ 
+   & AN Ranking - Dropped & .46 \; (0.50) & .50 \; (0.50) & .42 \; (0.50) \\ 
+   & Founder name in Museum name & .05 \; (0.28) & .07 \; (0.28) & .03 \; (0.28) \\ 
+   & Exhibition any &  & -.22 \; (0.27) &  \\ 
+   & Exhibition any last 5 years &  &  & .20 \; (0.26) \\ 
+   \multicolumn{5}{l}{\textbf{Environment}} \\ 
+ & PM density (country) & .65 \; (0.34) & .66 \; (0.35) & .65 \; (0.35) \\ 
+   & PM density$^{2}$ (country) & -.03 \; (0.02) & -.03 \; (0.02) & -.03 \; (0.02) \\ 
+   & Pop. (millions) within 10km & .27 \; (0.09)^{**} & .27 \; (0.09)^{**} & .27 \; (0.10)^{**} \\ 
+   & Nbr PM within 10km & .26 \; (0.08)^{***} & .26 \; (0.08)^{***} & .27 \; (0.08)^{***} \\ 
+   & Nbr PM (10km) * Pop (10km) & -.09 \; (0.03)^{**} & -.09 \; (0.03)^{**} & -.09 \; (0.03)^{**} \\ 
+   & Great Recession (2008/09) & -1.59 \; (1.01) & -1.60 \; (1.01) & -1.57 \; (1.01) \\ 
+   & Covid Pandemic (2020/21) & .42 \; (0.29) & .42 \; (0.29) & .41 \; (0.29) \\ 
+   \hline
+ & Museums & 503 & 503 & 503 \\ 
+   & Museum-years & 6096 & 6096 & 6096 \\ 
+   & Closures & 68 & 68 & 68 \\ 
+   & log. Likelihood & -339.68 & -339.34 & -339.38 \\ 
+   & AIC & 711.35 & 712.67 & 712.76 \\ 
+   & BIC & 746.87 & 750.41 & 750.50 \\ 
+   \hline 
+ \multicolumn{5}{l}{\footnotesize{standard errors in parantheses.\textsuperscript{***}p $<$ 0.001;\textsuperscript{**}p $<$ 0.01;\textsuperscript{*}p $<$ 0.05.}}
+\end{tabular}
+\caption{Alternative specification: include Exhibition} 
+\label{tbl:t_reg_coxph_af}
+\end{table}
+
+It is also possible to include an indicator whether museums have had exhibitions of contemporary art.
+For this the database of Artfacts is used.
+It is not included in the main model as it might reflect resources (with larger museums being more likely to organize exhibitions), which would then influence the coefficients of other variables. 
+Controlling for the mechanism (or a proxy of it) would then lead to coefficients corresponding to comparisons where resources are equal.
+To investigate the role of exhibitions anyways, table \ref{tbl:t_reg_coxph_af} includes next to the main model two models with different exhibition specifications.
+"Exhibition any" is a time-invariant indicator measuring whether Artfacts has ever recorded this museum as organizating an exhibition, "Exhibition any last 5 years" is a time-varying variable indicating whether an exhibition has been taken place in the previous 5 years.
+Both coefficients are not significant, and do not substantially change the coefficients of other variables. 
 \end{document}

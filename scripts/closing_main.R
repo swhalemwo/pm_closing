@@ -329,13 +329,6 @@ l_mdlnames_coxph <- list("r_pop4")
 
 l_mdlnames_dens <- list("r_pop4", "r_comp1", "r_pmdens1", "r_pmdens2", "r_pmdens3", "r_pmdens_aud1", "r_pmdens_aud2")
 
-## "r_smol")#, "r_pop5", "r_pop42")#  , ",r_pop4_wyr", "r_pop4_wcrises")
-## l_mdlnames_coxph <- c("r_pop4", paste0("r_wsize", 3:1))
-## c("r_more", paste0("r_pop", c(1, 3:6)))
-## "r_woaf", "r_waf_year", "r_waf_roll", "r_waf_roll2")
-## "r_waf_cy", "r_waf_proplog", "r_waf_prop", "r_waf_year_sqrd") 
-
-
 ## compare whether proxcnt/popm_circle10 patterns are stable across data ranges
 l_mdlnames_coxph_density <- list("r_pop4", "r_onlycryside", "r_wocryside", "r_pop42") 
 
@@ -350,6 +343,9 @@ l_mdlnames_comp <- c("r_pop4", "r_comp1", "r_audience1", "r_audience2", "r_audie
 
 ## combination of density/competition specifications
 l_mdlnames_env <- c("r_pop4", "r_pmdens1", "r_pmdens2", "r_audience1", "r_audience_log1")
+
+## including exhibition data (Artfacts)
+l_mdlnames_af <- c("r_pop4", "r_exhbany", "r_exhbroll")
 
 ## improvement by adding variables
 dt_drop1 <- gd_drop1(l_mdls)

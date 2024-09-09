@@ -23,7 +23,11 @@ wd_nbrs(dt_nbrs)
 #+MACRO: pm_n_closed 68
 #+MACRO: n_pmyears 6096
 #+MACRO: pmdb_n_nlpm 25
+#+MACRO: pmdb_n_closed 72
 #+MACRO: pmdb_n 523
+#+MACRO: pmdb_n_closed_NAclosingyear 2
+#+MACRO: pmdb_n_closed_before2k 2
+#+MACRO: pmdb_n_open_NAopeningyear 1
 #+MACRO: pmx_n 505
 #+MACRO: n_founder_dead 47
 #+MACRO: pm_n_used 503
@@ -118,6 +122,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: reftbl_t_reg_coxph_comp \ref{tbl:t_reg_coxph_comp}
 #+MACRO: reftbl_t_reg_coxph_dens \ref{tbl:t_reg_coxph_dens}
 #+MACRO: reftbl_t_reg_coxph_env \ref{tbl:t_reg_coxph_env}
+#+MACRO: reftbl_t_reg_coxph_af \ref{tbl:t_reg_coxph_af}
 #+MACRO: reftbl_t_reg_coxph_timecfg \ref{tbl:t_reg_coxph_timecfg}
 
 
@@ -220,8 +225,6 @@ wd_nbrs(dt_nbrs)
 ** Alternative competition specifications
 
 
-#+INCLUDE: "../tables/t_reg_coxph_env_wcpF.tex" export latex
-
 {{{ynkplt_p_pred_heatmap_alt}}}
 
 
@@ -237,6 +240,9 @@ Secondly, one might argue that the competition between private museums is scaled
 # 
 In this case, the absence of other private museums assumes absence of competition, regardless of the audience size.
 
+#+latex: \begin{landscape}
+#+INCLUDE: "../tables/t_reg_coxph_env_wcpF.tex" export latex
+#+latex: \end{landscape}
 
 These while it would be possible for these different specifications to lead to similar interpretations, in practice they diverge substantially (table {{{reftbl_t_reg_coxph_env}}}).
 #
@@ -266,6 +272,25 @@ However, both these models are not reliable, as they do not properly converge (i
 ** Alternative time range specifications
 #+INCLUDE: "../tables/t_reg_coxph_timeslice_wcpF.tex" export latex
 
-Table {{{reftbl_t_reg_coxph_timecfg}}} investigates whether relationships have substantially changed over time.
+Table {{{reftbl_t_reg_coxph_timeslice}}} investigates whether relationships have substantially changed over time.
 #
 However, subsetting the dataset to different year ranges shows general consistency of the main findings, in particular insignificant coefficients for the founder's death, gender, Artnews ranking variables, inclusion of founder name in museum name, positive and significant coefficients for self-identification as other, population and private museum numbers, and a significant negative interaction between private museum numbers and population.
+
+** Inclusion of Exhibition data
+
+#+INCLUDE: "../tables/t_reg_coxph_af_wcpF.tex" export latex
+
+It is also possible to include an indicator whether museums have had exhibitions of contemporary art.
+#
+For this the database of Artfacts is used.
+#
+It is not included in the main model as it might reflect resources (with larger museums being more likely to organize exhibitions), which would then influence the coefficients of other variables. 
+#
+Controlling for the mechanism (or a proxy of it) would then lead to coefficients corresponding to comparisons where resources are equal.
+#
+To investigate the role of exhibitions anyways, table {{{reftbl_t_reg_coxph_af}}} includes next to the main model two models with different exhibition specifications.
+#
+"Exhibition any" is a time-invariant indicator measuring whether Artfacts has ever recorded this museum as organizating an exhibition, "Exhibition any last 5 years" is a time-varying variable indicating whether an exhibition has been taken place in the previous 5 years.
+#
+Both coefficients are not significant, and do not substantially change the coefficients of other variables. 
+
