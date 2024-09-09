@@ -953,21 +953,6 @@ Investigating the survival prospects of private museum furthermore illucidates t
 
 
 
-*** facilities/size :ignhead:
-# FIXME: rewrite with 
-
-
-The lack of a relation between temporary exhibitions and survival prospect is somewhat unexpected.
-#
-It was expected that as temporary exhibitions constitute one of the main tasks of a museums operations, organizing them would benefit a museum financially (via visitor fees) and symbolically (via prestige of other art field actors, which might be developed into further contacts), leading to higher survival chances[fn::Furthermore, the ability to organization exhibitions likely reflects museum resources, which should also enhance survival.]
-# not sure this follows
-However, organizing exhibitions does not seem to bestow benefits for the museums which organize them, nor do organizations seem to be organized only by established/sustainable/secure organizations.
-#
-One possibility for this discrepancy could be that exhibitions are expensive, and whatever benefits gained from them are offset by the associated costs.
-#
-One might see in this association again the importance of the founder:
-#
-Founders who are committed to their museums will keep them alive, regardless of whether or not they plan to organize temporary exhibitions.
 
 
 

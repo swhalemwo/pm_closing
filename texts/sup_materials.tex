@@ -1,4 +1,4 @@
-% Created 2024-09-09 ma 11:38
+% Created 2024-09-09 ma 12:03
 % Intended LaTeX compiler: pdflatex
 \documentclass[12pt]{article}
 
@@ -366,6 +366,8 @@ It is also possible to include an indicator whether museums have had exhibitions
 For this the database of Artfacts is used.
 It is not included in the main model as it might reflect resources (with larger museums being more likely to organize exhibitions), which would then influence the coefficients of other variables. 
 Controlling for the mechanism (or a proxy of it) would then lead to coefficients corresponding to comparisons where resources are equal.
+Alternatively, exhibitions could enhance the reputation of museums, as it might lead to higher recognition among third parties such as sponsors and governments of the public good the museum provides.
+Temporary exhibitions might also be a way to attract larger audiences, but as museum operations are unprofitable, the ticket revenues likely do not lead to a better financial situation.
 To investigate the role of exhibitions anyways, table \ref{tbl:t_reg_coxph_af} includes next to the main model two models with different exhibition specifications.
 "Exhibition any" is a time-invariant indicator measuring whether Artfacts has ever recorded this museum as organizating an exhibition, "Exhibition any last 5 years" is a time-varying variable indicating whether an exhibition has been taken place in the previous 5 years.
 Both coefficients are not significant, and do not substantially change the coefficients of other variables. 
