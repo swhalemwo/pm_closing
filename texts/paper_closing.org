@@ -46,6 +46,21 @@ wd_nbrs(dt_nbrs)
 #+MACRO: mow_prop_name_museum 71
 
 
+# egmus
+#+MACRO: own_state_cnt 2264
+#+MACRO: own_loc_reg_cnt 7690
+#+MACRO: own_publicother_cnt 641
+#+MACRO: own_priv_cnt 5052
+#+MACRO: own_ttl_cnt 15647
+#+MACRO: own_state_perc 14
+#+MACRO: own_loc_reg_perc 49
+#+MACRO: own_publicother_perc 4.1
+#+MACRO: own_priv_perc 32
+#+MACRO: own_ttl_perc 100
+#+MACRO: perc_entryfees 12
+#+MACRO: perc_subsidies 69
+
+
 # meanhaz
 #+MACRO: meanhaz_upto_2 0.10%
 #+MACRO: meanhaz_upto_4 0.49%
@@ -622,9 +637,13 @@ The variable is lagged by one year to avoid reverse causality, i.e. to exclude t
 :ID:       e891980a-d6c2-400a-8770-238a1c68eb09
 :END:
 
-On a national level, density of private museum is calculated as the number of private museums per million.
+On a national level, density of private museum is calculated as the number of private museums per million population.
+# 
+To measure competition on a local level, I first determine the coordinates of museum using the Google Maps API; the coordindates of museums which are not found that way (particularly those located in countries with limited Google presence such as South Korea, China and Russia) are searched manually (often using other map services such as Kakao Maps, Baidu Maps and Yandex Maps).
 #
-On a local level, I use the Global Human Settlement Layer [[parencite:&EC_2023_GHSL]] to estimate the number of private museums and population counts inside a radius of ten kilometers around each private museum for each year.
+For closed museums, which often are not included in the current map databases, coordinates are also determined via addresses mentioned on snapshots in the Wayback Machine.
+# 
+I then use the Global Human Settlement Layer [[parencite:&EC_2023_GHSL]] to estimate the number of private museums and population counts inside a radius of ten kilometers around each private museum for each year.
 #
 To be able to estimate both competition and demand/audience/population separately, I do not calculate densities as per capita rates, but include the local museum counts, local population in millions as well as an interaction between the two.
 

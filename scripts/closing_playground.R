@@ -550,4 +550,17 @@ dt_pmdb[dt_pmyear[popm_circle10 > 3 & proxcnt10 < 4, .(year = max(year), closing
     .[, .(name, iso3c, closing, city, year, ID)] %>% print(n=30) %>%
     .[closing == 1]
 
-## Jakarta, Istanbul, Paris.. 
+## Jakarta, Istanbul, Paris..
+
+## * egmus
+dt_egmus <- gd_egmus()
+
+
+dt_egmus %>% names
+
+## look at 
+
+
+
+    
+    

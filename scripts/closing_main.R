@@ -81,9 +81,33 @@ gd_nbrs <- function() {
         melt(id.vars = "slfidfcn") %>%
         .[, .(nbr_name = sprintf("%s_slfid_%s", variable, slfidfcn),
               nbr_fmt = format(value, digits = 2, nsmall = 0, trim = T))]
-
-
+    
     dt_descs <- rbind(dt_descs_prep1, dt_descs_prep2) %>% .[, grp := "descs"]
+
+    ## get EGMUS numbers
+    dt_egmus_subset <- gd_egmus() %>% 
+        .[, .SD[which.max(year)], country] %>%
+        .[year > 2014] %>%
+        .[, .SD, .SDcols = patterns("country|^year$|^own_|^inc_")]
+
+
+    ## ownership counts/percentages by form
+    dt_egmus_own <- melt(dt_egmus_subset, id.vars = "country", measure.vars = patterns("own_"),
+                         variable.name = "ownership") %>%
+        .[ownership != "own_ppp", .(own_cnt = sum(value, na.rm = T)), ownership] %>%
+        .[, own_perc := own_cnt*100/sum(own_cnt)] %>%
+        rbind(data.table(ownership = "own_ttl", own_cnt = sum(.[, own_cnt]), own_perc = 100)) %>%
+        melt(measure.vars = c("own_cnt", "own_perc")) %>%
+        .[, .(nbr_fmt = format(value, digits = 2)),
+          .(nbr_name = sprintf("%s_%s", ownership, gsub("own_", "", variable)))]
+    
+    ## income percentages by category
+    dt_egmus_inc <- dt_egmus_subset[, .(perc_entryfees = (inc_entryfees/inc_ttl)*100,
+                                        perc_subsidies = (inc_subsidies/inc_ttl)*100)] %>%
+        .[, map(.SD, ~mean(.x, na.rm = T))] %>% melt(measure.vars =  names(.)) %>%
+        .[, .(nbr_name = variable, nbr_fmt = format(value, digits = 2))]
+
+    dt_egmus_cbn <- rbind(dt_egmus_own, dt_egmus_inc)[, grp := "egmus"]
     
 
     ## calculate average hazard rate numbers, depending on maximum age
@@ -212,7 +236,7 @@ gd_nbrs <- function() {
     ## dt_ynktbl <- gc_ynktbl()
     dt_reftbl <- gc_reftbl()
 
-    dt_nbrs_cbnd <- Reduce(rbind, list(dt_descs, dt_meanhaz, dt_meanhaz_later, dt_med_life_expect,
+    dt_nbrs_cbnd <- Reduce(rbind, list(dt_descs, dt_egmus_cbn, dt_meanhaz, dt_meanhaz_later, dt_med_life_expect,
                                        dt_nbr_yearhaz,
                                        dt_ynkplt, dt_refplt, dt_reftbl,
                                        dt_mow_prop_museum,
