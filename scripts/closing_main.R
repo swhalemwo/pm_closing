@@ -50,6 +50,8 @@ gd_nbrs <- function() {
     ## descripti nbrs
     dt_descs_prep1 <- list(
         list(nbr_name = "pmdb_n_all",    nbr_fmt = dt_pmdb[, .N]),
+        list(nbr_name = "pmdb_n_US",    nbr_fmt = dt_pmdb[iso3c == "USA", .N]),
+        list(nbr_name = "pmdb_n_closed_US",  nbr_fmt = dt_pmdb[iso3c == "USA" & museum_status == "closed", .N]),
         list(nbr_name = "pmdb_open_atm", nbr_fmt = dt_pmdb[museum_status == "private museum", .N]),
         list(nbr_name = "pm_n_closed",   nbr_fmt = dt_pmyear[, sum(closing)]),
         list(nbr_name = "n_pmyears",     nbr_fmt = dt_pmyear[, .N]),

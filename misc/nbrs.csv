@@ -1,5 +1,7 @@
 nbr_name,nbr_fmt,grp
 pmdb_n_all,548,descs
+pmdb_n_US,70,descs
+pmdb_n_closed_US,9,descs
 pmdb_open_atm,451,descs
 pm_n_closed,68,descs
 n_pmyears,6096,descs
