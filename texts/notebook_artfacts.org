@@ -33,8 +33,7 @@ library(furrr)                                  # parallel processing
 c_dirs <- gc_dirs(dir_proj = "/home/johannes/Dropbox/phd/papers/closing/") ## project dirs
 PMDATA_LOCS <- gc_pmdata_locs()
 
-dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%
-    .[museum_status %in% c("private museum", "closed")] # yeet bad PMs
+dt_pmdb_excl <- gd_pmdb_excl(sel = "only_always_pm")
 dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
 
 

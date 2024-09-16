@@ -305,8 +305,7 @@ source(paste0(c_dirs$code, "descriptives.R")) # descriptive tables/plots
 
 
 
-dt_pmdb_excl <- gd_pmdb_excl(only_pms = F) %>%
-    .[museum_status %in% c("private museum", "no longer a private museum", "closed")] # yeet bad PMs
+dt_pmdb_excl <- gd_pmdb_excl(sel = "any_ever_pm")    
 dt_pmdb <- gd_pmdb(dt_pmdb_excl, verbose = T)
 
 

@@ -1,13 +1,13 @@
 nbr_name,nbr_fmt,grp
-pmdb_n_all,548,descs
+pmdb_n_all,550,descs
 pmdb_n_US,70,descs
 pmdb_n_closed_US,9,descs
-pmdb_open_atm,451,descs
+pmdb_open_atm,453,descs
 pm_n_closed,68,descs
 n_pmyears,6096,descs
 pmdb_n_nlpm,25,descs
 pmdb_n_closed,72,descs
-pmdb_n,523,descs
+pmdb_n,525,descs
 pmdb_n_closed_NAclosingyear,2,descs
 pmdb_n_closed_before2k,2,descs
 pmdb_n_open_NAopeningyear,1,descs
@@ -16,7 +16,7 @@ n_founder_dead,47,descs
 perc_founder_dead,9.3,descs
 pm_n_used,503,descs
 n_pm_close_after_recent_death,3,descs
-pm_open_from2021,15,descs
+pm_open_from2021,17,descs
 N_slfid_other,140,descs
 N_slfid_museum,190,descs
 N_slfid_foundation,104,descs

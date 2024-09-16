@@ -132,7 +132,7 @@ gd_af_size <- function(dt_pmx) {
     
     ## check that NAs on iso3c are dealt with
     dt_pmdb_na_check <- join(dt_af_qntlprep[is.na(iso3c), .N, .(ID = PMDB_ID)] %>% na.omit,
-                             gd_pmdb_excl(only_pms = F)[, .(name, museum_status, ID)],
+                             gd_pmdb_excl(sel = "all")[, .(name, museum_status, ID)],
                              on = "ID")
     
     if (dt_pmdb_na_check[, any(museum_status %!in% c("no longer a private museum", "not open yet"))]) {
