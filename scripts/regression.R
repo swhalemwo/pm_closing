@@ -1166,6 +1166,7 @@ gp_hazard <- function(dt_pmcpct, cutwidth, bw.smooth) {
 gp_hazard_time <- function(dt_pmyear) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
+    gw_fargs(match.call())
 
     ## get data
     dt_vis <- dt_pmyear %>% copy %>%
@@ -2448,6 +2449,7 @@ gt_coxzph <- function(rx) {
 
 gt_reg_coxph_deathcfg <- function(l_mdls) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    gw_fargs(match.call())
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
 
     #' founder death robustness checks
@@ -2537,6 +2539,7 @@ gd_drop1 <- function(l_mdls) {
 
 gt_drop1 <- function(dt_drop1) {
     if (as.character(match.call()[[1]]) %in% fstd){browser()}
+    gw_fargs(match.call())
     
     ## get vrblinfo for order/labels
     dt_vrblinfo <- gc_vvs() %>% chuck("dt_vrblinfo")
