@@ -66,7 +66,11 @@ gc_tbls <- function(c_tblargs) {
         t_reg_coxph_timecfg = list(
             l_mdls = quote(l_mdls),
             l_mdlnames = quote(l_mdlnames_timecfg),
-            caption = "Cox PH regression results with different time configurations")
+            caption = "Cox PH regression results with different time configurations"),
+        t_reg_coxph_reg = list(
+            l_mdls = quote(l_mdls),
+            l_mdlnames = quote(l_mdlnames_reg),
+            caption = "Cox PH regression results with different region dummies included")
         
     )
 
@@ -282,13 +286,15 @@ gc_vvs <- function() {
         "proxcnt10:popm_circle10_log"     = "Nbr PM (10km) * Pop (10km, log)",
         
                 
-
+        
         audience10                = "Local Audience per PM",
         "I(audience10^2)"         = "Local Audience per PM^2",
         audience10_log            = "Local Audience per PM (log)",
         "I(audience10_log^2)"     = "Local Audience per PM (log)^2",
+        iso3c                     = "Country",
         west                      = "Europe and North America",
         reg6                      = "Region",
+        regsub                    = "UN Subregion",
         an_inclusion              = "ArtNews Ranking inclusion",
         exhbany                   = "Exhibition any",
         exhbrollany               = "Exhibition any last 5 years",
@@ -320,18 +326,19 @@ gc_vvs <- function() {
                       exhbqntl_year, "I(exhbqntl_year^2)",
                       exhbprop_top10_log, exhbprop_top10_utf, exhbqntl_roll, "I(exhbqntl_roll^2)"), 
         envir    = .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
-                      west, reg6, "popm_circle10:I(proxcnt10^2)",
+                      west, reg6, "popm_circle10:I(proxcnt10^2)",  iso3c,
                       pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10",
                       year, "I(year^2)",  time_period, covid, recession,
                       audience10, "I(audience10^2)", audience10_log, "I(audience10_log^2)",
                       proxcnt10_log, popm_circle10_log, "popm_circle10:I(proxcnt10^2)",
                       "proxcnt10_log:popm_circle10_log", "proxcnt10:popm_circle10_log",
-                      "popm_circle10:proxcnt10_log", pmdens_circle10_log, "I(pmdens_circle10_log^2)"),
+                      "popm_circle10:proxcnt10_log", pmdens_circle10_log, "I(pmdens_circle10_log^2)",
+                      regsub),
         misc     = .c(GLOBAL)
     )
 
     ## specify whether variable is time-varying or not
-    vrbls_tiv <- .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6, PC1, PC2, year_opened)
+    vrbls_tiv <- .c(gender, slfidfcn, muem_fndr_name, mow, west, reg6, PC1, PC2, year_opened, regsub)
     vrbls_tv <- .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
                    founder_dead1, founder_dead_binary, 
                    an_inclusion, pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10",
@@ -357,7 +364,7 @@ gc_vvs <- function() {
                  proxcnt10_log, popm_circle10_log, "popm_circle10:I(proxcnt10^2)",
                  "proxcnt10_log:popm_circle10_log", "proxcnt10:popm_circle10_log", "popm_circle10:proxcnt10_log",
                  pmdens_circle10_log, "I(pmdens_circle10_log^2)"),
-        cat = .c(gender, founder_dead1, slfidfcn, reg6, an_inclusion, time_period))
+        cat = .c(gender, founder_dead1, slfidfcn, reg6, an_inclusion, time_period, regsub))
 
 
     l_vrblgrp_lbls <- list(# variable group labels
@@ -415,6 +422,36 @@ gc_vvs <- function() {
         list(vrbl = "reg6", term = "reg6LA",    term_lbl = "Region - Latin America"),
         list(vrbl = "reg6", term = "reg6NALUL", term_lbl = "Region - North America"),
         list(vrbl = "reg6", term = "reg6OC",    term_lbl = "Region - Oceania"),
+        ## list(vrbl = "regsub", term = 
+        list(vrbl = "regsub", term = "regsub21",  term_lbl = "UN Subregion - Northern America"),
+        list(vrbl = "regsub", term = "regsub53",  term_lbl = "UN Subregion - Australia and New Zealand"),
+        list(vrbl = "regsub", term = "regsub151", term_lbl = "UN Subregion - Eastern Europe"),
+        list(vrbl = "regsub", term = "regsub39",  term_lbl = "UN Subregion - Southern Europe"),
+        list(vrbl = "regsub", term = "regsub30",  term_lbl = "UN Subregion - Eastern Asia"),
+        list(vrbl = "regsub", term = "regsub35",  term_lbl = "UN Subregion - South-eastern Asia"),
+        list(vrbl = "regsub", term = "regsub155", term_lbl = "UN Subregion - Western Europe"),
+        list(vrbl = "regsub", term = "regsub34",  term_lbl = "UN Subregion - Southern Asia"),
+        list(vrbl = "regsub", term = "regsub419", term_lbl = "UN Subregion - Latin America and the Caribbean"),
+        list(vrbl = "regsub", term = "regsub145", term_lbl = "UN Subregion - Western Asia"),
+        list(vrbl = "regsub", term = "regsub154", term_lbl = "UN Subregion - Northern Europe"),
+        list(vrbl = "regsub", term = "regsub202", term_lbl = "UN Subregion - Sub-Saharan Africa"),
+        list(vrbl = "regsub", term = "regsub15",  term_lbl = "UN Subregion - Northern Africa"),
+
+        list(vrbl = "iso3c", term = "iso3cUSA", term_lbl = "Country - United States"),
+        list(vrbl = "iso3c", term = "iso3cGRC", term_lbl = "Country - Greece"),
+        list(vrbl = "iso3c", term = "iso3cDEU", term_lbl = "Country - Germany"),
+        list(vrbl = "iso3c", term = "iso3cFRA", term_lbl = "Country - France"),
+        list(vrbl = "iso3c", term = "iso3cKOR", term_lbl = "Country - South Korea"),
+        list(vrbl = "iso3c", term = "iso3cJPN", term_lbl = "Country - Japan"),
+        list(vrbl = "iso3c", term = "iso3cCHN", term_lbl = "Country - China"),
+        list(vrbl = "iso3c", term = "iso3cBEL", term_lbl = "Country - Belgium"),
+        list(vrbl = "iso3c", term = "iso3cBRA", term_lbl = "Country - Brazil"),
+        list(vrbl = "iso3c", term = "iso3cITA", term_lbl = "Country - Italy"),
+        list(vrbl = "iso3c", term = "iso3cESP", term_lbl = "Country - Spain"),
+        list(vrbl = "iso3c", term = "iso3cGBR", term_lbl = "Country - United Kingdom"),
+        list(vrbl = "iso3c", term = "iso3cCHE", term_lbl = "Country - Switzerland"),
+        list(vrbl = "iso3c", term = "iso3cRUS", term_lbl = "Country - Russia"),
+
         list(vrbl = "an_inclusion", term = "an_inclusionincluded",     term_lbl = "AN Ranking - Included"),
         list(vrbl = "an_inclusion", term = "an_inclusionnot_included", term_lbl = "AN Ranking - Not Included"),
         list(vrbl = "an_inclusion", term = "an_inclusiondropped",      term_lbl = "AN Ranking - Dropped"),

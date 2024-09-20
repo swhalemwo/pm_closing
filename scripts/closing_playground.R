@@ -561,6 +561,13 @@ dt_egmus %>% names
 ## look at 
 
 
+## ** add labels for different geographic things    
 
-    
-    
+
+dt_pmtiv[, .(subreg = countrycode(iso3c, "iso3c", "un.regionsub.code"),
+             subreg2 = countrycode(iso3c, "iso3c", "un.regionsub.name"))] %>% funique %>%
+    .[, sprintf('list(vrbl = "regsub", term = "regsub%s", term_lbl = "UN Subregion - %s")', subreg, subreg2)]
+
+
+dt_pmtiv[, .N, iso3c][N > 10][, country_name := countrycode(iso3c, "iso3c", "country.name")] %>%
+    .[, sprintf('list(vrbl = "iso3c", term = "iso3c%s", term_lbl = "Country - %s")', iso3c, country_name)] %>% cat(sep = "\n")

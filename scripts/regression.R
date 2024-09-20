@@ -545,6 +545,7 @@ gd_pmyear_prep <- function(dt_pmx, dt_pmtiv, c_lvrs = c_lvrs) {
     ## yeet unused variables
     dt_pmyear_wtiv[, `:=`(museum_status = NULL, year_closed = NULL, deathyear = NULL)]
 
+
     
     attr(dt_pmyear_wtiv, "gnrtdby") <- as.character(match.call()[[1]])
     return(dt_pmyear_wtiv)
@@ -590,6 +591,11 @@ gd_pmyear <- function(dt_pmyear_prep, c_lvrs) {
         dt_pmyear_trimmed[, time_period := factor(time_period)]
     }
 
+    ## set iso3c reference category to US
+    dt_pmyear_trimmed[, iso3c := factor(iso3c,
+                                        levels = c("USA", dt_pmyear_trimmed[iso3c != "USA", funique(iso3c)]))]
+
+
     
     attr(dt_pmyear_trimmed, "gnrtdby") <- as.character(match.call()[[1]])
     return(dt_pmyear_trimmed)
@@ -627,6 +633,10 @@ gd_pmtiv <- function(dt_pmx, l_pca_dimred_woclosed) {
 
     dt_pmx2 <- copy(dt_pmx) %>% 
         .[, reg6 := rcd_iso3c_reg6(iso3c)] %>%
+        ## set US as reference
+        .[, iso3c := factor(iso3c, levels = c("USA", dt_pmx[iso3c != "USA", funique(iso3c)]))] %>% 
+        .[, regsub := countrycode(iso3c, "iso3c", 'un.regionsub.code',
+                               custom_match = c(TWN = 30L)) %>% as.factor] %>% 
         .[, west := fifelse(reg6 %in% .c(EU, NALUL),1, 0)] %>%
         .[, slfidfcn := fifelse(slfidfcn %in% c("Collection", "Foundation", "Museum"),
                                 tolower(slfidfcn), "other")] %>%
@@ -659,6 +669,7 @@ gd_pmtiv <- function(dt_pmx, l_pca_dimred_woclosed) {
     ## add PCA scores
     dt_pmtiv_wpca <- join(dt_pmtiv, l_pca_dimred_woclosed$dt_scores[, .(ID, PC1, PC2)], on = "ID")
 
+    
     attr(dt_pmtiv_wpca, "gnrtdby") <- as.character(match.call()[[1]])
     return(dt_pmtiv_wpca)
 
@@ -1384,7 +1395,7 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         r_null = coxph(Surv(tstart, tstop, closing) ~ 1, dt_pmyear),
 
         ## some regional covariates
-        r_reg6 = coxph(Surv(age, closing) ~ reg6, dt_pmcpct), # doesn't like to convert 
+        ## r_reg6 = coxph(Surv(age, closing) ~ reg6, dt_pmcpct), # doesn't like to convert 
 
         ## r_garbage = coxph(Surv(age, closing) ~ west + age, dt_pmcpct),
 
@@ -1508,7 +1519,44 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
 
         r_exhbany = coxph(gf_coxph_close(vrbls_to_add = "exhbany"), dt_pmyear),
 
-        r_exhbroll = coxph(gf_coxph_close(vrbls_to_add = "exhbrollany"), dt_pmyear)
+        r_exhbroll = coxph(gf_coxph_close(vrbls_to_add = "exhbrollany"), dt_pmyear),
+
+        
+        ## add country/dummy regions
+        
+        r_country = coxph(gf_coxph_close(vrbls_to_add = "iso3c",
+                                         vrbls_to_yeet = c("pmdens_cry", "I(pmdens_cry^2)")),
+                          dt_pmyear[, .SD[sum(fnunique(ID)) > 10], iso3c] %>% droplevels),
+
+        r_country_samplecprn = coxph(gf_coxph_close(
+            vrbls_to_yeet = c("pmdens_cry", "I(pmdens_cry^2)")),
+                                     dt_pmyear[, .SD[sum(fnunique(ID)) > 10], iso3c]),
+        
+        r_country2 = coxph(gf_coxph_close(vrbls_to_add = "iso3c",
+                                          vrbls_to_yeet = c("pmdens_cry", "I(pmdens_cry^2)")),
+                           dt_pmyear[, .SD[sum(fnunique(ID)) > 15], iso3c] %>% droplevels),
+
+        ## see whether change in coefficients is due to yeeting low N countries or adding measures
+        r_country2_samplecprn = coxph(gf_coxph_close(vrbls_to_yeet = c("pmdens_cry", "I(pmdens_cry^2)")),
+                                      dt_pmyear[, .SD[sum(fnunique(ID)) > 15], iso3c]),
+        
+        r_regsub = coxph(gf_coxph_close(vrbls_to_add = "regsub"), dt_pmyear),
+        r_regsub2 = coxph(gf_coxph_close(vrbls_to_add = "regsub"),
+                          dt_pmyear[, .SD[sum(fnunique(ID)) > 10], regsub] %>% droplevels),
+
+        ## see again whether change in coefficients is due to yeeting low N countries or adding measures
+        r_regsub2_samplecprn = coxph(gf_coxph_close(),
+                          dt_pmyear[, .SD[sum(fnunique(ID)) > 10], regsub] %>% droplevels),
+
+
+        
+        ## r_regsub3 = coxph(gf_coxph_close(vrbls_to_add = "regsub"),
+        ##                   dt_pmyear[, .SD[sum(fnunique(ID)) > 100], regsub] %>% droplevels),
+        r_reg6 = coxph(gf_coxph_close(vrbls_to_add = "reg6"), dt_pmyear)
+
+
+
+        
         
 
         ## fullest model:
@@ -2391,6 +2439,7 @@ gt_reg_coxph_comp <- gt_reg_coxph
 gt_reg_coxph_dens <- gt_reg_coxph
 gt_reg_coxph_env <- gt_reg_coxph
 gt_reg_coxph_af <- gt_reg_coxph
+gt_reg_coxph_reg <- gt_reg_coxph
 
 gt_coxzph <- function(rx) {
     gw_fargs(match.call())
