@@ -1,6 +1,6 @@
 digraph D {
  compound = true;
- splines = false; fontname=helvetica;
+ splines = true; fontname=helvetica;
  node [shape=box, fontsize = 14, fontname=helvetica];
  edge [style = solid];
  
