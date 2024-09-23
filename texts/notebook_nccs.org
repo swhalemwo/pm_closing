@@ -20,6 +20,7 @@
 :ID:       6833a270-f8e2-466c-99d8-8dcab82d458d
 :END:
 
+** website classification
 play a bit with NCCS data
 https://urbaninstitute.github.io/nccs/datasets/core/
 
@@ -43,23 +44,106 @@ five groups based on two variables:
 - organizational type scope (tscope): distinguishes bewteen 501c3 public charities, 501c3 PFs, all other 501c orgs
 - form filing scope (scope): which types of filers are included in dataset
 
-groups: 
-- private foundations: always use form 990-PF, regardless of size
+organizational scope (tscope) groups: 
+- private foundations: always categorized as 501(c)(3) charities, exclusively use form 990-PF, regardless of size
 - other non-profits:
   - 501(c)(3) public charities: all  donations tax deductible
   - other tax exempt org types: 501(c)(1) to 501(c)(92), excluding 501(c)(3) -> labelled as 501CE-SCOPE-NONPROFIT
     501cE: everything besides 501(c)(3)
 
 form scope
-- full 990 filers
+- full 990 filers: PC
 - broader 990 + 990EZ filers (PZ)
+# -> all PC scope are in PZ scope, but there are 990EZ filers which are not in PC scope
+# there's also PF scope in filenames?
+[[file:./images/screenshot-19.png]]
+
+990N: ePostcard filers (smaller things like community associations): not included in Core Series
+
+-> groups are:
+- full 990
+- 990 EZ and full 990
+- only 990 EZ e
+- only 990PF
+- comunity foundations (full 990)
+
+https://urbaninstitute.github.io/nccs-handbook/standard-10.html  
+
+
+
+** data guide
+https://nccs.urban.org/pubs/nccs-data-guide.pdf, [[file:~/Downloads/nccs-data-guide.pdf]]
+
+NCCS processes IRS files:
+- IRS Business master file (BMF): info of tex-except organizations, updated each month
+- IRS return Transaction files: financial data for those organizations that file 990, 990EZ, 990-PF
+  up to 60 financial variables
+  produced annually by IRS
+  processed by NCCS into core files
+- IRS Statistics of Income Sample Files: 300 variables for organizations with 50m or more in assets
+  also sample of smaller NPOs
+
+created by NCCS  
+- NCCS Cumulative Master File: mostly for locating Employer Identification Number when only name is known
+  cumulative, included all dead since 1989
+- NCCS Core Files: annually since 1989: descriptive from BMF, financial info from RTF
+  only Form 990
+  additional files for private foundations ("NCCS Core PF") and others ("NCCS Core 501(c) others")
+- NCCS-GuideStar National Nonprofit Research Database (NNRD)
+  cumulative listing of public charities filling Form 990 and Form 990 EZ, years 1998 to 2003
+  # -> can ignore
+- 1992 IRS supplements: sounds like just 1992?
+  # -> can ignore
+- Trends Analysis Files: time series, on request only
+  # -> can ignore
+- NCCS NTEE master file: classification of EIN based on NTEE
+
+financil measures:
+- pbulic support: gifts, contributions (cash, in-kind), grants
+  some issues for organizations to classify gvt grants as grants or income tho
+- total expenses: sum of program, fundraising, management, general expenses, payments to affiliates
+- total assets
+- gross receips
+
+return year:
+- year in which IRS processes form 990 -> IRS return processing year
+- end of filing organiztion's fiscal year
+- start year of  reporting organization's fiscal year
+- central time period for the data (circa year)
+
+*Fiscal vs. Start Years*. For example, Organization “X” has a fiscal year that begins January 1, 
+2011, and ends December 31, 2012. It files its Form 990 return for that year by the May 15, 
+2013, IRS deadline. The return’s Start or Tax Year and Fiscal Year are both 2012 and its 
+Processing Year is 2013. The fiscal year for Organization “Y” runs from July 1, 2012, to June 
+30, 2013. Its Start or Tax Year will be 2012 but its Fiscal Year and Processing Year will be 
+2013.
+
+core files and circa years: most recent return in the last three calendar years
+
+*Care should be taken in making assumptions that organizations with missing returns no longer exist.*
+-> this could inflate mortality measures hmmm
+
+
+get_data seems to download only the 501CE datasets?
+
+
+
+
+want:
+- Core Files
+- Cumulative Master File
+- NTEE master file
+
+might underestimate mortality: ded organizations   still listed as active
 
 NTEE:
 - group
 - code
 - orgtype
 
-https://nccs.urban.org/pubs/nccs-data-guide.pdf:
+
+
+
 NTEE-CC: hierarchical mixed notation (letters, numbers) of
 - 630 centile level codes (NTEECC?)
 - 26 major groups
@@ -81,10 +165,97 @@ install.packages("devtools")
 library(devtools)
 devtools::install_github("UrbanInstitute/nccsdata")
 library(nccsdata)
+library(purrr)
+library(jtls)
+
 
 dtx <- get_data(dsname = "core", time = "2010", ntee = "A", geo.city = "san francisco")
 
 dt_a51 <- get_data(dsname = "bmf", time = "2010", ntee = "A51", geo.city = "san francisco")
+
+c_typecbns <- list(
+  list(orgtype = "501C3-CHARITIES", formtype = "PZ"),
+  list(orgtype = "501CE-NONPROFIT", formtype = "PZ"),
+  list(orgtype = "503C3-PRIVFOUND", formtype = "PF"))
+  
+library(RClickhouse)
+  
+con <- DBI::dbConnect(RClickhouse::clickhouse())
+dbListTables(con)
+
+
+lapply(c_typecbns, \(x) sprintf("org %s form %s", x$orgtype, x$formtype))
+
+l_nccs <- lapply(c_typecbns, \(x)
+                 get_data(dsname = "core",
+                          scope.orgtype = x$orgtype,
+                          scope.formtype = x$formtype, # should also make a separate call for PF
+                          time = as.character(c(2005, 2013)),
+                          ))
+system2
+
+
+
+## download: download.file is actually good
+
+dt_nccs_urls <- data.table(
+  orgtype = c("501C3-CHARITIES" ,  "501CE-NONPROFIT" , "501C3-PRIVFOUND"),
+  scope = c("PZ"           ,  "PZ"         , "PF"),
+  start_year = c(1989     ,  1989         , 1989),
+  end_year = c(2019       ,  2019         , 2019)) %>%
+  .[, .(year = start_year:end_year), .(orgtype, scope)] %>%
+  .[!(orgtype == "501C3-PRIVFOUND" & year %in% c(1993, 2016, 2017, 2018))] # yeet some years w/o data
+
+
+
+download_nccs <- function(orgtype, scope, year) {
+
+  DIR_NCCS <- "/run/media/johannes/data/nccs"
+
+  url <- sprintf("https://nccsdata.s3.us-east-1.amazonaws.com/legacy/core/CORE-%s-%s-%s.csv", year, orgtype, scope)
+
+  ## target_file <- sprintf("CORE-%s-%s-PZ.csv", year, orgtype)
+
+  target_file <- sprintf("%s/CORE-%s-%s-%s.csv", DIR_NCCS, year, orgtype, scope)
+
+  ## cmd <- sprintf("cd %s && curl %s > %s", DIR_NCCS, url, target_file)
+
+  l_files_already_there <- list.files(DIR_NCCS, full.names = T)
+
+  ## print("target_file: %s ", target_file)
+  print(target_file)
+  
+
+  if (target_file %!in% l_files_already_there) {
+    download.file(url, destfile = target_file)
+    Sys.sleep(20) 
+    ## print(url)
+  }
+
+  
+
+}
+
+## lapply(split(dt_nccs_urls[1:2], 1:2), \(x) download_nccs(x$orgtype, x$scope, x$year))
+
+lapply(split(dt_nccs_urls, 1:nrow(dt_nccs_urls)), \(x) download_nccs(x$orgtype, x$scope, x$year))
+
+
+
+
+## apply(split(dt_nccs_urls, 
+## dt2 <- get_data(dsname = "core",
+##                 scope.orgtype = "CHARITIES",
+##                 scope.formtype = "PZ", # should also make a separate call for PF
+##                 time = as.character(2010:2012),
+##                 ntee = "A51")
+
+
+
+                
+                                                   )
+
+dt2[, .N, NTEECC][grepl("A", NTEECC)] %>% print(n=800)
 
 dtx <- fread("/home/johannes/nccs.csv")
 
@@ -111,3 +282,4 @@ and then other steps will take a while too
 - finding good comparison group: all museums, art museums, all museums except some groups, different types of charities
   
 https://offeneregister.de/
+
