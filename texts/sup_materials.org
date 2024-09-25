@@ -310,3 +310,23 @@ Both coefficients are not significant, and do not substantially change the coeff
 # One might see in this association again the importance of the founder:
 # #
 # Founders who are committed to their museums will keep them alive, regardless of whether or not they plan to organize temporary exhibitions.
+
+** Measurement of museum-level variables
+
+{{{refplt_p_vrblcvrg_ratio}}}
+Figure {{{refplt_p_vrblcvrg_ratio}}} shows the variable coverage by whether a museum is open or closed at the status of data collection (2020-2022).
+#
+Not only is coverage on most variables far from complete, which would already make it difficult to construct indicators of them, but variable coverage is substantially worse for closed museums than for open museums, especially variables related to the collection, operation, relations to other actors and social media.
+#
+In principle it is possible to treat absence of evidence as evidence of absence, and assume that not measuring the presence of e.g. temporary exhibitions, educational events, restaurants or cooperations means that these are absent.
+
+
+Under this assumption, based on variables where an absence is a plausible value (i.e. not including variables such as floor size, collection size or opening times) a principal component analysis was performed.
+#
+figure FIXME
+
+
+and the two first factors included in the regression results.
+
+# FIXME put table here
+
