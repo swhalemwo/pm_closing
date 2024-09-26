@@ -72,7 +72,7 @@ https://urbaninstitute.github.io/nccs-handbook/standard-10.html
 
 
 ** data guide
-https://nccs.urban.org/pubs/nccs-data-guide.pdf, [[file:~/Downloads/nccs-data-guide.pdf]]
+https://nccs.urban.org/pubs/nccs-data-guide.pdf, [[file:~/Downloads/nccs-data-guide.pdf]], [[cite:&NCCS_2013_dataguide]]
 
 NCCS processes IRS files:
 - IRS Business master file (BMF): info of tex-except organizations, updated each month
