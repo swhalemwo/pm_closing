@@ -736,7 +736,7 @@ None of these focus on art museums exclusively ([[textcite:&Hager_2001_vulnerabi
 Some of this difference may be explained by higher shares of smaller organizations in [[textcite:&Bowen_etal_1994_charitable]], where museums of any size are included, whereas [[textcite:&Gordon_etal_2013_insolvency]] excluded NPOs with operational revenues below 150,000 USD, as smaller non-profits are at higher risk of closing [[parencite:&Harrison_Laincz_2008_nonprofit;&Helmig_Ingerfurth_Pinz_2013_nonprofit]].
 
 
-Focusing directly on Art museums, rather than museum generally as part of the wider focus on Art NPOs, [[textcite:&Hager_2001_vulnerability]] observes 42 closures over a period of 4 years (1994-1997) from a starting populaton of 448 (p.383).
+Focusing directly on Art museums (NTEE code A51), rather than museum generally as part of a wider focus on Art NPOs, [[textcite:&Hager_2001_vulnerability]] observes 42 closures over a period of 4 years (1994-1997) from a starting populaton of 448 (p.383).
 #
 As his way of delineating the population (having "filed an annual Form 990 tax return with the IRS for the 1990, 1991, or 1992 tax year", p.380) does not rule out that some closings took place in 1991, 1992 or 1993[fn::In particular it is unclear why 1993 is not treated as belonging to the observation period], attributing some closings to these years is likely appropriate, and presumably roughly equivalent to assuming an observation period of five (rather than four) years, which corresponds to an average yearly closing rate of 1.9%.[fn::So far it is hard to tell why art museums appear to have higher closing rates than museums generally.
 #
