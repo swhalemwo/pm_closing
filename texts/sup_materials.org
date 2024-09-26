@@ -18,21 +18,24 @@ wd_nbrs(dt_nbrs)
 #+RESULTS:
 :results:
 # descs
-#+MACRO: pmdb_n_all 548
-#+MACRO: pmdb_open_atm 451
+#+MACRO: pmdb_n_all 550
+#+MACRO: pmdb_n_US 70
+#+MACRO: pmdb_n_closed_US 9
+#+MACRO: pmdb_open_atm 453
 #+MACRO: pm_n_closed 68
 #+MACRO: n_pmyears 6096
 #+MACRO: pmdb_n_nlpm 25
 #+MACRO: pmdb_n_closed 72
-#+MACRO: pmdb_n 523
+#+MACRO: pmdb_n 525
 #+MACRO: pmdb_n_closed_NAclosingyear 2
 #+MACRO: pmdb_n_closed_before2k 2
 #+MACRO: pmdb_n_open_NAopeningyear 1
 #+MACRO: pmx_n 505
 #+MACRO: n_founder_dead 47
+#+MACRO: perc_founder_dead 9.3
 #+MACRO: pm_n_used 503
 #+MACRO: n_pm_close_after_recent_death 3
-#+MACRO: pm_open_from2021 15
+#+MACRO: pm_open_from2021 17
 #+MACRO: N_slfid_other 140
 #+MACRO: N_slfid_museum 190
 #+MACRO: N_slfid_foundation 104
@@ -42,6 +45,21 @@ wd_nbrs(dt_nbrs)
 #+MACRO: perc_slfid_foundation 21
 #+MACRO: perc_slfid_collection 14
 #+MACRO: mow_prop_name_museum 71
+
+
+# egmus
+#+MACRO: own_state_cnt 2264
+#+MACRO: own_loc_reg_cnt 7690
+#+MACRO: own_publicother_cnt 641
+#+MACRO: own_priv_cnt 5052
+#+MACRO: own_ttl_cnt 15647
+#+MACRO: own_state_perc 14
+#+MACRO: own_loc_reg_perc 49
+#+MACRO: own_publicother_perc 4.1
+#+MACRO: own_priv_perc 32
+#+MACRO: own_ttl_perc 100
+#+MACRO: perc_entryfees 12
+#+MACRO: perc_subsidies 69
 
 
 # meanhaz
