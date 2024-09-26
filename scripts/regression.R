@@ -2439,7 +2439,15 @@ gt_reg_coxph_comp <- gt_reg_coxph
 gt_reg_coxph_dens <- gt_reg_coxph
 gt_reg_coxph_env <- gt_reg_coxph
 gt_reg_coxph_af <- gt_reg_coxph
-gt_reg_coxph_reg <- gt_reg_coxph
+
+
+gt_reg_coxph_reg <- function(l_mdls, l_mdlnames) {
+    c(gt_reg_coxph(l_mdls, l_mdlnames),
+      list(tabenv = "longtable", size = "small")) ## scalebox = 0.8), )
+}
+
+
+
 
 gt_coxzph <- function(rx) {
     gw_fargs(match.call())

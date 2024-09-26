@@ -373,8 +373,10 @@ l_mdlnames_env <- c("r_pop4", "r_pmdens1", "r_pmdens2", "r_audience1", "r_audien
 ## including exhibition data (Artfacts)
 l_mdlnames_af <- c("r_pop4", "r_exhbany", "r_exhbroll")
 
-l_mdlnames_reg <- c("r_pop4", "r_reg6", "r_regsub", "r_regsub2", "r_regsub2_samplecprn",
-                    "r_country", "r_country_samplecprn", "r_country2", "r_country2_samplecprn")
+l_mdlnames_reg <- c("r_pop4", "r_reg6", "r_regsub2", "r_regsub2_samplecprn",
+                    "r_country", "r_country_samplecprn") # "r_country2", "r_country2_samplecprn")
+
+
 
 ## improvement by adding variables
 dt_drop1 <- gd_drop1(l_mdls)

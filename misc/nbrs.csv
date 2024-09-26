@@ -104,6 +104,7 @@ reftbl_t_reg_coxph_dens,\ref{tbl:t_reg_coxph_dens},reftbl
 reftbl_t_reg_coxph_env,\ref{tbl:t_reg_coxph_env},reftbl
 reftbl_t_reg_coxph_af,\ref{tbl:t_reg_coxph_af},reftbl
 reftbl_t_reg_coxph_timecfg,\ref{tbl:t_reg_coxph_timecfg},reftbl
+reftbl_t_reg_coxph_reg,\ref{tbl:t_reg_coxph_reg},reftbl
 mow_prop_name_museum,71,descs
 coef_genderF,-0.038,coefs
 coef_gendercouple,-0.140,coefs

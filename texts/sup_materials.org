@@ -124,6 +124,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: reftbl_t_reg_coxph_env \ref{tbl:t_reg_coxph_env}
 #+MACRO: reftbl_t_reg_coxph_af \ref{tbl:t_reg_coxph_af}
 #+MACRO: reftbl_t_reg_coxph_timecfg \ref{tbl:t_reg_coxph_timecfg}
+#+MACRO: reftbl_t_reg_coxph_reg \ref{tbl:t_reg_coxph_reg}
 
 
 # coefs
@@ -310,6 +311,31 @@ Both coefficients are not significant, and do not substantially change the coeff
 # One might see in this association again the importance of the founder:
 # #
 # Founders who are committed to their museums will keep them alive, regardless of whether or not they plan to organize temporary exhibitions.
+
+** Inclusion of regional indicators
+
+
+#+latex: \begin{landscape}
+#+INCLUDE: "../tables/t_reg_coxph_reg_wcpF.tex" export latex
+#+latex: \end{landscape}
+
+As private museum closing might depend on particular country- or region-level factors, table {{{reftbl_t_reg_coxph_reg}}} shows a number of Cox Proportional Hazard regression models results with different sets of dummy variables.
+#
+In particular, dummy variables are added for UN region code (with a minor modification of splitting the Americas into North and Latin America according to the UN subregion codes and reference category of Africa), the UN subregion code itself (with reference category of Northern America), as well as country level (with reference category of United States).
+#
+For models with country-dummies, country-level private museum density variables are removed as the high collinearity led to unreasonably high country-dummy estimates.
+#
+As many countries and some UN subregions have too few private museums for the model to converge correctly, the dataset is reduced to include only regions or countries with 10 or more private museums (in the case of country2, 15 private museums).
+#
+To identify whether any change in coefficients is due to addition of variables or exclusion of cases, a separate model with the same restricted sample but without region/country dummies is included.
+
+
+None of the models show a significant region or country dummy variables, nor substantial changes of the coefficients of the main predictors (a minor change is that the addition of country dummies results in a significant coefficient for the Covid-19 pandemic).
+#
+While log-likelihood decreases by definition, model fit indices (AIC and BIC) that penalize inclusion of additional variables indicate worse fit for models with region/country dummies, except in the case of the AIC for the inclusion of UN subregion dummies, where a small improvement is observed.
+#
+Taken together, these results indicate little support for an importance of time-invariant contextual factors on the level of the region or country on private museum survival. 
+
 
 ** Measurement of museum-level variables
 
