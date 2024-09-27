@@ -88,6 +88,10 @@ wd_nbrs(dt_nbrs)
 #+MACRO: ynkplt_p_vrblcvrg_ugrpd (eval (concat "#+label: fig:p_vrblcvrg_ugrpd\n" "#+caption: PMDB variable coverage by museum status\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_vrblcvrg_ugrpd.pdf]]"))
 #+MACRO: ynkplt_p_vrblcvrg (eval (concat "#+label: fig:p_vrblcvrg\n" "#+caption: PMDB variable coverage by museum status and variable group\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_vrblcvrg.pdf]]"))
 #+MACRO: ynkplt_p_vrblcvrg_ratio (eval (concat "#+label: fig:p_vrblcvrg_ratio\n" "#+caption: PMDB variable coverage (abs/rel prop) by museum status and variable group\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_vrblcvrg_ratio.pdf]]"))
+#+MACRO: ynkplt_p_vrblcvrg_pca (eval (concat "#+label: fig:p_vrblcvrg_pca\n" "#+caption: coverage of variables used in PCA\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_vrblcvrg_pca.pdf]]"))
+#+MACRO: ynkplt_p_scree (eval (concat "#+label: fig:p_scree\n" "#+caption: Scree plot of PCA dimensionality reduction\n" "#+attr_latex: :width 14cm\n" "[[file:../figures/p_scree.pdf]]"))
+#+MACRO: ynkplt_p_pca_loadings (eval (concat "#+label: fig:p_pca_loadings\n" "#+caption: loadings of first 2 PCs\n" "#+attr_latex: :width 14cm\n" "[[file:../figures/p_pca_loadings.pdf]]"))
+#+MACRO: ynkplt_p_pca_scores (eval (concat "#+label: fig:p_pca_scores\n" "#+caption: scores on first PCs\n" "#+attr_latex: :width 16cm\n" "[[file:../figures/p_pca_scores.pdf]]"))
 #+MACRO: ynkplt_p_surv (eval (concat "#+label: fig:p_surv\n" "#+caption: Private Museum Survival probability\n" "#+attr_latex: :width 14cm\n" "[[file:../figures/p_surv.pdf]]"))
 #+MACRO: ynkplt_p_hazard (eval (concat "#+label: fig:p_hazard\n" "#+caption: Private Museum hazard function\n" "#+attr_latex: :width 16cm\n" "[[file:../figures/p_hazard.pdf]]"))
 #+MACRO: ynkplt_p_hazard_time (eval (concat "#+label: fig:p_hazard_time\n" "#+caption: Private Museum hazard function by year\n" "#+attr_latex: :width 16cm\n" "[[file:../figures/p_hazard_time.pdf]]"))
@@ -110,6 +114,10 @@ wd_nbrs(dt_nbrs)
 #+MACRO: refplt_p_vrblcvrg_ugrpd \ref{fig:p_vrblcvrg_ugrpd}
 #+MACRO: refplt_p_vrblcvrg \ref{fig:p_vrblcvrg}
 #+MACRO: refplt_p_vrblcvrg_ratio \ref{fig:p_vrblcvrg_ratio}
+#+MACRO: refplt_p_vrblcvrg_pca \ref{fig:p_vrblcvrg_pca}
+#+MACRO: refplt_p_scree \ref{fig:p_scree}
+#+MACRO: refplt_p_pca_loadings \ref{fig:p_pca_loadings}
+#+MACRO: refplt_p_pca_scores \ref{fig:p_pca_scores}
 #+MACRO: refplt_p_surv \ref{fig:p_surv}
 #+MACRO: refplt_p_hazard \ref{fig:p_hazard}
 #+MACRO: refplt_p_hazard_time \ref{fig:p_hazard_time}
@@ -130,18 +138,19 @@ wd_nbrs(dt_nbrs)
 
 # reftbl
 #+MACRO: reftbl_t_coxzph \ref{tbl:t_coxzph}
-#+MACRO: reftbl_t_reg_coxph \ref{tbl:t_reg_coxph}
 #+MACRO: reftbl_t_sumstats \ref{tbl:t_sumstats}
 #+MACRO: reftbl_t_selfid \ref{tbl:t_selfid}
-#+MACRO: reftbl_t_reg_coxph_density \ref{tbl:t_reg_coxph_density}
-#+MACRO: reftbl_t_reg_coxph_timeslice \ref{tbl:t_reg_coxph_timeslice}
 #+MACRO: reftbl_t_reg_coxph_deathcfg \ref{tbl:t_reg_coxph_deathcfg}
 #+MACRO: reftbl_t_drop1 \ref{tbl:t_drop1}
+#+MACRO: reftbl_t_reg_coxph \ref{tbl:t_reg_coxph}
+#+MACRO: reftbl_t_reg_coxph_density \ref{tbl:t_reg_coxph_density}
+#+MACRO: reftbl_t_reg_coxph_timeslice \ref{tbl:t_reg_coxph_timeslice}
 #+MACRO: reftbl_t_reg_coxph_comp \ref{tbl:t_reg_coxph_comp}
 #+MACRO: reftbl_t_reg_coxph_dens \ref{tbl:t_reg_coxph_dens}
 #+MACRO: reftbl_t_reg_coxph_env \ref{tbl:t_reg_coxph_env}
 #+MACRO: reftbl_t_reg_coxph_af \ref{tbl:t_reg_coxph_af}
 #+MACRO: reftbl_t_reg_coxph_timecfg \ref{tbl:t_reg_coxph_timecfg}
+#+MACRO: reftbl_t_reg_coxph_dimred \ref{tbl:t_reg_coxph_dimred}
 #+MACRO: reftbl_t_reg_coxph_reg \ref{tbl:t_reg_coxph_reg}
 
 
