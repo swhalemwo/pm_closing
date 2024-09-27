@@ -366,7 +366,8 @@ Taken together, these results indicate little support for an importance of time-
 
 ** Measurement of museum-level variables
 
-{{{refplt_p_vrblcvrg_ratio}}}
+{{{ynkplt_p_vrblcvrg_ratio}}}
+
 Figure {{{refplt_p_vrblcvrg_ratio}}} shows the variable coverage by whether a museum is open or closed at the status of data collection (2020-2022).
 #
 Not only is coverage on most variables far from complete, which would already make it difficult to construct indicators of them, but variable coverage is substantially worse for closed museums than for open museums, especially variables related to the collection, operation, relations to other actors and social media.
@@ -374,12 +375,30 @@ Not only is coverage on most variables far from complete, which would already ma
 In principle it is possible to treat absence of evidence as evidence of absence, and assume that not measuring the presence of e.g. temporary exhibitions, educational events, restaurants or cooperations means that these are absent.
 
 
-Under this assumption, based on variables where an absence is a plausible value (i.e. not including variables such as floor size, collection size or opening times) a principal component analysis was performed.
+{{{ynkplt_p_vrblcvrg_pca}}}
+
+{{{ynkplt_p_pca_loadings}}}
+
+{{{ynkplt_p_pca_scores}}}
+
+#+INCLUDE: ../tables/t_reg_coxph_dimred_wcpF.tex export latex
+
+Under this assumption, based on variables where an absence is a plausible value (i.e. not including variables such as floor size, collection size or opening times; figure {{{refplt_p_vrblcvrg_pca}}}) a principal component analysis was performed of which the first two factors are extracted with varimax rotation (figure {{{refplt_p_pca_loadings}}}).
 #
-figure FIXME
+The first component appears to differentiate museums based on facilities (museumshop, restaurant) and institutional arrangements corresponding to larger institutions (sponsorship, donor program, temporary exhibitions), which makes it plausible that it reflects the size of an organization. 
+# 
+The second dimension seems to measure the extent of artistic support, education and research.
+#
+Figure {{{refplt_p_pca_scores}}} shows positioning of the museums on both dimensions. 
+#
+Table {{{reftbl_t_reg_coxph_dimred}}} shows models with one or both of these components included:
+#
+Both components are highly significantly associated with closing, improve model performance and change a number of main results, such as the coefficient of the death of the founder (significant when the first component is addded) and the main effect of local population (insignificant when the first component is addded), as well as the covid pandemic effect (significant in all model with principal components).
 
 
-and the two first factors included in the regression results.
+While it is plausible that larger organizations face a lower closing risk, I ultimately consider the coefficients are too large to be plausibly reflect primary an influence of institutional characteristics.
+#
+While some size effect may exist, I consider it more plausible that this is indicator much more strongly reflects whether a museum is open or closed in the first place (as data collection was much more difficult for closed museums, the  measurement error is systematically related with the outcome variable), and therefore do not include it in the main regression model to avoid a circular rationale.
 
-# FIXME put table here
+
 
