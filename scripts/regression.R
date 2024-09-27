@@ -1517,8 +1517,8 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
             vrbls_to_add = "pmdens_circle10",
             vrbls_to_yeet = c("popm_circle10", "proxcnt10:popm_circle10")), dt_pmyear),
 
+        ## include artfacts variables
         r_exhbany = coxph(gf_coxph_close(vrbls_to_add = "exhbany"), dt_pmyear),
-
         r_exhbroll = coxph(gf_coxph_close(vrbls_to_add = "exhbrollany"), dt_pmyear),
 
         
@@ -1548,11 +1548,15 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         r_regsub2_samplecprn = coxph(gf_coxph_close(),
                           dt_pmyear[, .SD[sum(fnunique(ID)) > 10], regsub] %>% droplevels),
 
-
         
         ## r_regsub3 = coxph(gf_coxph_close(vrbls_to_add = "regsub"),
         ##                   dt_pmyear[, .SD[sum(fnunique(ID)) > 100], regsub] %>% droplevels),
-        r_reg6 = coxph(gf_coxph_close(vrbls_to_add = "reg6"), dt_pmyear)
+        r_reg6 = coxph(gf_coxph_close(vrbls_to_add = "reg6"), dt_pmyear),
+
+        ## include PC
+        r_pc1 = coxph(gf_coxph_close(vrbls_to_add = "PC1"), dt_pmyear),
+        r_pc2 = coxph(gf_coxph_close(vrbls_to_add = "PC2"), dt_pmyear),
+        r_pcboth = coxph(gf_coxph_close(vrbls_to_add = c("PC1", "PC2")), dt_pmyear)
 
 
 
@@ -2397,7 +2401,7 @@ gt_reg_coxph <- function(l_mdls, l_mdlnames) {
     1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;
     gw_fargs(match.call())
 
-
+    
     l_mdls_slct <- map(l_mdlnames, ~chuck(l_mdls, .x))
 
     l_mdlres <- map2(l_mdls_slct, l_mdlnames, ~gd_reg_coxph(.x, .y, unit_name = "ID"))
@@ -2439,6 +2443,7 @@ gt_reg_coxph_comp <- gt_reg_coxph
 gt_reg_coxph_dens <- gt_reg_coxph
 gt_reg_coxph_env <- gt_reg_coxph
 gt_reg_coxph_af <- gt_reg_coxph
+gt_reg_coxph_dimred <- gt_reg_coxph
 
 
 gt_reg_coxph_reg <- function(l_mdls, l_mdlnames) {

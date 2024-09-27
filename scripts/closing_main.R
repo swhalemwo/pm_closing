@@ -331,12 +331,13 @@ c_lvrs <- list(
 
 
 ## actual pm data
-## l_pca_dimred <- gl_pca_dimred(dt_pmdb)
+
 ## l_pca_dimred_woclosed <- gl_pca_dimred(dt_pmdb[museum_status != "closed"])
 
 dt_pmx <- gd_pmx(dt_pmdb) # extract of main variables
 
 ## generate PC cores, only use open PMs for loading calculation
+l_pca_dimred <- gl_pca_dimred(dt_pmdb)
 l_pca_dimred_woclosed <- gl_pca_dimred_closed_imputed(dt_pmdb, dt_pmx)
 
 dt_pmtiv <- gd_pmtiv(dt_pmx, l_pca_dimred_woclosed) # time invariant variables
@@ -353,7 +354,8 @@ l_mdls <- gl_mdls(dt_pmyear, dt_pmcpct) # generate models
 
 l_mdlnames_coxph <- list("r_pop4")
 
-l_mdlnames_dens <- list("r_pop4", "r_comp1", "r_pmdens1", "r_pmdens2", "r_pmdens3", "r_pmdens_aud1", "r_pmdens_aud2")
+l_mdlnames_dens <- list("r_pop4", "r_comp1", "r_pmdens1",
+                        "r_pmdens2", "r_pmdens3", "r_pmdens_aud1", "r_pmdens_aud2")
 
 ## compare whether proxcnt/popm_circle10 patterns are stable across data ranges
 l_mdlnames_coxph_density <- list("r_pop4", "r_onlycryside", "r_wocryside", "r_pop42") 
@@ -375,6 +377,8 @@ l_mdlnames_af <- c("r_pop4", "r_exhbany", "r_exhbroll")
 
 l_mdlnames_reg <- c("r_pop4", "r_reg6", "r_regsub2", "r_regsub2_samplecprn",
                     "r_country", "r_country_samplecprn") # "r_country2", "r_country2_samplecprn")
+
+l_mdlnames_dimred <- c("r_pop4", "r_pc1", "r_pc2", "r_pcboth") # dimred for supplementary materials
 
 
 

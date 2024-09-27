@@ -16,14 +16,12 @@ gc_clgrphattrs <- function() {
 }
 
 gc_tbls <- function(c_tblargs) {
-    list(
+
+    l_tblcfgs_mnl <- list(
         t_coxzph = list(
             rx = quote(l_mdls$r_pop4),
             caption = "Z-test of proportional hazards"),
-        t_reg_coxph = list(
-            l_mdls = quote(l_mdls),
-            l_mdlnames = quote(l_mdlnames_coxph), # FIXME: gw_fargs should be able to handle vectors
-            caption = "Cox Proportional Hazards Regression Results"),
+        ## FIXME: gw_fargs should be able to handle vectors
         t_sumstats = list(
             dt_pmyear = quote(dt_pmyear),
             dt_pmcpct = quote(dt_pmcpct),
@@ -32,47 +30,43 @@ gc_tbls <- function(c_tblargs) {
             dt_pmx = quote(dt_pmx),
             dt_pmyear = quote(dt_pmyear),
             caption = "Selfidentification"),
-        t_reg_coxph_density = list(
-            l_mdls = quote(l_mdls),
-            l_mdlnames = quote(l_mdlnames_coxph_density),
-            caption = "Cox PH models of different local density specifications"),
-        t_reg_coxph_timeslice = list(
-            l_mdls = quote(l_mdls),
-            l_mdlnames = quote(l_mdlnames_timeslice),
-            caption = "Cox PH regression results with different time slices"),
         t_reg_coxph_deathcfg = list(
             l_mdls = quote(l_mdls),
-            ## l_mdlnames = quote(l_mdlnames_deathcfg),
-            caption = "Cox PH regression results wiht different death configurations"),
+            caption = "Cox PH regression results with different death configurations") ,
         t_drop1 = list(
             dt_drop1 = quote(dt_drop1),
-            caption = "Model Fit Improvement by Single Term Deletions"),
-        t_reg_coxph_comp = list(
-            l_mdls = quote(l_mdls),
-            l_mdlnames = quote(l_mdlnames_comp),
-            caption = "Alternative competition specifications"),
-        t_reg_coxph_dens = list(
-            l_mdls = quote(l_mdls),
-            l_mdlnames = quote(l_mdlnames_dens),
-            caption = "Alternative competition specifications"),
-        t_reg_coxph_env = list(
-            l_mdls = quote(l_mdls),
-            l_mdlnames = quote(l_mdlnames_env),
-            caption = "Alternative specification of environment"),
-        t_reg_coxph_af = list(
-            l_mdls = quote(l_mdls),
-            l_mdlnames = quote(l_mdlnames_af),
-            caption = "Alternative specification: include Exhibition"),
-        t_reg_coxph_timecfg = list(
-            l_mdls = quote(l_mdls),
-            l_mdlnames = quote(l_mdlnames_timecfg),
-            caption = "Cox PH regression results with different time configurations"),
-        t_reg_coxph_reg = list(
-            l_mdls = quote(l_mdls),
-            l_mdlnames = quote(l_mdlnames_reg),
-            caption = "Cox PH regression results with different region dummies included")
-        
+            caption = "Model Fit Improvement by Single Term Deletions")
     )
+            
+
+
+
+    ## regression model tables have all similar structure: table name, list of models, caption
+    ## can be stored more compactly
+    dt_cfg_prep <- tribble(
+        ~tblname,    ~l_mdlnames,    ~caption,
+        "",          "coxph",        "Cox Proportional Hazards Regression Results",                     
+        "_density",  "coxph_density","Cox PH models of different local density specifications",         
+        "_timeslice","timeslice",    "Cox PH regression results with different time slices",            
+        "_comp",     "comp",         "Alternative competition specifications",                          
+        "_dens",     "dens",         "Alternative competition specifications",                          
+        "_env",      "env",          "Alternative specification of environment",                        
+        "_af",       "af",           "Alternative specification: include Exhibition",                   
+        "_timecfg",  "timecfg",      "Cox PH regression results with different time configurations",    
+        "_dimred",   "dimred",       "Cox PH regression models with PCA factors of museum facilities",  
+        "_reg",      "reg",          "Cox PH regression results with different region dummies included")
+
+    l_tblcfgs_coxph <- split(dt_cfg_prep, 1:nrow(dt_cfg_prep)) %>%
+        lapply(\(x) list(# tblname = paste0("t_reg_coxph", x$tblname),
+                        ## l_mdlnames = sym(paste0("l_mdlnames_",x$l_mdlnames)),
+                        l_mdlnames = get(paste0("l_mdlnames_",x$l_mdlnames)),
+                        l_mdls = sym("l_mdls"),
+                        caption = x$caption)) %>%
+        setNames(paste0("t_reg_coxph", dt_cfg_prep$tblname))
+                
+    l_tblcfgs <- c(l_tblcfgs_mnl, l_tblcfgs_coxph)
+
+    return(l_tblcfgs)
 
     
 }
@@ -105,7 +99,7 @@ gc_plts <- function() {
 
     l_pltcfgs <- c(
         if (exists("gc_plts_vrblcvrg")) gc_plts_vrblcvrg(),
-        ## gc_plts_dimred()
+        gc_plts_dimred(),
         list(
             p_surv = list(
                 dt_pmcpct = quote(dt_pmcpct),
