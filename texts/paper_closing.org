@@ -302,31 +302,10 @@ Finally, private museums with unconventional names (in particular, without the t
 
 This study furthermore combines museum research with quantitative non-profit management literature, a link which has so far been weak. 
 
-
-
-
-
-# interrelated question of sustainability/longevity and collector decision making
-
-# Thinking about private museums can take place along several discourses:
-# - celebratory, disinterested, giving back to community 
-# - critical: self-promotional, focus on inequality/legitimacy/status
-
-
-
-  
-
-
 ** Private museums definition and dependency relations
 
 
 *** definition
-#+latex: \bigbreak
-#+latex: \noindent
-# Private museums:
-# - founded by collector -> needs to have amassed substantial art collection
-# - building of its own, limited public/corporate funding, has to be visitable -> requires substantial resources
-
 
 While private collectors have existed for centuries, and have already founded a number of notable museums in the gilded age [[parencite:&diMaggio_1982_boston;&Higonnet_2003_sight;&Duncan_1995_civilizing]], in the recent decades they have substantially expanded their activities into the museum sphere by founding their own museums as individuals, rather than e.g. loaning or donating their collection or opening museums as a group.
 #
