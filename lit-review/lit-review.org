@@ -304,7 +304,7 @@ collaboration
 
 [[cite:&Glynn_Abzug_2002_names]]: having proper name gives legitimacy -> survival
 
-[[cite:&Mayer_2022_slimmer]]: volatility -> mortality
+[[cite:&Mayer_2022_simmer]]: volatility -> mortality
 nice theory + large sample, some modeling weirdnesses tho (asset calculation, volatility  distribution, mediation, density)
 volatility probably not possible with PMDB, but maybe diversification
 
