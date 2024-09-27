@@ -59,7 +59,7 @@ gc_tbls <- function(c_tblargs) {
     l_tblcfgs_coxph <- split(dt_cfg_prep, 1:nrow(dt_cfg_prep)) %>%
         lapply(\(x) list(# tblname = paste0("t_reg_coxph", x$tblname),
                         ## l_mdlnames = sym(paste0("l_mdlnames_",x$l_mdlnames)),
-                        l_mdlnames = get(paste0("l_mdlnames_",x$l_mdlnames)),
+                        l_mdlnames = sym(paste0("l_mdlnames_",x$l_mdlnames)),
                         l_mdls = sym("l_mdls"),
                         caption = x$caption)) %>%
         setNames(paste0("t_reg_coxph", dt_cfg_prep$tblname))

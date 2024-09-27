@@ -56,6 +56,10 @@ yearhaz_from2010,1.36%,yearhaz
 ynkplt_p_vrblcvrg_ugrpd,(eval (concat "#+label: fig:p_vrblcvrg_ugrpd\n" "#+caption: PMDB variable coverage by museum status\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_vrblcvrg_ugrpd.pdf]]")),pltcfgs
 ynkplt_p_vrblcvrg,(eval (concat "#+label: fig:p_vrblcvrg\n" "#+caption: PMDB variable coverage by museum status and variable group\n" "#+attr_latex: :width 19cm\n" "[[file:../figures/p_vrblcvrg.pdf]]")),pltcfgs
 ynkplt_p_vrblcvrg_ratio,(eval (concat "#+label: fig:p_vrblcvrg_ratio\n" "#+caption: PMDB variable coverage (abs/rel prop) by museum status and variable group\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_vrblcvrg_ratio.pdf]]")),pltcfgs
+ynkplt_p_vrblcvrg_pca,(eval (concat "#+label: fig:p_vrblcvrg_pca\n" "#+caption: coverage of variables used in PCA\n" "#+attr_latex: :width 18cm\n" "[[file:../figures/p_vrblcvrg_pca.pdf]]")),pltcfgs
+ynkplt_p_scree,(eval (concat "#+label: fig:p_scree\n" "#+caption: Scree plot of PCA dimensionality reduction\n" "#+attr_latex: :width 14cm\n" "[[file:../figures/p_scree.pdf]]")),pltcfgs
+ynkplt_p_pca_loadings,(eval (concat "#+label: fig:p_pca_loadings\n" "#+caption: loadings of first 2 PCs\n" "#+attr_latex: :width 14cm\n" "[[file:../figures/p_pca_loadings.pdf]]")),pltcfgs
+ynkplt_p_pca_scores,(eval (concat "#+label: fig:p_pca_scores\n" "#+caption: scores on first PCs\n" "#+attr_latex: :width 16cm\n" "[[file:../figures/p_pca_scores.pdf]]")),pltcfgs
 ynkplt_p_surv,(eval (concat "#+label: fig:p_surv\n" "#+caption: Private Museum Survival probability\n" "#+attr_latex: :width 14cm\n" "[[file:../figures/p_surv.pdf]]")),pltcfgs
 ynkplt_p_hazard,(eval (concat "#+label: fig:p_hazard\n" "#+caption: Private Museum hazard function\n" "#+attr_latex: :width 16cm\n" "[[file:../figures/p_hazard.pdf]]")),pltcfgs
 ynkplt_p_hazard_time,(eval (concat "#+label: fig:p_hazard_time\n" "#+caption: Private Museum hazard function by year\n" "#+attr_latex: :width 16cm\n" "[[file:../figures/p_hazard_time.pdf]]")),pltcfgs
@@ -75,6 +79,10 @@ ynkplt_p_lngtdvelp,(eval (concat "#+label: fig:p_lngtdvelp\n" "#+caption: Compos
 refplt_p_vrblcvrg_ugrpd,\ref{fig:p_vrblcvrg_ugrpd},figlbls
 refplt_p_vrblcvrg,\ref{fig:p_vrblcvrg},figlbls
 refplt_p_vrblcvrg_ratio,\ref{fig:p_vrblcvrg_ratio},figlbls
+refplt_p_vrblcvrg_pca,\ref{fig:p_vrblcvrg_pca},figlbls
+refplt_p_scree,\ref{fig:p_scree},figlbls
+refplt_p_pca_loadings,\ref{fig:p_pca_loadings},figlbls
+refplt_p_pca_scores,\ref{fig:p_pca_scores},figlbls
 refplt_p_surv,\ref{fig:p_surv},figlbls
 refplt_p_hazard,\ref{fig:p_hazard},figlbls
 refplt_p_hazard_time,\ref{fig:p_hazard_time},figlbls
@@ -92,18 +100,19 @@ refplt_p_pred_heatmap_alt,\ref{fig:p_pred_heatmap_alt},figlbls
 refplt_p_surv_death,\ref{fig:p_surv_death},figlbls
 refplt_p_lngtdvelp,\ref{fig:p_lngtdvelp},figlbls
 reftbl_t_coxzph,\ref{tbl:t_coxzph},reftbl
-reftbl_t_reg_coxph,\ref{tbl:t_reg_coxph},reftbl
 reftbl_t_sumstats,\ref{tbl:t_sumstats},reftbl
 reftbl_t_selfid,\ref{tbl:t_selfid},reftbl
-reftbl_t_reg_coxph_density,\ref{tbl:t_reg_coxph_density},reftbl
-reftbl_t_reg_coxph_timeslice,\ref{tbl:t_reg_coxph_timeslice},reftbl
 reftbl_t_reg_coxph_deathcfg,\ref{tbl:t_reg_coxph_deathcfg},reftbl
 reftbl_t_drop1,\ref{tbl:t_drop1},reftbl
+reftbl_t_reg_coxph,\ref{tbl:t_reg_coxph},reftbl
+reftbl_t_reg_coxph_density,\ref{tbl:t_reg_coxph_density},reftbl
+reftbl_t_reg_coxph_timeslice,\ref{tbl:t_reg_coxph_timeslice},reftbl
 reftbl_t_reg_coxph_comp,\ref{tbl:t_reg_coxph_comp},reftbl
 reftbl_t_reg_coxph_dens,\ref{tbl:t_reg_coxph_dens},reftbl
 reftbl_t_reg_coxph_env,\ref{tbl:t_reg_coxph_env},reftbl
 reftbl_t_reg_coxph_af,\ref{tbl:t_reg_coxph_af},reftbl
 reftbl_t_reg_coxph_timecfg,\ref{tbl:t_reg_coxph_timecfg},reftbl
+reftbl_t_reg_coxph_dimred,\ref{tbl:t_reg_coxph_dimred},reftbl
 reftbl_t_reg_coxph_reg,\ref{tbl:t_reg_coxph_reg},reftbl
 mow_prop_name_museum,71,descs
 coef_genderF,-0.038,coefs

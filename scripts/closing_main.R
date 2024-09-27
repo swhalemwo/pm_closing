@@ -361,10 +361,10 @@ l_mdlnames_dens <- list("r_pop4", "r_comp1", "r_pmdens1",
 l_mdlnames_coxph_density <- list("r_pop4", "r_onlycryside", "r_wocryside", "r_pop42") 
 
 ## compare whether patterns change if only recent data is used
-l_mdlnames_timeslice <- list("r_pop4", "r_2005", "r_2010", "r_2015")
+l_mdlnames_timeslice <- c("r_pop4", "r_2005", "r_2010", "r_2015")
 
 ## check whether patterns depend on itme configuration (time period, year_opened, both)
-l_mdlnames_timecfg <- list("r_pop4", "r_pop4_wyo", "r_pop4_wtp", "r_pop4_wyotp")
+l_mdlnames_timecfg <- c("r_pop4", "r_pop4_wyo", "r_pop4_wtp", "r_pop4_wyotp")
 
 ## alternative competition specficication
 l_mdlnames_comp <- c("r_pop4", "r_comp1", "r_audience1", "r_audience2", "r_audience_log1", "r_audience_log2")
