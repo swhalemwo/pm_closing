@@ -1,4 +1,4 @@
-% Created 2024-09-27 vr 18:36
+% Created 2024-09-30 ma 14:08
 % Intended LaTeX compiler: pdflatex
 \documentclass[12pt]{article}
 
@@ -539,4 +539,41 @@ Both components are highly significantly associated with closing, improve model 
 
 While it is plausible that larger organizations face a lower closing risk, I ultimately consider the coefficients are too large to be plausibly reflect primary an influence of institutional characteristics.
 While some size effect may exist, I consider it more plausible that this is indicator much more strongly reflects whether a museum is open or closed in the first place (as data collection was much more difficult for closed museums, the  measurement error is systematically related with the outcome variable), and therefore do not include it in the main regression model to avoid a circular rationale.
+\subsection*{Model improvement by variable addition}
+
+
+
+% latex table generated in R 4.3.3 by xtable 1.8-4 package
+% Fri Sep 27 17:51:21 2024
+\begin{table}[ht]
+\centering
+\begin{tabular}{llrD{.}{.}{5}}
+  \hline 
+ \multicolumn{1}{l}{} & \multicolumn{1}{l}{Variable dropped} & \multicolumn{1}{l}{AIC difference} & \multicolumn{1}{l}{Chisq}\\ 
+ \hline
+  \multicolumn{3}{l}{\textbf{Founder}} \\ 
+ & Founder Gender & 3.81 & .19 \\ 
+   & Founder died & 1.60 & .40 \\ 
+   \multicolumn{3}{l}{\textbf{Museum}} \\ 
+ & Self-Identification & -13.25 & 19.25^{***} \\ 
+   & Founder name in Museum name & 1.97 & .03 \\ 
+   & ArtNews Ranking inclusion & 3.00 & 1.00 \\ 
+   \multicolumn{3}{l}{\textbf{Environment}} \\ 
+ & PM density (country) & 0.85 & 3.15 \\ 
+   & PM density$^{2}$ (country) & -1.03 & 3.03 \\ 
+   & Pop. (millions) within 10km & -8.56 & 12.56^{**} \\ 
+   & Nbr PM within 10km & -9.28 & 13.28^{**} \\ 
+   & Nbr PM (10km) * Pop (10km) & -10.04 & 12.04^{***} \\ 
+   & Great Recession (2008/09) & -2.23 & 4.23^{*} \\ 
+   & Covid Pandemic (2020/21) & 0.07 & 1.93 \\ 
+   \hline 
+ \multicolumn{2}{l}{\footnotesize{\textsuperscript{***}p $<$ 0.001;\textsuperscript{**}p $<$ 0.01;\textsuperscript{*}p $<$ 0.05.}} \\ 
+\end{tabular}
+\caption{Model Fit Improvement by Single Term Deletions} 
+\label{tbl:t_drop1}
+\end{table}
+
+Table \ref{tbl:t_drop1} shows model fit improvement by adding each variable to the model with the other main variables but without the variable in question.
+For the most part, variables that are significant in the main model (self-identification and the main effects and interaction of population and private museums in the local environment) significantly improve the model when added.
+The one variable deviating from this pattern is the dummy variable for the years of the Great Recession, which despite an insignificant model coefficient significantly improves model fit; however model improvement is relatively small compared to the other variables. 
 \end{document}

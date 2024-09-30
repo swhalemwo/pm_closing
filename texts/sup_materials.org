@@ -402,3 +402,16 @@ While some size effect may exist, I consider it more plausible that this is indi
 
 
 
+
+** Model improvement by variable addition
+
+
+#+INCLUDE: "../tables/t_drop1_wcpF.tex" export latex
+
+Table {{{reftbl_t_drop1}}} shows model fit improvement by adding each variable to the model with the other main variables but without the variable in question.
+#
+For the most part, variables that are significant in the main model (self-identification and the main effects and interaction of population and private museums in the local environment) significantly improve the model when added.
+#
+The one variable deviating from this pattern is the dummy variable for the years of the Great Recession, which despite an insignificant model coefficient significantly improves model fit; however model improvement is relatively small compared to the other variables. 
+
+ 
