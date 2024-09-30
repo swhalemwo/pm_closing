@@ -53,7 +53,8 @@ gc_tbls <- function(c_tblargs) {
         "_env",      "env",          "Alternative specification of environment",                        
         "_af",       "af",           "Alternative specification: include Exhibition",                   
         "_timecfg",  "timecfg",      "Cox PH regression results with different time configurations",    
-        "_dimred",   "dimred",       "Cox PH regression models with PCA factors of museum facilities",  
+        "_dimred",   "dimred",       "Cox PH regression models with PCA factors of museum facilities",
+        "_addgns",   "addgns",       "Cox PH regression models with additional specifications",
         "_reg",      "reg",          "Cox PH regression results with different region dummies included")
 
     l_tblcfgs_coxph <- split(dt_cfg_prep, 1:nrow(dt_cfg_prep)) %>%
@@ -279,7 +280,7 @@ gc_vvs <- function() {
         "popm_circle10:proxcnt10_log"     = "Nbr PM (10km, log) * Pop (10km)",
         "proxcnt10:popm_circle10_log"     = "Nbr PM (10km) * Pop (10km, log)",
         
-                
+        "founder_dead_binary:muem_fndr_name" = "Founder name in Museum name * Founder died",
         
         audience10                = "Local Audience per PM",
         "I(audience10^2)"         = "Local Audience per PM^2",
@@ -313,7 +314,8 @@ gc_vvs <- function() {
     
     l_vrblgrps <- list(# variable groups
         founder  = .c(gender, founder_dead1, founder_dead_binary),
-        museum   = .c(slfidfcn, muem_fndr_name, mow, an_inclusion, PC1, PC2,
+        museum   = .c(slfidfcn, muem_fndr_name, "founder_dead_binary:muem_fndr_name",
+                      mow, an_inclusion, PC1, PC2,
                       exhbany, exhbrollany,
                       year_opened,
                       exhbqntl_cy, exhbcnt, exhbrollsum_avg,
@@ -337,7 +339,7 @@ gc_vvs <- function() {
                    founder_dead1, founder_dead_binary, 
                    an_inclusion, pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10",
                    year, "I(year^2)", time_period, "popm_circle10:I(proxcnt10^2)",
-                   exhbany, exhbrollany, 
+                   exhbany, exhbrollany, "founder_dead_binary:muem_fndr_name",
                    exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)", exhbprop_top10_log, exhbprop_top10_utf,
                    exhbqntl_roll, "I(exhbqntl_roll^2)",
                    exhbcnt, exhbrollsum_avg, audience10, "I(audience10^2)", audience10_log, "I(audience10_log^2)",
@@ -351,6 +353,7 @@ gc_vvs <- function() {
         num = .c(pmdens_cry, "I(pmdens_cry^2)", popm_circle10, popm_country, proxcnt10, "I(proxcnt10^2)",
                  pmdens_circle10, "I(pmdens_circle10^2)", "proxcnt10:popm_circle10", PC1, PC2,
                  year, "I(year^2)", "popm_circle10:I(proxcnt10^2)",
+                 "founder_dead_binary:muem_fndr_name",
                  year_opened, audience10, "I(audience10^2)", audience10_log, "I(audience10_log^2)",
                  exhbqntl_cy, exhbqntl_year, "I(exhbqntl_year^2)",
                  exhbcnt, exhbrollsum_avg,

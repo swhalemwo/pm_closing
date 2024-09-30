@@ -380,6 +380,7 @@ l_mdlnames_reg <- c("r_pop4", "r_reg6", "r_regsub2", "r_regsub2_samplecprn",
 
 l_mdlnames_dimred <- c("r_pop4", "r_pc1", "r_pc2", "r_pcboth") # dimred for supplementary materials
 
+l_mdlnames_addgns <- c("r_pop4", "r_founder_name_death_int")
 
 
 ## improvement by adding variables

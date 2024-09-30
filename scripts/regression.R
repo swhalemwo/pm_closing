@@ -1556,10 +1556,13 @@ gl_mdls <- function(dt_pmyear, dt_pmcpct) {
         ## include PC
         r_pc1 = coxph(gf_coxph_close(vrbls_to_add = "PC1"), dt_pmyear),
         r_pc2 = coxph(gf_coxph_close(vrbls_to_add = "PC2"), dt_pmyear),
-        r_pcboth = coxph(gf_coxph_close(vrbls_to_add = c("PC1", "PC2")), dt_pmyear)
+        r_pcboth = coxph(gf_coxph_close(vrbls_to_add = c("PC1", "PC2")), dt_pmyear),
 
 
-
+        ## interaction of death and founder name
+        r_founder_name_death_int = coxph(gf_coxph_close(vrbls_to_add = "muem_fndr_name*founder_dead_binary"),
+                                         dt_pmyear)
+                                         
         
         
 
@@ -2444,6 +2447,7 @@ gt_reg_coxph_dens <- gt_reg_coxph
 gt_reg_coxph_env <- gt_reg_coxph
 gt_reg_coxph_af <- gt_reg_coxph
 gt_reg_coxph_dimred <- gt_reg_coxph
+gt_reg_coxph_addgns <- gt_reg_coxph
 
 
 gt_reg_coxph_reg <- function(l_mdls, l_mdlnames) {
