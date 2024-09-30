@@ -571,3 +571,16 @@ dt_pmtiv[, .(subreg = countrycode(iso3c, "iso3c", "un.regionsub.code"),
 
 dt_pmtiv[, .N, iso3c][N > 10][, country_name := countrycode(iso3c, "iso3c", "country.name")] %>%
     .[, sprintf('list(vrbl = "iso3c", term = "iso3c%s", term_lbl = "Country - %s")', iso3c, country_name)] %>% cat(sep = "\n")
+
+## ** naming conventions by country
+
+dt_namconv <- dt_pmtiv[, .N, .(slfidfcn, iso3c)][, `:=`(prop = N/sum(N), N_ttl = sum(N)), iso3c]
+
+
+dt_namconv %>% dcast(iso3c + N_ttl ~ slfidfcn, value.var = "prop") %>% .[order(-N_ttl)]
+
+dt_namconv %>% copy %>%
+    .[N_ttl >= 10] %>% 
+    .[order(N_ttl)] %>% .[, iso3c := factor(iso3c, levels = unique(iso3c))] %>% # .[, iso3c] %>% 
+    ggplot(aes(x=prop, y=iso3c)) + geom_col() +
+    facet_grid(~slfidfcn)
