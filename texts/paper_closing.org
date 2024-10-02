@@ -497,12 +497,12 @@ In particular when they rely on the decision-making of other art-field actors, s
 # The image that these parties have of the private museum might be substantial importance in guiding their decision-making.
 
 
-Other environmental factors beyond the recognitition of the founder might influence the longevity prospects of a private museum.
-#
-The inclusion of loss of status shows that even founder-related variables can take effect through environmental processes, rather than the internal setup of the museum.
-#
+# Other environmental factors beyond the recognitition of the founder might influence the longevity prospects of a private museum.
+# #
+# The inclusion of loss of status shows that even founder-related variables can take effect through environmental processes, rather than the internal setup of the museum.
+# #
 
-Loss of status of the founder is just one effect that takes effect through environmental processes.
+# Loss of status of the founder is just one effect that takes effect through environmental processes.
 
 
 **** Competition
@@ -548,6 +548,7 @@ Thus, a hypothesis regarding competition can be formulated as:
   
   
 
+
 **** Identity 
 # provide legitimacy
 
@@ -567,6 +568,8 @@ The empirical record of the link between identity and survival for non-profit or
 For example [[textcite:&Bielefeld_1994_survival]] finds that NPOs who pursue less legitimation strategies (obtaining endorsements, lobbying or contributing to local causes) are more likely to close, and [[textcite:&HernandezOrtiz_2022_discontinuity]] observes a declining image or reputation as a cause of closure in a number of non-profits (p.115).
 #
 Nonetheless, other studies find little to no effect of legitimacy on survival, both when measured via density parencite:&Bogaert_etal_2014_ecological or from archival sources and interviews [[parencite:&Fernandez_2007_dissolution]].
+#
+[[textcite:&Walker_McCarthy_2010_survival]] find support for some, but not all legitimacy indicators. 
 
 
 Legitimacy might be obtained by isomorphism, i.e. adopting features associated with blueprints [[parencite:&diMaggio_1983_iron]].
