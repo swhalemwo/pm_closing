@@ -374,7 +374,7 @@ Nethertheless, the identification of the centrality of the founder as a critical
 #
 For example, [[cite:&Bielefeld_1994_survival]] finds that nonprofits with a larger number of funding sources (e.g. from foundations, individuals, federated funders, corporations, trusts, government at federal, state, county and municipal level as well as self-generated sources such as dues, interests, and service revenue, p.31) are more likely to survive.
 #
-Other studies have measured diversification as the Herfindahl Index (a measure of concentration) of income sources such as public support, program service revenues, dues and assessments, net fundraising income and profits from sale of inventory [[parencite:&Hager_2001_vulnerability p.381]] or contributions, program service revenue, investment income, other revenues [[parencite:&Lu_Shon_Zhang_2019_dissolution p.37]], with both studies finding a positive association between diversification and survival; in the case of [[cite:&Hager_2001_vulnerability]] also specifically for art museums.
+Other studies have measured diversification as the Herfindahl Index (a measure of concentration) of income sources such as public support, program service revenues, dues and assessments, net fundraising income and profits from sale of inventory [[parencite:&Hager_2001_vulnerability p.381]] or contributions, program service revenue, investment income, other revenues [[parencite:&Lu_Shon_Zhang_2019_dissolution p.37]], with both studies finding a positive association between diversification and survival; in the case of [[textcite:&Hager_2001_vulnerability]] also specifically for art museums.
 # 
 Next to diversification, volatility, i.e. fluctuation in revenue streams, has been associated with mortality as well [[parencite:&Mayer_2022_simmer]].
 #
@@ -388,9 +388,7 @@ Resulting from the dependence of the museum on the founder, it is plausible that
 
 **** death :ignhead:
 
-The most direct interruption a founder and their museum can experience is the death of the former.
-#
-This event has in fact already extensively been argued to result in museum closure:
+The most direct interruption a founder and their museum can experience is the death of the founder; this event has in fact already been extensively argued to result in museum closure:
 # 
 # Lack of diversification is then argued to pose a problem in particular in the case of the founder's death:
 #
@@ -412,7 +410,7 @@ The death of the founder thus constitutes a clear financial and organizational d
 *Hypothesis 1a*: Private museums are more likely to close after the death of the founder.
 
 
-**** comparison lacking :ignhead:
+**** loss of status :ignhead:
 
 # Overall, two related arguments emerge from the current literature on private museum sustainability:
 #
@@ -428,18 +426,31 @@ The death of the founder thus constitutes a clear financial and organizational d
 
 A less obvious yet possibly impactful event that can jeopardize a founder's ability to sustain their museum and potentially shorten its lifespan is a decline of status of the collector within the art world.
 #
-Recognition bestowed by prominent art world authorities confers the acknowledgment of "cultural expertise" [[parencite:&Braden_2016_recognition p.1486]], thus validating the collector-founder's refined taste, which constitutes a form symbolic capital that might yield tangible benefits [[parencite:&Bourdieu_1993_production]].
-# 
+Recognition bestowed by prominent art world authorities confers the acknowledgment of "cultural expertise" [[parencite:&Braden_2016_recognition p.1486]], thus validating the collector-founder's refined taste, which constitutes a form symbolic capital [[parencite:&Bourdieu_1993_production]].
+#
 This symbolic capital might provide opportunities to acquire material advantages such as collaborations with other institutions and access to broader audiences, ultimately bolstering the museum's longevity.
 
 
-In the face of a loss of recognition, the consequences can extend beyond the personal demotivation it may cause the founder.
+While limited research exists that investigates reputation effects for (art) museums, its effects have been investigated for non-profits more widely.
+#
+Here reputation is often referred to as an organization's resource or asset [[parencite:&Kong_Farrell_2010_image;&Goldfarb_Zavyalova_Pillai_2018_Rao;&Walker_McCarthy_2010_survival;&Schloderer_Sarstedt_Ringle_2014_reputation]]. 
+#
+Studies primarily focus on the effect of reputation on some tangible benefits such as donations and contributions [[parencite:&Sarstedt_2010_reputation;&Mews_Boenigk_2012_blood;&Heller_2008_alliances;&Meijer_2009_reputation]], or its direct effect on survial [[parencite:&Lu_Shon_Zhang_2019_dissolution;&Singh_1991_change;&Hager_2001_vulnerability]] [fn:: Furthermore, the term "survival" is sometimes used more loosely to refer to a non-profit's effective operation and financial condition rather than the more narrowly defined dissolution (e.g. [[cite:&Santos_Laureano_Moro_2019_reputation p.58]], [[cite:&Heller_2008_alliances p.15]], [[cite:&Schloderer_Sarstedt_Ringle_2014_reputation p.111]])], with most studies finding support for a positive effect of reputation.
+#
+Next to the reputation of the general public, studies have also found reputation effects among more narrowly defined groups, in particular peers [[parencite:&Padanyi_Gainer_2003_peerreputation]] and networks of similar organizations on regional and national scale [[parencite:&Walker_McCarthy_2010_survival]].
+# 
+In particular this reputation among more narrowly defined groups makes it likely that the reputation of the  /founder/ matters (beyond the reputation of the /organization/, the focus on most prior research) given the highly personal character of the private museum initiative and the central role of the founder in negotiations with decision makers from other organizations or the public sector.
+
+
+In the case of the founder losing his reputation, the consequences then might extend beyond personal demotivation.
 #
 Such a decline could also curtail potential opportunities for cooperation with other institutions and limit the museum's reach to larger audiences, thus posing a risk to the museum's continued operation and survival in the long term.
 # 
 
 
-*Hypothesis 1b*: Private museums are more likely to close after a decline of their founder's status, measured by exclusion from a prestigious ranking.
+*Hypothesis 1b*: Private museums are more likely to close after a decline of their founder's status.
+
+# measured by exclusion from a prestigious ranking.
 
 # #
 # Second, due to their low diversification (high reliance on the founder), private museums are more fragile than museums where single individuals are not comparably central figures.
