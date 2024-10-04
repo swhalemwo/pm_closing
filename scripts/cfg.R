@@ -262,7 +262,7 @@ gc_vvs <- function() {
         pmdens_cry                = "PM density (country)",
         "I(pmdens_cry^2)"         = "PM density^2 (country)",
         popm_circle10             = "Pop. (millions) within 10km",
-        popm_country              = "Pop. (millions) country",        
+        popm_country              = "Pop. (millions) country",
         proxcnt10                 = "Nbr PM within 10km",
         "I(proxcnt10^2)"          = "Nbr PM^2 within 10km",
         pmdens_circle10           = "PM density (10km)",
@@ -270,8 +270,8 @@ gc_vvs <- function() {
         pmdens_circle10_log       = "PM density (10km, log)",
         "I(pmdens_circle10_log^2)"= "PM density (10km, log^2)",
         "proxcnt10:popm_circle10" = "Nbr PM (10km) * Pop (10km)",
-        
         proxcnt10_log             = "Nbr PM within 10km (log)",
+
         popm_circle10_log         = "Pop. (millions) within 10km (log)",
         
         
@@ -286,6 +286,8 @@ gc_vvs <- function() {
         "I(audience10^2)"         = "Local Audience per PM^2",
         audience10_log            = "Local Audience per PM (log)",
         "I(audience10_log^2)"     = "Local Audience per PM (log)^2",
+        recession                 = "Great Recession (2008/09)",
+        covid                     = "Covid Pandemic (2020/21)",
         iso3c                     = "Country",
         west                      = "Europe and North America",
         reg6                      = "Region",
@@ -293,6 +295,7 @@ gc_vvs <- function() {
         an_inclusion              = "ArtNews Ranking inclusion",
         exhbany                   = "Exhibition any",
         exhbrollany               = "Exhibition any last 5 years",
+
         exhbqntl_roll             = "Exhibition Quantile (year, rolled)",
         "I(exhbqntl_year^2)"      = "Exhibition Quantile (year)^2",
         exhbqntl_cy               = "Exhibition Quantile (CY)",
@@ -301,6 +304,7 @@ gc_vvs <- function() {
         exhbqntl_year             = "Exhibition Quantile (year)",
         exhbprop_top10_log        = "Exh. top 10% (log)",
         exhbprop_top10_utf        = "Exh. top 10%",
+
         "I(exhbqntl_roll^2)"      = "Exhibition Quantile^2 (year, rolled)",
         PC1                       = "PC1 (Size)",
         PC2                       = "PC2 (Support)",
@@ -308,8 +312,6 @@ gc_vvs <- function() {
         "I(year^2)"               = "year^2",
         year_opened               = "Opening year",
         time_period               = "Time Period (5 years)",
-        recession                 = "Great Recession (2008/09)",
-        covid                     = "Covid Pandemic (2020/21)",
         GLOBAL                    = "Global") # from cox.zph
     
     l_vrblgrps <- list(# variable groups

@@ -16,6 +16,7 @@ n_founder_dead,47,descs
 perc_founder_dead,9.3,descs
 pm_n_used,503,descs
 n_pm_close_after_recent_death,3,descs
+pmyear_proxcnt10_geq0,41,descs
 pm_open_from2021,17,descs
 N_slfid_other,140,descs
 N_slfid_museum,190,descs
@@ -113,6 +114,7 @@ reftbl_t_reg_coxph_env,\ref{tbl:t_reg_coxph_env},reftbl
 reftbl_t_reg_coxph_af,\ref{tbl:t_reg_coxph_af},reftbl
 reftbl_t_reg_coxph_timecfg,\ref{tbl:t_reg_coxph_timecfg},reftbl
 reftbl_t_reg_coxph_dimred,\ref{tbl:t_reg_coxph_dimred},reftbl
+reftbl_t_reg_coxph_addgns,\ref{tbl:t_reg_coxph_addgns},reftbl
 reftbl_t_reg_coxph_reg,\ref{tbl:t_reg_coxph_reg},reftbl
 mow_prop_name_museum,71,descs
 coef_genderF,-0.038,coefs

@@ -72,6 +72,9 @@ gd_nbrs <- function() {
         list(nbr_name = "pm_n_used",     nbr_fmt = dt_pmyear[, fnunique(ID)]),
         list(nbr_name = "n_pm_close_after_recent_death",
              nbr_fmt = dt_pmyear[founder_dead5 == "recently_dead" & closing == 1, .N]),
+        list(nbr_name = "pmyear_proxcnt10_geq0",
+             nbr_fmt = dt_pmyear[, .(proxcnt10 = sum(proxcnt10 > 0), .N), year] %>%
+                 .[, perc := 100*(proxcnt10/N)] %>% .[, mean(perc)] %>% format(digits = 2)),
         list(nbr_name = "pm_open_from2021",
              nbr_fmt=dt_pmdb[year_opened>= 2021 & museum_status %in% c("private museum", "closed"),.N])) %>%        
         rbindlist

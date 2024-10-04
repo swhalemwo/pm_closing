@@ -100,7 +100,8 @@ gt_sumstats <- function(dt_pmyear, dt_pmcpct) {
         Reduce(cbind, .) %>% adt %>%
         melt(measure.vars = names(.), variable.name = "term") %>%
         .[, .(pm_mean = mean(value), pm_sum = sum(value)), term]
-    
+
+        
     ## combine pm-year-level and pm-level data, reorder
     dt_cbn2 <- copy(dt_cbn)[dt_sumry_pm, `:=`("pm_mean" = i.pm_mean, "pm_sum" =  i.pm_sum), on = "term"] %>%
         .[, vrbl := factor(vrbl, levels = levels(c_vvs$dt_vrblinfo$vrbl))] %>% # somehow necessary to relevel? 
@@ -109,10 +110,14 @@ gt_sumstats <- function(dt_pmyear, dt_pmcpct) {
     ## create summary column names
     sumstats_cols <- c("grp_filler" = "", "term_lbl" = "Variable", "pm_sum" = "Count", "pm_mean" = "Mean",
                        "mean" = "Mean", "sd" = "SD", min = "Min.", max = "Max.")
+
     
     ## variables to yeet from table
     vrbls_toyeet <- c("mow", "year", "exhbrollany", "PC1", "PC2", "popm_country", "west", "year",
-                      "pmdens_circle10")
+                      "pmdens_circle10", "regsub", "time_period", "year_opened", "founder_dead1",
+                      "pmdens_circle10", "pmdens_circle10_log", "proxcnt10_log", "audience10", "audience10_log",
+                      "popm_circle10_log", "exhbany")
+    
 
     ## format the columns
     dt_cbn_viz <- copy(dt_cbn2) %>%

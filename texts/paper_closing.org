@@ -36,6 +36,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: perc_founder_dead 9.3
 #+MACRO: pm_n_used 503
 #+MACRO: n_pm_close_after_recent_death 3
+#+MACRO: pmyear_proxcnt10_geq0 41
 #+MACRO: pm_open_from2021 17
 #+MACRO: N_slfid_other 140
 #+MACRO: N_slfid_museum 190
@@ -152,6 +153,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: reftbl_t_reg_coxph_af \ref{tbl:t_reg_coxph_af}
 #+MACRO: reftbl_t_reg_coxph_timecfg \ref{tbl:t_reg_coxph_timecfg}
 #+MACRO: reftbl_t_reg_coxph_dimred \ref{tbl:t_reg_coxph_dimred}
+#+MACRO: reftbl_t_reg_coxph_addgns \ref{tbl:t_reg_coxph_addgns}
 #+MACRO: reftbl_t_reg_coxph_reg \ref{tbl:t_reg_coxph_reg}
 
 
