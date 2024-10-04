@@ -250,6 +250,26 @@ wd_nbrs(dt_nbrs)
 * Supplementary online materials
 
 
+** Alternative founder death specification
+
+#+INCLUDE: "../tables/t_reg_coxph_deathcfg_wcpF.tex" export latex
+
+It is possible to construct an alternative measure of founder death by partitioning the time after the death in a short-term and long-term period; the short-term period might then capture the disruption by the founder, whereas the long-term period would only be reached by museums who have successfully acquired alternative funding models and are hence relatively viable.
+#
+However, the choice of choosing a cut-off point between the short- and long-term periods is relatively arbitrary.
+
+
+Table \ref{tbl:t_reg_coxph_deathcfg} shows coefficients of both periods with different cut-off points.
+#
+While the coefficient in the short-term period is consistently higher than both the overall death coefficient and the long-term period coefficients, so far the evidence is inconclusive as only few cases are statistically significant[fn:: P-values are also not adjusted for multiple tests].
+#
+Furthermore, such a shock passes quickly relative to the predicted median lifetime of museums of {{{median_life_expectancy}}} years, thus "giving" the founder death little time to lead to many museum closures. 
+# 
+
+Considering the raw numbers underlying the death effect estimates illustrates the uncertainty involved in determining the effect of the death of the founder on closing: 
+# 
+While {{{n_founder_dead}}} private museums have seen the death of their founders, only {{{n_pm_close_after_recent_death}}} of these have closed in the following 5 years; given such low numbers it cannot be ruled out that the statistical significance in a few configurations of founder death time results from random fluctuations rather than an underlying pattern.
+
 ** Alternative competition specifications
 
 
