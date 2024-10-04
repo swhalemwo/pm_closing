@@ -2387,6 +2387,7 @@ gp_surv_death <- function(l_mdls, name_mainmdl) {
                linetype = guide_legend(title = "Founder status")) +
         scale_color_manual(values = c("0" = "blue", "1" = "red"), labels = leg_labels) +
         scale_linetype_manual(values = c("0" = "solid", "1" = "32"), labels = leg_labels) +
+        theme_bw() + 
         theme(legend.position = "bottom",
               legend.spacing = unit(0, "pt"),
               legend.key.height = unit(0, "pt"),
