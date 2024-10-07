@@ -268,15 +268,17 @@ In recent years, private collector-run museums have seen an unprecedented prolif
 #
 These museums, run by individual collectors, constitute an addition to established organizational forms of art provision such as museums operated and financed by the state, foundations or associations.
 #
-Many aspects of this new organizational form has attracted attention, such as their emergence, relations to other institutions or impact on artist consecration (cf. [[cite:&Kolbe_etal_2022_privatemuseum]] for a literature review).
+Many aspects of this new organizational form have attracted attention, such as their emergence, relations to other institutions or impact on artist consecration (cf. [[textcite:&Kolbe_etal_2022_privatemuseum]] for a literature review).
 #
-Long-term sustainability or private museum closure has also been investigated, however primarily through case studies; quantitative studies have been mostly absent.
+Long-term survival or private museum closure has also been investigated, however primarily through case studies; quantitative studies have been mostly absent.
 # 
 In this paper, I address this gap by quantitatively investigating the closure event of members of this new organizational form.
 #
-Analyzing which factors are associated with museum closures provides insight not only into the event of closing, but also into the ongoing processes of a private museums, such as dependency relationships.
+Analyzing which factors are associated with museum closures provides insight into not only the event of closing, but also the ongoing internal processes and dependency relationships of private museums.
+#  but also into the ongoing processes of a private museums.
+# , such as dependency relationships.
 #
-Furthermore, analyzing how long museums survive allows to make informed speculations on the future of this recently emerged organizational form. 
+Furthermore, analyzing how long museums survive provides a basis for informed speculations on the future of this recently emerged organizational form. 
 
 
 # #+latex: \bigbreak
@@ -299,14 +301,16 @@ Furthermore, analyzing how long museums survive allows to make informed speculat
 # In other words, what can the factors leading to the closure of private museums tell us about the internal processes and dependence relationships of these institutions, as well as about the motivations of their founders?
 
 
-A recent study by [[textcite:&Velthuis_Gera_2024_fragility]] has systematically investigated closing reasons of private museums, and I built on this research by using a more elaborate statistical model and additional data sources.
+A recent study by [[textcite:&Velthuis_Gera_2024_fragility]] has systematically investigated closing reasons of private museums, and I build on this research by using a more elaborate statistical model and additional data sources.
 #
-In particular, I compare private museum closing rates to those of other museum populations, and analyze the risk associated with variables on the level of the founder, museum and environment. 
+In particular, I analyze the risk associated with variables on the level of the founder, museum and environment, obtaining three main findings. 
 #
 # Taken together, the results provide little evidence that private museums are overly dependent on their original founder, nor that they face higher mortality rates than other non-profit museums.
 # #
 # While little evidence points toward private museums being involuntarily at risk due to their low diversification,
-Whereas previous research had identified the reliance on the founder as a key vulnerability, quantitative analyses show no significant increase in closing risk for museums the founders of which have died or lost their art-world status.
+Firstly, whereas previous research had identified the reliance on the founder as a key vulnerability, quantitative analyses show no significant increase in closing risk for museums whose founders have died or lost status in the art world.
+#
+A descriptive comparison of closing rates to other museum populations also shows no elevated closing risk for private museums.
 #
 Secondly, private museums with unconventional names (in particular, without the term "museum", "foundation" or "collection" in the name) face a higher closing risk, which may indicate either limited recognition by third parties as potential closing reasons and/or a temporary intention by their founders from the very beginning.
 # The role of the founder in museum closure may thus be more limited to voluntary closures, as evidenced by higher closing rates for museums with unconventional names (in particular, museums without the term "museum", "foundation" or "collection" in the name), which however may also indicate an effect of limited recognition by other art-field actors. 
@@ -323,13 +327,13 @@ Finally, private museums face higher closing risks under certain environmental c
 
 *** definition :ignhead:
 
-While private collectors have existed for centuries, and have already founded a number of notable museums in the gilded age [[parencite:&Higonnet_2003_sight;&Duncan_1995_civilizing]], in the recent decades they have substantially expanded their activities into the museum sphere by founding their own museums as individuals, rather than e.g. loaning or donating their collection or opening museums as a group.
+While private collectors have existed for centuries, and have already founded a number of notable museums in the gilded age [[parencite:&Higonnet_2003_sight;&Duncan_1995_civilizing]], in the recent decades they have substantially expanded their activities into the museum sphere by founding their own museums as individuals, rather than loaning or donating their collection or opening museums as a group.
 #
 This phenomenon of private collectors taking the initiative in setting up a museum of their own has become increasingly widespread, with around 80% of currently open private museums having opened since 2000 [[parencite:&Velthuis_etal_2023_boom]].
 #
 To be considered as a private museum for this study, a collector needs to have amassed a substantial art collection, which he or she exhibits in a building in a way that is accessible to the public while receiving limited public and corporate funding.
 #
-The central role of the founder delimits a private museum from other organizational forms such as public museums supported by local or state governments, corporate museums run by companies or other non-profit museums operated by associations or foundations with more dispersed ownership and control.[fn::Which is not to say that for an institution to be considered a private museum, it has to be legal personal ownership of the founder. Instead the distinguishing criterion is the central role of the collector, which can be the case under a wide range of organizational forms; generally this has to be assessed on a case-by-case basis.]
+The central role of the founder delimits a private museum from other organizational forms such as public museums supported by local or state governments, corporate museums run by companies or other non-profit museums operated by associations or foundations with more dispersed ownership and control.[fn::Which is not to say that for an institution to be considered a private museum, it has to be legal personal ownership of the founder. Instead, the distinguishing criterion is the central role of the collector, which can be the case under a wide range of organizational forms; generally, this has to be assessed on a case-by-case basis.]
 
 
 
@@ -362,24 +366,24 @@ In a systematic review of closing reasons given in newspapers, magazines, social
 #
 A central reason for financial vulnerability has been argued to be the crucial reliance on the single founder, who, as the initiators of their private museums, likely have to contribute a large part of their institution's non-operating income [[parencite:&Frey_Meier_2002_beyeler]]:
 # 
-[[textcite:&Adam_2021_rise]] argues that "ultimately, many of these failures demonstrate the fragility of spaces that rely on a single founder, whose motivations and financial stability may change, or who may not have realised the difficulties inherent in establishing their own art space" (p.82).
+[[textcite:&Adam_2021_rise]] argues that "ultimately, many of these failures demonstrate the fragility of spaces that rely on a single founder, whose motivations and financial stability may change, or who may not have realized the difficulties inherent in establishing their own art space" (p.82).
 # 
 [[textcite:&Velthuis_Gera_2024_fragility]] similarly argue that "because of their funding models and reliance on a sole founder, [private museums] are inherently fragile organizations" (p.1).
 #
-[[textcite:&Bechtler_Imhof_2018_future]] also characterize "the dependency on single individuals only" as one of main reasons that "make these private museums fragile" (p.53).
+[[textcite:&Bechtler_Imhof_2018_future]] also characterize "the dependency on single individuals only" as one of the main reasons that "make these private museums fragile" (p.53).
 #
 [[textcite:&StylianouLambert_etal_2014_museums]] similarly describe many private institutions as "small individual museums that depend too much on their creators to guarantee their sustainability" (p.582).
 #
-Beyond a direct financial component, private museums have been also been characterized as fragile since they can only rely on their founder for "taste", "vision and drive" [[parencite:&Adam_2021_rise p.77]], "passion" [[parencite:&Walker_2019_collector p.234]] or "skills and knowledge" [[parencite:&StylianouLambert_etal_2014_museums p.580]].
+Beyond a direct financial component, private museums have also been characterized as fragile since they can only rely on their founder for "taste", "vision and drive" [[parencite:&Adam_2021_rise p.77]], "passion" [[parencite:&Walker_2019_collector p.234]] or "skills and knowledge" [[parencite:&StylianouLambert_etal_2014_museums p.580]].
 
 
 
 **** diversification in general :ignhead:
-Existing research on private museum is conducted primarily by scholars of the art field or market as well as art historians.
+Existing research on private museums has been conducted primarily by scholars of the art field or market as well as art historians.
 #
 Nevertheless, the identification of the centrality of the founder as a critical source of vulnerability corresponds strongly to the finding in non-profit management of a relation between diversification and mortality [[parencite:&Tuckman_Chang_1991_vulnerability;&Hung_Hager_2018_diversification]].
 #
-For example, [[textcite:&Bielefeld_1994_survival]] finds that nonprofits with a larger number of funding sources (e.g. from foundations, individuals, federated funders, corporations, trusts, government at federal, state, county and municipal level as well as self-generated sources such as dues, interests, and service revenue, p.31) are more likely to survive.
+For example, [[textcite:&Bielefeld_1994_survival]] finds that nonprofits with a larger number of funding sources (e.g. foundations, individuals, federated funders, corporations, trusts, government at federal, state, county and municipal levels as well as self-generated sources such as dues, interests, and service revenue, p.31) are more likely to survive.
 #
 Other studies have measured diversification as the Herfindahl Index (a measure of concentration) of income sources such as public support, program service revenues, dues and assessments, net fundraising income and profits from sale of inventory [[parencite:&Hager_2001_vulnerability p.381]] or contributions, program service revenue, investment income, other revenues [[parencite:&Lu_Shon_Zhang_2019_dissolution p.37]], with both studies finding a positive association between diversification and survival; in the case of [[textcite:&Hager_2001_vulnerability]] also specifically for art museums.
 # 
@@ -437,7 +441,7 @@ The death of the founder thus constitutes a clear financial and organizational d
 # Loss of recognition might then, next to possibly demotivating the founder personally, also limit such opportunities.
 
 
-A less obvious yet possibly impactful event that might jeopardize a founder's ability to sustain their museum and shorten its lifespan is a decline of status of the collector within the art world.
+A less obvious yet possibly impactful event that might jeopardize a founder's ability to sustain their museum and shorten its lifespan is status decline of the collector within the art world.
 #
 Recognition bestowed by prominent art world authorities confers the acknowledgment of "cultural expertise" [[parencite:&Braden_2016_recognition p.1486]], thus validating the collector-founder's refined taste, which constitutes a form symbolic capital [[parencite:&Bourdieu_1993_production]].
 #
@@ -452,7 +456,7 @@ Studies primarily focus on the effect of reputation on some tangible benefits su
 #
 Next to the reputation of the general public, studies have also found reputation effects among more narrowly defined groups, in particular peers [[parencite:&Padanyi_Gainer_2003_peerreputation]] and networks of similar organizations on regional and national scale [[parencite:&Walker_McCarthy_2010_survival]].
 # 
-In particular this reputation among more narrowly defined groups makes it likely that the reputation of the /founder/ matters (beyond the reputation of the /organization/, the focus on most prior research) given the highly personal character of the private museum initiative and the central role of the founder in negotiations with decision makers from other organizations or the public sector.
+In particular, this reputation among more narrowly defined groups makes it likely that the reputation of the /founder/ matters (beyond the reputation of the /organization/, the focus on most prior research) given the highly personal character of the private museum initiative and the central role of the founder in negotiations with decision makers from other organizations or the public sector.
 
 
 In the case of the founder losing their reputation, the consequences then might extend beyond personal demotivation.
@@ -514,7 +518,7 @@ Such a decline could also curtail potential opportunities for cooperation with o
 
 The perception of the museum itself, beyond the reputation of the founder, might also affect survival prospects.
 #
-As has also been summarized in the previous section, an identity that is legitimate (understandable) and favorable (positive) has been argued to have numerous positive outcomes for organizations such as allowing higher profits, satisfaction, as well as weaker impact of shocks, and providing the opportunity to deviate from established patterns [[parencite:&Lange_Lee_Dai_2010_reputation]], which in turn can facilitate survival prospects [[parencite:&Rao_1994_reputation]].
+As has also been summarized in the previous section, an identity that is legitimate (understandable) and favorable (positive) has been argued to have numerous positive outcomes for organizations such as higher profits, satisfaction, as well as weaker impact of shocks, and providing the opportunity to deviate from established patterns [[parencite:&Lange_Lee_Dai_2010_reputation]], which in turn can facilitate survival prospects [[parencite:&Rao_1994_reputation]].
 #
 In the context of private museums, a more positive identity could lead to higher visitor numbers, discounts from art dealers, government grants or collaborations with other museums or corporations, resulting in higher revenues and lower acquisition costs.
 
@@ -523,7 +527,7 @@ A favorable identity might be obtained by isomorphism, i.e. adopting features fr
 #
 Next to material organizational features, adherence to symbolic features such as naming conventions has been found to enhance perceptions of legitimacy; organizations that adhere to field norms about name length, name ambiguity (usage of artificial names) and name domain specificity (mentioning industry) were judged more legitimate parencite:&Glynn_Abzug_2002_names.
 #
-Assuming that such a legitimacy effect translates into better survival prospect, a hypothesis can be formulated as:
+Assuming that such a legitimacy effect translates into better survival prospects, a hypothesis can be formulated as:
 
 
 #+latex: \bigbreak
@@ -532,7 +536,7 @@ Assuming that such a legitimacy effect translates into better survival prospect,
 
 
 # FIXME
-It is however necessary to consider that the name of a museum might be associated with a museum's survival not only via its perception by other parties, but also via reflection of the founder's intentions regarding the institution's longevity; this possibility is discussed in more detail in the results.
+It is however necessary to consider that the name of a museum might be associated with a museum's survival not only via its perception by other parties but also via reflection of the founder's intentions regarding the institution's longevity; this possibility is discussed in more detail in the results.
 
 # Furthermore, inferring the status of the museum via the reputaton of the founder again explores the extent to which the founder is a figure of central importance for the private museum.
 
@@ -545,7 +549,7 @@ It is however necessary to consider that the name of a museum might be associate
 
 # mechanism: losing motivation?
 
-Just as the environment can be supportive of museums recognized perceived as renowned, it can also be a source of risk if it such support is absent.
+Just as the environment can be supportive of museums recognized as renowned, it can also be a source of risk if such support is absent.
 # 
 In particular this might be the case under conditions of harsh competition, which private museums have been characterized to engage in.
 # Private museums have been characterized as highly competitive.
@@ -573,7 +577,7 @@ Previous research into non-profit dissolution has often investigated competition
 #
 Qualitative studies which trace the history and/or closing reasons for each organization individually have highlighted competition over funding.
 # 
-textcite:&Hager_1999_demise reports that "both individual donations/subscriptions and community and corporate grants tended to go to the singular, most reputable arts organizations of their types", resulting in "strong competitive pressures" for the vast majority of organizations (ibid.).
+textcite:&Hager_1999_demise reports that "both individual donations/subscriptions and community and corporate grants tended to go to the singular, most reputable arts organizations of their types" (p.173), resulting in "strong competitive pressures" for the vast majority of organizations (ibid.).
 #
 Similarly, [[textcite:&HernandezOrtiz_2022_discontinuity]] found that an "[increasingly] crowded niche increased the competition and limited [NPOs'] access to resources and clients" (p.116) with an informant stating that "there was less money to go around and more organizations seeking the money [...] we had a full-time grant writer, we were always applying for grants. But there are so many organizations applying for the same grants" (ibid.).
 #
@@ -594,7 +598,7 @@ A newly constructed database, assembled from a wide range of sources, is used to
 #
 Currently, the database includes {{{pmdb_n_all}}} museums, of which {{{pmdb_open_atm}}} are currently open, {{{pmdb_n_closed}}} have closed and {{{pmdb_n_nlpm}}} have transformed into other organizational forms.[fn:: The {{{pmdb_n_nlpm}}} institutions which were private museums at some point and have since been transformed into other organizational forms are not included in this analysis and discussed in the limitations.]
 #
-Using this database, in particular year of opening and, if available, closing, it is possible to reconstruct the life course of each institution with museum-year as the unit of analysis.
+Using this database, in particular year of opening and closing, it is possible to reconstruct the life course of each institution with museum-year as the unit of analysis.
 #
 While the database is not limited to private museums of a particular time period, due to the recency of the private museum boom in the last two decades 80% of the museums included in it have opened after 2000.
 #
@@ -651,7 +655,7 @@ For each year, a museum can have one of three values: "Not included"; in which c
 #
 Cases where multiple individuals are involved in the founding of a private museum are resolved by aggregating the Artnews ranking inclusion history to the founder level (i.e., if only one of two founders is dropped from the Artnews ranking, but the other remains included, the founder couple as a whole is considered included).
 #
-The variable is lagged by one year to avoid reverse causality, i.e. to exclude the possibility that an association is observed which is present due to founders being dropped from the ranking as a consequence of the closure of their museum.
+The variable is lagged by one year to avoid reverse causality, i.e. to exclude the possibility that an association is observed due to founders being dropped from the ranking as a consequence of the closure of their museum.
 
 
 
@@ -668,11 +672,11 @@ In particular, it might be that museums that also refer to themselves as museums
 
 To ensure that inclusion of the word "museum" corresponds to the naming convention of the museum population, the names of the "Museums of the World" (MOW) database [[parencite:&deGruyter_2021_MOW]], a database containing over 55,000 museums, are analyzed.
 #
-In this database, {{{mow_prop_name_museum}}}% of museum names contain the term "museum" (or its equivalent in other languages), which indicates a substantial convention by founders to include the term museum in the name of their institution.[fn::While it would also be possible to construct inclusion in the MOW as an indicator of legitimacy, as it represents recognition of the organization as a museum by experts [[parencite:&Zuckerman_1999_illegitimacy]], preliminary investigations of the database indicated that it has been updated only sparsely in recent years; thereby inclusion in it (or the lack therefore) does not constitute an accurate measurement of the extent of an institutions' recognition as a museum.]
+In this database, {{{mow_prop_name_museum}}}% of museum names contain the term "museum" (or its equivalent in other languages), which indicates a substantial convention by founders to include the term museum in the name of their institution.[fn::While it would also be possible to construct inclusion in the MOW as an indicator of legitimacy, as it represents recognition of the organization as a museum by experts, preliminary investigations of the database indicated that it has been updated only sparsely in recent years; thereby inclusion in it (or the lack therefore) does not constitute an accurate measurement of an institutions' recognition as a museum.]
 #
 At the same time, for an association between name and survival to be attributed to the name, the name and other organizational characteristics cannot be linked too closely.
 #
-This seems to be the case for museums, as organizations are not subject to strong regulations to be considered a museums: 
+This seems to be the case for museums, as organizations are not subject to strong regulations to be considered a museum: 
 #
 The term "museum" is not a protected term in the US [[parencite:&Moore_2022_best p.205]] or European countries such as Germany [[parencite:&Museumsbund_ICOMDE_2006_standards p.4]], Denmark, Austria, Croatia or Finland [[parencite:&EGMUS_2024_reports]][fn::While I was not able to find concrete information on the naming regulations of museums for every country, I did not find any country where such naming regulation is present.].
 #
@@ -697,17 +701,19 @@ In such a largely unregulated field, names do not clearly reflect institutional 
 :ID:       e891980a-d6c2-400a-8770-238a1c68eb09
 :END:
 
-On a national level, density of private museum is calculated as the number of private museums per million population.
+On a national level, density of private museums is calculated as the number of private museums per million population.
 # 
-To measure competition on a local level, I first determine the coordinates of museum using the Google Maps API; the coordinates of museums which are not found that way (particularly those located in countries with limited Google presence such as South Korea, China and Russia) are searched manually (often using other map services such as Kakao Maps, Baidu Maps and Yandex Maps).
+To measure competition on a local level, I first determine the coordinates of museums using the Google Maps API; the coordinates of museums which are not found that way (particularly those located in countries with limited Google presence such as South Korea, China and Russia) are searched manually (often using other map services such as Kakao Maps, Baidu Maps and Yandex Maps).
 #
 For closed museums, which often are not included in the current map databases, coordinates are also determined via addresses mentioned on snapshots in the Wayback Machine.
-# 
-I then use the Global Human Settlement Layer [[parencite:&EC_2023_GHSL]] to estimate the number of private museums and population counts inside a radius of ten kilometers around each private museum for each year.
+#
+These coordinates are then used to calculate two measures that describe the local environment within a ten-kilometer radius around each museum for each year:
+#
+First, the number of other private museums and second the population counts using the Global Human Settlement Layer [[parencite:&EC_2023_GHSL]]. 
 #
 To be able to estimate both competition and population effects separately, I do not calculate densities as per capita rates, but include the local museum counts, local population in millions as well as an interaction between the two (alternative specifications are presented in the supplementary materials).
 #
-While this operationalization is limited to private museum in the neighborhood, rather than the more complete set of all museums private museums may compete with, it is by no means a rarity to find private museums within a 10 km radius, as in {{{pmyear_proxcnt10_geq0}}}% museum-years one or more private museums in the surroundings are observed. 
+While this operationalization is limited to private museums in the neighborhood, rather than the more complete set of all museums private museums may compete with, it is by no means a rarity to find private museums within a 10 km radius, as in {{{pmyear_proxcnt10_geq0}}}% museum-years one or more private museums in the surroundings are observed. 
 
 
 *** Control variables
@@ -718,13 +724,13 @@ A number of control variables are used:
 # 
 On the level of the founder, gender constitutes a time-invariant variable; with possible values being male, female and couple.
 #
-Women are a minority among private museums founders, thus from a typicality perspective [[parencite:&Rosch_1975_family]] museums by female founders would be expected to close more often as female founders would face greater difficulties in securing resources from third parties, primarily governments and corporate sponsors.
+Women are a minority among private museum founders, thus from a typicality perspective [[parencite:&Rosch_1975_family]] museums by female founders would be expected to close more often as female founders would face greater difficulties in securing resources from third parties, primarily governments and corporate sponsors.
 #
 However, women may also be particularly associated with philanthropic initiatives - in contrast to corporate activities [[parencite:&Milam_2013_artgirls]] - to such an extent that devaluation of female initiatives may not necessarily be present.
 
-On the level of museum, I control for whether a museum includes the name of the founder (e.g. "Liam's Gallery" includes the name of the founder).
+On the level of the museum, I control for whether a museum includes the name of the founder (e.g. "Liam's Gallery" includes the name of the founder).
 #
-As another property of the name, it might be indicative of the commitment founder, but it might also might support by third parties less attractive.
+As another property of the name, it might be indicative of the commitment founder, but it also might make support by third parties less attractive.
 
 #
 # Organizational transformation, such as change of authority has been to increase chances of closure both generally [[parencite:&Carroll_Khessina_2019_demography]] and in the case of private museums specifically ([[cite:&Walker_2019_collector p.234]]: "seldom do heirs share a similar passion or wish to take on the financial burden of maintaining private museum indefinitely").
@@ -737,9 +743,9 @@ As another property of the name, it might be indicative of the commitment founde
 
 External shocks might interrupt operations, which reduces income from tickets, as well as make other donors more hesitant to commit money in uncertain times.
 #
-However, museums, including private museums, might also be relatively resilient as they can adopt measures such as tightening their belt, additional fundraising, and expanding their marketing efforts [[parencite:&Geller_Salamon_2010_resilience]], which might bolster their resilience.
+However, museums might also be relatively resilient as they can adopt measures such as tightening their belt, additional fundraising, and expanding their marketing efforts [[parencite:&Geller_Salamon_2010_resilience]], which might bolster their resilience.
 #
-To account for two prevalent shocks in the recent decades, the Great Recession and the Covid-19 pandemic, I thus include two dummy variables for 2008/2009 and 2020/2021; respectively.
+To account for two prevalent shocks in the recent decades, the Great Recession and the Covid-19 pandemic, I thus include two dummy variables for 2008/2009 and 2020/2021.
 
 
 ** Results
@@ -759,7 +765,7 @@ Table {{{reftbl_t_sumstats}}} shows summary statistics for all variables.
 {{{ynkplt_p_surv}}}
 
 
-Before discussing the regression models, I provide a descriptive account on private museum closure using the hazard and survival functions which describe variation the closing risk over the museum life-course.
+Before discussing the regression models, I provide a descriptive account of private museum closure using the hazard and survival functions which describe (variation in) the closing risk over the museum life course.
 # 
 The hazard rate is a non-parametric function which describes the probability of exiting at age $t_i$ conditional on being alive, in the context of museum-years as units of analysis it can be formulated as $h(t_i) = \frac{d_i}{n_i}$, with $n_i$ as the number of units at risk at age $t_i$ and $d_i$ as the number of exits at age $t_i$.
 #
@@ -770,28 +776,28 @@ Figure {{{refplt_p_hazard}}} shows the hazard rate over time, figure {{{refplt_p
 #
 The hazard rate increases strongly from {{{meanhaz_upto_2}}} in the first two years, to {{{meanhaz_upto_5}}} in the first 5 years, to {{{meanhaz_8to30}}} at year 8, around which it then fluctuates, leading to an average hazard of {{{meanhaz_upto_30}}} for the first 30 years[fn::While it is possible to calculate the average hazard over longer periods (e.g. the overall average hazard rate is {{{meanhaz_upto_100}}}), for ages above 30 only few observations are available, which make these predictions rather uncertain.].
 # 
-The increase in the first years is likely explained by the fact that as the establishment of a museum requires considerable resources, their founders have allocated enough resources to keep the risk of closure minimal in the first years after opening.
+The increase in the first years is likely explained by the fact that as the establishment of a museum requires considerable resources, founders have allocated enough resources to keep the risk of closure minimal in the first years after opening.
 
 Such analysis can be used to estimate the average life expectancy of a private museum.
 #
-While only a fraction of all opened museums has closed ({{{pm_n_closed}}} out of {{{pm_n_used}}}), and even the complete survival function has not reached 0.5, under the assumption of average closing risk of {{{meanhaz_upto_8}}} in the first 8 years and {{{meanhaz_8to30}}} onwards, it is possible to predict the median life expectancy as approximately {{{median_life_expectancy}}} years (yet as only around half of this range is observed for most museums, the certainty of such measurement is clearly limited).
+While only a fraction of all opened museums has closed ({{{pm_n_closed}}} out of {{{pm_n_used}}}), and even the complete survival function has not reached 0.5, under the assumption of an average closing risk of {{{meanhaz_upto_8}}} in the first 8 years and {{{meanhaz_8to30}}} onwards, it is possible to predict the median life expectancy as approximately {{{median_life_expectancy}}} years (yet as only around half of this range is observed for most museums, the certainty of such measurement is clearly limited).
 
 **** comparison :ignhead:
 
 Calculating such survival statistics allows (to a degree) to assess whether private museums differ in their longevity from comparable institutions.
 #
-So far only a few studies has investigated museum closing rates, and these have focused on the United States, likely primarily due to data availability reasons: 
+So far only a few studies have investigated museum closing rates, and these have focused on the United States, likely primarily due to data availability reasons: 
 #
 Larger non-profits in the US have to file the IRS form 990 (or its variants) to maintain their tax-deductible status, and form 990 data is publicly available [[parencite:&Lecy_2023_core]].
 # 
-This data has been used in many studies of non-profit populations, and constitutes an effective comparison group for private museums as both share the same organizational form (non-profit) and unprofitable cultural sector environment.
+This data has been used in many studies of non-profit populations and constitutes an effective comparison group for private museums as both share the same organizational form (non-profit) and unprofitable cultural sector environment.
 #
 So far three studies have used this data to investigate museum closure by calculating hazard rates not as a function of age but of calendar year:
 - [[textcite:&Bowen_etal_1994_charitable]] investigate the closing of 501(c)(3) museums in the 1981-1991 time period and, based on 271 (9.8%) closures of a population of 2755, calculate average annual exit rates as 1.1% (p.103).
 - textcite:&Gordon_etal_2013_insolvency observe 35 closures based on 5,167 museum-years between 2000 and 2003 (p.368), resulting in an average annual closing rate of 0.68% (p.377)[fn::The difference to [[cite:&Bowen_etal_1994_charitable]] is likely due to exclusion of organizations with revenues below 150,000 USD.].
 - textcite:&Hager_2001_vulnerability has conducted the only study specifically on art museums (NTEE code A51); he observes 42 closures over a period of four years (1994-1997) from a starting population of 448 (p.383), corresponding to an average yearly closing rate of 2.4%, or around 1.9% under the more realistic assumption of effectively using a five-year time period.
 
-Constructing private museum closing rates in the same manner (as average of proportion closed each calendar year, rather than at each age) results in average closing rates of {{{yearhaz_all}}} overall, {{{yearhaz_from2010}}} for the period 2010-2011 and {{{yearhaz_allw}}} when weighing yearly closing proportions by the number of museums at risk.
+Constructing private museum closing rates in the same manner (as the average of proportion closed each calendar year, rather than at each age) results in average closing rates of {{{yearhaz_all}}} overall, {{{yearhaz_from2010}}} for the period 2010-2011 and {{{yearhaz_allw}}} when weighing yearly closing proportions by the number of museums at risk.
 #
 Private museum closing rates thus do not appear substantially higher than the range of possible values established by previous studies, and in particular not higher than the closing rate of the most direct comparison group of non-profit art museums by [[textcite:&Hager_2001_vulnerability]]. 
 
@@ -800,13 +806,13 @@ Private museum closing rates thus do not appear substantially higher than the ra
 # FIXME: shorten this to 1/2 sentences
 However, two limitations complicate such a comparison.
 #
-First, this measure of overall museum closing rates cannot take museum-level variables into account, thus direct comparability hinges on the assumption that on private museums display a similar distribution of survival-relevant attributes to US non-profit museums.
+First, this measure of overall museum closing rates cannot take museum-level variables into account, thus direct comparability hinges on the assumption that private museums display a similar distribution of survival-relevant attributes to US non-profit museums.
 #
 # More specifically, private museums might have such disproportionately high assets and/or revenues that the appropriate comparison group would not be the entire (art) museum population, but rather only its in wealthiest half, third or quarter, which in turn could be characterized by substantially higher survival rates (such a size difference likely explains the difference between the hazard rates of [[textcite:&Gordon_etal_2013_insolvency]] and [[textcite:&Bowen_etal_1994_charitable]], as the former only includes museums with operational revenues above 150,000 USD).
 #
 Secondly, as previous studies have focused exclusively on the US, survival rates for non-profits in other countries might differ, for example in particular in Europe one possible reason might be more public support for non-profits.
 #
-Additional analyses, reported in the supplementary materials, do not indicate a substantial influence of time-invariant country (or region) factors on private museum closing, however mortality of non-private museums might be stronger influenced by these country-level factors.
+Additional analyses, reported in the supplementary materials, do not indicate a substantial influence of time-invariant country (or region) factors on private museum closing, however mortality of non-private museums might be more strongly influenced by these country-level factors.
 #
 # Thirdly, a number of limitations of form 990 data might lead to inaccurate mortality estimates in the first place.
 # # 
@@ -831,17 +837,17 @@ Coefficients are interpreted as log hazard ratios, i.e. as multipliers of the ba
 **** Control Variables
 
 #
-Neither gender of the founder, inclusion of the founder name in the museum name nor external shocks (the Great Recession and the Covid-19 Pandemic) are associated with significantly higher closing rates.
+Neither gender of the founder, inclusion of the founder's name in the museum name nor external shocks (the Great Recession and the Covid-19 Pandemic) are associated with significantly higher closing rates.
 # 
-Given the non-significant gender difference, it can be expected that the population of private museums founders will remain predominantly male, unless a strong increase in museum founding by women takes place.
+Given the non-significant gender difference, it can be expected that the population of private museum founders will remain predominantly male, unless a strong increase in museum founding by women takes place.
 # 
 At the same time, this finding also provides no evidence that female founders face gender-specific challenges, at least not to an extent that these decrease the survival prospects of their private museums.
 #
-Museums whose name contain the name of the founder face no significantly elevated risk of closure, which provides little evidence that founders face greater difficulties to secure a long-term future for their museums by choosing to emphasize their personal contribution.
+Museums whose names contain the name of the founder face no significantly elevated risk of closure, which provides little evidence that founders face greater difficulties in securing a long-term future for their museums by choosing to emphasize their personal contribution.
 #
 A possible explanation might be that even when other parties do indeed feel less inclined to contribute, these gaps are filled by a stronger commitment of the founder, who having committed her name to the initiative, wants to keep the museum open event at great costs.
 # 
-The insignificance of the coefficients of the external shocks indicate that museums are overall relatively resilient; possibly unlike other types of art organizations with lower assets and higher reliance on earned incomes [[parencite:&Bowen_etal_1994_charitable p.102]].  
+The insignificance of the coefficients of the external shocks indicates that museums are overall relatively resilient; possibly unlike other types of art organizations with lower assets and higher reliance on earned incomes [[parencite:&Bowen_etal_1994_charitable p.102]].  
 
 # 
 # inclusion of founder name is significantly associated with mortality rates.
@@ -864,12 +870,12 @@ While the point estimate is positive ({{{coef_founder_dead_binary}}}, correspond
 
 ***** artnews ranking :ignhead:
 
-Coefficients for founder reputation, measured via inclusion in the ARTnews ranking, are not statistically significant.
+Coefficients for founder reputation, measured via inclusion in the ARTnews ranking, are also not statistically significant.
 # Other founder-level characteristics also do not indicate that founder-related variables are strongly associated to museum closure, as the coefficients of ARTnews ranking inclusion (measuring reputation) are not statistically significant.
 #
 Museums whose founders are not included in the ARTnews collector ranking (reference category) are the least likely to close, followed by museums whose founders are included ({{{coef_an_inclusionincluded_perc}}}% elevated closing risk) and by founders who were included at some point but are no longer included ({{{coef_an_inclusiondropped_perc}}}% elevated closing risk).
 #
-However as none of the differences are statistically significant, they provide little support for hypothesis 1b.
+However as none of the differences are statistically significant, they provide little support for H1b.
 #
 # It is also worth to point out that the order of the categories does not fully correspond to the expected order, according to which museums whose collectors are not included would be more likely to close than collectors who are.
 # #
@@ -880,24 +886,24 @@ However as none of the differences are statistically significant, they provide l
 ***** founder conclusion :ignhead:
 
 
-Taken together, the inability to explain private museum closing with the death of founder and their exclusion from a prestigious ranking question the hypothesized central role of the founder (Hypothesis 1).
+Taken together, the inability to explain private museum closing with the death of the founder and their exclusion from a prestigious ranking question the hypothesized central role of the founder (Hypothesis 1).
 #
 In other words, so far little evidence points to low diversification, i.e. reliance on founders, as a substantial source of involuntary closing risk for private museums.
 #
 
 **** Museum Identity (H2)
 
-Museums which include the term "collections" in their name are the least likely to close ({{{coef_slfidfcncollection_exp}}} times the rate of museums with the name "museum", while those with the term "foundation" experience a closing rate elevated by {{{coef_slfidfcnfoundation_perc}}}%; yet both of these differences are statistically significant.
+Museums which include the term "collection" in their name are the least likely to close ({{{coef_slfidfcncollection_exp}}} times the rate of museums with the name "museum", while those with the term "foundation" experience a closing rate elevated by {{{coef_slfidfcnfoundation_perc}}}%; yet both of these differences are statistically significant.
 #
 However, institutions which include neither of these are the most likely to close, and have mortality rates almost three times as high ({{{coef_slfidfcnother_perc}}}%) than institutions including the term "museum".
 # 
 The usage of unconventional names might reflect adherence to museum standards which makes museums more understandable and familiar to third parties (e.g. audiences, other museums, companies or the government) and thereby facilitates interactions which are beneficial for long-term survival (e.g. attracting visitors, cooperations, sponsorships or subsidies).
 # 
-However, as founders can choose the name of their museum arbitrarily, they might choose a name without reference to organizational forms associated with perpetuity precisely because their intention is not an institution enduring in perpetuity but rather a more temporally bounded project.
+However, as founders can choose the name of their museum arbitrarily, they might choose a name without reference to organizational forms associated with perpetuity precisely because their intention is not an enduring institution but rather a more temporally bounded project.
 #
 Some support for the latter interpretation is given by the fact that two of the three museums for which [[textcite:&Velthuis_Gera_2024_fragility]] identify a temporal intention as the closing reason do not self-identify as museum, collection or foundation.
 #
-Temporal intentions are however the exceptions among closing reasons identified by [[textcite:&Velthuis_Gera_2024_fragility]] (p.6), and as similarly only a fraction of private museum chooses such a name ({{{N_slfid_other}}} museums, or {{{perc_slfid_other}}}%), the overall proportion of these types of voluntary closures compared to all closures is presumably limited.
+# Temporal intentions are however the exceptions among closing reasons identified by [[textcite:&Velthuis_Gera_2024_fragility]] (p.6), and as similarly only a fraction of private museum chooses such a name ({{{N_slfid_other}}} museums, or {{{perc_slfid_other}}}%), the overall proportion of these types of voluntary closures compared to all closures is presumably limited.
 # oof is actually more than I thought.. FIXME
 
 
@@ -915,7 +921,7 @@ Country-level measures of the private museum population show a marginally signif
 {{{ynkplt_p_pred_heatmap}}}
 
 
-At the local level, the number of private museum and population numbers predict survival chances as the main effects of population and number of private museums as well as its interaction are significant.
+At the local level, private museums and population numbers predict survival chances as the main effects of population and number of private museums, as well as its interaction are significant.
 #
 The particular pattern however is complex:
 #
@@ -923,7 +929,7 @@ As both main terms are positive and the interaction negative, at low values incr
 #
 Thus, for population values of 0 to {{{popm_circle10_marg0}}} million people, an increase in the number of private museums corresponds to an increase in mortality (bottom half of figure {{{refplt_p_pred_heatmap}}}), which provides support for hypothesis 3 according to which competition leads to museum closure, in particular as this range includes {{{N_zonebottom}}} museums years, or {{{perc_zonebottom}}}% of the dataset. 
 #
-Yet at the same time, at low private museums numbers (0 to 3 private museums, left half of figure {{{refplt_p_pred_heatmap}}}), increases in population also increase mortality; this range also includes a large number of museum-years ({{{N_zoneleft}}} museum years; {{{perc_zoneleft}}}% of the data).
+Yet at the same time, at low private museum numbers (0 to 3 private museums, left half of figure {{{refplt_p_pred_heatmap}}}), increases in population also increase mortality; this range also includes a large number of museum-years ({{{N_zoneleft}}} museum years; {{{perc_zoneleft}}}% of the data).
 #
 Such a relationship is unexpected insofar as it is unclear why a larger potential audience would be associated with a higher risk of closure.[fn::Alternative approaches of modeling competition are discussed in the supplementary materials, but cannot answer this question.]
 #
@@ -931,17 +937,17 @@ A possible explanation might be that collectors in less densely populated areas 
 #
 Alternatively, areas with high population and low private museum numbers might more generally lack cultural infrastructure; which one could see supported by closures in Jakarta, Istanbul and Mexico City, but less so by closings in Paris, Tokyo or Madrid.
 #
-However, low private museums numbers indicating lack of cultural infrastructure might also explain the decrease in mortality associated with increases in private museum numbers at high population values (figure {{{refplt_p_pred_heatmap}}}, upper half), as such pattern does not correspond to that predicted by competition.
+However, low private museums numbers indicating a lack of cultural infrastructure might also explain the decrease in mortality associated with increases in private museum numbers at high population values (figure {{{refplt_p_pred_heatmap}}}, upper half), as such pattern does not correspond to that predicted by competition.
 #
 # maybe add something here that at high pop numbers competition might be harder to identify
 # 
-More in line with expectation is however the association between increases of population numbers and lower mortality at higher numbers of private museums (right half), as it indicates that audiences can facilitate museum survival.
+More in line with expectations is however the association between increases in population numbers and lower mortality at higher numbers of private museums (right half), as it indicates that audiences can facilitate museum survival.
 
 
-Taken together, figure {{{refplt_p_pred_heatmap}}} indicates two niches as particular supportive of private museum survival, on the one hand remote areas with low population and no competing private museums, and on the other densely populated areas with at least some other private museums.
+Taken together, figure {{{refplt_p_pred_heatmap}}} indicates two niches as particularly supportive of private museum survival, on the one hand, remote areas with low population and no competing private museums, and on the other densely populated areas with at least some other private museums.
 
 
-While not all associations correspond to predictions made by resource dependence, the most direct measurement of increased competition, number of private museums in the local surrounding, is associated with higher closing chances for a large part of the sample, which in turn supports the substantial role of competition (H3).
+While not all associations correspond to predictions made by resource dependence, the most direct measurement of increased competition, the number of private museums in the local environment, is associated with higher closing chances for a large part of the sample, which in turn supports the substantial role of competition (H3).
 
 
 
@@ -953,34 +959,47 @@ While not all associations correspond to predictions made by resource dependence
 
 *** discusson :ignhead:
 
-Previously the dozens of closures have been seen as indicator of their vulnerability and short-livedness [[parencite:&Adam_2020_close]], however this analysis shows the importance studying closing not in isolation but in comparison to both non-closures and closures of comparable institutions.
+# Previously the dozens of closures have been seen as indicator of their vulnerability and short-livedness [[parencite:&Adam_2020_close]], however this analysis shows the importance of studying closing not in isolation but in comparison to both non-closures and closures of comparable institutions.
+# #
+# While the booming numbers of private museums themselves have received substantial attention, less consideration has been given to the fact that large populations can generate dozens of closures without requiring high closing rates, especially when closures are considered over a span of several years or decades.
+# #
+# In other words, the sheer size to which the private museum population has grown over the last decades has made it all but inevitable that some of them would close, and do so after only a few years.
+# #
+# # Based on the current analysis, private museums will continue to close in the years to come; at hazard rates of around 1% on average a handful of closures every year are to be expected.
+
+
+# Comparing private museums closures to closures of other organizational form advances the understanding of the sustainability of this new organizational form.
+# #
+# While private museums do close, the comparison to previous studies of museum closing rates provides no evidence that dependence on single founders constitutes a less stable organizational form than reliance on less centralized foundations, associations or corporate sponsorship.
 #
-While the booming numbers of private museums themselves have received substantial attention, less consideration has been given to the fact that large populations can generate dozens of closures without requiring high closing rates, especially when closures are considered over a span of several years or decades.
-#
-In other words, the sheer size to which the private museum population has grown over the last decades has made it all but inevitable that some of them would close, and do so after only a few years.
-#
-Based on the current analysis, private museums will continue to close in the years to come; at hazard rates of around 1% on average a handful of closures every year are to be expected.
 
 
 
-Comparing private museums closures to closures of other organizational form advances our understanding of the sustainability of this new organizational form.
-#
-While private museums do close, the comparison to previous studies of museum closing rates provides no evidence that dependence on single founders constitutes a less stable organizational form than reliance on less centralized foundations, associations or corporate sponsorship.
-#
-Multiple reasons might be the at play that mitigate this risk of low diversification.
-#
-First, it might take more commitment to open a museum as an individual or couple compared to less involved art patronage of being a board member in existing institutions or donating works, which would result in private museums founders being more motivated to secure the continued existence of their institutions.
+Whereas previous research has identified the reliance on the founder as a key vulnerability, this study found little support for such a dependency.
 # 
-Furthermore, the centrality of the founder might leave little room to question who is responsible to provide additional funds in times of financial difficulties, whereas in organizations without a central figure each member may feel less responsible.
+Multiple reasons might be at play that mitigate this risk of low diversification.
 #
-It might also be such commitment that leads founder to plan the future of their museum to such an extent that their death is not significantly associated with involuntary closing.
- 
-
-
-
-While so far little evidence points toward low diversification, i.e. reliance on the founder, as a key vulnerability of private museums to involuntary closures, the centrality of the founder may be more pronounced in voluntary closures. 
+First, it might require more commitment from collectors to open a museum compared to less involved art patronage of being a board member in existing institutions or donating works, which would result in private museum founders being more motivated to secure the continued existence of their institutions.
+# 
+Furthermore, the centrality of the founder might leave little uncertainty as to who is responsible for providing additional funds in times of financial difficulties, whereas in organizations without a central figure each member may feel less responsible.
 #
-Indicated by unconventional naming choice, a subset of founders might from the very beginning envision the museum as temporary.
+It might also be such commitment that leads founders to plan the future of their museum e.g. via an endowment to such an extent that their death is not significantly associated with involuntary closing.
+
+
+
+Similarly, characterizations of private museums as generally fragile [[cite:&Adam_2020_close;&Bechtler_Imhof_2018_future]] are not supported here either.
+#
+While the descriptive comparison to other studies allows only preliminary conclusions, it still shows the importance of considering closings not in isolation, but in comparison to both non-closures and closures of comparable institutions.
+#
+In particular, the context of the growing private museum population deserves consideration, as large populations can generate dozens of closures without requiring high closing rates, especially when closures are considered over a span of several years or decades.
+
+
+
+
+While so far little evidence points toward reliance on the founder as a key vulnerability of private museums to involuntary closures, the centrality of the founder may be more pronounced in voluntary closures.
+# low diversification, i.e.
+#
+Indicated by unconventional naming choices, a subset of founders might from the very beginning envision the museum as temporary.
 #
 On the other hand, higher closing rates for unconventionally named museums might reflect absence of recognition and support by third parties in the environment.
 #
@@ -988,7 +1007,7 @@ A dimension where the influence of the environment can however be ascertained wi
 #
 While the overall relationship is complex, for the majority of private museums increases in both variables are associated with higher closing rates.
 #
-Whereas it is plausible that the association between higher institution counts and closing rates reflects competitive pressures, it is less obvious what may lay behind observing a positive association behind larger population and closing risk. 
+Whereas it is plausible that the association between higher institution counts and closing rates reflects competitive pressures, it is less obvious what may lay behind observing a positive association between larger population and closing risk. 
 
 
 
@@ -997,13 +1016,12 @@ Whereas it is plausible that the association between higher institution counts a
 
 
 
-*** Limitations
-
+*** Limitations and Future Research
 
 **** little founder death :ignhead:
 A number of limitations are worth considering:
 # 
-So far only a small fraction ({{{n_founder_dead}}} museums, {{{perc_founder_dead}}}%) of museums has experienced the death of their founder, one of the primary reasons hypothesized to lead to the private museum closure. 
+So far only few museums have experienced the death of their founder ({{{n_founder_dead}}} museums, {{{perc_founder_dead}}}%), one of the primary reasons hypothesized to lead to the private museum closure. 
 #
 While so far these museums have not seen significantly elevated closing risks, these estimates will become more precise as more founders pass away.
 # 
@@ -1011,7 +1029,7 @@ As the currently large confidence interval (figure {{{refplt_p_surv_death}}}) fo
 #
 # This research shows that while it is important to use theory to predict relationships, the systematic empirical investigation of these should not be relegated either
 #
-At the same time, it is also possible that private museums are generally less dependent on a single person (or couple) than has been assumed, and have in fact become institutionalized to an extent that most heirs of founders feel as motivated to continue the original founders' efforts as these founders themselves.
+At the same time, it is also possible that private museums are generally less dependent on a single founder than has been assumed, and have in fact become institutionalized to an extent that most heirs feel motivated to continue the original founders' efforts.
 
 
 # **** comparison limited to american NPOs :ignhead:
@@ -1038,23 +1056,21 @@ The primary reason for this is data availability.
 #
 While centralized non-profit financial information is available for American non-profits through the IRS/NCCS files, the much larger private museum population in the rest of the world is not subject to similar reporting requirements.
 #
-The effort to compile such information on a global scale ranges from extremely challenging (harmonizing different reporting standards, language barriers) to outright impossible for institutions who do not even (have to) report public financial information.
+The effort to compile such information on a global scale ranges from extremely challenging (harmonizing different reporting standards and language barriers) to outright impossible for institutions that do not even (have to) report public financial information.
 #
 Similarly, other museum characteristics which were not considered here, such as museum size, facilities, as well as marketing and outreach activities, might be related to long-term survival prospects.[fn::While the original data collection included the assessment of various museum characteristics, such as floor and collection size, facilities, and cooperations, it became clear during data analysis that the data collected was unsuitable to construct accurate indicators from these findings due to difficulty in assessing them in many cases. Especially for closed museums data collection proved difficult, as in many cases websites had been shut down, and while in many cases snapshots of the main website were available in the Wayback machine, less central pages (such as those with information about facilities and activities), were archived much less frequently, and sometimes inaccessible despite being archived due to changes in web technology (such as the retirement of Adobe flash). Analyses based on this data are reported in the supplementary materials.]
 #
-As such, private museums remain relatively untransparent, which does not prevent, but to some extent limits the identification of risk factors. 
+As such, private museums remain relatively intransparent which to some extent limits the identification of risk factors. 
 
 
 **** no transformation :ignhead:
 For this study, I only investigated the occurrence of closure events.
 #
-However, private museums can stop existing as private museums not just by closing down, but also by being transformed into other organizational forms.
-#
-One way in which this can happen is when other parties, such as local governments, other philanthropists, foundations, or corporations become substantially involved in the ownership, governance and/or funding of the museum.
+However, private museums can stop existing as private museums not just by closing down, but also by being transformed into other organizational forms as a consequence of involvement of local governments, other philanthropists, foundations, or corporations in the ownership, governance or funding of the museum.
 #
 Sometimes this involves changes in the composition of the board of directors (or equivalent), with new parties gaining seats and hence influence in decision-making, thereby diminishing the private character of the museum to an extent that it no longer fits the working definition.
 #
-Museums which experienced this trajectory have been excluded from the analysis as explorative investigation showed that it was not possible to consistently determine the date of such transitions.[fn:: Consequently they are excluded from the analysis all together, and thus also not contributing to the hazard rate for closing, despite being entities at risk for closing for at least some time. However, as their numbers are limited to {{{pmdb_n_nlpm}}} entries in the database, the bias this introduces into closing risks is likely not substantial.]
+Museums which experienced this trajectory have been excluded from the analysis as explorative investigation showed that it was not possible to consistently determine the date of such transitions.[fn:: Consequently they are excluded from the analysis altogether, and thus also not contributing to the hazard rate for closing, despite being entities at risk for closing for at least some time. However, as their numbers are limited to {{{pmdb_n_nlpm}}} entries in the database, the bias this introduces into closing risks is likely not substantial.]
 #
 The main issues that made the determination of the date impossible was the intransparency of these organizations, the gradual process of the transition, and the substantial amount of time that had passed since.
 # 
@@ -1063,11 +1079,11 @@ The possibility of other outcomes than survival and closures has been investigat
 #
 [[textcite:&Walker_2019_collector]] argues that in the case of Germany, private museum founders turn to the state to ensure the survival of their projects in the form of public-private partnerships.
 #
-Investigating this process of transformation into a different organizational form thus provides fruitful avenue for further research. 
+Investigating this process of transformation into a different organizational form thus provides fruitful avenues for further research. 
 
 
 **** environment :ignhead:
-While this study has already included measures of both the national and local environment, the ability to clearly observe spatial museum location allows measuring environmental influences in greater detail.
+Finally, while this study has already included measures of both the national and local environment, the ability to clearly observe spatial museum location allows measuring environmental influences in greater detail.
 #
 For once, so far competition has been limited to other private museums, but geocoding of a wider range of institutions would lead to a more encompassing assessment of competitive dynamics.
 #
