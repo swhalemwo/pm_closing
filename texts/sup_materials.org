@@ -372,7 +372,7 @@ In particular, dummy variables are added for UN region code (with a minor modifi
 #
 For models with country-dummies, country-level private museum density variables are removed as the high collinearity led to unreasonably high country-dummy estimates.
 #
-As many countries and some UN subregions have too few private museums for the model to converge correctly, the dataset is reduced to include only regions or countries with 10 or more private museums (in the case of country2, 15 private museums).
+As many countries and some UN subregions have too few private museums for the model to converge correctly, the dataset is reduced to include only regions or countries with 10 or more private museums.
 #
 To identify whether any change in coefficients is due to addition of variables or exclusion of cases, a separate model with the same restricted sample but without region/country dummies is included.
 
@@ -390,7 +390,7 @@ Taken together, these results indicate little support for an importance of time-
 
 Figure {{{refplt_p_vrblcvrg_ratio}}} shows the variable coverage by whether a museum is open or closed at the status of data collection (2020-2022).
 #
-Not only is coverage on most variables far from complete, which would already make it difficult to construct indicators of them, but variable coverage is substantially worse for closed museums than for open museums, especially variables related to the collection, operation, relations to other actors and social media.
+Not only is coverage on most variables far from complete, which would already make it difficult to construct indicators of them, but variable coverage is substantially worse for closed museums than for open museums, especially for variables related to the collection, operation, relations to other actors and social media.
 #
 In principle it is possible to treat absence of evidence as evidence of absence, and assume that not measuring the presence of e.g. temporary exhibitions, educational events, restaurants or cooperations means that these are absent.
 
