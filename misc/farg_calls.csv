@@ -121,6 +121,8 @@ gt_reg_coxph_timecfg,l_mdls,l_mdls
 gt_reg_coxph_timecfg,l_mdlnames,l_mdlnames_timecfg
 gt_reg_coxph_dimred,l_mdls,l_mdls
 gt_reg_coxph_dimred,l_mdlnames,l_mdlnames_dimred
+gt_reg_coxph_addgns,l_mdls,l_mdls
+gt_reg_coxph_addgns,l_mdlnames,l_mdlnames_addgns
 gt_reg_coxph,l_mdls,l_mdls
 gt_reg_coxph,l_mdlnames,l_mdlnames
 gd_inflcases,rx,rx
