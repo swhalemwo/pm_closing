@@ -440,6 +440,18 @@ gdtbl("t_reg_coxph")
 ## gd_reg_coxph(l_mdls$r_more, "r_more")
 
 
+## export data
+
+## yeet identifying data
+l_pmdbcols_idfng <- .c(name, insta_handle,  founder_name, lat, long, address_formatted, mission, website)
+
+dt_pmdb_xp <- dt_pmdb[, .SD, .SDcols = setdiff(names(dt_pmdb), l_pmdbcols_idfng)]
+dt_pmcpct
+dt_pmyear
+
+DIR_DATAXP <- "/home/johannes/Dropbox/phd/papers/closing/dataxp/"
+
+map(c("dt_pmdb_xp", "dt_pmcpct", "dt_pmyear"), ~fwrite(get(.x), sprintf("%s%s.csv", DIR_DATAXP, .x)))
 
 stop("everything is DONE")
 
