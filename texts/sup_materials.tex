@@ -1,4 +1,4 @@
-% Created 2024-10-07 ma 14:12
+% Created 2024-10-16 wo 12:28
 % Intended LaTeX compiler: pdflatex
 \documentclass[12pt]{article}
 
@@ -136,11 +136,11 @@
 \listfiles
 
 \setlength{\parindent}{1.2cm}
-\author{Johannes Aengenheyster}
+\author{Johannes }
 \date{\today}
 \title{}
 \hypersetup{
- pdfauthor={Johannes Aengenheyster},
+ pdfauthor={Johannes },
  pdftitle={},
  pdfkeywords={},
  pdfsubject={},
@@ -182,40 +182,79 @@
 \end{table}
 
 It is possible to construct an alternative measure of founder death by partitioning the time after the death in a short-term and long-term period; the short-term period might then capture the disruption by the founder, whereas the long-term period would only be reached by museums who have successfully acquired alternative funding models and are hence relatively viable.
-
 However, the choice of choosing a cut-off point between the short- and long-term periods is relatively arbitrary.
 
 
 Table \ref{tbl:t_reg_coxph_deathcfg} shows coefficients of both periods with different cut-off points.
-
 While the coefficient in the short-term period is consistently higher than both the overall death coefficient and the long-term period coefficients, so far the evidence is inconclusive as only few cases are statistically significant\footnote{P-values are also not adjusted for multiple tests}.
-
 Furthermore, such a shock passes quickly relative to the predicted median lifetime of museums of 52 years, thus "giving" the founder death little time to lead to many museum closures. 
-
 Considering the raw numbers underlying the death effect estimates illustrates the uncertainty involved in determining the effect of the death of the founder on closing: 
-
 While 47 private museums have seen the death of their founders, only 3 of these have closed in the following 5 years; given such low numbers it cannot be ruled out that the statistical significance in a few configurations of founder death time results from random fluctuations rather than an underlying pattern.
+\subsection*{Interaction of Founder name in Museum name and founder death}
+
+
+% latex table generated in R 4.3.3 by xtable 1.8-4 package
+% Mon Sep 30 14:43:50 2024
+\begin{table}[ht]
+\centering
+\begin{tabular}{p{0mm}lD{)}{)}{8)3}D{)}{)}{8)3}}
+  \hline 
+ \multicolumn{1}{l}{} & \multicolumn{1}{l}{Variable} & \multicolumn{1}{l}{r\_pop4} & \multicolumn{1}{l}{r\_founder\_name\_death\_int}\\ 
+ \hline
+  \multicolumn{4}{l}{\textbf{Founder}} \\ 
+ & Gender - Female & -.04 \; (0.34) & -.02 \; (0.34) \\ 
+   & Gender - Couple & -.14 \; (0.32) & -.12 \; (0.32) \\ 
+   & Founder died & .28 \; (0.43) & .73 \; (0.75) \\ 
+   \multicolumn{4}{l}{\textbf{Museum}} \\ 
+ & Self-Identification - Foundation & .20 \; (0.41) & .21 \; (0.41) \\ 
+   & Self-Identification - Collection & -.45 \; (0.54) & -.47 \; (0.54) \\ 
+   & Self-Identification - Other & 1.09 \; (0.30)^{***} & 1.08 \; (0.30)^{***} \\ 
+   & AN Ranking - Included & .19 \; (0.34) & .19 \; (0.34) \\ 
+   & AN Ranking - Dropped & .46 \; (0.50) & .48 \; (0.50) \\ 
+   & Founder name in Museum name & .05 \; (0.28) & .09 \; (0.29) \\ 
+   & Founder name in Museumm name * Founder died &  & -.62 \; (0.90) \\ 
+   \multicolumn{4}{l}{\textbf{Environment}} \\ 
+ & PM density (country) & .65 \; (0.34) & .64 \; (0.34) \\ 
+   & PM density$^{2}$ (country) & -.03 \; (0.02) & -.03 \; (0.02) \\ 
+   & Pop. (millions) within 10km & .27 \; (0.09)^{**} & .27 \; (0.10)^{**} \\ 
+   & Nbr PM within 10km & .26 \; (0.08)^{***} & .27 \; (0.08)^{***} \\ 
+   & Nbr PM (10km) * Pop (10km) & -.09 \; (0.03)^{**} & -.09 \; (0.03)^{**} \\ 
+   & Great Recession (2008/09) & -1.59 \; (1.01) & -1.59 \; (1.01) \\ 
+   & Covid Pandemic (2020/21) & .42 \; (0.29) & .41 \; (0.29) \\ 
+   \hline
+ & Museums & 503 & 503 \\ 
+   & Museum-years & 6096 & 6096 \\ 
+   & Closures & 68 & 68 \\ 
+   & log. Likelihood & -339.68 & -339.46 \\ 
+   & AIC & 711.35 & 712.92 \\ 
+   & BIC & 746.87 & 750.65 \\ 
+   \hline 
+ \multicolumn{4}{l}{\footnotesize{standard errors in parantheses.\textsuperscript{***}p $<$ 0.001;\textsuperscript{**}p $<$ 0.01;\textsuperscript{*}p $<$ 0.05.}} \\ 
+\end{tabular}
+\caption{Cox PH regression models with additional specifications} 
+\label{tbl:t_reg_coxph_addgns}
+\end{table}
+
+While private museums generally do not experience a significantly higher risk of closing after the death of their founders, such effect might be present for a subgroup.
+The most likely candidate for this would be Museums whose name include the name of the founder, as including the founder name in the museum might indicate disproportionate commitment by the founder (which would be absent after their death) as well as disincentivize third parties to contribute.
+To investigate this possibility, an interaction between Founder death and inclusion of Founder name in museum name is added, results are presented in table \ref{tbl:t_reg_coxph_addgns}.
+As both the main effects and the interaction are not significant, the effect of the founder's death on a musuem's closing risk does not significantly differ between museums which do include their founder's name in their name and those who do not. 
 \subsection*{Alternative competition specifications}
 
 
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=18cm]{../figures/p_pred_heatmap_alt.png}
+\includegraphics[width=18cm]{../figures/p_pred_heatmap_alt.pdf}
 \caption{\label{fig:p_pred_heatmap_alt}Prediction Heatmap of Alternative model specifications}
 \end{figure}
 
 
 Alternative Specifications of competition exist.
-
 First, it is possible to argue that the primary mechanism through which private museums compete with each other is by limiting each other's audience.
-
 This specification leads to the construction of the Audience variable, which describes the number of people in the 10 km surrounding by the number of private museums present.
-
 Under this assumption, the situation of a private museum which is alone in an environment of 1 million people is equivalent to one in an environment of 3 million people with 2 other private museums, as each museums is "assigned" a pool of 1 million people.
-
 Secondly, one might argue that the competition between private museums is scaled by the amount of people, which corresponds to specifying competition as the number of other private museums per (million) population.
-
 In this case, the absence of other private museums assumes absence of competition, regardless of the audience size.
 
 \begin{landscape}
@@ -266,11 +305,8 @@ In this case, the absence of other private museums assumes absence of competitio
 \end{landscape}
 
 These while it would be possible for these different specifications to lead to similar interpretations, in practice they diverge substantially (table \ref{tbl:t_reg_coxph_env}).
-
 Using Private museum density (model 2 and 3 for linear and log-transformed audience, figure \ref{fig:p_pred_heatmap_alt} bottom left), the general conclusion would be that (logged) competition increases mortality as predicted closing chance is highest in areas of low population and large private museum populations.
-
 However, using audience (models 4 and 5, figure \ref{fig:p_pred_heatmap_alt} bottom right) leads to the opposite conclusion, as higher audience is associated with higher mortality; predicted closing chance is highest for areas of low numbers of private museums and large populations.
-
 While it is beyond the scope of the paper to explore the origin of these diverging perspectives in detail, it is worth pointing out that the main specification of private interacted private museum and population counts captures both of these relationships, which arguably makes it preferable for its encompassingness.
 \subsection*{Alternative sample specifications}
 
@@ -319,11 +355,8 @@ While it is beyond the scope of the paper to explore the origin of these divergi
 \end{table}
 
 To investigate the robustness of the coefficients across different values, table \ref{tbl:t_reg_coxph_density} shows how coefficients according to sample restrictions. 
-
 In model 1, only museums are included which are located in areas with the highest value combination of number and private museums and population, i.e. museums located in an environment of less than 2 million people and 0 or 1 other private museums (the "countryside").
-
 In model 2, the "countryside" is excluded.
-
 However, both these models are not reliable, as they do not properly converge (indicated by extremely large coefficients in both models).
 \subsection*{Alternative time range specifications}
 
@@ -369,7 +402,6 @@ However, both these models are not reliable, as they do not properly converge (i
 \end{table}
 
 Table \ref{tbl:t_reg_coxph_timeslice} investigates whether relationships have substantially changed over time.
-
 However, subsetting the dataset to different year ranges shows general consistency of the main findings, in particular insignificant coefficients for the founder's death, gender, Artnews ranking variables, inclusion of founder name in museum name, positive and significant coefficients for self-identification as other, population and private museum numbers, and a significant negative interaction between private museum numbers and population.
 \subsection*{Inclusion of Exhibition data}
 
@@ -418,21 +450,13 @@ However, subsetting the dataset to different year ranges shows general consisten
 \end{table}
 
 It is also possible to include an indicator whether museums have had exhibitions of contemporary art.
-
 For this the database of Artfacts is used.
-
 It is not included in the main model as it might reflect resources (with larger museums being more likely to organize exhibitions), which would then influence the coefficients of other variables. 
-
 Controlling for the mechanism (or a proxy of it) would then lead to coefficients corresponding to comparisons where resources are equal.
-
 Alternatively, exhibitions could enhance the reputation of museums, as it might lead to higher recognition among third parties such as sponsors and governments of the public good the museum provides.
-
 Temporary exhibitions might also be a way to attract larger audiences, but as museum operations are unprofitable, the ticket revenues likely do not lead to a better financial situation.
-
 To investigate the role of exhibitions anyways, table \ref{tbl:t_reg_coxph_af} includes next to the main model two models with different exhibition specifications.
-
 "Exhibition any" is a time-invariant indicator measuring whether Artfacts has ever recorded this museum as organizating an exhibition, "Exhibition any last 5 years" is a time-varying variable indicating whether an exhibition has been taken place in the previous 5 years.
-
 Both coefficients are not significant, and do not substantially change the coefficients of other variables. 
 \subsection*{Inclusion of regional indicators}
 
@@ -508,52 +532,44 @@ Both coefficients are not significant, and do not substantially change the coeff
 \end{landscape}
 
 As private museum closing might depend on particular country- or region-level factors, table \ref{tbl:t_reg_coxph_reg} shows a number of Cox Proportional Hazard regression models results with different sets of dummy variables.
-
 In particular, dummy variables are added for UN region code (with a minor modification of splitting the Americas into North and Latin America according to the UN subregion codes and reference category of Africa), the UN subregion code itself (with reference category of Northern America), as well as country level (with reference category of United States).
-
 For models with country-dummies, country-level private museum density variables are removed as the high collinearity led to unreasonably high country-dummy estimates.
-
-As many countries and some UN subregions have too few private museums for the model to converge correctly, the dataset is reduced to include only regions or countries with 10 or more private museums (in the case of country2, 15 private museums).
-
+As many countries and some UN subregions have too few private museums for the model to converge correctly, the dataset is reduced to include only regions or countries with 10 or more private museums.
 To identify whether any change in coefficients is due to addition of variables or exclusion of cases, a separate model with the same restricted sample but without region/country dummies is included.
 
 
 None of the models show a significant region or country dummy variables, nor substantial changes of the coefficients of the main predictors (a minor change is that the addition of country dummies results in a significant coefficient for the Covid-19 pandemic).
-
 While log-likelihood decreases by definition, model fit indices (AIC and BIC) that penalize inclusion of additional variables indicate worse fit for models with region/country dummies, except in the case of the AIC for the inclusion of UN subregion dummies, where a small improvement is observed.
-
 Taken together, these results indicate little support for an importance of time-invariant contextual factors on the level of the region or country on private museum survival. 
 \subsection*{Measurement of museum-level variables}
 
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=18cm]{../figures/p_vrblcvrg_ratio.png}
+\includegraphics[width=18cm]{../figures/p_vrblcvrg_ratio.pdf}
 \caption{\label{fig:p_vrblcvrg_ratio}PMDB variable coverage (abs/rel prop) by museum status and variable group}
 \end{figure}
 
 Figure \ref{fig:p_vrblcvrg_ratio} shows the variable coverage by whether a museum is open or closed at the status of data collection (2020-2022).
-
-Not only is coverage on most variables far from complete, which would already make it difficult to construct indicators of them, but variable coverage is substantially worse for closed museums than for open museums, especially variables related to the collection, operation, relations to other actors and social media.
-
+Not only is coverage on most variables far from complete, which would already make it difficult to construct indicators of them, but variable coverage is substantially worse for closed museums than for open museums, especially for variables related to the collection, operation, relations to other actors and social media.
 In principle it is possible to treat absence of evidence as evidence of absence, and assume that not measuring the presence of e.g. temporary exhibitions, educational events, restaurants or cooperations means that these are absent.
 
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=18cm]{../figures/p_vrblcvrg_pca.png}
+\includegraphics[width=18cm]{../figures/p_vrblcvrg_pca.pdf}
 \caption{\label{fig:p_vrblcvrg_pca}coverage of variables used in PCA}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=14cm]{../figures/p_pca_loadings.png}
+\includegraphics[width=14cm]{../figures/p_pca_loadings.pdf}
 \caption{\label{fig:p_pca_loadings}loadings of first 2 PCs}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=16cm]{../figures/p_pca_scores.png}
+\includegraphics[width=16cm]{../figures/p_pca_scores.pdf}
 \caption{\label{fig:p_pca_scores}scores on first PCs}
 \end{figure}
 
@@ -601,20 +617,14 @@ In principle it is possible to treat absence of evidence as evidence of absence,
 \end{table}
 
 Under this assumption, based on variables where an absence is a plausible value (i.e. not including variables such as floor size, collection size or opening times; figure \ref{fig:p_vrblcvrg_pca}) a principal component analysis was performed of which the first two factors are extracted with varimax rotation (figure \ref{fig:p_pca_loadings}).
-
 The first component appears to differentiate museums based on facilities (museumshop, restaurant) and institutional arrangements corresponding to larger institutions (sponsorship, donor program, temporary exhibitions), which makes it plausible that it reflects the size of an organization. 
-
 The second dimension seems to measure the extent of artistic support, education and research.
-
 Figure \ref{fig:p_pca_scores} shows positioning of the museums on both dimensions. 
-
 Table \ref{tbl:t_reg_coxph_dimred} shows models with one or both of these components included:
-
 Both components are highly significantly associated with closing, improve model performance and change a number of main results, such as the coefficient of the death of the founder (significant when the first component is addded) and the main effect of local population (insignificant when the first component is addded), as well as the covid pandemic effect (significant in all model with principal components).
 
 
 While it is plausible that larger organizations face a lower closing risk, I ultimately consider the coefficients are too large to be plausibly reflect primary an influence of institutional characteristics.
-
 While some size effect may exist, I consider it more plausible that this is indicator much more strongly reflects whether a museum is open or closed in the first place (as data collection was much more difficult for closed museums, the  measurement error is systematically related with the outcome variable), and therefore do not include it in the main regression model to avoid a circular rationale.
 \subsection*{Model improvement by variable addition}
 
@@ -651,8 +661,6 @@ While some size effect may exist, I consider it more plausible that this is indi
 \end{table}
 
 Table \ref{tbl:t_drop1} shows model fit improvement by adding each variable to the model with the other main variables but without the variable in question.
-
 For the most part, variables that are significant in the main model (self-identification and the main effects and interaction of population and private museums in the local environment) significantly improve the model when added.
-
 The one variable deviating from this pattern is the dummy variable for the years of the Great Recession, which despite an insignificant model coefficient significantly improves model fit; however model improvement is relatively small compared to the other variables. 
 \end{document}

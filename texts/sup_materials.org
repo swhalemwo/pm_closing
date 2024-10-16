@@ -35,6 +35,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: perc_founder_dead 9.3
 #+MACRO: pm_n_used 503
 #+MACRO: n_pm_close_after_recent_death 3
+#+MACRO: pmyear_proxcnt10_geq0 41
 #+MACRO: pm_open_from2021 17
 #+MACRO: N_slfid_other 140
 #+MACRO: N_slfid_museum 190
@@ -151,6 +152,7 @@ wd_nbrs(dt_nbrs)
 #+MACRO: reftbl_t_reg_coxph_af \ref{tbl:t_reg_coxph_af}
 #+MACRO: reftbl_t_reg_coxph_timecfg \ref{tbl:t_reg_coxph_timecfg}
 #+MACRO: reftbl_t_reg_coxph_dimred \ref{tbl:t_reg_coxph_dimred}
+#+MACRO: reftbl_t_reg_coxph_addgns \ref{tbl:t_reg_coxph_addgns}
 #+MACRO: reftbl_t_reg_coxph_reg \ref{tbl:t_reg_coxph_reg}
 
 
@@ -269,6 +271,20 @@ Furthermore, such a shock passes quickly relative to the predicted median lifeti
 Considering the raw numbers underlying the death effect estimates illustrates the uncertainty involved in determining the effect of the death of the founder on closing: 
 # 
 While {{{n_founder_dead}}} private museums have seen the death of their founders, only {{{n_pm_close_after_recent_death}}} of these have closed in the following 5 years; given such low numbers it cannot be ruled out that the statistical significance in a few configurations of founder death time results from random fluctuations rather than an underlying pattern.
+
+** Interaction of Founder name in Museum name and founder death
+
+#+INCLUDE: "../tables/t_reg_coxph_addgns_wcpF.tex" export latex
+
+While private museums generally do not experience a significantly higher risk of closing after the death of their founders, such effect might be present for a subgroup.
+#
+The most likely candidate for this would be Museums whose name include the name of the founder, as including the founder name in the museum might indicate disproportionate commitment by the founder (which would be absent after their death) as well as disincentivize third parties to contribute.
+#
+To investigate this possibility, an interaction between Founder death and inclusion of Founder name in museum name is added, results are presented in table {{{reftbl_t_reg_coxph_addgns}}}.
+#
+As both the main effects and the interaction are not significant, the effect of the founder's death on a musuem's closing risk does not significantly differ between museums which do include their founder's name in their name and those who do not. 
+
+
 
 ** Alternative competition specifications
 
@@ -435,3 +451,6 @@ For the most part, variables that are significant in the main model (self-identi
 The one variable deviating from this pattern is the dummy variable for the years of the Great Recession, which despite an insignificant model coefficient significantly improves model fit; however model improvement is relatively small compared to the other variables. 
 
  
+
+
+
